@@ -1,112 +1,46 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Sécurité Néon</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #000000;
-            color: #ffffff;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
+<style>
+    .amazon-style {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .btn-main {
+        width: 100%;
+        padding: 15px;
+        margin: 8px 0;
+        border-radius: 8px;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
 
-        .container {
-            text-align: center;
-            padding: 35px;
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid #00ffff; 
-            border-radius: 20px;
-            box-shadow: 0 0 15px #00ffff, inset 0 0 10px #00ffff;
-            max-width: 400px;
-            width: 85%;
-        }
+    /* Le bouton principal comme Amazon (Se connecter) */
+    .btn-primary {
+        background-color: #00ffff;
+        color: #000;
+        border: none;
+        box-shadow: 0 4px 10px rgba(0, 255, 255, 0.3);
+    }
 
-        h1 {
-            font-size: 2.5em;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #ffffff;
-            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
-            margin-bottom: 10px;
-        }
+    /* Le bouton secondaire (Créer un compte) */
+    .btn-secondary {
+        background-color: transparent;
+        color: #00ffff;
+        border: 2px solid #00ffff;
+    }
+</style>
 
-        h2 {
-            font-size: 1em;
-            color: #00ffff;
-            opacity: 0.8;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-
-        input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #00ffff;
-            border-radius: 8px;
-            background-color: #111;
-            color: #ffffff;
-            font-size: 1em;
-            text-align: center;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            background-color: transparent;
-            color: #00ffff;
-            border: 2px solid #00ffff;
-            border-radius: 50px;
-            font-size: 1.2em;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-        }
-
-        button:hover {
-            background-color: #00ffff;
-            color: #000;
-            box-shadow: 0 0 25px #00ffff;
-        }
-
-        #message { color: #ff0055; margin-top: 15px; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>S.E.G GLOBAL</h1>
-        <h2>Système de Sécurité Néon</h2>
-        
-        <input type="number" id="age" placeholder="VOTRE ÂGE">
-        <input type="password" id="code" placeholder="CODE SECRET S.E.G">
-        
-        <button onclick="checkAccess()">Ouvrir l'Empire</button>
-        
-        <p id="message"></p>
-    </div>
-
-    <script>
-        function checkAccess() {
-            var age = document.getElementById("age").value;
-            var code = document.getElementById("code").value;
-            var message = document.getElementById("message");
-
-            if (age >= 18 && code === "SEG1234") {
-                window.location.href = "https://seg-global.vercel.app"; // On changera ce lien vers ta boutique après
-            } else {
-                message.innerHTML = "ACCÈS REFUSÉ : INFOS INCORRECTES";
-            }
-        }
-    </script>
-</body>
-</html>
+<div class="amazon-style">
+    <h1>S.E.G GLOBAL</h1>
+    <p style="margin-bottom: 30px; color: #aaa;">L'excellence à portée de main.</p>
+    
+    <button class="btn-main btn-primary">Se connecter</button>
+    <button class="btn-main btn-secondary">Créer un compte</button>
+    
+    <p style="margin-top: 20px; font-size: 0.8em; text-decoration: underline; cursor: pointer;">
+        Continuer en tant qu'invité
+    </p>
+</div>
