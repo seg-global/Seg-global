@@ -3,23 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL | Anti-Arnaque</title>
+    <title>S.E.G GLOBAL - Portail de Sécurité</title>
     <style>
-        body { background-color: #000; color: #d4af37; font-family: sans-serif; text-align: center; padding: 50px; }
-        h1 { border-bottom: 2px solid #d4af37; display: inline-block; padding-bottom: 10px; }
-        .status { margin-top: 20px; font-weight: bold; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #FFD700;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #FFD700;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            max-width: 450px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        h1 {
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+
+        h2 {
+            font-size: 1.2em;
+            color: #ffffff;
+            font-weight: 300;
+            margin-bottom: 25px;
+        }
+
+        fieldset {
+            border: 1px solid #FFD700;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #111111;
+        }
+
+        legend {
+            font-size: 1em;
+            color: #FFD700;
+            padding: 0 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+            background-color: #222222;
+            color: #ffffff;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        button {
+            padding: 15px 30px;
+            background-color: #FFD700;
+            color: #000000;
+            border: 2px solid #FFD700;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #ffffff;
+            color: #000000;
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        p {
+            font-size: 0.9em;
+            color: #ffffff;
+            margin-top: 20px;
+            opacity: 0.7;
+        }
+
+        #message {
+            color: red;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2em; }
+            h2 { font-size: 1em; }
+            .container { padding: 25px; }
+        }
     </style>
 </head>
 <body>
-    <h1>S.E.G GLOBAL</h1>
-    <p>Système de Certification Anti-Arnaque en marche.</p>
-    <div id="status-robot" class="status">Initialisation du robot...</div>
-    
+    <div class="container">
+        <h1>S.E.G GLOBAL</h1>
+        <h2>Portail d'Accès Sécurisé</h2>
+        <fieldset>
+            <legend>Entrez vos informations</legend>
+            <input type="number" id="age" placeholder="Entrez votre âge (ex: 18)" required min="1" max="120">
+            <input type="password" id="code" placeholder="Entrez votre code secret S.E.G GLOBAL" required>
+        </fieldset>
+        <button onclick="checkAccess()">Ouvrir l'Empire</button>
+        <p id="message"></p>
+        <p>Le système anti-arnaque est activé.</p>
+    </div>
     <script>
-        // Premier algorithme de test
-        setTimeout(() => {
-            document.getElementById('status-robot').innerHTML = "Robot S.E.G : Prêt à filtrer les arnaqueurs ✅";
-        }, 3000);
+        function checkAccess() {
+            var age = document.getElementById("age").value;
+            var code = document.getElementById("code").value;
+            var message = document.getElementById("message");
+
+            // Définit l'âge minimum
+            var minAge = 18;
+            // Définit le code secret (tu peux le changer ici)
+            var secretCode = "SEG1234";
+
+            // Vérification de l'âge
+            if (age < minAge) {
+                message.innerHTML = "Désolé, l'accès est interdit aux moins de " + minAge + " ans.";
+                return;
+            }
+
+            // Vérification du code
+            if (code !== secretCode) {
+                message.innerHTML = "Code secret S.E.G GLOBAL incorrect. Accès refusé.";
+                return;
+            }
+
+            // Si tout est OK, redirection vers ton autre site
+            window.location.href = "https://example.com/notre-boutique"; 
+        }
     </script>
 </body>
 </html>
+
