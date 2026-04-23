@@ -1,46 +1,253 @@
-<style>
-    .amazon-style {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-    
-    .btn-main {
-        width: 100%;
-        padding: 15px;
-        margin: 8px 0;
-        border-radius: 8px;
-        font-weight: bold;
-        text-transform: uppercase;
-        cursor: pointer;
-    }
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.E.G GLOBAL - Empire E-commerce</title>
+    <style>
+        /* BASE & TYPO */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000; /* Fond noir total */
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    /* Le bouton principal comme Amazon (Se connecter) */
-    .btn-primary {
-        background-color: #00ffff;
-        color: #000;
-        border: none;
-        box-shadow: 0 4px 10px rgba(0, 255, 255, 0.3);
-    }
+        /* SECTION 1 : TON INTERFACE ACTUELLE (Image 9) */
+        .welcome-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 60vh; /* Prend 60% de la hauteur de l'écran */
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            border-bottom: 2px solid #00ffff; /* Ligne néon de séparation */
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+        }
 
-    /* Le bouton secondaire (Créer un compte) */
-    .btn-secondary {
-        background-color: transparent;
-        color: #00ffff;
-        border: 2px solid #00ffff;
-    }
-</style>
+        h1 {
+            font-size: 2.2em;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px #00ffff;
+        }
 
-<div class="amazon-style">
-    <h1>S.E.G GLOBAL</h1>
-    <p style="margin-bottom: 30px; color: #aaa;">L'excellence à portée de main.</p>
-    
-    <button class="btn-main btn-primary">Se connecter</button>
-    <button class="btn-main btn-secondary">Créer un compte</button>
-    
-    <p style="margin-top: 20px; font-size: 0.8em; text-decoration: underline; cursor: pointer;">
-        Continuer en tant qu'invité
-    </p>
-</div>
+        .subtitle {
+            font-size: 0.9em;
+            color: #aaaaaa;
+            margin-bottom: 30px;
+        }
+
+        .btn-main {
+            width: 90%;
+            max-width: 350px;
+            padding: 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Bouton "Se connecter" plein */
+        .btn-primary {
+            background-color: #00ffff;
+            color: #000000;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 255, 255, 0.3);
+        }
+        .btn-primary:hover { box-shadow: 0 0 20px #00ffff; }
+
+        /* Bouton "Créer un compte" contour */
+        .btn-secondary {
+            background-color: transparent;
+            color: #00ffff;
+            border: 2px solid #00ffff;
+        }
+        .btn-secondary:hover { background-color: rgba(0, 255, 255, 0.1); }
+
+        .guest-link {
+            margin-top: 15px;
+            font-size: 0.8em;
+            color: #ffffff;
+            text-decoration: underline;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        /* SECTION 2 : LA VITRINE E-COMMERCE (L'espace vide) */
+        .shop-section {
+            width: 100%;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .shop-title {
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        /* Grille des produits */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* S'adapte à la largeur */
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* Carte Produit Néon */
+        .product-card {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .product-card:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            transform: translateY(-5px); /* Petit saut au survol */
+        }
+
+        /* L'IMAGE QUI FLOTTE (Animation) */
+        .product-image-container {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .product-image {
+            max-width: 100%;
+            max-height: 100%;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5)); /* Glow léger */
+            /* Activation de l'animation de flottement */
+            animation: float 4s ease-in-out infinite; 
+        }
+
+        /* Définition de l'animation de flottement (lévitation) */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); } /* Monte de 10px */
+            100% { transform: translateY(0px); }
+        }
+
+        .product-name {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 5px 0;
+        }
+
+        .product-price {
+            font-size: 1em;
+            color: #00ffff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 8px;
+            background-color: transparent;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .btn-add:hover { background-color: #00ffff; color: #000000; }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8em; letter-spacing: 3px; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); } /* 2 produits par ligne sur mobile */
+            .product-image-container { width: 80px; height: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="welcome-section">
+        <h1>S.E.G GLOBAL</h1>
+        <p class="subtitle">L'excellence à portée de main.</p>
+        
+        <button class="btn-main btn-primary">Se connecter</button>
+        <button class="btn-main btn-secondary">Créer un compte</button>
+        
+        <p class="guest-link">Continuer en tant qu'invité</p>
+    </div>
+
+    <div class="shop-section">
+        <h2 class="shop-title">Collection S.E.G</h2>
+        
+        <div class="product-grid">
+            
+            <div class="product-card">
+                <div class="product-image-container">
+                    <img src="https://via.placeholder.com/100x100/111/0ff?text=Watch" alt="Montre S.E.G" class="product-image">
+                </div>
+                <p class="product-name">Montre "Horizon" Néon</p>
+                <p class="product-price">299.99 €</p>
+                <button class="btn-add">Ajouter</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image-container">
+                    <img src="https://via.placeholder.com/100x100/111/0ff?text=Bag" alt="Sac S.E.G" class="product-image">
+                </div>
+                <p class="product-name">Sac "Clutch" Cyber</p>
+                <p class="product-price">189.99 €</p>
+                <button class="btn-add">Ajouter</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image-container">
+                    <img src="https://via.placeholder.com/100x100/111/0ff?text=Shoes" alt="Chaussures S.E.G" class="product-image">
+                </div>
+                <p class="product-name">Baskets "Velocity"</p>
+                <p class="product-price">249.99 €</p>
+                <button class="btn-add">Ajouter</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image-container">
+                    <img src="https://via.placeholder.com/100x100/111/0ff?text=Glasses" alt="Lunettes S.E.G" class="product-image">
+                </div>
+                <p class="product-name">Lunettes "Vision X"</p>
+                <p class="product-price">95.00 €</p>
+                <button class="btn-add">Ajouter</button>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
