@@ -1,205 +1,29 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Marketplace Mondiale</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        body { background-color: #EAEDED; color: #111; padding-bottom: 50px; }
-
-        /* --- BARRE DE TRADUCTION --- */
-        .translate-header {
-            background-color: #FEBD69; 
-            padding: 10px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-            border-bottom: 2px solid #f3a847;
-        }
-
-        /* --- HEADER & NAVIGATION --- */
-        .amazon-header { background-color: #232F3E; padding: 15px; color: white; }
-        .logo-seg { color: #19C9D1; font-size: 24px; font-weight: bold; letter-spacing: 2px; text-decoration: none; }
-        
-        .search-container { display: flex; margin-top: 10px; }
-        .search-input { flex: 1; padding: 12px; border: none; border-radius: 4px 0 0 4px; font-size: 16px; }
-        .search-btn { background: #FEBD69; border: none; padding: 10px 20px; border-radius: 0 4px 4px 0; cursor: pointer; }
-
-        /* --- BANNIERE : GESTION DIRECTE VENDEURS --- */
-        .promo-banner {
-            background: linear-gradient(to right, #19C9D1, #118A91);
-            height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* --- SECTION DU DIRECTEUR GÉNÉRAL --- */
-        .creator-section { padding: 15px; }
-        .creator-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .creator-img {
-            width: 100%;
-            height: 400px;
-            background-image: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg'); 
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 20px;
-            color: white;
-            position: relative;
-        }
-        .creator-img::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0; height: 50%;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-        }
-        .creator-img h2, .creator-img p { z-index: 2; position: relative; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-
-        /* --- GRILLE PRODUITS --- */
-        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-        .product-item { background: white; padding: 10px; border-radius: 4px; text-align: center; border: 1px solid #ddd; }
-        .product-box { height: 100px; background: #f0f0f0; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 10px; }
-        .seller-info { font-size: 10px; color: #555; margin-top: 5px; font-style: italic; }
-
-        /* --- FOOTER BOUTON VENDEUR --- */
-        .footer-seller-btn {
-            background: #232F3E;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        /* --- FENÊTRE PORTAIL VENDEUR --- */
-        #sellerModal {
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); 
-            z-index: 9999; 
-            justify-content: center; 
-            align-items: center;
-        }
-        .modal-content {
-            background: white; 
-            padding: 30px; 
-            border-radius: 15px; 
-            width: 90%; 
-            max-width: 400px; 
-            text-align: center;
-        }
-        .modal-content input {
-            width: 100%; 
-            padding: 12px; 
-            margin-bottom: 15px; 
-            border: 1px solid #ddd; 
-            border-radius: 5px;
-        }
-        .btn-submit-seller {
-            width: 100%; 
-            background: #19C9D1; 
-            color: white;
-            border: none; 
-            padding: 15px; 
-            font-weight: bold; 
-            border-radius: 5px; 
-            cursor: pointer;
-        }
-
-        .goog-te-banner-frame.skiptranslate { display: none !important; }
-        body { top: 0px !important; }
-    </style>
-</head>
-<body>
-
-    <div class="translate-header">
-        <span>🌍 TRADUCTION MONDIALE : </span>
-        <div id="google_translate_element" style="display: inline-block; vertical-align: middle;"></div>
-    </div>
-
-    <header class="amazon-header">
-        <a href="#" class="logo-seg">S.E.G GLOBAL</a>
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="Rechercher un article...">
-            <button class="search-btn">🔍</button>
+<section id="global-feed" style="padding: 15px;">
+    <h2 style="font-size: 18px; margin-bottom: 15px; color: #232F3E;">🔥 EN DIRECT DES BOUTIQUES</h2>
+    
+    <div class="video-scroll" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+        <div class="video-card" style="min-width: 120px; height: 200px; background: #000; border-radius: 10px; position: relative; overflow: hidden;">
+            <div style="position: absolute; bottom: 5px; left: 5px; color: white; font-size: 10px; font-weight: bold;">Boutique Diamant 💎</div>
         </div>
-    </header>
-
-    <section class="promo-banner">
-        <div>
-            <h1 style="font-size: 24px;">VOTRE BOUTIQUE, VOS RÈGLES</h1>
-            <p>Vendez partout, gérez vos propres livraisons.</p>
+        <div class="video-card" style="min-width: 120px; height: 200px; background: #333; border-radius: 10px; position: relative; overflow: hidden;">
+            <div style="position: absolute; bottom: 5px; left: 5px; color: white; font-size: 10px; font-weight: bold;">Archi-Luxe 🏛️</div>
         </div>
-    </section>
-
-    <section class="creator-section">
-        <div class="creator-card">
-            <div class="creator-img">
-                <h2 style="font-size: 22px;">LA VISION DU DIRECTEUR GÉNÉRAL</h2>
-                <p>L'infrastructure du luxe indépendant</p>
-            </div>
-        </div>
-    </section>
-
-    <div class="product-grid">
-        <div class="product-item">
-            <div class="product-box">BOUTIQUE A</div>
-            <p style="font-size: 12px; font-weight: bold;">MONTRE NÉON</p>
-            <p class="seller-info">Expédié par : Boutique Alpha</p>
-        </div>
-        <div class="product-item">
-            <div class="product-box">BOUTIQUE B</div>
-            <p style="font-size: 12px; font-weight: bold;">SAC CYBER</p>
-            <p class="seller-info">Expédié par : Luxe Premium</p>
+        <div class="video-card" style="min-width: 120px; height: 200px; background: #444; border-radius: 10px; position: relative; overflow: hidden;">
+            <div style="position: absolute; bottom: 5px; left: 5px; color: white; font-size: 10px; font-weight: bold;">S.E.G Watch ⌚</div>
         </div>
     </div>
 
-    <div class="footer-seller-btn" onclick="openSeller()">
-        Ouvrir ma boutique maintenant
-    </div>
-
-    <div id="sellerModal">
-        <div class="modal-content">
-            <h2 style="color:#232F3E; margin-bottom:10px;">Portail Vendeur</h2>
-            <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Gérez vos produits et vos livraisons en toute liberté.</p>
-            
-            <input type="text" placeholder="Nom de votre boutique">
-            <input type="email" placeholder="Email professionnel">
-            <input type="password" placeholder="Mot de passe">
-            
-            <button class="btn-submit-seller" onclick="submitSeller()">CRÉER MON ESPACE</button>
-            
-            <p onclick="closeSeller()" style="margin-top:20px; color:#CC0C39; cursor:pointer; font-size: 13px; font-weight: bold;">ANNULER</p>
+    <h2 style="font-size: 18px; margin: 20px 0 15px; color: #232F3E;">🛍️ NOUVEAUTÉS DES VENDEURS</h2>
+    <div class="product-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #eee;">
+            <div style="height: 120px; background: #f9f9f9; border-radius: 4px; margin-bottom: 8px;"></div>
+            <p style="font-size: 12px; font-weight: bold;">Collier Émeraude</p>
+            <p style="font-size: 10px; color: #19C9D1;">Vendu par : Boutique Royale</p>
+        </div>
+        <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #eee;">
+            <div style="height: 120px; background: #f9f9f9; border-radius: 4px; margin-bottom: 8px;"></div>
+            <p style="font-size: 12px; font-weight: bold;">Plan Villa Moderne</p>
+            <p style="font-size: 10px; color: #19C9D1;">Archi : Design S.E.G</p>
         </div>
     </div>
-
-    <script type="text/javascript">
-        function openSeller() { document.getElementById('sellerModal').style.display = 'flex'; }
-        function closeSeller() { document.getElementById('sellerModal').style.display = 'none'; }
-        function submitSeller() {
-            alert("Compte créé ! Vous pouvez maintenant configurer vos modes de livraison dans votre espace vendeur.");
-            closeSeller();
-        }
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'fr', autoDisplay: true}, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-</body>
-</html>
+</section>
