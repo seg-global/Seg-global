@@ -3,47 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Connexion Sécurisée</title>
+    <title>S.E.G GLOBAL - Empire Intégral</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --ali-orange: #ff6a00; --apple-black: #000; --google-blue: #4285F4; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #f4f4f4; padding-bottom: 80px; }
+        :root { --ali-orange: #ff6a00; --apple-black: #000; --seg-cyan: #19C9D1; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+        body { background-color: #f4f4f4; padding-bottom: 80px; overflow-x: hidden; }
 
-        /* --- ÉCRAN DE CONNEXION SÉRIEUX --- */
-        #auth-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 10000; display: flex; flex-direction: column; padding: 40px 25px;
-        }
-        .auth-header { text-align: center; margin-bottom: 50px; }
-        .auth-logo { color: var(--ali-orange); font-size: 32px; font-weight: 900; letter-spacing: 2px; }
-        
-        .social-btn {
-            width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ddd;
-            display: flex; align-items: center; justify-content: center; gap: 15px;
-            font-size: 16px; font-weight: 600; margin-bottom: 15px; cursor: pointer; transition: 0.3s;
-        }
+        /* --- AUTHENTIFICATION SÉCURISÉE --- */
+        #auth-screen { position: fixed; inset: 0; background: white; z-index: 10000; display: flex; flex-direction: column; padding: 40px 25px; transition: 0.5s; }
+        .social-btn { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 16px; font-weight: 600; margin-bottom: 15px; cursor: pointer; }
         .btn-google { background: white; color: #757575; }
-        .btn-apple { background: var(--apple-black); color: white; border: none; }
-        .social-btn i { font-size: 20px; }
+        .btn-apple { background: black; color: white; border: none; }
 
-        .divider { display: flex; align-items: center; margin: 20px 0; color: #999; font-size: 12px; }
-        .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #eee; margin: 0 10px; }
+        /* --- INTERFACE PRINCIPALE --- */
+        .app-header { background: linear-gradient(90deg, #ff6a00, #ee4d2d); padding: 15px; color: white; position: sticky; top: 0; z-index: 1000; border-radius: 0 0 20px 20px; }
+        .search-box { background: white; border-radius: 25px; display: flex; padding: 10px 15px; align-items: center; margin-top: 10px; }
+        .search-box input { border: none; flex: 1; outline: none; margin-left: 10px; }
 
-        /* --- INTERFACE PRINCIPALE (STYLE ALIBABA) --- */
-        .ali-header { background: linear-gradient(90deg, #ff6a00, #ee4d2d); padding: 15px; position: sticky; top: 0; z-index: 1000; color: white; }
-        .search-container { background: white; border-radius: 25px; display: flex; padding: 10px 15px; align-items: center; margin-top: 10px; }
-        .search-container input { border: none; flex: 1; outline: none; margin-left: 10px; }
-
-        .view { display: none; padding: 15px; animation: slideUp 0.4s ease; }
+        .view { display: none; padding: 15px; animation: fadeIn 0.4s ease; }
         .active-view { display: block; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* CARTE UTILISATEUR */
-        .user-profile { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
-        .avatar { width: 80px; height: 80px; background: #eee; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #999; border: 3px solid var(--ali-orange); }
+        /* --- FLUX VIDÉO (STYLE TIKTOK) --- */
+        .video-player { width: 100%; height: 500px; background: #000; border-radius: 20px; position: relative; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; color: white; flex-direction: column; text-align: center; }
+        .video-actions { position: absolute; right: 15px; bottom: 80px; display: flex; flex-direction: column; gap: 20px; }
 
-        /* NAV BASSE */
+        /* --- MARKETPLACE GRILLE --- */
+        .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .product-img { width: 100%; height: 140px; object-fit: cover; }
+        .product-info { padding: 10px; text-align: center; }
+        .buy-btn { background: #febd69; border: none; width: 100%; padding: 8px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+
+        /* --- NAV BASSE --- */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; }
         .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #bbb; font-size: 11px; cursor: pointer; }
         .nav-item.active { color: var(--ali-orange); }
@@ -51,111 +44,120 @@
 </head>
 <body>
 
-    <div id="auth-overlay">
-        <div class="auth-header">
-            <div class="auth-logo">S.E.G GLOBAL</div>
-            <p style="color: #666; margin-top: 10px;">Connectez-vous pour accéder à l'Empire</p>
+    <div id="auth-screen">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h1 style="color: var(--ali-orange); font-size: 35px; font-weight: 900;">S.E.G GLOBAL</h1>
+            <p style="color: #888; margin-top: 10px;">Connectez-vous pour rejoindre l'empire.</p>
         </div>
-
-        <button class="social-btn btn-google" onclick="simulerConnexion('Google')">
-            <i class="fab fa-google" style="color: #4285F4;"></i> Continuer avec Google
-        </button>
-
-        <button class="social-btn btn-apple" onclick="simulerConnexion('Apple')">
-            <i class="fab fa-apple"></i> Continuer avec Apple
-        </button>
-
-        <div class="divider">OU</div>
-
-        <div style="text-align: center; font-size: 12px; color: #999;">
-            En continuant, vous acceptez les conditions de <br> <strong>S.E.G GLOBAL INTERNATIONAL</strong>.
-        </div>
+        <button class="social-btn btn-google" onclick="login('Google')"><i class="fab fa-google"></i> Continuer avec Google</button>
+        <button class="social-btn btn-apple" onclick="login('Apple')"><i class="fab fa-apple"></i> Continuer avec Apple</button>
+        <p style="text-align: center; font-size: 11px; color: #bbb; margin-top: 20px;">Accès sécurisé réservé aux membres S.E.G.</p>
     </div>
 
-    <header class="ali-header">
+    <header class="app-header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-weight: 900; font-size: 20px;">S.E.G</span>
-            <i class="fas fa-shopping-cart"></i>
+            <span style="font-weight: bold; font-size: 18px;">S.E.G GLOBAL</span>
+            <i class="fas fa-crown"></i>
         </div>
-        <div class="search-container">
+        <div class="search-box">
             <i class="fas fa-search" style="color: #999;"></i>
-            <input type="text" placeholder="Rechercher des articles de luxe...">
+            <input type="text" placeholder="Diamants, Autos, Mode...">
         </div>
     </header>
 
     <main id="view-home" class="view active-view">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-            <div id="user-initial" style="width: 40px; height: 40px; background: var(--ali-orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">?</div>
-            <h2 id="welcome-msg" style="font-size: 18px;">Bienvenue</h2>
+        <div style="background: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <h2 id="userName" style="font-size: 16px;">Chargement...</h2>
+            <div style="color: var(--ali-orange); font-size: 24px;"><i class="fas fa-gem"></i></div>
         </div>
-        
-        <div style="background: white; border-radius: 15px; padding: 15px; height: 200px; display: flex; align-items: center; justify-content: center; color: #ddd; border: 2px dashed #eee;">
-            [ Flux d'articles en cours de chargement... ]
+        <div class="market-grid">
+            <div class="product-card">
+                <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=300" class="product-img">
+                <div class="product-info">
+                    <p style="font-size: 11px;">Montre S.E.G</p>
+                    <p style="color: #ee4d2d; font-weight: bold;">450,000 F</p>
+                    <button class="buy-btn" onclick="alert('Commande envoyée au DG !')">ACHETER</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?w=300" class="product-img">
+                <div class="product-info">
+                    <p style="font-size: 11px;">Sneakers Luxe</p>
+                    <p style="color: #ee4d2d; font-weight: bold;">180,000 F</p>
+                    <button class="buy-btn" onclick="alert('Commande envoyée au DG !')">ACHETER</button>
+                </div>
+            </div>
         </div>
     </main>
 
-    <main id="view-account" class="view">
-        <div class="user-profile">
-            <div class="avatar"><i class="fas fa-user"></i></div>
-            <h3 id="profile-name">Utilisateur S.E.G</h3>
-            <p id="profile-method" style="font-size: 12px; color: #999; margin-bottom: 20px;">Connecté via ...</p>
-            
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: left; margin-bottom: 20px;">
-                <p style="font-size: 11px; font-weight: bold; color: #666;">MON STATUT</p>
-                <p style="font-size: 14px; color: #333;">Membre de l'Empire (Vérifié ✅)</p>
+    <main id="view-video" class="view">
+        <div class="video-player">
+            <i class="fas fa-play" style="font-size: 50px; opacity: 0.5;"></i>
+            <h3 style="margin-top: 15px;">S.E.G NEWS</h3>
+            <p style="font-size: 12px; padding: 0 20px;">L'actualité économique mondiale gérée par le DG Stève.</p>
+            <div class="video-actions">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-comment"></i>
+                <i class="fas fa-share"></i>
             </div>
+        </div>
+    </main>
 
-            <button onclick="logout()" style="color: #ee4d2d; border: none; background: none; font-weight: bold; cursor: pointer;">Se déconnecter</button>
+    <main id="view-dg" class="view">
+        <div style="background: white; border-radius: 15px; padding: 25px; text-align: center;">
+            <div style="width: 80px; height: 80px; background: #eee; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; border: 3px solid var(--ali-orange);"><i class="fas fa-user-tie"></i></div>
+            <h3 id="profileName">Profil</h3>
+            <p id="profileRole" style="font-size: 12px; color: var(--ali-orange); font-weight: bold;">MEMBER</p>
+            <hr style="margin: 20px 0; opacity: 0.1;">
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+                <p style="font-size: 10px; color: #999;">SOLDE ESTIMÉ</p>
+                <h2 id="userBalance">0 FCFA</h2>
+            </div>
+            <button onclick="logout()" style="color: red; background: none; border: none; margin-top: 20px;">Se déconnecter</button>
         </div>
     </main>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" id="nav-home" onclick="switchTab('home')"><i class="fas fa-home"></i><span>Accueil</span></div>
-        <div class="nav-item" onclick="alert('Scanner S.E.G activé...')"><i class="fas fa-plus-circle"></i><span>Vendre</span></div>
-        <div class="nav-item" id="nav-account" onclick="switchTab('account')"><i class="fas fa-user-circle"></i><span>Compte</span></div>
+        <div class="nav-item active" id="nav-home" onclick="tab('home')"><i class="fas fa-shopping-bag"></i><span>Market</span></div>
+        <div class="nav-item" id="nav-video" onclick="tab('video')"><i class="fas fa-play-circle"></i><span>Vidéos</span></div>
+        <div class="nav-item" id="nav-dg" onclick="tab('dg')"><i class="fas fa-user-circle"></i><span>Compte</span></div>
     </nav>
 
     <script>
-        function simulerConnexion(methode) {
-            // Dans une vraie app, ici on appelle l'API Google ou Apple
-            const nomSimule = methode === 'Google' ? "Utilisateur Google" : "Utilisateur Apple";
-            
-            const userData = {
-                name: nomSimule,
-                method: methode,
-                initial: methode.charAt(0)
-            };
-
-            localStorage.setItem('seg_session', JSON.stringify(userData));
-            initApp();
-        }
-
-        function initApp() {
-            const session = localStorage.getItem('seg_session');
-            if (session) {
-                const user = JSON.parse(session);
-                document.getElementById('auth-overlay').style.display = 'none';
-                document.getElementById('welcome-msg').innerText = "Bienvenue, " + user.name;
-                document.getElementById('user-initial').innerText = user.initial;
-                document.getElementById('profile-name').innerText = user.name;
-                document.getElementById('profile-method').innerText = "Connecté via " + user.method;
+        function login(methode) {
+            const nom = prompt("Bienvenue via " + methode + " ! Entrez votre nom pour l'Empire :");
+            if (nom) {
+                const user = { 
+                    name: nom, 
+                    balance: (nom.toLowerCase() === "stève" || nom.toLowerCase() === "dg") ? "4,850,000 FCFA" : "0 FCFA",
+                    role: (nom.toLowerCase() === "stève" || nom.toLowerCase() === "dg") ? "DIRECTEUR GÉNÉRAL" : "MEMBRE VÉRIFIÉ"
+                };
+                localStorage.setItem('seg_session', JSON.stringify(user));
+                start();
             }
         }
 
-        function switchTab(tab) {
+        function start() {
+            const data = localStorage.getItem('seg_session');
+            if (data) {
+                const user = JSON.parse(data);
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('userName').innerText = "Salut, " + user.name;
+                document.getElementById('profileName').innerText = user.name;
+                document.getElementById('profileRole').innerText = user.role;
+                document.getElementById('userBalance').innerText = user.balance;
+            }
+        }
+
+        function tab(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('view-' + tab).classList.add('active-view');
-            document.getElementById('nav-' + tab).classList.add('active');
+            document.getElementById('view-' + id).classList.add('active-view');
+            document.getElementById('nav-' + id).classList.add('active');
         }
 
-        function logout() {
-            localStorage.removeItem('seg_session');
-            location.reload();
-        }
-
-        // Vérification au chargement
-        window.onload = initApp;
+        function logout() { localStorage.removeItem('seg_session'); location.reload(); }
+        window.onload = start;
     </script>
 </body>
 </html>
