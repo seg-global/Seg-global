@@ -3,111 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Accueil Alibaba Style</title>
+    <title>S.E.G GLOBAL - Empire Officiel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+        :root { --ali-gradient: linear-gradient(90deg, #ff6a00, #ee4d2d); --seg-cyan: #19C9D1; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #f4f4f4; padding-bottom: 80px; }
 
-        /* --- HEADER ALIBABA STYLE --- */
-        .ali-header { background: linear-gradient(90deg, #ff6a00, #ee4d2d); padding: 15px; position: sticky; top: 0; z-index: 1000; border-radius: 0 0 20px 20px; }
-        .top-line { display: flex; justify-content: space-between; align-items: center; color: white; margin-bottom: 15px; }
-        .search-container { background: white; border-radius: 25px; display: flex; padding: 10px 15px; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .search-container input { border: none; flex: 1; outline: none; margin-left: 10px; font-size: 14px; }
+        /* --- ÉCRAN D'INSCRIPTION (PRÉSENTATION) --- */
+        #registration-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--ali-gradient); z-index: 5000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 30px; text-align: center;
+        }
+        .reg-input { width: 100%; padding: 15px; border-radius: 30px; border: none; margin: 20px 0; font-size: 16px; text-align: center; outline: none; }
+        .reg-btn { background: white; color: #ff6a00; padding: 15px 40px; border-radius: 30px; font-weight: bold; border: none; cursor: pointer; width: 100%; }
 
-        /* --- BANNER BIENVENUE --- */
-        .welcome-banner { margin: 15px; background: white; border-radius: 15px; padding: 20px; display: flex; align-items: center; justify-content: space-between; overflow: hidden; position: relative; }
-        .welcome-text h2 { font-size: 18px; color: #333; }
-        .welcome-text p { font-size: 12px; color: #ff6a00; font-weight: bold; }
-        .coupon-badge { background: #ffefea; color: #ff6a00; padding: 5px 10px; border-radius: 5px; font-size: 10px; margin-top: 5px; display: inline-block; }
+        /* --- HEADER ALIBABA --- */
+        .ali-header { background: var(--ali-gradient); padding: 15px; position: sticky; top: 0; z-index: 1000; border-radius: 0 0 20px 20px; }
+        .search-bar { background: white; border-radius: 25px; display: flex; padding: 10px 15px; align-items: center; margin-top: 10px; }
+        .search-bar input { border: none; flex: 1; outline: none; margin-left: 10px; }
 
-        /* --- CATÉGORIES COLORÉES --- */
-        .ali-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 15px; background: white; margin: 0 15px; border-radius: 15px; }
-        .cat-item { text-align: center; }
-        .cat-circle { width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; }
-        .cat-item p { font-size: 11px; color: #666; font-weight: 500; }
+        /* --- CONTENU --- */
+        .view { display: none; animation: fadeIn 0.4s ease; }
+        .active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- SECTION FLASH SALES --- */
-        .section-title { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .flash-grid { display: flex; overflow-x: auto; padding: 0 15px; gap: 12px; scrollbar-width: none; }
-        .flash-card { min-width: 130px; background: white; border-radius: 12px; padding: 10px; text-align: center; }
-        .flash-img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
-        .flash-price { color: #ee4d2d; font-weight: bold; font-size: 14px; margin-top: 5px; }
+        /* BANNIÈRE PERSONNALISÉE */
+        .welcome-card { background: white; margin: 15px; border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .welcome-card h2 { font-size: 18px; color: #333; }
+        .welcome-card p { font-size: 12px; color: #ff6a00; font-weight: bold; }
 
-        /* --- NAV BASSE --- */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: white; display: flex; border-top: 1px solid #eee; }
-        .nav-link { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; text-decoration: none; font-size: 11px; }
-        .nav-link.active { color: #ff6a00; }
-        .nav-link i { font-size: 22px; margin-bottom: 3px; }
+        /* CATÉGORIES */
+        .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; background: white; margin: 0 15px; border-radius: 15px; }
+        .cat-item { text-align: center; cursor: pointer; }
+        .cat-circle { width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; }
+
+        /* GRILLE PRODUITS (OFFRES DG) */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
+        .p-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .p-img { width: 100%; height: 150px; object-fit: cover; }
+        .p-info { padding: 10px; text-align: center; }
+        .buy-btn { background: #febd69; border: none; width: 100%; padding: 8px; border-radius: 5px; font-weight: bold; margin-top: 5px; cursor: pointer; }
+
+        /* NAV BASSE */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; font-size: 11px; cursor: pointer; }
+        .nav-item.active { color: #ff6a00; }
+        .nav-item i { font-size: 22px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <div class="ali-header">
-        <div class="top-line">
-            <span style="font-weight: bold; font-size: 18px;">S.E.G GLOBAL</span>
-            <i class="fas fa-comment-dots" style="font-size: 20px;"></i>
+    <div id="registration-overlay">
+        <h1 style="font-size: 28px;">S.E.G GLOBAL</h1>
+        <p style="margin-top: 10px;">L'Empire vous attend.</p>
+        <input type="text" id="userNameInput" class="reg-input" placeholder="Entrez votre nom complet">
+        <button class="reg-btn" onclick="validerInscription()">REJOINDRE L'EMPIRE</button>
+    </div>
+
+    <header class="ali-header">
+        <div style="display: flex; justify-content: space-between; color: white; align-items: center;">
+            <span style="font-weight: 900; letter-spacing: 2px;">S.E.G GLOBAL</span>
+            <i class="fas fa-crown"></i>
         </div>
-        <div class="search-container">
+        <div class="search-bar">
             <i class="fas fa-search" style="color: #999;"></i>
-            <input type="text" placeholder="Rechercher des produits d'usine...">
-            <i class="fas fa-camera" style="color: #999;"></i>
+            <input type="text" placeholder="Rechercher dans l'Empire...">
         </div>
-    </div>
+    </header>
 
-    <div class="welcome-banner">
-        <div class="welcome-text">
-            <h2>Bienvenue, Stève</h2>
-            <p>Ton Empire commence ici</p>
-            <span class="coupon-badge">-10% sur ton premier achat</span>
+    <main id="view-home" class="view active-view">
+        <div class="welcome-card">
+            <div>
+                <h2 id="display-name">Bienvenue dans l'Empire</h2>
+                <p>Status : Client Privilégié</p>
+            </div>
+            <div style="color: #ff6a00; font-size: 30px;"><i class="fas fa-user-circle"></i></div>
         </div>
-        <div style="font-size: 50px; color: #ff6a00; opacity: 0.2;"><i class="fas fa-crown"></i></div>
-    </div>
 
-    <div class="ali-cats">
-        <div class="cat-item">
-            <div class="cat-circle" style="background: #ff9d00;"><i class="fas fa-car"></i></div>
-            <p>Auto</p>
+        <div class="cat-grid">
+            <div class="cat-item"><div class="cat-circle" style="background: #ff9d00;"><i class="fas fa-car"></i></div><p style="font-size: 10px;">Auto</p></div>
+            <div class="cat-item"><div class="cat-circle" style="background: #00d2ff;"><i class="fas fa-gem"></i></div><p style="font-size: 10px;">Luxe</p></div>
+            <div class="cat-item"><div class="cat-circle" style="background: #ff4b2b;"><i class="fas fa-bolt"></i></div><p style="font-size: 10px;">Tech</p></div>
+            <div class="cat-item"><div class="cat-circle" style="background: #7b2ff7;"><i class="fas fa-tshirt"></i></div><p style="font-size: 10px;">Mode</p></div>
         </div>
-        <div class="cat-item">
-            <div class="cat-circle" style="background: #00d2ff;"><i class="fas fa-gem"></i></div>
-            <p>Luxe</p>
-        </div>
-        <div class="cat-item">
-            <div class="cat-circle" style="background: #ff4b2b;"><i class="fas fa-bolt"></i></div>
-            <p>Tech</p>
-        </div>
-        <div class="cat-item">
-            <div class="cat-circle" style="background: #7b2ff7;"><i class="fas fa-tshirt"></i></div>
-            <p>Mode</p>
-        </div>
-    </div>
 
-    <div class="section-title">
-        <h3 style="font-size: 16px;">Ventes Flash 🔥</h3>
-        <a href="#" style="color: #999; font-size: 12px; text-decoration: none;">Voir plus</a>
-    </div>
-    <div class="flash-grid">
-        <div class="flash-card">
-            <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=200" class="flash-img">
-            <p class="flash-price">450k F</p>
+        <h3 style="padding: 15px 15px 0; font-size: 16px;">OFFRES DU DG 🔥</h3>
+        <div class="product-grid">
+            <div class="p-card">
+                <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?w=300" class="p-img">
+                <div class="p-info">
+                    <p style="font-size: 12px; font-weight: bold;">Sneakers Luxe</p>
+                    <p style="color: #ee4d2d; font-weight: bold;">180,000 F</p>
+                    <button class="buy-btn" onclick="alert('Paiement sécurisé par S.E.G Global activé...')">ACHETER</button>
+                </div>
+            </div>
+            <div class="p-card">
+                <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=300" class="p-img">
+                <div class="p-info">
+                    <p style="font-size: 12px; font-weight: bold;">Montre S.E.G</p>
+                    <p style="color: #ee4d2d; font-weight: bold;">450,000 F</p>
+                    <button class="buy-btn" onclick="alert('Paiement sécurisé par S.E.G Global activé...')">ACHETER</button>
+                </div>
+            </div>
         </div>
-        <div class="flash-card">
-            <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?w=200" class="flash-img">
-            <p class="flash-price">120k F</p>
+    </main>
+
+    <main id="view-dg" class="view">
+        <div style="background: #232F3E; color: white; padding: 30px; text-align: center; border-radius: 0 0 30px 30px;">
+            <h1 id="dg-title">ESPACE DG</h1>
+            <p style="color: var(--seg-cyan);">Gestionnaire de flux mondial</p>
         </div>
-        <div class="flash-card">
-            <img src="https://images.pexels.com/photos/2858137/pexels-photo-2858137.jpeg?w=200" class="flash-img">
-            <p class="flash-price">1.5M F</p>
+        <div style="padding: 20px;">
+            <div style="background: white; padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 15px;">
+                <p style="color: #999; font-size: 12px;">SOLDE DES COMMISSIONS (10%)</p>
+                <h2 style="font-size: 30px; color: #3fb950;">4,850,000 FCFA</h2>
+            </div>
         </div>
-    </div>
+    </main>
 
     <nav class="bottom-nav">
-        <div class="nav-link active"><i class="fas fa-home"></i><span>Accueil</span></div>
-        <div class="nav-link"><i class="fas fa-list"></i><span>Catégories</span></div>
-        <div class="nav-link"><i class="fas fa-shopping-cart"></i><span>Panier</span></div>
-        <div class="nav-link"><i class="fas fa-user"></i><span>Mon Compte</span></div>
+        <div class="nav-item active" id="nav-home" onclick="changerVue('home')">
+            <i class="fas fa-home"></i><span>Accueil</span>
+        </div>
+        <div class="nav-item" onclick="alert('Ouverture du Scanner S.E.G pour vendeur...')">
+            <i class="fas fa-plus-circle"></i><span>Vendre</span>
+        </div>
+        <div class="nav-item" id="nav-dg" onclick="changerVue('dg')">
+            <i class="fas fa-user-tie"></i><span>Mon S.E.G</span>
+        </div>
     </nav>
 
+    <script>
+        function validerInscription() {
+            const nom = document.getElementById('userNameInput').value;
+            if(nom.length > 2) {
+                localStorage.setItem('seg_user_name', nom);
+                document.getElementById('registration-overlay').style.display = 'none';
+                document.getElementById('display-name').innerText = "Bienvenue, " + nom;
+                document.getElementById('dg-title').innerText = "ESPACE " + nom.toUpperCase();
+            } else {
+                alert("Veuillez entrer un nom valide pour créer votre accès.");
+            }
+        }
+
+        function changerVue(vue) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('view-' + vue).classList.add('active-view');
+            document.getElementById('nav-' + vue).classList.add('active');
+        }
+
+        // Vérification au démarrage
+        window.onload = function() {
+            const savedName = localStorage.getItem('seg_user_name');
+            if(savedName) {
+                document.getElementById('registration-overlay').style.display = 'none';
+                document.getElementById('display-name').innerText = "Bienvenue, " + savedName;
+                document.getElementById('dg-title').innerText = "ESPACE " + savedName.toUpperCase();
+            }
+        }
+    </script>
 </body>
 </html>
