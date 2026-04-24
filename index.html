@@ -3,50 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Interactif</title>
+    <title>S.E.G GLOBAL - Empire Officiel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* --- STYLE DE BASE --- */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', sans-serif; }
-        body { background-color: #f0f2f2; padding-bottom: 80px; overflow-x: hidden; }
+        body { background-color: #f0f2f2; padding-bottom: 80px; transition: background 0.3s; }
 
-        /* HEADER */
-        .app-header { background-color: #232F3E; padding: 15px; position: sticky; top: 0; z-index: 1000; text-align: center; }
-        .logo { color: #19C9D1; font-size: 22px; font-weight: bold; letter-spacing: 3px; }
+        /* --- HEADER DG --- */
+        .app-header { background-color: #232F3E; padding: 15px; position: sticky; top: 0; z-index: 1000; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .logo { color: #19C9D1; font-size: 22px; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; }
 
-        /* VUES */
-        .page-view { display: none; animation: fadeIn 0.3s ease; }
+        /* --- NAVIGATION DES VUES --- */
+        .page-view { display: none; animation: fadeIn 0.4s ease; }
         .active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* --- ACCUEIL CLIENT (STYLE LUXE) --- */
+        .search-container { padding: 10px; background: #232F3E; }
+        .search-bar { display: flex; background: white; border-radius: 8px; overflow: hidden; height: 40px; }
+        .search-bar input { flex: 1; border: none; padding: 0 15px; outline: none; }
+        .search-btn { background: #FEBD69; width: 50px; display: flex; align-items: center; justify-content: center; }
 
-        /* ACCUEIL CLIENT */
-        .ceo-banner { padding: 10px; }
-        .ceo-card { 
-            height: 300px; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg');
-            background-size: cover; background-position: center; border-radius: 15px;
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; color: white;
+        .cat-scroll { display: flex; overflow-x: auto; background: white; padding: 15px 5px; gap: 20px; border-bottom: 1px solid #eee; }
+        .cat-card { min-width: 75px; text-align: center; }
+        .cat-icon { width: 45px; height: 45px; background: #f8f9fa; border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #19C9D1; border: 1px solid #eee; }
+        .cat-card p { font-size: 10px; font-weight: bold; color: #555; }
+
+        .hero-banner { padding: 10px; }
+        .hero-image { 
+            height: 350px; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg');
+            background-size: cover; background-position: center; border-radius: 20px;
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 25px; color: white;
         }
 
         .product-grid { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .p-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .p-img { width: 100%; height: 150px; object-fit: cover; }
-        .p-info { padding: 10px; text-align: center; }
-        .buy-btn { background: #FEBD69; border: none; padding: 8px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .p-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .p-img { width: 100%; height: 160px; object-fit: cover; }
+        .p-info { padding: 12px; }
+        .p-brand { font-size: 10px; color: #19C9D1; font-weight: bold; }
+        .p-price { font-weight: bold; color: #333; margin: 5px 0; }
+        .buy-now { background: #FEBD69; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
 
-        /* FORMULAIRE VENDEUR */
-        .form-container { padding: 20px; background: white; margin: 15px; border-radius: 15px; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
-        .submit-btn { background: #19C9D1; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        /* --- FORMULAIRE VENDEUR --- */
+        .sell-container { padding: 25px; background: white; margin: 15px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .sell-header { text-align: center; margin-bottom: 20px; }
+        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; }
+        .commission-note { background: #f0fdfa; border: 1px solid #19C9D1; padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 12px; color: #007a7e; line-height: 1.4; }
+        .publish-btn { background: #19C9D1; color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
 
-        /* DASHBOARD DG */
-        #dashboard-view { background: #0d1117; color: white; min-height: 100vh; padding: 20px; }
-        .stat-box { background: #161b22; padding: 20px; border-radius: 15px; border: 1px solid #30363d; margin-bottom: 15px; text-align: center; }
+        /* --- DASHBOARD DG (DARK MODE) --- */
+        #view-dg { background-color: #0d1117; min-height: 100vh; padding: 20px; color: white; }
+        .dg-card { background: #161b22; border: 1px solid #30363d; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .revenue-circle { width: 150px; height: 150px; border: 8px solid #19C9D1; border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; flex-direction: column; }
 
-        /* NAV BASSE */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 11px; cursor: pointer; }
+        /* --- NAV BASSE --- */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 11px; cursor: pointer; transition: 0.2s; }
         .nav-item.active { color: #19C9D1; }
-        .nav-item i { font-size: 22px; margin-bottom: 4px; }
+        .nav-item i { font-size: 20px; margin-bottom: 5px; }
+
     </style>
 </head>
 <body>
@@ -56,104 +72,144 @@
     </header>
 
     <main id="view-home" class="page-view active-view">
-        <div class="ceo-banner">
-            <div class="ceo-card">
-                <h2 style="text-transform: uppercase;">Offres du DG</h2>
-                <p style="color: #19C9D1; font-weight: bold;">DANS LE MONDE ENTIER 🌍</p>
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" placeholder="Rechercher un article de luxe...">
+                <div class="search-btn"><i class="fas fa-search"></i></div>
             </div>
         </div>
+
+        <div class="cat-scroll">
+            <div class="cat-card"><div class="cat-icon"><i class="fas fa-shoe-prints"></i></div><p>Chaussures</p></div>
+            <div class="cat-card"><div class="cat-icon"><i class="fas fa-watch"></i></div><p>Montres</p></div>
+            <div class="cat-card"><div class="cat-icon"><i class="fas fa-tshirt"></i></div><p>Vêtements</p></div>
+            <div class="cat-card"><div class="cat-icon"><i class="fas fa-gem"></i></div><p>Luxe</p></div>
+        </div>
+
+        <div class="hero-banner">
+            <div class="hero-image">
+                <p style="font-size: 12px; letter-spacing: 2px; font-weight: bold;">OFFRES DU DG</p>
+                <h2 style="font-size: 26px;">DANS LE MONDE ENTIER 🌍</h2>
+            </div>
+        </div>
+
         <div class="product-grid">
             <div class="p-card">
                 <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=400" class="p-img">
                 <div class="p-info">
-                    <p style="font-size: 12px;">Sneakers Luxe</p>
-                    <p style="font-weight: bold;">180,000 F</p>
-                    <button class="buy-btn" onclick="actionAchat()">ACHETER</button>
+                    <p class="p-brand">S.E.G ELITE</p>
+                    <p class="p-price">180,000 FCFA</p>
+                    <button class="buy-now" onclick="acheter()">ACHETER</button>
                 </div>
             </div>
             <div class="p-card">
                 <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?auto=compress&cs=tinysrgb&w=400" class="p-img">
                 <div class="p-info">
-                    <p style="font-size: 12px;">Montre S.E.G</p>
-                    <p style="font-weight: bold;">450,000 F</p>
-                    <button class="buy-btn" onclick="actionAchat()">ACHETER</button>
+                    <p class="p-brand">CHRONO LUXE</p>
+                    <p class="p-price">450,000 FCFA</p>
+                    <button class="buy-now" onclick="acheter()">ACHETER</button>
                 </div>
             </div>
         </div>
     </main>
 
     <div id="view-sell" class="page-view">
-        <div class="form-container">
-            <h2 style="text-align: center; color: #232F3E; margin-bottom: 15px;">POSTER UN ARTICLE</h2>
-            <p style="font-size: 12px; color: #666; text-align: center; margin-bottom: 20px;">Le Scanner S.E.G analysera votre photo après validation.</p>
-            <input type="text" id="itemName" placeholder="Nom de l'article (ex: Barbouches)">
-            <input type="number" id="itemPrice" placeholder="Prix de vente (FCFA)">
-            <select id="itemCat">
-                <option>Chaussures</option>
-                <option>Vêtements</option>
-                <option>Bijoux/Montres</option>
-            </select>
-            <button class="submit-btn" onclick="validerPost()">ACTIVER LE SCANNER & PUBLIER</button>
+        <div class="sell-container">
+            <div class="sell-header">
+                <h2 style="color: #232F3E;">Devenez Vendeur S.E.G</h2>
+                <p style="font-size: 12px; color: #666; margin-top: 5px;">Votre empire commence ici.</p>
+            </div>
+            
+            <input type="text" id="p-name" placeholder="Nom de l'article">
+            <input type="number" id="p-price" placeholder="Prix de vente (FCFA)" oninput="calculerCommission()">
+            
+            <div class="commission-note">
+                <strong>💡 Pourquoi la commission de 10% ?</strong><br>
+                Elle garantit la sécurité de votre paiement via notre compte central et active le <b>Scanner S.E.G</b> pour valider votre vente.
+                <div id="calcul-result" style="margin-top: 10px; font-weight: bold; color: #19C9D1;">Gain Net : 0 FCFA</div>
+            </div>
+
+            <button class="publish-btn" onclick="publier()">PUBLIER SUR L'EMPIRE</button>
         </div>
     </div>
 
     <div id="view-dg" class="page-view">
-        <div id="dashboard-view">
-            <h2 style="color: #19C9D1; margin-bottom: 20px;">DASHBOARD DG</h2>
-            <div class="stat-box">
-                <p style="font-size: 12px; color: #8b949e;">COMMISSIONS TOTALES (10%)</p>
-                <h1 id="total-revenue" style="color: #3fb950; margin: 10px 0;">4 850 000 FCFA</h1>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+            <div style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #19C9D1; background: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg') center/cover;"></div>
+            <div>
+                <p style="font-size: 18px; font-weight: bold;">DG STÈVE</p>
+                <p style="color: #19C9D1; font-size: 10px; letter-spacing: 2px;">GESTIONNAIRE DE FLUX</p>
             </div>
-            <div class="stat-box">
-                <i class="fas fa-shield-alt" style="color: #ff7b72; font-size: 24px;"></i>
-                <p style="margin-top: 10px;">42 ARNAQUES BLOQUÉES</p>
+        </div>
+
+        <div class="dg-card" style="text-align: center;">
+            <p style="font-size: 12px; color: #8b949e;">SOLDE COMMISSIONS (10%)</p>
+            <div class="revenue-circle">
+                <span style="font-size: 24px; font-weight: bold;">4.8M</span>
+                <span style="font-size: 10px; color: #19C9D1;">FCFA</span>
             </div>
-            <button class="submit-btn" style="background: #30363d;" onclick="alert('Audit de sécurité en cours...')">AUDIT DU SYSTÈME</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="dg-card">
+                <i class="fas fa-users" style="color: #19C9D1;"></i>
+                <p style="font-size: 18px; margin: 10px 0;">1,240</p>
+                <p style="font-size: 9px; color: #8b949e;">VISITEURS</p>
+            </div>
+            <div class="dg-card">
+                <i class="fas fa-shield-alt" style="color: #ff7b72;"></i>
+                <p style="font-size: 18px; margin: 10px 0;">42</p>
+                <p style="font-size: 9px; color: #8b949e;">BLOCAGES</p>
+            </div>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" id="nav-home" onclick="showPage('home')">
+        <div class="nav-item active" id="nav-home" onclick="changerVue('home')">
             <i class="fas fa-home"></i><span>Accueil</span>
         </div>
-        <div class="nav-item" id="nav-sell" onclick="showPage('sell')">
+        <div class="nav-item" id="nav-sell" onclick="changerVue('sell')">
             <i class="fas fa-plus-circle"></i><span>Vendre</span>
         </div>
-        <div class="nav-item" id="nav-dg" onclick="showPage('dg')">
+        <div class="nav-item" id="nav-dg" onclick="changerVue('dg')">
             <i class="fas fa-user-tie"></i><span>Mon S.E.G</span>
         </div>
     </nav>
 
     <script>
-        // LOGIQUE DES BOUTONS
-        function showPage(pageId) {
-            // Cacher toutes les vues
-            document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
-            // Désactiver tous les boutons nav
+        function changerVue(vue) {
+            // Cacher tout
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active-view'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             
-            // Afficher la page demandée
-            document.getElementById('view-' + pageId).classList.add('active-view');
-            document.getElementById('nav-' + pageId).classList.add('active');
+            // Afficher la vue
+            document.getElementById('view-' + vue).classList.add('active-view');
+            document.getElementById('nav-' + vue).classList.add('active');
 
-            // Changer la couleur du fond si c'est le dashboard
-            document.body.style.backgroundColor = (pageId === 'dg') ? '#0d1117' : '#f0f2f2';
+            // Style de fond
+            document.body.style.backgroundColor = (vue === 'dg') ? '#0d1117' : '#f0f2f2';
             window.scrollTo(0,0);
         }
 
-        function actionAchat() {
-            alert("✅ Article ajouté au panier S.E.G.\nConnectez-vous pour finaliser le paiement sécurisé.");
+        function calculerCommission() {
+            const prix = document.getElementById('p-price').value;
+            const res = document.getElementById('calcul-result');
+            if(prix > 0) {
+                const net = prix * 0.9;
+                res.innerHTML = "Votre Gain Net : " + net.toLocaleString() + " FCFA";
+            }
         }
 
-        function validerPost() {
-            const name = document.getElementById('itemName').value;
-            const price = document.getElementById('itemPrice').value;
-            if(name && price) {
-                alert("🔎 SCANNER S.E.G EN COURS...\n\nL'article '" + name + "' a été analysé avec succès.\nIl sera publié après vérification des 10% de commission.");
-                showPage('home');
-            } else {
-                alert("Veuillez remplir les informations de l'article.");
+        function publier() {
+            const nom = document.getElementById('p-name').value;
+            if(nom) {
+                alert("🚀 ANALYSE S.E.G...\n\nL'article '" + nom + "' est validé par le scanner.\nIl est maintenant visible par les acheteurs du monde entier !");
+                changerVue('home');
             }
+        }
+
+        function acheter() {
+            alert("💳 SYSTÈME DE SÉQUESTRE S.E.G\n\nL'argent sera conservé en sécurité sur notre compte central jusqu'à votre confirmation de réception.");
         }
     </script>
 </body>
