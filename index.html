@@ -3,123 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Plateforme Mondiale</title>
+    <title>S.E.G GLOBAL - Monde</title>
     <style>
-        /* --- CONFIGURATION AMAZON STYLE --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: "Amazon Ember", Arial, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background-color: #EAEDED; }
 
-        body {
-            background-color: #EAEDED;
-            color: #111;
-            padding-bottom: 50px;
-        }
-
-        /* --- BARRE DE TRADUCTION GOOGLE (Invisible au repos) --- */
-        #google_translate_element {
-            background-color: #37475A;
-            padding: 5px;
+        /* --- BARRE DE TRADUCTION FIXE --- */
+        .translate-header {
+            background-color: #FEBD69; /* Orange Amazon */
+            padding: 10px;
             text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            border-bottom: 2px solid #f3a847;
         }
 
-        /* --- HEADER NOIR (Navigation) --- */
+        /* --- HEADER STYLE AMAZON --- */
         .amazon-header {
             background-color: #232F3E;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .top-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo-seg {
-            color: #19C9D1;
-            font-size: 22px;
-            font-weight: bold;
-            text-decoration: none;
-            letter-spacing: 1px;
-        }
-
-        /* --- BARRE DE RECHERCHE --- */
-        .search-bar-container {
-            display: flex;
-            width: 100%;
-        }
-
-        .search-input {
-            flex-grow: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 4px 0 0 4px;
-            font-size: 15px;
-        }
-
-        .search-button {
-            background-color: #FEBD69;
-            border: none;
-            padding: 0 15px;
-            border-radius: 0 4px 4px 0;
-            font-size: 18px;
-        }
-
-        /* --- BARRE DE LIVRAISON --- */
-        .delivery-bar {
-            background-color: #37475A;
+            padding: 15px;
             color: white;
-            padding: 8px 12px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
+        .logo-seg { color: #19C9D1; font-size: 24px; font-weight: bold; letter-spacing: 2px; }
+        
+        .search-container { display: flex; margin-top: 10px; }
+        .search-input { flex: 1; padding: 12px; border: none; border-radius: 4px 0 0 4px; }
+        .search-btn { background: #FEBD69; border: none; padding: 10px 20px; border-radius: 0 4px 4px 0; cursor: pointer; }
 
-        /* --- BANNIÈRE PROMO --- */
+        /* --- BANNIERE PROMO --- */
         .promo-banner {
-            width: 100%;
-            height: 200px;
             background: linear-gradient(to right, #FF9900, #FFB84D);
-            padding: 20px;
+            height: 180px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            position: relative;
-        }
-
-        .promo-text {
+            justify-content: center;
             color: white;
-            z-index: 2;
+            text-align: center;
+            padding: 20px;
         }
 
-        .promo-text h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        /* --- ZONE DU CRÉATEUR (DIRECTEUR GÉNÉRAL) --- */
-        .creator-section {
-            padding: 15px;
-        }
-
+        /* --- SECTION CRÉATEUR (TA PHOTO) --- */
+        .creator-section { padding: 15px; }
         .creator-card {
-            background-color: white;
-            border-radius: 4px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
-        .creator-image-box {
+        .creator-img {
             width: 100%;
-            height: 350px;
-            border-radius: 4px;
+            height: 400px;
             background-image: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg');
             background-size: cover;
             background-position: center;
@@ -130,109 +63,73 @@
             color: white;
             position: relative;
         }
-
-        .creator-image-box::after {
+        .creator-img::after {
             content: '';
             position: absolute;
             bottom: 0; left: 0; right: 0; height: 50%;
             background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
         }
-
-        .creator-image-box h2 { z-index: 2; font-size: 20px; text-transform: uppercase; }
-        .creator-image-box p { z-index: 2; font-style: italic; }
+        .creator-img h2, .creator-img p { z-index: 2; position: relative; }
 
         /* --- GRILLE PRODUITS --- */
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding: 15px;
-        }
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
+        .product-item { background: white; padding: 10px; border-radius: 4px; text-align: center; }
+        .product-box { height: 100px; background: #f0f0f0; margin-bottom: 5px; }
 
-        .product-item {
-            background: white;
-            padding: 10px;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .product-img-placeholder {
-            width: 100%;
-            height: 100px;
-            background: #f0f0f0;
-            margin-bottom: 10px;
-        }
-
-        /* --- FOOTER VENDEUR --- */
-        .footer-banner {
-            background: #232F3E;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-weight: bold;
-            margin-top: 20px;
-        }
+        /* --- CACHER LA BARRE GOOGLE ORIGINALE --- */
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0px !important; }
     </style>
 </head>
 <body>
 
-    <div id="google_translate_element"></div>
+    <div class="translate-header">
+        <span>🌍 TRADUIRE DANS MA LANGUE : </span>
+        <div id="google_translate_element" style="display: inline-block; vertical-align: middle;"></div>
+    </div>
 
     <header class="amazon-header">
-        <div class="top-nav">
-            <a href="#" class="logo-seg">S.E.G GLOBAL</a>
-            <div style="color:white; font-size: 20px;">🛒</div>
-        </div>
-        <div class="search-bar-container">
-            <input type="text" class="search-input" placeholder="Rechercher / Search...">
-            <button class="search-button">🔍</button>
+        <div class="logo-seg">S.E.G GLOBAL</div>
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Rechercher partout dans le monde...">
+            <button class="search-btn">🔍</button>
         </div>
     </header>
 
-    <div class="delivery-bar">
-        📍 Expédition mondiale disponible
-    </div>
-
     <section class="promo-banner">
-        <div class="promo-text">
-            <h1>Livraison Gratuite</h1>
-            <p>Sur votre première commande mondiale</p>
+        <div>
+            <h1 style="font-size: 28px;">EXPÉDITION MONDIALE</h1>
+            <p>Le luxe n'a plus de frontières.</p>
         </div>
-        <div style="font-size: 60px; opacity: 0.3;">🌍</div>
     </section>
 
     <section class="creator-section">
         <div class="creator-card">
-            <h3 style="margin-bottom: 10px; font-size: 14px; color: #555;">LE CRÉATEUR DE L'EMPIRE</h3>
-            <div class="creator-image-box">
-                <h2>LA VISION DU DIRECTEUR</h2>
-                <p>L'excellence sans frontières</p>
+            <div class="creator-img">
+                <h2 style="font-size: 22px;">LA VISION DU DIRECTEUR GÉNÉRAL</h2>
+                <p>Bienvenue dans l'empire S.E.G</p>
             </div>
         </div>
     </section>
 
     <div class="product-grid">
         <div class="product-item">
-            <div class="product-img-placeholder"></div>
+            <div class="product-box"></div>
             <p style="font-size: 12px; font-weight: bold;">MONTRE NÉON</p>
         </div>
         <div class="product-item">
-            <div class="product-img-placeholder"></div>
+            <div class="product-box"></div>
             <p style="font-size: 12px; font-weight: bold;">SAC CYBER</p>
         </div>
-    </div>
-
-    <div class="footer-banner">
-        DEVENIR VENDEUR MONDIAL
     </div>
 
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'fr',
-                // Cette ligne permet d'inclure toutes les langues automatiquement
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
+                // Inclut TOUTES les langues
+                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+                autoDisplay: true
             }, 'google_translate_element');
         }
     </script>
