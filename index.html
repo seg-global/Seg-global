@@ -3,174 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Management</title>
+    <title>S.E.G GLOBAL - Empire Interactif</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', sans-serif; }
-        body { background-color: #f0f2f2; padding-bottom: 80px; transition: 0.3s; }
+        body { background-color: #f0f2f2; padding-bottom: 80px; overflow-x: hidden; }
 
-        /* --- STYLE AMAZON : HEADER --- */
-        .amazon-header { background-color: #232F3E; padding: 10px; position: sticky; top: 0; z-index: 1000; }
-        .search-box { display: flex; background: white; border-radius: 8px; overflow: hidden; height: 45px; }
-        .search-box input { flex: 1; border: none; padding: 0 15px; font-size: 14px; outline: none; }
-        .search-icon { background: #FEBD69; width: 50px; display: flex; align-items: center; justify-content: center; color: #333; font-size: 18px; }
+        /* HEADER */
+        .app-header { background-color: #232F3E; padding: 15px; position: sticky; top: 0; z-index: 1000; text-align: center; }
+        .logo { color: #19C9D1; font-size: 22px; font-weight: bold; letter-spacing: 3px; }
 
-        /* --- VUE CLIENT (ACCUEIL) --- */
-        #client-view { display: block; }
-        
-        .ali-categories { display: flex; overflow-x: auto; background: white; padding: 15px 5px; gap: 20px; scrollbar-width: none; }
-        .cat-item { min-width: 70px; text-align: center; }
-        .cat-icon { width: 45px; height: 45px; background: #f7f7f7; border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #ff6a00; }
-        .cat-item p { font-size: 11px; color: #666; font-weight: 500; }
+        /* VUES */
+        .page-view { display: none; animation: fadeIn 0.3s ease; }
+        .active-view { display: block; }
 
-        .ceo-vision-container { padding: 10px; position: relative; }
-        .ceo-photo-frame { 
-            height: 400px; background-image: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg');
-            background-size: cover; background-position: center; border-radius: 20px;
-            position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .floating-overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(transparent 40%, rgba(0,0,0,0.8) 95%);
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 30px 20px; color: white;
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ACCUEIL CLIENT */
+        .ceo-banner { padding: 10px; }
+        .ceo-card { 
+            height: 300px; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg');
+            background-size: cover; background-position: center; border-radius: 15px;
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; color: white;
         }
 
         .product-grid { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .p-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .p-img { width: 100%; height: 160px; object-fit: cover; }
-        .p-info { padding: 12px; text-align: center; }
-        .p-price { font-weight: bold; color: #ff4400; font-size: 15px; }
+        .p-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .p-img { width: 100%; height: 150px; object-fit: cover; }
+        .p-info { padding: 10px; text-align: center; }
+        .buy-btn { background: #FEBD69; border: none; padding: 8px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 5px; }
 
-        /* --- VUE DASHBOARD DG (PRIVÉE) --- */
-        #dashboard-view { display: none; background-color: #0d1117; min-height: 100vh; padding: 20px; color: white; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* FORMULAIRE VENDEUR */
+        .form-container { padding: 20px; background: white; margin: 15px; border-radius: 15px; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
+        .submit-btn { background: #19C9D1; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        .dg-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-        .dg-photo-small { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #19C9D1; background: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg') center/cover; }
-        
-        .revenue-hero { background: linear-gradient(135deg, #19C9D1, #007a7e); padding: 25px; border-radius: 20px; text-align: center; margin-bottom: 25px; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: #161b22; padding: 20px; border-radius: 15px; border: 1px solid #30363d; text-align: center; }
-        
-        .activity-section { background: #161b22; border-radius: 20px; padding: 20px; border: 1px solid #30363d; }
-        .activity-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #30363d; font-size: 12px; }
+        /* DASHBOARD DG */
+        #dashboard-view { background: #0d1117; color: white; min-height: 100vh; padding: 20px; }
+        .stat-box { background: #161b22; padding: 20px; border-radius: 15px; border: 1px solid #30363d; margin-bottom: 15px; text-align: center; }
 
-        /* --- BARRE DE NAVIGATION COMMUNE --- */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; }
-        .nav-link { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 10px; text-decoration: none; cursor: pointer; }
-        .nav-link.active { color: #19C9D1; }
-        .nav-link i { font-size: 22px; margin-bottom: 3px; }
+        /* NAV BASSE */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 11px; cursor: pointer; }
+        .nav-item.active { color: #19C9D1; }
+        .nav-item i { font-size: 22px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <div id="client-view">
-        <div class="amazon-header">
-            <div style="color: white; text-align: center; font-weight: bold; margin-bottom: 8px; letter-spacing: 2px;">S.E.G GLOBAL</div>
-            <div class="search-box">
-                <input type="text" placeholder="Rechercher dans l'empire...">
-                <div class="search-icon"><i class="fas fa-search"></i></div>
+    <header class="app-header">
+        <div class="logo">S.E.G GLOBAL</div>
+    </header>
+
+    <main id="view-home" class="page-view active-view">
+        <div class="ceo-banner">
+            <div class="ceo-card">
+                <h2 style="text-transform: uppercase;">Offres du DG</h2>
+                <p style="color: #19C9D1; font-weight: bold;">DANS LE MONDE ENTIER 🌍</p>
             </div>
         </div>
-
-        <div class="ali-categories">
-            <div class="cat-item"><div class="cat-icon"><i class="fas fa-shoe-prints"></i></div><p>Chaussures</p></div>
-            <div class="cat-item"><div class="cat-icon"><i class="fas fa-watch"></i></div><p>Montres</p></div>
-            <div class="cat-item"><div class="cat-icon"><i class="fas fa-gem"></i></div><p>Diamants</p></div>
-            <div class="cat-item"><div class="cat-icon"><i class="fas fa-bolt"></i></div><p>Tech</p></div>
-        </div>
-
-        <div class="ceo-vision-container">
-            <div class="ceo-photo-frame">
-                <div class="floating-overlay">
-                    <h2 style="font-size: 28px; text-transform: uppercase;">Offres du DG</h2>
-                    <p style="color: #19C9D1; letter-spacing: 2px;">DANS LE MONDE ENTIER 🌍</p>
-                </div>
-            </div>
-        </div>
-
         <div class="product-grid">
             <div class="p-card">
                 <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=400" class="p-img">
-                <div class="p-info"><p style="font-size: 12px;">Sneakers Luxe</p><p class="p-price">180,000 FCFA</p></div>
+                <div class="p-info">
+                    <p style="font-size: 12px;">Sneakers Luxe</p>
+                    <p style="font-weight: bold;">180,000 F</p>
+                    <button class="buy-btn" onclick="actionAchat()">ACHETER</button>
+                </div>
             </div>
             <div class="p-card">
                 <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?auto=compress&cs=tinysrgb&w=400" class="p-img">
-                <div class="p-info"><p style="font-size: 12px;">Montre S.E.G</p><p class="p-price">450,000 FCFA</p></div>
+                <div class="p-info">
+                    <p style="font-size: 12px;">Montre S.E.G</p>
+                    <p style="font-weight: bold;">450,000 F</p>
+                    <button class="buy-btn" onclick="actionAchat()">ACHETER</button>
+                </div>
             </div>
+        </div>
+    </main>
+
+    <div id="view-sell" class="page-view">
+        <div class="form-container">
+            <h2 style="text-align: center; color: #232F3E; margin-bottom: 15px;">POSTER UN ARTICLE</h2>
+            <p style="font-size: 12px; color: #666; text-align: center; margin-bottom: 20px;">Le Scanner S.E.G analysera votre photo après validation.</p>
+            <input type="text" id="itemName" placeholder="Nom de l'article (ex: Barbouches)">
+            <input type="number" id="itemPrice" placeholder="Prix de vente (FCFA)">
+            <select id="itemCat">
+                <option>Chaussures</option>
+                <option>Vêtements</option>
+                <option>Bijoux/Montres</option>
+            </select>
+            <button class="submit-btn" onclick="validerPost()">ACTIVER LE SCANNER & PUBLIER</button>
         </div>
     </div>
 
-    <div id="dashboard-view">
-        <div class="dg-header">
-            <div class="dg-photo-small"></div>
-            <div>
-                <p style="font-size: 18px; font-weight: bold;">DG STÈVE</p>
-                <p style="color: #19C9D1; font-size: 10px; letter-spacing: 2px;">GESTION DE L'EMPIRE</p>
+    <div id="view-dg" class="page-view">
+        <div id="dashboard-view">
+            <h2 style="color: #19C9D1; margin-bottom: 20px;">DASHBOARD DG</h2>
+            <div class="stat-box">
+                <p style="font-size: 12px; color: #8b949e;">COMMISSIONS TOTALES (10%)</p>
+                <h1 id="total-revenue" style="color: #3fb950; margin: 10px 0;">4 850 000 FCFA</h1>
             </div>
-        </div>
-
-        <div class="revenue-hero">
-            <p style="font-size: 12px; opacity: 0.8;">COMMISSIONS TOTALES (10%)</p>
-            <div style="font-size: 32px; font-weight: 800;">4 850 000 FCFA</div>
-            <p style="font-size: 10px; margin-top: 10px;">Prêt pour retrait sécurisé</p>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <i class="fas fa-users" style="color: #19C9D1; margin-bottom: 10px;"></i>
-                <div style="font-size: 18px; font-weight: bold;">1 240</div>
-                <p style="font-size: 9px; color: #8b949e;">UTILISATEURS</p>
+            <div class="stat-box">
+                <i class="fas fa-shield-alt" style="color: #ff7b72; font-size: 24px;"></i>
+                <p style="margin-top: 10px;">42 ARNAQUES BLOQUÉES</p>
             </div>
-            <div class="stat-card">
-                <i class="fas fa-shield-alt" style="color: #ff7b72; margin-bottom: 10px;"></i>
-                <div style="font-size: 18px; font-weight: bold;">42</div>
-                <p style="font-size: 9px; color: #8b949e;">ARNAQUES BLOQUÉES</p>
-            </div>
+            <button class="submit-btn" style="background: #30363d;" onclick="alert('Audit de sécurité en cours...')">AUDIT DU SYSTÈME</button>
         </div>
-
-        <div class="activity-section">
-            <p style="font-size: 13px; margin-bottom: 15px; color: #19C9D1;">DERNIÈRES ENTRÉES (FLUX 10%)</p>
-            <div class="activity-item"><span>Vente Sneakers</span><span style="color:#3fb950;">+ 18 000 F</span></div>
-            <div class="activity-item"><span>Vente Montre</span><span style="color:#3fb950;">+ 45 000 F</span></div>
-            <div class="activity-item"><span>Vente Bijoux</span><span style="color:#3fb950;">+ 85 000 F</span></div>
-        </div>
-
-        <button onclick="switchView('home')" style="width: 100%; background: #30363d; color: white; border: none; padding: 15px; border-radius: 10px; margin-top: 20px; font-weight: bold;">RETOUR AU CATALOGUE CLIENT</button>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-link active" id="btn-home" onclick="switchView('home')">
-            <i class="fas fa-home"></i>Accueil
+        <div class="nav-item active" id="nav-home" onclick="showPage('home')">
+            <i class="fas fa-home"></i><span>Accueil</span>
         </div>
-        <div class="nav-link" onclick="alert('Ouverture du Scanner de Sécurité S.E.G...')">
-            <i class="fas fa-shield-alt"></i>Scanner
+        <div class="nav-item" id="nav-sell" onclick="showPage('sell')">
+            <i class="fas fa-plus-circle"></i><span>Vendre</span>
         </div>
-        <div class="nav-link" id="btn-dg" onclick="switchView('dg')">
-            <i class="fas fa-user-tie"></i>Mon S.E.G
+        <div class="nav-item" id="nav-dg" onclick="showPage('dg')">
+            <i class="fas fa-user-tie"></i><span>Mon S.E.G</span>
         </div>
     </nav>
 
     <script>
-        function switchView(view) {
-            const client = document.getElementById('client-view');
-            const dash = document.getElementById('dashboard-view');
-            const btnHome = document.getElementById('btn-home');
-            const btnDg = document.getElementById('btn-dg');
+        // LOGIQUE DES BOUTONS
+        function showPage(pageId) {
+            // Cacher toutes les vues
+            document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
+            // Désactiver tous les boutons nav
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            // Afficher la page demandée
+            document.getElementById('view-' + pageId).classList.add('active-view');
+            document.getElementById('nav-' + pageId).classList.add('active');
 
-            if (view === 'dg') {
-                client.style.display = 'none';
-                dash.style.display = 'block';
-                document.body.style.backgroundColor = '#0d1117';
-                btnDg.classList.add('active');
-                btnHome.classList.remove('active');
+            // Changer la couleur du fond si c'est le dashboard
+            document.body.style.backgroundColor = (pageId === 'dg') ? '#0d1117' : '#f0f2f2';
+            window.scrollTo(0,0);
+        }
+
+        function actionAchat() {
+            alert("✅ Article ajouté au panier S.E.G.\nConnectez-vous pour finaliser le paiement sécurisé.");
+        }
+
+        function validerPost() {
+            const name = document.getElementById('itemName').value;
+            const price = document.getElementById('itemPrice').value;
+            if(name && price) {
+                alert("🔎 SCANNER S.E.G EN COURS...\n\nL'article '" + name + "' a été analysé avec succès.\nIl sera publié après vérification des 10% de commission.");
+                showPage('home');
             } else {
-                client.style.display = 'block';
-                dash.style.display = 'none';
-                document.body.style.backgroundColor = '#f0f2f2';
-                btnHome.classList.add('active');
-                btnDg.classList.remove('active');
-                window.scrollTo(0,0);
+                alert("Veuillez remplir les informations de l'article.");
             }
         }
     </script>
