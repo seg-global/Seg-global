@@ -3,123 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire du Luxe</title>
+    <title>S.E.G GLOBAL - Interface Elite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* --- STYLE PRESTIGE S.E.G --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #f4f7f6; color: #1a1a1a; padding-bottom: 80px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', sans-serif; }
+        body { background-color: #f0f2f2; padding-bottom: 80px; }
 
-        /* HEADER */
-        .main-header { background-color: #232F3E; padding: 20px; text-align: center; color: white; position: sticky; top: 0; z-index: 100; }
-        .logo { color: #19C9D1; font-size: 28px; font-weight: bold; letter-spacing: 3px; }
+        /* --- STYLE AMAZON : LA BARRE DE RECHERCHE --- */
+        .amazon-header { background-color: #232F3E; padding: 10px; position: sticky; top: 0; z-index: 1000; }
+        .search-box { display: flex; background: white; border-radius: 8px; overflow: hidden; height: 45px; }
+        .search-box input { flex: 1; border: none; padding: 0 15px; font-size: 14px; outline: none; }
+        .search-icon { background: #FEBD69; width: 50px; display: flex; align-items: center; justify-content: center; color: #333; font-size: 18px; }
 
-        /* BANNIÈRE DG */
-        .ceo-section { padding: 15px; }
-        .ceo-card {
-            background-image: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg'); 
-            height: 350px; background-size: cover; background-position: center;
-            border-radius: 15px; display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 20px; color: white; position: relative; overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 20px;
+        /* --- STYLE ALIBABA : LES CATÉGORIES RAPIDES --- */
+        .ali-categories { display: flex; overflow-x: auto; background: white; padding: 15px 5px; gap: 20px; scrollbar-width: none; }
+        .cat-item { min-width: 70px; text-align: center; }
+        .cat-icon { width: 45px; height: 45px; background: #f7f7f7; border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #ff6a00; }
+        .cat-item p { font-size: 11px; color: #666; font-weight: 500; }
+
+        /* BANNIÈRE DG PROMO */
+        .promo-banner { padding: 10px; }
+        .banner-card { 
+            height: 180px; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg');
+            background-size: cover; background-position: center; border-radius: 12px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; text-align: center; border: 2px solid #19C9D1;
         }
-        .ceo-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
-        .ceo-text { z-index: 2; }
 
-        /* CATALOGUE PRODUITS */
-        .catalog-section { padding: 0 15px; }
-        .section-title { font-size: 18px; margin-bottom: 15px; color: #232F3E; font-weight: bold; }
-        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .product-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #eee; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .product-img { height: 150px; background-size: cover; background-position: center; }
-        .product-details { padding: 10px; text-align: center; }
-        .product-name { font-size: 13px; font-weight: bold; margin-bottom: 5px; height: 35px; overflow: hidden; }
-        .product-price { color: #19C9D1; font-weight: bold; font-size: 14px; margin-bottom: 10px; }
-        .buy-btn { background: #FEBD69; color: #232F3E; border: none; padding: 10px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; }
+        /* --- FLUX DE PRODUITS "SMART" --- */
+        .feed-container { padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .product-card { background: white; border-radius: 8px; overflow: hidden; position: relative; }
+        .prod-img { width: 100%; height: 160px; object-fit: cover; }
+        .prod-info { padding: 10px; }
+        .prod-title { font-size: 13px; color: #333; height: 32px; overflow: hidden; margin-bottom: 5px; line-height: 1.2; }
+        .prod-price { font-size: 16px; font-weight: bold; color: #ff4400; }
+        .prod-tag { position: absolute; top: 5px; left: 5px; background: #ff6a00; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
 
-        /* MODALE */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-box { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; }
-        .modal-box input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; }
-        .submit-btn { background: #19C9D1; color: white; border: none; padding: 15px; width: 100%; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; }
-
-        /* FOOTER NAV */
-        .footer-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
-            background: #232F3E; display: flex; justify-content: space-around; align-items: center;
-            color: white; font-size: 12px; z-index: 2000; box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
-        }
-        .nav-item { text-align: center; cursor: pointer; opacity: 0.8; transition: 0.3s; }
-        .nav-item:hover { opacity: 1; color: #19C9D1; }
+        /* FOOTER NAVIGATION STYLE APP */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: white; display: flex; border-top: 1px solid #ddd; z-index: 1000; }
+        .nav-link { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; text-decoration: none; font-size: 10px; }
+        .nav-link.active { color: #19C9D1; }
+        .nav-link i { font-size: 20px; margin-bottom: 3px; }
     </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="logo">S.E.G GLOBAL</div>
-    </header>
-
-    <main id="main-view">
-        <section class="ceo-section">
-            <div class="ceo-card">
-                <div class="ceo-text">
-                    <p style="color: #19C9D1; font-weight: bold; font-size: 12px;">DIRECTEUR GÉNÉRAL</p>
-                    <h1 style="font-size: 20px;">L'EMPIRE DU LUXE MONDIAL</h1>
-                </div>
-            </div>
-        </section>
-
-        <section class="catalog-section">
-            <h2 class="section-title">✨ COLLECTIONS PRESTIGE</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-img" style="background-image: url('https://images.pexels.com/photos/1257733/pexels-photo-1257733.jpeg?auto=compress&cs=tinysrgb&w=400');"></div>
-                    <div class="product-details"><p class="product-name">Montre S.E.G Chrono</p><p class="product-price">850,000 FCFA</p><button class="buy-btn" onclick="openAuth('achat')">ACHETER</button></div>
-                </div>
-                <div class="product-card">
-                    <div class="product-img" style="background-image: url('https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=400');"></div>
-                    <div class="product-details"><p class="product-name">Sneakers Luxe Black</p><p class="product-price">250,000 FCFA</p><button class="buy-btn" onclick="openAuth('achat')">ACHETER</button></div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <nav class="footer-nav">
-        <div class="nav-item" onclick="goHome()">🏠<br>Accueil</div>
-        <div class="nav-item" onclick="openAuth('vendre')">💰<br>Vendre</div>
-        <div class="nav-item" onclick="openAuth('compte')">👤<br>Mon Compte</div>
-    </nav>
-
-    <div id="authModal" class="modal">
-        <div class="modal-box">
-            <h2 id="auth-title">Accès S.E.G</h2>
-            <p id="auth-desc" style="font-size: 13px; color: #666; margin: 10px 0;"></p>
-            <input type="email" placeholder="Email professionnel">
-            <input type="password" placeholder="Mot de passe">
-            <button class="submit-btn" onclick="closeAuth()">VALIDER</button>
-            <p onclick="closeAuth()" style="color:red; cursor:pointer; font-weight:bold; margin-top:20px;">FERMER</p>
+    <div class="amazon-header">
+        <div style="color: white; text-align: center; font-weight: bold; margin-bottom: 8px; letter-spacing: 2px;">S.E.G GLOBAL</div>
+        <div class="search-box">
+            <input type="text" placeholder="Rechercher des produits de luxe mondiaux...">
+            <div class="search-icon"><i class="fas fa-search"></i></div>
         </div>
     </div>
 
-    <script>
-        // Fonction ACCUEIL : Ferme tout et revient en haut
-        function goHome() {
-            closeAuth(); // Ferme toute modale ouverte
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Remonte en douceur
-            console.log("Retour à l'accueil de l'empire.");
-        }
+    <div class="ali-categories">
+        <div class="cat-item"><div class="cat-icon"><i class="fas fa-gem"></i></div><p>Diamants</p></div>
+        <div class="cat-item"><div class="cat-icon"><i class="fas fa-clock"></i></div><p>Montres</p></div>
+        <div class="cat-item"><div class="cat-icon"><i class="fas fa-tshirt"></i></div><p>Mode</p></div>
+        <div class="cat-item"><div class="cat-icon"><i class="fas fa-car"></i></div><p>Auto</p></div>
+        <div class="cat-item"><div class="cat-icon"><i class="fas fa-bolt"></i></div><p>Tech</p></div>
+        <div class="cat-item"><div class="cat-icon"><i class="fas fa-ellipsis-h"></i></div><p>Plus</p></div>
+    </div>
 
-        function openAuth(type) {
-            const title = document.getElementById('auth-title');
-            const desc = document.getElementById('auth-desc');
-            if (type === 'achat') { title.innerText = "Finaliser l'achat"; desc.innerText = "Connectez-vous pour sécuriser votre paiement."; }
-            else if (type === 'vendre') { title.innerText = "Portail Vendeur"; desc.innerText = "Accédez au scanner S.E.G pour publier vos articles."; }
-            else { title.innerText = "Mon Espace"; desc.innerText = "Gérez vos commandes et votre solde."; }
-            document.getElementById('authModal').style.display = 'flex';
-        }
+    <div class="promo-banner">
+        <div class="banner-card">
+            <h2 style="font-size: 22px;">OFFRES DU DG</h2>
+            <p style="font-size: 12px; background: rgba(25, 201, 209, 0.8); padding: 4px 10px; border-radius: 20px; margin-top: 5px;">Expédition Monde Entier 🌍</p>
+        </div>
+    </div>
 
-        function closeAuth() {
-            document.getElementById('authModal').style.display = 'none';
-        }
-    </script>
+    <div class="feed-container">
+        <div class="product-card">
+            <div class="prod-tag">Vendeur Vérifié</div>
+            <img src="https://images.pexels.com/photos/1257733/pexels-photo-1257733.jpeg?auto=compress&cs=tinysrgb&w=400" class="prod-img">
+            <div class="prod-info">
+                <p class="prod-title">Montre de luxe S.E.G Automatique</p>
+                <p class="prod-price">750,000 FCFA</p>
+                <p style="font-size: 10px; color: #888;">Livraison : Russie, USA, Cameroun...</p>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=400" class="prod-img">
+            <div class="prod-info">
+                <p class="prod-title">Chaussures "Elite Edition" SEG</p>
+                <p class="prod-price">180,000 FCFA</p>
+                <p style="font-size: 10px; color: #888;">Plus de 500 vendus</p>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-link active"><i class="fas fa-home"></i>Accueil</a>
+        <a href="#" class="nav-link"><i class="fas fa-th-large"></i>Catégories</a>
+        <a href="#" class="nav-link"><i class="fas fa-shopping-cart"></i>Panier</a>
+        <a href="#" class="nav-link" onclick="alert('Accès au Scanner SEG...')"><i class="fas fa-shield-alt"></i>Vendre</a>
+        <a href="#" class="nav-link"><i class="fas fa-user"></i>Mon S.E.G</a>
+    </nav>
+
 </body>
 </html>
