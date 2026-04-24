@@ -3,104 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Luxury Mall</title>
+    <title>S.E.G GLOBAL - Dashboard DG</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', sans-serif; }
-        body { background-color: #f8f9fa; padding-bottom: 80px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #0d1117; color: white; padding: 20px; }
 
-        /* HEADER PRESTIGE */
-        .app-header { background-color: #1a1a1a; padding: 15px; text-align: center; color: white; position: sticky; top: 0; z-index: 1000; }
-        .logo { color: #19C9D1; font-size: 22px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; }
+        /* HEADER DG */
+        .header-dg { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+        .dg-profile { display: flex; align-items: center; gap: 15px; }
+        .dg-photo { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #19C9D1; background: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg') center/cover; }
+        .dg-status { color: #19C9D1; font-size: 12px; font-weight: bold; letter-spacing: 2px; }
 
-        /* BANNIÈRE PARTENARIAT (Appel aux marques) */
-        .partner-banner { 
-            background: linear-gradient(45deg, #1a1a1a, #333); 
-            color: #19C9D1; padding: 10px; text-align: center; font-size: 11px; font-weight: bold; letter-spacing: 1px;
-        }
+        /* STATS PRINCIPALES */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: #161b22; padding: 20px; border-radius: 15px; border: 1px solid #30363d; text-align: center; }
+        .stat-value { font-size: 18px; font-weight: bold; color: #19C9D1; margin-top: 10px; }
+        .stat-label { font-size: 10px; color: #8b949e; text-transform: uppercase; margin-top: 5px; }
 
-        /* FILTRAGE DES COLLECTIONS */
-        .nav-categories { display: flex; overflow-x: auto; background: white; padding: 15px; gap: 25px; border-bottom: 1px solid #eee; }
-        .cat-box { text-align: center; min-width: 60px; }
-        .cat-box i { font-size: 20px; color: #1a1a1a; margin-bottom: 5px; }
-        .cat-box p { font-size: 10px; font-weight: bold; text-transform: uppercase; color: #666; }
+        /* REVENUS TOTAUX */
+        .revenue-hero { background: linear-gradient(135deg, #19C9D1, #007a7e); padding: 25px; border-radius: 20px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 20px rgba(25, 201, 209, 0.2); }
+        .revenue-total { font-size: 32px; font-weight: 800; }
+        
+        /* ACTIVITÉ RÉCENTE (Les 10%) */
+        .activity-section { background: #161b22; border-radius: 20px; padding: 20px; border: 1px solid #30363d; }
+        .activity-title { font-size: 14px; margin-bottom: 15px; display: flex; justify-content: space-between; }
+        .activity-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #30363d; font-size: 12px; }
+        .comm-plus { color: #3fb950; font-weight: bold; }
 
-        /* GRILLE DE VENTE QUOTIDIENNE LUXE */
-        .luxury-grid { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .item-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
-        .item-img { width: 100%; height: 180px; object-fit: cover; }
-        .item-info { padding: 12px; }
-        .brand-name { font-size: 10px; color: #19C9D1; font-weight: bold; text-transform: uppercase; }
-        .item-name { font-size: 13px; font-weight: 500; margin: 4px 0; color: #333; }
-        .item-price { font-size: 15px; font-weight: bold; color: #1a1a1a; }
-
-        /* BARRE DE NAVIGATION SEG */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; }
-        .nav-link { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 10px; text-decoration: none; }
-        .nav-link.active { color: #19C9D1; }
+        /* BOUTONS D'ACTION */
+        .action-btn { background: transparent; border: 1px solid #19C9D1; color: #19C9D1; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="partner-banner">PARTENARIATS OFFICIELS S.E.G GLOBAL</div>
-
-    <header class="app-header">
-        <div class="logo">S.E.G GLOBAL</div>
-    </header>
-
-    <div class="nav-categories">
-        <div class="cat-box"><i class="fas fa-shoe-prints"></i><p>Chaussures</p></div>
-        <div class="cat-box"><i class="fas fa-tshirt"></i><p>Habits</p></div>
-        <div class="cat-box"><i class="fas fa-glasses"></i><p>Lunettes</p></div>
-        <div class="cat-box"><i class="fas fa-watch"></i><p>Montres</p></div>
-        <div class="cat-box"><i class="fas fa-ring"></i><p>Bijoux</p></div>
+    <div class="header-dg">
+        <div class="dg-profile">
+            <div class="dg-photo"></div>
+            <div>
+                <p style="font-size: 16px; font-weight: bold;">DG STÈVE</p>
+                <p class="dg-status">EMPIRE ACTIF</p>
+            </div>
+        </div>
+        <i class="fas fa-bell" style="font-size: 20px; color: #8b949e;"></i>
     </div>
 
-    <div class="luxury-grid">
-        <div class="item-card">
-            <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=400" class="item-img">
-            <div class="item-info">
-                <p class="brand-name">Collection S.E.G</p>
-                <p class="item-name">Sneakers Black Premium</p>
-                <p class="item-price">180,000 FCFA</p>
-            </div>
-        </div>
+    <div class="revenue-hero">
+        <p style="font-size: 12px; opacity: 0.9; margin-bottom: 5px;">COMMISSIONS TOTALES (10%)</p>
+        <div class="revenue-total">4 850 000 FCFA</div>
+        <p style="font-size: 10px; margin-top: 10px; opacity: 0.8;">Solde prêt pour virement central</p>
+    </div>
 
-        <div class="item-card">
-            <img src="https://images.pexels.com/photos/701877/pexels-photo-701877.jpeg?auto=compress&cs=tinysrgb&w=400" class="item-img">
-            <div class="item-info">
-                <p class="brand-name">Optique Luxe</p>
-                <p class="item-name">Lunettes de Soleil "Empire"</p>
-                <p class="item-price">95,000 FCFA</p>
-            </div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fas fa-users" style="color: #19C9D1;"></i>
+            <div class="stat-value">1 240</div>
+            <div class="stat-label">Utilisateurs</div>
         </div>
-
-        <div class="item-card">
-            <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?auto=compress&cs=tinysrgb&w=400" class="item-img">
-            <div class="item-info">
-                <p class="brand-name">Haute Horlogerie</p>
-                <p class="item-name">Montre Chronographe Silver</p>
-                <p class="item-price">450,000 FCFA</p>
-            </div>
-        </div>
-
-        <div class="item-card">
-            <img src="https://images.pexels.com/photos/1328545/pexels-photo-1328545.jpeg?auto=compress&cs=tinysrgb&w=400" class="item-img">
-            <div class="item-info">
-                <p class="brand-name">Bijouterie</p>
-                <p class="item-name">Chaîne Or 18 Carats</p>
-                <p class="item-price">850,000 FCFA</p>
-            </div>
+        <div class="stat-card">
+            <i class="fas fa-shield-alt" style="color: #ff7b72;"></i>
+            <div class="stat-value">42</div>
+            <div class="stat-label">Scams Bloqués</div>
         </div>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="#" class="nav-link active"><i class="fas fa-home"></i>Accueil</a>
-        <a href="#" class="nav-link"><i class="fas fa-search"></i>Explorer</a>
-        <a href="#" class="nav-link" style="color:#19C9D1;"><i class="fas fa-plus-circle"></i>Vendre</a>
-        <a href="#" class="nav-link"><i class="fas fa-shopping-bag"></i>Panier</a>
-        <a href="#" class="nav-link"><i class="fas fa-user"></i>Profil</a>
-    </nav>
+    <div class="activity-section">
+        <div class="activity-title">
+            <span>FLUX DE COMMISSIONS</span>
+            <span style="color: #19C9D1;">En direct</span>
+        </div>
+        
+        <div class="activity-item">
+            <span>Vente Montre Neon</span>
+            <span class="comm-plus">+ 85 000 FCFA</span>
+        </div>
+        <div class="activity-item">
+            <span>Vente Sneakers Black</span>
+            <span class="comm-plus">+ 18 000 FCFA</span>
+        </div>
+        <div class="activity-item">
+            <span>Vente Chaîne Or 18K</span>
+            <span class="comm-plus">+ 120 000 FCFA</span>
+        </div>
+        <div class="activity-item">
+            <span>Vente Lunettes Empire</span>
+            <span class="comm-plus">+ 9 500 FCFA</span>
+        </div>
+    </div>
+
+    <button class="action-btn" onclick="alert('Lancement de l\'audit de sécurité...')">VÉRIFIER LE SYSTÈME DE SÉQUESTRE</button>
+    
+    <p style="text-align: center; font-size: 10px; color: #8b949e; margin-top: 30px;">
+        S.E.G GLOBAL v2.0 - Gestion des flux mondiaux
+    </p>
 
 </body>
 </html>
