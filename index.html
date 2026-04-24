@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Interface Luxe Pro</title>
+    <title>S.E.G GLOBAL - Plateforme Mondiale</title>
     <style>
         /* --- CONFIGURATION AMAZON STYLE --- */
         * {
@@ -14,8 +14,16 @@
         }
 
         body {
-            background-color: #EAEDED; /* Le gris clair typique d'Amazon */
+            background-color: #EAEDED;
             color: #111;
+            padding-bottom: 50px;
+        }
+
+        /* --- BARRE DE TRADUCTION GOOGLE (Invisible au repos) --- */
+        #google_translate_element {
+            background-color: #37475A;
+            padding: 5px;
+            text-align: center;
         }
 
         /* --- HEADER NOIR (Navigation) --- */
@@ -56,11 +64,10 @@
         }
 
         .search-button {
-            background-color: #FEBD69; /* Le orange Amazon */
+            background-color: #FEBD69;
             border: none;
             padding: 0 15px;
             border-radius: 0 4px 4px 0;
-            cursor: pointer;
             font-size: 18px;
         }
 
@@ -75,44 +82,29 @@
             gap: 5px;
         }
 
-        /* --- GRANDE BANNIÈRE (Comme ton image Amazon) --- */
+        /* --- BANNIÈRE PROMO --- */
         .promo-banner {
             width: 100%;
-            height: 220px;
+            height: 200px;
             background: linear-gradient(to right, #FF9900, #FFB84D);
             padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            overflow: hidden;
             position: relative;
         }
 
         .promo-text {
             color: white;
             z-index: 2;
-            max-width: 60%;
         }
 
         .promo-text h1 {
-            font-size: 26px;
-            line-height: 1.1;
-            margin-bottom: 10px;
+            font-size: 24px;
+            margin-bottom: 5px;
         }
 
-        .btn-promo {
-            background: white;
-            color: #111;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
-            margin-top: 10px;
-            text-decoration: none;
-        }
-
-        /* --- TA ZONE : LE CRÉATEUR --- */
+        /* --- ZONE DU CRÉATEUR (DIRECTEUR GÉNÉRAL) --- */
         .creator-section {
             padding: 15px;
         }
@@ -121,12 +113,12 @@
             background-color: white;
             border-radius: 4px;
             padding: 15px;
-            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .creator-image-box {
             width: 100%;
-            height: 300px;
+            height: 350px;
             border-radius: 4px;
             background-image: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg');
             background-size: cover;
@@ -142,50 +134,49 @@
         .creator-image-box::after {
             content: '';
             position: absolute;
-            bottom: 0; left: 0; right: 0; height: 40%;
-            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            bottom: 0; left: 0; right: 0; height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
         }
 
-        .creator-image-box h2, .creator-image-box p {
-            z-index: 2;
-        }
+        .creator-image-box h2 { z-index: 2; font-size: 20px; text-transform: uppercase; }
+        .creator-image-box p { z-index: 2; font-style: italic; }
 
-        /* --- GRILLE DE PRODUITS --- */
+        /* --- GRILLE PRODUITS --- */
         .product-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            padding: 0 15px 20px;
+            padding: 15px;
         }
 
         .product-item {
             background: white;
-            padding: 15px;
+            padding: 10px;
             border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
         }
 
-        .product-img {
+        .product-img-placeholder {
             width: 100%;
-            height: 120px;
-            background: #f7f7f7;
+            height: 100px;
+            background: #f0f0f0;
             margin-bottom: 10px;
-            border-radius: 4px;
         }
 
-        .price-tag {
-            background: #CC0C39;
+        /* --- FOOTER VENDEUR --- */
+        .footer-banner {
+            background: #232F3E;
             color: white;
-            padding: 2px 6px;
-            font-size: 12px;
-            border-radius: 2px;
-            align-self: flex-start;
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
+
+    <div id="google_translate_element"></div>
 
     <header class="amazon-header">
         <div class="top-nav">
@@ -193,46 +184,59 @@
             <div style="color:white; font-size: 20px;">🛒</div>
         </div>
         <div class="search-bar-container">
-            <input type="text" class="search-input" placeholder="Rechercher sur S.E.G Global">
+            <input type="text" class="search-input" placeholder="Rechercher / Search...">
             <button class="search-button">🔍</button>
         </div>
     </header>
 
     <div class="delivery-bar">
-        📍 Votre adresse de livraison: Cameroun
+        📍 Expédition mondiale disponible
     </div>
 
     <section class="promo-banner">
         <div class="promo-text">
-            <h1>1ère livraison gratuite</h1>
-            <p>Découvrez l'excellence maintenant.</p>
-            <a href="#" class="btn-promo">En savoir plus</a>
+            <h1>Livraison Gratuite</h1>
+            <p>Sur votre première commande mondiale</p>
         </div>
-        <div style="font-size: 80px; opacity: 0.3;">💎</div>
+        <div style="font-size: 60px; opacity: 0.3;">🌍</div>
     </section>
 
     <section class="creator-section">
         <div class="creator-card">
-            <h3 style="margin-bottom: 10px;">LE CRÉATEUR DU LUXE</h3>
+            <h3 style="margin-bottom: 10px; font-size: 14px; color: #555;">LE CRÉATEUR DE L'EMPIRE</h3>
             <div class="creator-image-box">
                 <h2>LA VISION DU DIRECTEUR</h2>
-                <p>Incarnez l'exception</p>
+                <p>L'excellence sans frontières</p>
             </div>
         </div>
     </section>
 
     <div class="product-grid">
         <div class="product-item">
-            <div class="product-img"></div>
-            <div class="price-tag">-14%</div>
-            <p style="font-size: 13px; font-weight: bold; margin-top: 5px;">Montre Néon</p>
+            <div class="product-img-placeholder"></div>
+            <p style="font-size: 12px; font-weight: bold;">MONTRE NÉON</p>
         </div>
         <div class="product-item">
-            <div class="product-img"></div>
-            <div class="price-tag">-13%</div>
-            <p style="font-size: 13px; font-weight: bold; margin-top: 5px;">Sac Cyber</p>
+            <div class="product-img-placeholder"></div>
+            <p style="font-size: 12px; font-weight: bold;">SAC CYBER</p>
         </div>
     </div>
+
+    <div class="footer-banner">
+        DEVENIR VENDEUR MONDIAL
+    </div>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'fr',
+                // Cette ligne permet d'inclure toutes les langues automatiquement
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
