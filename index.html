@@ -3,167 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Amazon & Alibaba Model</title>
+    <title>S.E.G GLOBAL - Accueil Alibaba Style</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --amazon-blue: #232F3E; --amazon-orange: #febd69; --seg-cyan: #19C9D1; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Arial', sans-serif; }
-        body { background-color: #eaeded; padding-bottom: 80px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+        body { background-color: #f4f4f4; padding-bottom: 80px; }
 
-        /* HEADER TYPE AMAZON */
-        header { background-color: var(--amazon-blue); padding: 10px; position: sticky; top: 0; z-index: 1000; }
-        .nav-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .logo { color: white; font-weight: bold; font-size: 1.2rem; }
-        
-        .search-wrapper { display: flex; background: white; border-radius: 4px; overflow: hidden; height: 40px; }
-        .search-wrapper input { flex: 1; border: none; padding: 10px; outline: none; }
-        .search-btn { background: var(--amazon-orange); border: none; width: 45px; cursor: pointer; }
+        /* --- HEADER ALIBABA STYLE --- */
+        .ali-header { background: linear-gradient(90deg, #ff6a00, #ee4d2d); padding: 15px; position: sticky; top: 0; z-index: 1000; border-radius: 0 0 20px 20px; }
+        .top-line { display: flex; justify-content: space-between; align-items: center; color: white; margin-bottom: 15px; }
+        .search-container { background: white; border-radius: 25px; display: flex; padding: 10px 15px; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .search-container input { border: none; flex: 1; outline: none; margin-left: 10px; font-size: 14px; }
 
-        /* CATÉGORIES (VUE ALIBABA) */
-        .cat-bar { display: flex; overflow-x: auto; background: white; padding: 15px 5px; gap: 15px; border-bottom: 1px solid #ddd; }
-        .cat-item { min-width: 70px; text-align: center; cursor: pointer; }
-        .cat-circle { width: 50px; height: 50px; background: #f7f7f7; border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--amazon-blue); border: 1px solid #eee; }
-        .cat-item p { font-size: 11px; font-weight: 500; }
+        /* --- BANNER BIENVENUE --- */
+        .welcome-banner { margin: 15px; background: white; border-radius: 15px; padding: 20px; display: flex; align-items: center; justify-content: space-between; overflow: hidden; position: relative; }
+        .welcome-text h2 { font-size: 18px; color: #333; }
+        .welcome-text p { font-size: 12px; color: #ff6a00; font-weight: bold; }
+        .coupon-badge { background: #ffefea; color: #ff6a00; padding: 5px 10px; border-radius: 5px; font-size: 10px; margin-top: 5px; display: inline-block; }
 
-        /* GRILLE DE PRODUITS */
-        .view { display: none; animation: fadeIn 0.3s; }
-        .active-view { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* --- CATÉGORIES COLORÉES --- */
+        .ali-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 15px; background: white; margin: 0 15px; border-radius: 15px; }
+        .cat-item { text-align: center; }
+        .cat-circle { width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; }
+        .cat-item p { font-size: 11px; color: #666; font-weight: 500; }
 
-        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; }
-        .card { background: white; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; }
-        .card-img { width: 100%; height: 160px; object-fit: cover; }
-        .card-body { padding: 10px; flex-grow: 1; }
-        .verified { font-size: 10px; color: #c45500; font-weight: bold; }
-        .p-title { font-size: 13px; margin: 5px 0; height: 32px; overflow: hidden; }
-        .p-price { font-size: 16px; font-weight: bold; }
-        .add-btn { background: var(--amazon-orange); border: 1px solid #a88734; border-radius: 3px; width: 100%; padding: 8px; margin-top: 10px; cursor: pointer; font-size: 12px; }
+        /* --- SECTION FLASH SALES --- */
+        .section-title { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .flash-grid { display: flex; overflow-x: auto; padding: 0 15px; gap: 12px; scrollbar-width: none; }
+        .flash-card { min-width: 130px; background: white; border-radius: 12px; padding: 10px; text-align: center; }
+        .flash-img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
+        .flash-price { color: #ee4d2d; font-weight: bold; font-size: 14px; margin-top: 5px; }
 
-        /* FORMULAIRE D'INSCRIPTION VENDEUR (MODÈLE ALIBABA) */
-        .seller-form { background: white; padding: 20px; margin: 15px; border-radius: 8px; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #888; border-radius: 3px; }
-        .submit-vendeur { background: #f0c14b; border: 1px solid #a88734; padding: 12px; width: 100%; border-radius: 3px; font-weight: bold; cursor: pointer; }
-
-        /* NAVIGATION BASSE */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: white; display: flex; border-top: 1px solid #ddd; z-index: 2000; }
-        .nav-link { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #111; text-decoration: none; font-size: 10px; cursor: pointer; }
-        .nav-link i { font-size: 20px; margin-bottom: 3px; }
-        .badge { position: absolute; top: 8px; right: 25%; background: var(--seg-cyan); color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; }
+        /* --- NAV BASSE --- */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: white; display: flex; border-top: 1px solid #eee; }
+        .nav-link { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; text-decoration: none; font-size: 11px; }
+        .nav-link.active { color: #ff6a00; }
+        .nav-link i { font-size: 22px; margin-bottom: 3px; }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="nav-top">
-        <div class="logo">S.E.G GLOBAL</div>
-        <div style="color: white;"><i class="fas fa-shopping-cart"></i><span id="cart-count" class="badge">0</span></div>
-    </div>
-    <div class="search-wrapper">
-        <input type="text" id="searchInput" placeholder="Rechercher sur S.E.G..." onkeyup="moteurRecherche()">
-        <button class="search-btn"><i class="fas fa-search"></i></button>
-    </div>
-</header>
-
-<div class="cat-bar">
-    <div class="cat-item" onclick="filtrer('auto')"><div class="cat-circle"><i class="fas fa-car"></i></div><p>Auto</p></div>
-    <div class="cat-item" onclick="filtrer('diamant')"><div class="cat-circle"><i class="fas fa-gem"></i></div><p>Diamants</p></div>
-    <div class="cat-item" onclick="filtrer('montre')"><div class="cat-circle"><i class="fas fa-clock"></i></div><p>Montres</p></div>
-    <div class="cat-item" onclick="filtrer('mode')"><div class="cat-circle"><i class="fas fa-tshirt"></i></div><p>Mode</p></div>
-</div>
-
-<div id="home" class="view active-view">
-    <div class="product-grid" id="grid"></div>
-</div>
-
-<div id="vendre" class="view">
-    <div class="seller-form">
-        <h2 style="margin-bottom: 15px;">Vendre un article</h2>
-        <div class="input-group">
-            <label>Titre de l'article</label>
-            <input type="text" id="v-title" placeholder="ex: Mercedes Classe G">
+    <div class="ali-header">
+        <div class="top-line">
+            <span style="font-weight: bold; font-size: 18px;">S.E.G GLOBAL</span>
+            <i class="fas fa-comment-dots" style="font-size: 20px;"></i>
         </div>
-        <div class="input-group">
-            <label>Prix de vente (FCFA)</label>
-            <input type="number" id="v-price" oninput="calculerNet()">
+        <div class="search-container">
+            <i class="fas fa-search" style="color: #999;"></i>
+            <input type="text" placeholder="Rechercher des produits d'usine...">
+            <i class="fas fa-camera" style="color: #999;"></i>
         </div>
-        <p id="v-net" style="font-size: 11px; color: green; margin-bottom: 15px; font-weight: bold;"></p>
-        <div class="input-group">
-            <label>Catégorie</label>
-            <select id="v-cat">
-                <option value="auto">Automobile</option>
-                <option value="diamant">Pierres Précieuses</option>
-                <option value="montre">Horlogerie</option>
-                <option value="mode">Mode & Luxe</option>
-            </select>
-        </div>
-        <button class="submit-vendeur" onclick="publierArticle()">Mettre en vente sur S.E.G</button>
     </div>
-</div>
 
-<nav class="bottom-nav">
-    <div class="nav-link" onclick="show('home')"><i class="fas fa-home"></i><span>Accueil</span></div>
-    <div class="nav-link" onclick="show('vendre')"><i class="fas fa-plus-square"></i><span>Vendre</span></div>
-    <div class="nav-link" onclick="alert('Mon Compte S.E.G en cours...')"><i class="fas fa-user"></i><span>Moi</span></div>
-</nav>
+    <div class="welcome-banner">
+        <div class="welcome-text">
+            <h2>Bienvenue, Stève</h2>
+            <p>Ton Empire commence ici</p>
+            <span class="coupon-badge">-10% sur ton premier achat</span>
+        </div>
+        <div style="font-size: 50px; color: #ff6a00; opacity: 0.2;"><i class="fas fa-crown"></i></div>
+    </div>
 
-<script>
-    const db = [
-        { title: "Mercedes Classe G 2024", price: "85000000", cat: "auto", img: "https://images.pexels.com/photos/244206/pexels-photo-244206.jpeg?w=400" },
-        { title: "Diamant Brut 1.5 Carats", price: "1500000", cat: "diamant", img: "https://images.pexels.com/photos/2858137/pexels-photo-2858137.jpeg?w=400" },
-        { title: "Rolex Submariner Gold", price: "12500000", cat: "montre", img: "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400" },
-        { title: "Sac Hermès Birkin", price: "8000000", cat: "mode", img: "https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400" }
-    ];
+    <div class="ali-cats">
+        <div class="cat-item">
+            <div class="cat-circle" style="background: #ff9d00;"><i class="fas fa-car"></i></div>
+            <p>Auto</p>
+        </div>
+        <div class="cat-item">
+            <div class="cat-circle" style="background: #00d2ff;"><i class="fas fa-gem"></i></div>
+            <p>Luxe</p>
+        </div>
+        <div class="cat-item">
+            <div class="cat-circle" style="background: #ff4b2b;"><i class="fas fa-bolt"></i></div>
+            <p>Tech</p>
+        </div>
+        <div class="cat-item">
+            <div class="cat-circle" style="background: #7b2ff7;"><i class="fas fa-tshirt"></i></div>
+            <p>Mode</p>
+        </div>
+    </div>
 
-    let cartCount = 0;
+    <div class="section-title">
+        <h3 style="font-size: 16px;">Ventes Flash 🔥</h3>
+        <a href="#" style="color: #999; font-size: 12px; text-decoration: none;">Voir plus</a>
+    </div>
+    <div class="flash-grid">
+        <div class="flash-card">
+            <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=200" class="flash-img">
+            <p class="flash-price">450k F</p>
+        </div>
+        <div class="flash-card">
+            <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?w=200" class="flash-img">
+            <p class="flash-price">120k F</p>
+        </div>
+        <div class="flash-card">
+            <img src="https://images.pexels.com/photos/2858137/pexels-photo-2858137.jpeg?w=200" class="flash-img">
+            <p class="flash-price">1.5M F</p>
+        </div>
+    </div>
 
-    function render(list) {
-        const grid = document.getElementById('grid');
-        grid.innerHTML = list.map(p => `
-            <div class="card">
-                <img src="${p.img}" class="card-img">
-                <div class="card-body">
-                    <span class="verified"><i class="fas fa-check-circle"></i> Vendeur Vérifié S.E.G</span>
-                    <p class="p-title">${p.title}</p>
-                    <p class="p-price">${Number(p.price).toLocaleString()} FCFA</p>
-                    <button class="add-btn" onclick="addToCart()">Ajouter au panier</button>
-                </div>
-            </div>
-        `).join('');
-    }
+    <nav class="bottom-nav">
+        <div class="nav-link active"><i class="fas fa-home"></i><span>Accueil</span></div>
+        <div class="nav-link"><i class="fas fa-list"></i><span>Catégories</span></div>
+        <div class="nav-link"><i class="fas fa-shopping-cart"></i><span>Panier</span></div>
+        <div class="nav-link"><i class="fas fa-user"></i><span>Mon Compte</span></div>
+    </nav>
 
-    function show(id) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
-        document.getElementById(id).classList.add('active-view');
-    }
-
-    function moteurRecherche() {
-        const val = document.getElementById('searchInput').value.toLowerCase();
-        render(db.filter(p => p.title.toLowerCase().includes(val) || p.cat.toLowerCase().includes(val)));
-    }
-
-    function filtrer(cat) {
-        render(db.filter(p => p.cat === cat));
-    }
-
-    function addToCart() {
-        cartCount++;
-        document.getElementById('cart-count').innerText = cartCount;
-        alert("Produit ajouté à votre compte S.E.G sécurisé.");
-    }
-
-    function calculerNet() {
-        const p = document.getElementById('v-price').value;
-        if(p) document.getElementById('v-net').innerText = "Vous recevrez : " + (p * 0.9).toLocaleString() + " FCFA après commission S.E.G.";
-    }
-
-    function publierArticle() {
-        alert("✅ ANALYSE SCANNER S.E.G... \nVotre article a été soumis avec succès à l'empire.");
-        show('home');
-    }
-
-    render(db);
-</script>
 </body>
 </html>
