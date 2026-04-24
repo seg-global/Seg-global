@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Plateforme Mondiale & Gestion Vendeurs</title>
+    <title>S.E.G GLOBAL - Marketplace Mondiale</title>
     <style>
-        /* --- CONFIGURATION STYLE AMAZON --- */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
         body { background-color: #EAEDED; color: #111; padding-bottom: 50px; }
 
@@ -27,9 +26,9 @@
         .search-input { flex: 1; padding: 12px; border: none; border-radius: 4px 0 0 4px; font-size: 16px; }
         .search-btn { background: #FEBD69; border: none; padding: 10px 20px; border-radius: 0 4px 4px 0; cursor: pointer; }
 
-        /* --- BANNIERE PROMO (1ère livraison gratuite) --- */
+        /* --- BANNIERE : GESTION DIRECTE VENDEURS --- */
         .promo-banner {
-            background: linear-gradient(to right, #FF9900, #FFB84D);
+            background: linear-gradient(to right, #19C9D1, #118A91);
             height: 180px;
             display: flex;
             align-items: center;
@@ -39,7 +38,7 @@
             padding: 20px;
         }
 
-        /* --- SECTION DU CRÉATEUR (DIRECTEUR GÉNÉRAL) --- */
+        /* --- SECTION DU DIRECTEUR GÉNÉRAL --- */
         .creator-section { padding: 15px; }
         .creator-card {
             background: white;
@@ -50,7 +49,7 @@
         .creator-img {
             width: 100%;
             height: 400px;
-            background-image: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg'); /* Ton lien direct ImgBB */
+            background-image: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg'); 
             background-size: cover;
             background-position: center;
             display: flex;
@@ -70,10 +69,11 @@
 
         /* --- GRILLE PRODUITS --- */
         .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-        .product-item { background: white; padding: 10px; border-radius: 4px; text-align: center; }
-        .product-box { height: 100px; background: #f0f0f0; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 10px; }
+        .product-item { background: white; padding: 10px; border-radius: 4px; text-align: center; border: 1px solid #ddd; }
+        .product-box { height: 100px; background: #f0f0f0; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 10px; }
+        .seller-info { font-size: 10px; color: #555; margin-top: 5px; font-style: italic; }
 
-        /* --- FOOTER INTERACTIF (BOUTON VENDEUR) --- */
+        /* --- FOOTER BOUTON VENDEUR --- */
         .footer-seller-btn {
             background: #232F3E;
             color: white;
@@ -82,12 +82,9 @@
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: background 0.3s;
         }
-        .footer-seller-btn:hover { background: #37475A; }
 
-        /* --- FENÊTRE MODALE (GESTION VENDEUR) --- */
+        /* --- FENÊTRE PORTAIL VENDEUR --- */
         #sellerModal {
             display: none; 
             position: fixed; 
@@ -105,7 +102,6 @@
             width: 90%; 
             max-width: 400px; 
             text-align: center;
-            position: relative;
         }
         .modal-content input {
             width: 100%; 
@@ -113,20 +109,18 @@
             margin-bottom: 15px; 
             border: 1px solid #ddd; 
             border-radius: 5px;
-            font-size: 14px;
         }
         .btn-submit-seller {
             width: 100%; 
-            background: #FEBD69; 
+            background: #19C9D1; 
+            color: white;
             border: none; 
             padding: 15px; 
             font-weight: bold; 
             border-radius: 5px; 
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        /* --- CACHER LA BARRE GOOGLE ORIGINALE --- */
         .goog-te-banner-frame.skiptranslate { display: none !important; }
         body { top: 0px !important; }
     </style>
@@ -134,22 +128,22 @@
 <body>
 
     <div class="translate-header">
-        <span>🌍 LANGUE / LANGUAGE : </span>
+        <span>🌍 TRADUCTION MONDIALE : </span>
         <div id="google_translate_element" style="display: inline-block; vertical-align: middle;"></div>
     </div>
 
     <header class="amazon-header">
         <a href="#" class="logo-seg">S.E.G GLOBAL</a>
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="Rechercher un produit de luxe...">
+            <input type="text" class="search-input" placeholder="Rechercher un article...">
             <button class="search-btn">🔍</button>
         </div>
     </header>
 
     <section class="promo-banner">
         <div>
-            <h1 style="font-size: 26px;">1ère LIVRAISON GRATUITE</h1>
-            <p>Le luxe mondial à votre porte.</p>
+            <h1 style="font-size: 24px;">VOTRE BOUTIQUE, VOS RÈGLES</h1>
+            <p>Vendez partout, gérez vos propres livraisons.</p>
         </div>
     </section>
 
@@ -157,65 +151,52 @@
         <div class="creator-card">
             <div class="creator-img">
                 <h2 style="font-size: 22px;">LA VISION DU DIRECTEUR GÉNÉRAL</h2>
-                <p>Bienvenue dans l'empire S.E.G</p>
+                <p>L'infrastructure du luxe indépendant</p>
             </div>
         </div>
     </section>
 
     <div class="product-grid">
         <div class="product-item">
-            <div class="product-box">IMAGE PRODUIT</div>
+            <div class="product-box">BOUTIQUE A</div>
             <p style="font-size: 12px; font-weight: bold;">MONTRE NÉON</p>
+            <p class="seller-info">Expédié par : Boutique Alpha</p>
         </div>
         <div class="product-item">
-            <div class="product-box">IMAGE PRODUIT</div>
+            <div class="product-box">BOUTIQUE B</div>
             <p style="font-size: 12px; font-weight: bold;">SAC CYBER</p>
+            <p class="seller-info">Expédié par : Luxe Premium</p>
         </div>
     </div>
 
     <div class="footer-seller-btn" onclick="openSeller()">
-        Devenir Vendeur Mondial
+        Ouvrir ma boutique maintenant
     </div>
 
     <div id="sellerModal">
         <div class="modal-content">
             <h2 style="color:#232F3E; margin-bottom:10px;">Portail Vendeur</h2>
-            <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Rejoignez l'empire S.E.G Global</p>
+            <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Gérez vos produits et vos livraisons en toute liberté.</p>
             
             <input type="text" placeholder="Nom de votre boutique">
-            <input type="email" placeholder="Votre email professionnel">
+            <input type="email" placeholder="Email professionnel">
             <input type="password" placeholder="Mot de passe">
             
-            <button class="btn-submit-seller" onclick="submitSeller()">OUVRIR MA BOUTIQUE</button>
+            <button class="btn-submit-seller" onclick="submitSeller()">CRÉER MON ESPACE</button>
             
-            <p onclick="closeSeller()" style="margin-top:20px; color:#CC0C39; cursor:pointer; font-size: 13px; font-weight: bold;">FERMER</p>
+            <p onclick="closeSeller()" style="margin-top:20px; color:#CC0C39; cursor:pointer; font-size: 13px; font-weight: bold;">ANNULER</p>
         </div>
     </div>
 
     <script type="text/javascript">
-        // Fonction pour ouvrir la fenêtre vendeur
-        function openSeller() {
-            document.getElementById('sellerModal').style.display = 'flex';
-        }
-
-        // Fonction pour fermer la fenêtre vendeur
-        function closeSeller() {
-            document.getElementById('sellerModal').style.display = 'none';
-        }
-
-        // Simulation d'envoi de compte
+        function openSeller() { document.getElementById('sellerModal').style.display = 'flex'; }
+        function closeSeller() { document.getElementById('sellerModal').style.display = 'none'; }
         function submitSeller() {
-            alert("Félicitations ! Votre demande a été envoyée au Directeur Général de S.E.G GLOBAL. Vous recevrez une confirmation par email.");
+            alert("Compte créé ! Vous pouvez maintenant configurer vos modes de livraison dans votre espace vendeur.");
             closeSeller();
         }
-
-        // Initialisation Google Translate (Toutes les langues)
         function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'fr',
-                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-                autoDisplay: true
-            }, 'google_translate_element');
+            new google.translate.TranslateElement({pageLanguage: 'fr', autoDisplay: true}, 'google_translate_element');
         }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
