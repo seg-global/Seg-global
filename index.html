@@ -3,214 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Officiel</title>
+    <title>S.E.G GLOBAL - Plateforme Intégrale</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* --- STYLE DE BASE --- */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', sans-serif; }
-        body { background-color: #f0f2f2; padding-bottom: 80px; transition: background 0.3s; }
+        body { background-color: #f0f2f2; padding-bottom: 80px; }
 
-        /* --- HEADER DG --- */
-        .app-header { background-color: #232F3E; padding: 15px; position: sticky; top: 0; z-index: 1000; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .logo { color: #19C9D1; font-size: 22px; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; }
+        /* HEADER & RECHERCHE */
+        .app-header { background-color: #232F3E; padding: 15px; position: sticky; top: 0; z-index: 1000; }
+        .logo { color: #19C9D1; text-align: center; font-weight: bold; letter-spacing: 3px; margin-bottom: 10px; text-transform: uppercase; }
+        .search-container { display: flex; background: white; border-radius: 8px; overflow: hidden; height: 45px; }
+        .search-container input { flex: 1; border: none; padding: 0 15px; outline: none; font-size: 14px; }
+        .search-btn { background: #FEBD69; width: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; }
 
-        /* --- NAVIGATION DES VUES --- */
-        .page-view { display: none; animation: fadeIn 0.4s ease; }
-        .active-view { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* CATÉGORIES FONCTIONNELLES */
+        .cat-scroll { display: flex; overflow-x: auto; background: white; padding: 15px 10px; gap: 20px; border-bottom: 1px solid #eee; }
+        .cat-btn { min-width: 70px; text-align: center; background: none; border: none; cursor: pointer; }
+        .cat-icon { width: 50px; height: 50px; background: #f8f9fa; border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #ff6a00; border: 1px solid #eee; transition: 0.3s; }
+        .cat-btn:active .cat-icon { background: #19C9D1; color: white; }
+        .cat-btn p { font-size: 10px; font-weight: bold; color: #555; }
 
-        /* --- ACCUEIL CLIENT (STYLE LUXE) --- */
-        .search-container { padding: 10px; background: #232F3E; }
-        .search-bar { display: flex; background: white; border-radius: 8px; overflow: hidden; height: 40px; }
-        .search-bar input { flex: 1; border: none; padding: 0 15px; outline: none; }
-        .search-btn { background: #FEBD69; width: 50px; display: flex; align-items: center; justify-content: center; }
-
-        .cat-scroll { display: flex; overflow-x: auto; background: white; padding: 15px 5px; gap: 20px; border-bottom: 1px solid #eee; }
-        .cat-card { min-width: 75px; text-align: center; }
-        .cat-icon { width: 45px; height: 45px; background: #f8f9fa; border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #19C9D1; border: 1px solid #eee; }
-        .cat-card p { font-size: 10px; font-weight: bold; color: #555; }
-
+        /* CONTENU */
         .hero-banner { padding: 10px; }
-        .hero-image { 
-            height: 350px; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg');
-            background-size: cover; background-position: center; border-radius: 20px;
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 25px; color: white;
+        .hero-card { 
+            height: 250px; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.5)), url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg');
+            background-size: cover; background-position: center; border-radius: 15px; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; color: white;
         }
 
         .product-grid { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .p-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .p-img { width: 100%; height: 160px; object-fit: cover; }
-        .p-info { padding: 12px; }
-        .p-brand { font-size: 10px; color: #19C9D1; font-weight: bold; }
-        .p-price { font-weight: bold; color: #333; margin: 5px 0; }
-        .buy-now { background: #FEBD69; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .p-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; }
+        .p-img { width: 100%; height: 150px; object-fit: cover; }
+        .p-info { padding: 10px; }
+        .p-name { font-size: 13px; font-weight: 500; height: 32px; overflow: hidden; margin-bottom: 5px; }
+        .p-price { color: #19C9D1; font-weight: bold; font-size: 14px; }
 
-        /* --- FORMULAIRE VENDEUR --- */
-        .sell-container { padding: 25px; background: white; margin: 15px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .sell-header { text-align: center; margin-bottom: 20px; }
-        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; }
-        .commission-note { background: #f0fdfa; border: 1px solid #19C9D1; padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 12px; color: #007a7e; line-height: 1.4; }
-        .publish-btn { background: #19C9D1; color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        /* VUES CACHÉES */
+        .view { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
+        .active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- DASHBOARD DG (DARK MODE) --- */
-        #view-dg { background-color: #0d1117; min-height: 100vh; padding: 20px; color: white; }
-        .dg-card { background: #161b22; border: 1px solid #30363d; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
-        .revenue-circle { width: 150px; height: 150px; border: 8px solid #19C9D1; border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        /* DASHBOARD DG */
+        #view-dg { background: #0d1117; color: white; min-height: 100vh; }
+        .stat-box { background: #161b22; border: 1px solid #30363d; border-radius: 15px; padding: 20px; margin-bottom: 15px; text-align: center; }
 
-        /* --- NAV BASSE --- */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 11px; cursor: pointer; transition: 0.2s; }
+        /* NAV BASSE */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 11px; cursor: pointer; text-decoration: none; }
         .nav-item.active { color: #19C9D1; }
-        .nav-item i { font-size: 20px; margin-bottom: 5px; }
-
+        .nav-item i { font-size: 22px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
     <header class="app-header">
         <div class="logo">S.E.G GLOBAL</div>
+        <div class="search-container">
+            <input type="text" id="mainSearch" placeholder="Rechercher (ex: Chaussures, Diamant, Auto)..." onkeyup="filtrerRecherche()">
+            <button class="search-btn" onclick="filtrerRecherche()"><i class="fas fa-search"></i></button>
+        </div>
     </header>
 
-    <main id="view-home" class="page-view active-view">
-        <div class="search-container">
-            <div class="search-bar">
-                <input type="text" placeholder="Rechercher un article de luxe...">
-                <div class="search-btn"><i class="fas fa-search"></i></div>
-            </div>
-        </div>
-
+    <main id="view-home" class="view active-view" style="padding: 0;">
         <div class="cat-scroll">
-            <div class="cat-card"><div class="cat-icon"><i class="fas fa-shoe-prints"></i></div><p>Chaussures</p></div>
-            <div class="cat-card"><div class="cat-icon"><i class="fas fa-watch"></i></div><p>Montres</p></div>
-            <div class="cat-card"><div class="cat-icon"><i class="fas fa-tshirt"></i></div><p>Vêtements</p></div>
-            <div class="cat-card"><div class="cat-icon"><i class="fas fa-gem"></i></div><p>Luxe</p></div>
+            <button class="cat-btn" onclick="filtrerCategorie('diamant')"><div class="cat-icon"><i class="fas fa-gem"></i></div><p>Diamants</p></button>
+            <button class="cat-btn" onclick="filtrerCategorie('montre')"><div class="cat-icon"><i class="fas fa-clock"></i></div><p>Montres</p></button>
+            <button class="cat-btn" onclick="filtrerCategorie('mode')"><div class="cat-icon"><i class="fas fa-tshirt"></i></div><p>Mode</p></button>
+            <button class="cat-btn" onclick="filtrerCategorie('auto')"><div class="cat-icon"><i class="fas fa-car"></i></div><p>Auto</p></button>
         </div>
 
         <div class="hero-banner">
-            <div class="hero-image">
-                <p style="font-size: 12px; letter-spacing: 2px; font-weight: bold;">OFFRES DU DG</p>
-                <h2 style="font-size: 26px;">DANS LE MONDE ENTIER 🌍</h2>
+            <div class="hero-card">
+                <p style="font-size: 10px; letter-spacing: 2px;">EXPÉDITION MONDE ENTIER 🌍</p>
+                <h2 style="font-size: 24px;">OFFRES DU DG</h2>
             </div>
         </div>
 
-        <div class="product-grid">
-            <div class="p-card">
-                <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=400" class="p-img">
-                <div class="p-info">
-                    <p class="p-brand">S.E.G ELITE</p>
-                    <p class="p-price">180,000 FCFA</p>
-                    <button class="buy-now" onclick="acheter()">ACHETER</button>
-                </div>
+        <div class="product-grid" id="mainGrid">
             </div>
-            <div class="p-card">
-                <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?auto=compress&cs=tinysrgb&w=400" class="p-img">
-                <div class="p-info">
-                    <p class="p-brand">CHRONO LUXE</p>
-                    <p class="p-price">450,000 FCFA</p>
-                    <button class="buy-now" onclick="acheter()">ACHETER</button>
-                </div>
-            </div>
-        </div>
     </main>
 
-    <div id="view-sell" class="page-view">
-        <div class="sell-container">
-            <div class="sell-header">
-                <h2 style="color: #232F3E;">Devenez Vendeur S.E.G</h2>
-                <p style="font-size: 12px; color: #666; margin-top: 5px;">Votre empire commence ici.</p>
-            </div>
-            
-            <input type="text" id="p-name" placeholder="Nom de l'article">
-            <input type="number" id="p-price" placeholder="Prix de vente (FCFA)" oninput="calculerCommission()">
-            
-            <div class="commission-note">
-                <strong>💡 Pourquoi la commission de 10% ?</strong><br>
-                Elle garantit la sécurité de votre paiement via notre compte central et active le <b>Scanner S.E.G</b> pour valider votre vente.
-                <div id="calcul-result" style="margin-top: 10px; font-weight: bold; color: #19C9D1;">Gain Net : 0 FCFA</div>
-            </div>
-
-            <button class="publish-btn" onclick="publier()">PUBLIER SUR L'EMPIRE</button>
+    <div id="view-dg" class="view">
+        <h2 style="color: #19C9D1; margin-bottom: 20px;">DASHBOARD DG</h2>
+        <div class="stat-box">
+            <p style="color: #8b949e; font-size: 12px;">REVENUS S.E.G (10%)</p>
+            <h1 style="color: #3fb950; margin: 10px 0;">4,850,000 FCFA</h1>
         </div>
-    </div>
-
-    <div id="view-dg" class="page-view">
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
-            <div style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #19C9D1; background: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg') center/cover;"></div>
-            <div>
-                <p style="font-size: 18px; font-weight: bold;">DG STÈVE</p>
-                <p style="color: #19C9D1; font-size: 10px; letter-spacing: 2px;">GESTIONNAIRE DE FLUX</p>
-            </div>
-        </div>
-
-        <div class="dg-card" style="text-align: center;">
-            <p style="font-size: 12px; color: #8b949e;">SOLDE COMMISSIONS (10%)</p>
-            <div class="revenue-circle">
-                <span style="font-size: 24px; font-weight: bold;">4.8M</span>
-                <span style="font-size: 10px; color: #19C9D1;">FCFA</span>
-            </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="dg-card">
-                <i class="fas fa-users" style="color: #19C9D1;"></i>
-                <p style="font-size: 18px; margin: 10px 0;">1,240</p>
-                <p style="font-size: 9px; color: #8b949e;">VISITEURS</p>
-            </div>
-            <div class="dg-card">
-                <i class="fas fa-shield-alt" style="color: #ff7b72;"></i>
-                <p style="font-size: 18px; margin: 10px 0;">42</p>
-                <p style="font-size: 9px; color: #8b949e;">BLOCAGES</p>
-            </div>
+        <div class="stat-box">
+            <i class="fas fa-shield-alt" style="color: #ff7b72; font-size: 24px;"></i>
+            <p style="margin-top: 10px;">42 TENTATIVES D'ARNAQUE BLOQUÉES</p>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" id="nav-home" onclick="changerVue('home')">
-            <i class="fas fa-home"></i><span>Accueil</span>
-        </div>
-        <div class="nav-item" id="nav-sell" onclick="changerVue('sell')">
-            <i class="fas fa-plus-circle"></i><span>Vendre</span>
-        </div>
-        <div class="nav-item" id="nav-dg" onclick="changerVue('dg')">
-            <i class="fas fa-user-tie"></i><span>Mon S.E.G</span>
-        </div>
+        <div class="nav-item active" id="nav-home" onclick="changerOnglet('home')"><i class="fas fa-home"></i><span>Accueil</span></div>
+        <div class="nav-item" onclick="alert('Scanner SEG activé...')"><i class="fas fa-shield-alt"></i><span>Vendre</span></div>
+        <div class="nav-item" id="nav-dg" onclick="changerOnglet('dg')"><i class="fas fa-user-tie"></i><span>Mon S.E.G</span></div>
     </nav>
 
     <script>
-        function changerVue(vue) {
-            // Cacher tout
-            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active-view'));
+        // BASE DE DONNÉES DE L'EMPIRE
+        const produits = [
+            { id: 1, nom: "Montre de luxe S.E.G Automatique", prix: "750,000 FCFA", cat: "montre", img: "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?auto=compress&cs=tinysrgb&w=400" },
+            { id: 2, nom: "Chaussures Elite Edition SEG", prix: "180,000 FCFA", cat: "mode", img: "https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=400" },
+            { id: 3, nom: "Collier Diamant 2 Carats", prix: "2,500,000 FCFA", cat: "diamant", img: "https://images.pexels.com/photos/2858137/pexels-photo-2858137.jpeg?auto=compress&cs=tinysrgb&w=400" },
+            { id: 4, nom: "Mercedes-Benz Classe G (Import)", prix: "85,000,000 FCFA", cat: "auto", img: "https://images.pexels.com/photos/244206/pexels-photo-244206.jpeg?auto=compress&cs=tinysrgb&w=400" }
+        ];
+
+        // FONCTION AFFICHAGE
+        function afficherProduits(liste) {
+            const grid = document.getElementById('mainGrid');
+            grid.innerHTML = "";
+            liste.forEach(p => {
+                grid.innerHTML += `
+                    <div class="p-card">
+                        <img src="${p.img}" class="p-img">
+                        <div class="p-info">
+                            <p class="p-name">${p.nom}</p>
+                            <p class="p-price">${p.prix}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // RECHERCHE DYNAMIQUE
+        function filtrerRecherche() {
+            const terme = document.getElementById('mainSearch').value.toLowerCase();
+            const resultat = produits.filter(p => p.nom.toLowerCase().includes(terme) || p.cat.toLowerCase().includes(terme));
+            afficherProduits(resultat);
+        }
+
+        // FILTRE PAR BOUTONS HAUT
+        function filtrerCategorie(categorie) {
+            const resultat = produits.filter(p => p.cat === categorie);
+            afficherProduits(resultat);
+            window.scrollTo(0, 400); // Scroll vers les produits
+        }
+
+        // CHANGER ONGLET BAS
+        function changerOnglet(vue) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
-            // Afficher la vue
             document.getElementById('view-' + vue).classList.add('active-view');
             document.getElementById('nav-' + vue).classList.add('active');
-
-            // Style de fond
-            document.body.style.backgroundColor = (vue === 'dg') ? '#0d1117' : '#f0f2f2';
-            window.scrollTo(0,0);
+            if(vue === 'home') afficherProduits(produits);
         }
 
-        function calculerCommission() {
-            const prix = document.getElementById('p-price').value;
-            const res = document.getElementById('calcul-result');
-            if(prix > 0) {
-                const net = prix * 0.9;
-                res.innerHTML = "Votre Gain Net : " + net.toLocaleString() + " FCFA";
-            }
-        }
-
-        function publier() {
-            const nom = document.getElementById('p-name').value;
-            if(nom) {
-                alert("🚀 ANALYSE S.E.G...\n\nL'article '" + nom + "' est validé par le scanner.\nIl est maintenant visible par les acheteurs du monde entier !");
-                changerVue('home');
-            }
-        }
-
-        function acheter() {
-            alert("💳 SYSTÈME DE SÉQUESTRE S.E.G\n\nL'argent sera conservé en sécurité sur notre compte central jusqu'à votre confirmation de réception.");
-        }
+        // INITIALISATION
+        afficherProduits(produits);
     </script>
 </body>
 </html>
