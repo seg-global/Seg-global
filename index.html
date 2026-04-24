@@ -3,64 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Marketplace de Luxe</title>
+    <title>S.E.G GLOBAL - Interface Luxe</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #ffffff; color: #111; margin: 0; padding: 0; }
-        .welcome-section { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 50vh; width: 100%; background: #fcfcfc; border-bottom: 2px solid #00ffff; }
-        h1 { font-size: 2.2em; text-transform: uppercase; letter-spacing: 5px; color: #00cccc; text-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
-        
-        /* Grille des produits flottants */
-        .shop-section { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; max-width: 800px; }
-        .product-card { background: #fff; border: 1px solid rgba(0, 255, 255, 0.2); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .product-image { width: 70px; animation: float 4s ease-in-out infinite; filter: drop-shadow(0 0 5px #00ffff); }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        /* --- Styles Généraux --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-        /* NOUVELLE SECTION VENDEUR */
-        .seller-space { width: 100%; background: #000; color: #fff; padding: 50px 20px; box-sizing: border-box; margin-top: 50px; border-top: 4px solid #00ffff; }
-        .seller-container { max-width: 500px; margin: 0 auto; text-align: center; }
-        .seller-title { color: #00ffff; text-transform: uppercase; letter-spacing: 2px; }
-        .seller-form { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; border: 1px solid #00ffff; margin-top: 20px; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: 1px solid #00ffff; background: #111; color: #fff; box-sizing: border-box; }
-        .btn-seller { width: 100%; padding: 15px; background: #00ffff; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        :root {
+            --primary-teal: #19C9D1;
+            --dark-background: #1C1C1E;
+            --text-color: #333;
+            --light-grey: #F2F2F7;
+        }
+
+        body {
+            background-color: white;
+            color: var(--text-color);
+        }
+
+        /* --- Header / Navigation --- */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-teal);
+            letter-spacing: 2px;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        /* --- Barre de Recherche (Style Amazon) --- */
+        .search-container {
+            padding: 10px 20px;
+            background-color: white;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 20px;
+            border: 1px solid #CCC;
+            background-color: #F8F8F8;
+            font-size: 16px;
+            outline: none;
+        }
+
+        /* --- Section Hero (Bouton Explorer) --- */
+        .hero-section {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .hero-title {
+            font-size: 14px;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .btn-explorer {
+            background-color: var(--primary-teal);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        /* --- Section Carrousel de Produits --- */
+        .product-section {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #1A1A1A;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .carrousel-container {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto; /* Permet le défilement horizontal */
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch; /* Défilement fluide sur iOS */
+        }
+
+        /* Cacher la barre de défilement */
+        .carrousel-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* --- Carte Produit Individuelle --- */
+        .product-card {
+            flex: 0 0 calc(50% - 15px); /* Deux cartes par vue, tenant compte du gap */
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            position: relative;
+        }
+
+        .badge-premium {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #000;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 5px;
+            text-transform: uppercase;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            max-width: 120px;
+            margin: 10px 0;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .btn-add-to-cart {
+            border: 1px solid #CCC;
+            background-color: white;
+            color: #333;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* --- Section Banner Ambassadeur (TA PHOTO ICI) --- */
+        .ambassador-section {
+            padding: 20px;
+        }
+
+        .ambassador-banner {
+            width: 100%;
+            height: 250px;
+            background-color: var(--dark-background);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 30px;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            /* C'est ici que tu dois coller l'URL de ta photo hébergée */
+            background-image: url('A_REMPLACER_PAR_LE_LIEN_DIRECT_DE_TA_PHOTO.png'); 
+        }
+
+        .ambassador-title {
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .ambassador-subtitle {
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        /* --- Section Footer (Vendeur) --- */
+        .footer-section {
+            background-color: var(--dark-background);
+            padding: 15px 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .vendeur-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
 
-    <div class="welcome-section">
-        <h1>S.E.G GLOBAL</h1>
-        <p>L'EXCELLENCE À PORTÉE DE MAIN</p>
-        <button style="padding:10px 20px; background:#00ffff; border:none; border-radius:5px; font-weight:bold;">EXPLORER</button>
+    <div class="header">
+        <div class="logo">S.E.G GLOBAL</div>
     </div>
 
-    <div class="shop-section">
-        <h2 style="color:#00cccc">VITRINE DE LUXE</h2>
-        <div class="product-grid">
-            <div class="product-card"><img src="https://via.placeholder.com/70/fff/0ff?text=Montre" class="product-image"><p>MONTRE NÉON</p></div>
-            <div class="product-card"><img src="https://via.placeholder.com/70/fff/0ff?text=Sac" class="product-image"><p>SAC CYBER</p></div>
-        </div>
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="🔍 Rechercher une montre, un sac...">
     </div>
 
-    <div class="seller-space">
-        <div class="seller-container">
-            <h2 class="seller-title">Vous êtes Vendeur ?</h2>
-            <p>Propulsez vos produits dans une nouvelle dimension.</p>
+    <div class="hero-section">
+        <div class="hero-title">L'EXCELLENCE À PORTÉE DE MAIN</div>
+        <button class="btn-explorer">EXPLORER</button>
+    </div>
+
+    <div class="product-section">
+        <div class="section-title">NOS NOUVEAUTÉS LUXE</div>
+        <div class="carrousel-container">
             
-            <div class="seller-form">
-                <p style="font-size:0.8em; color:#00ffff">REJOINDRE LA MARKETPLACE</p>
-                <input type="text" placeholder="Nom de votre Boutique">
-                <input type="tel" placeholder="Numéro WhatsApp (ex: +237...)">
-                <select>
-                    <option>Type de produits</option>
-                    <option>Montres & Bijoux</option>
-                    <option>Sacs & Maroquinerie</option>
-                    <option>Chaussures de luxe</option>
-                </select>
-                <textarea placeholder="Décrivez vos articles en quelques mots..."></textarea>
-                <button class="btn-seller" onclick="alert('Demande envoyée à Stève !')">POSTULER MAINTENANT</button>
+            <div class="product-card">
+                <span class="badge-premium">PRÉMIUM</span>
+                <img src="https://i.ibb.co/L5T4Q7R/watch-premium.png" alt="Montre Premium" class="product-image">
+                <div class="product-name">MONTRE NÉON</div>
+                <button class="btn-add-to-cart">Ajouter au panier</button>
             </div>
-            <p style="font-size: 0.7em; margin-top: 20px; opacity: 0.5;">S.E.G GLOBAL - Système de vérification des vendeurs activé.</p>
+
+            <div class="product-card">
+                <img src="https://i.ibb.co/Vvz1jBw/bag-cyber.png" alt="Sac Cyber" class="product-image">
+                <div class="product-name">SAC CYBER</div>
+                <button class="btn-add-to-cart">Ajouter au panier</button>
+            </div>
+            
+            </div>
+    </div>
+
+    <div class="ambassador-section">
+        <div class="ambassador-banner">
+            <div class="ambassador-title">COLLECTION AMBASSADEUR</div>
+            <div class="ambassador-subtitle">Incarnez l'exception</div>
         </div>
+    </div>
+
+    <div class="footer-section">
+        <div class="vendeur-title">VOUS ÊTES VENDEUR ?</div>
     </div>
 
 </body>
