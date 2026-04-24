@@ -3,161 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Intégral</title>
+    <title>S.E.G GLOBAL V2.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --ali-orange: #ff6a00; --apple-black: #000; --seg-cyan: #19C9D1; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
-        body { background-color: #f4f4f4; padding-bottom: 80px; overflow-x: hidden; }
+        :root { --ali-orange: #ff6a00; --seg-cyan: #19C9D1; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        
+        /* --- ÉCRAN DE MISE À JOUR (FORCE UPDATE) --- */
+        #update-screen {
+            position: fixed; inset: 0; background: white; z-index: 20000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            padding: 30px; text-align: center;
+        }
+        .btn-update { background: var(--ali-orange); color: white; padding: 15px 30px; border-radius: 30px; border: none; font-weight: bold; margin-top: 20px; }
 
-        /* --- AUTHENTIFICATION SÉCURISÉE --- */
-        #auth-screen { position: fixed; inset: 0; background: white; z-index: 10000; display: flex; flex-direction: column; padding: 40px 25px; transition: 0.5s; }
-        .social-btn { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 16px; font-weight: 600; margin-bottom: 15px; cursor: pointer; }
-        .btn-google { background: white; color: #757575; }
-        .btn-apple { background: black; color: white; border: none; }
-
-        /* --- INTERFACE PRINCIPALE --- */
-        .app-header { background: linear-gradient(90deg, #ff6a00, #ee4d2d); padding: 15px; color: white; position: sticky; top: 0; z-index: 1000; border-radius: 0 0 20px 20px; }
-        .search-box { background: white; border-radius: 25px; display: flex; padding: 10px 15px; align-items: center; margin-top: 10px; }
-        .search-box input { border: none; flex: 1; outline: none; margin-left: 10px; }
-
-        .view { display: none; padding: 15px; animation: fadeIn 0.4s ease; }
+        /* --- INTERFACE ALIBABA MODERNE --- */
+        .app-header { background: linear-gradient(90deg, #ff6a00, #ee4d2d); padding: 15px; color: white; position: sticky; top: 0; z-index: 1000; }
+        .view { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
         .active-view { display: block; }
+        
+        /* BOUTIQUE VENDEUR */
+        .shop-card { background: white; border-radius: 15px; padding: 20px; border: 2px dashed #ddd; margin-bottom: 20px; text-align: center; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 8px; margin-top: 5px; }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* --- FLUX VIDÉO (STYLE TIKTOK) --- */
-        .video-player { width: 100%; height: 500px; background: #000; border-radius: 20px; position: relative; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; color: white; flex-direction: column; text-align: center; }
-        .video-actions { position: absolute; right: 15px; bottom: 80px; display: flex; flex-direction: column; gap: 20px; }
-
-        /* --- MARKETPLACE GRILLE --- */
-        .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .product-img { width: 100%; height: 140px; object-fit: cover; }
-        .product-info { padding: 10px; text-align: center; }
-        .buy-btn { background: #febd69; border: none; width: 100%; padding: 8px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-
-        /* --- NAV BASSE --- */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #bbb; font-size: 11px; cursor: pointer; }
-        .nav-item.active { color: var(--ali-orange); }
     </style>
 </head>
 <body>
 
-    <div id="auth-screen">
-        <div style="text-align: center; margin-bottom: 60px;">
-            <h1 style="color: var(--ali-orange); font-size: 35px; font-weight: 900;">S.E.G GLOBAL</h1>
-            <p style="color: #888; margin-top: 10px;">Connectez-vous pour rejoindre l'empire.</p>
-        </div>
-        <button class="social-btn btn-google" onclick="login('Google')"><i class="fab fa-google"></i> Continuer avec Google</button>
-        <button class="social-btn btn-apple" onclick="login('Apple')"><i class="fab fa-apple"></i> Continuer avec Apple</button>
-        <p style="text-align: center; font-size: 11px; color: #bbb; margin-top: 20px;">Accès sécurisé réservé aux membres S.E.G.</p>
+    <div id="update-screen">
+        <div style="font-size: 60px; color: var(--ali-orange);"><i class="fas fa-cloud-download-alt"></i></div>
+        <h1 style="margin-top: 20px;">Mise à jour requise</h1>
+        <p style="color: #666; margin-top: 10px;">Le DG Stève a déployé de nouvelles fonctionnalités de sécurité et le moteur de boutique.</p>
+        <button class="btn-update" onclick="appliquerMiseAJour()">METTRE À JOUR MAINTENANT</button>
     </div>
 
     <header class="app-header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-weight: bold; font-size: 18px;">S.E.G GLOBAL</span>
-            <i class="fas fa-crown"></i>
-        </div>
-        <div class="search-box">
-            <i class="fas fa-search" style="color: #999;"></i>
-            <input type="text" placeholder="Diamants, Autos, Mode...">
+            <span style="font-weight: 900;">S.E.G GLOBAL</span>
+            <span id="version-tag" style="font-size: 10px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 10px;">V1.0</span>
         </div>
     </header>
 
     <main id="view-home" class="view active-view">
-        <div style="background: white; padding: 15px; border-radius: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <h2 id="userName" style="font-size: 16px;">Chargement...</h2>
-            <div style="color: var(--ali-orange); font-size: 24px;"><i class="fas fa-gem"></i></div>
-        </div>
-        <div class="market-grid">
-            <div class="product-card">
-                <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=300" class="product-img">
-                <div class="product-info">
-                    <p style="font-size: 11px;">Montre S.E.G</p>
-                    <p style="color: #ee4d2d; font-weight: bold;">450,000 F</p>
-                    <button class="buy-btn" onclick="alert('Commande envoyée au DG !')">ACHETER</button>
-                </div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?w=300" class="product-img">
-                <div class="product-info">
-                    <p style="font-size: 11px;">Sneakers Luxe</p>
-                    <p style="color: #ee4d2d; font-weight: bold;">180,000 F</p>
-                    <button class="buy-btn" onclick="alert('Commande envoyée au DG !')">ACHETER</button>
-                </div>
-            </div>
-        </div>
-    </main>
+        <h2>Bienvenue dans l'Empire</h2>
+        </main>
 
-    <main id="view-video" class="view">
-        <div class="video-player">
-            <i class="fas fa-play" style="font-size: 50px; opacity: 0.5;"></i>
-            <h3 style="margin-top: 15px;">S.E.G NEWS</h3>
-            <p style="font-size: 12px; padding: 0 20px;">L'actualité économique mondiale gérée par le DG Stève.</p>
-            <div class="video-actions">
-                <i class="fas fa-heart"></i>
-                <i class="fas fa-comment"></i>
-                <i class="fas fa-share"></i>
-            </div>
+    <main id="view-vendre" class="view">
+        <div class="shop-card">
+            <i class="fas fa-store" style="font-size: 40px; color: var(--ali-orange);"></i>
+            <h3>Créer ma boutique S.E.G</h3>
+            <p style="font-size: 12px; color: #999;">Commencez à vendre vos articles dans le monde entier.</p>
         </div>
-    </main>
-
-    <main id="view-dg" class="view">
-        <div style="background: white; border-radius: 15px; padding: 25px; text-align: center;">
-            <div style="width: 80px; height: 80px; background: #eee; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; border: 3px solid var(--ali-orange);"><i class="fas fa-user-tie"></i></div>
-            <h3 id="profileName">Profil</h3>
-            <p id="profileRole" style="font-size: 12px; color: var(--ali-orange); font-weight: bold;">MEMBER</p>
-            <hr style="margin: 20px 0; opacity: 0.1;">
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
-                <p style="font-size: 10px; color: #999;">SOLDE ESTIMÉ</p>
-                <h2 id="userBalance">0 FCFA</h2>
-            </div>
-            <button onclick="logout()" style="color: red; background: none; border: none; margin-top: 20px;">Se déconnecter</button>
+        
+        <div class="input-group">
+            <label>Nom de votre Boutique</label>
+            <input type="text" placeholder="ex: Cameroon Luxury Shoes">
         </div>
+        <div class="input-group">
+            <label>Catégorie</label>
+            <select>
+                <option>Automobile</option>
+                <option>Precious Stones (Diamants/Or)</option>
+                <option>High-Tech</option>
+                <option>Mode & Luxe</option>
+            </select>
+        </div>
+        <button class="btn-update" style="width: 100%;" onclick="alert('Boutique en cours de création sur Firebase...')">ACTIVER MA BOUTIQUE</button>
     </main>
-
-    <nav class="bottom-nav">
-        <div class="nav-item active" id="nav-home" onclick="tab('home')"><i class="fas fa-shopping-bag"></i><span>Market</span></div>
-        <div class="nav-item" id="nav-video" onclick="tab('video')"><i class="fas fa-play-circle"></i><span>Vidéos</span></div>
-        <div class="nav-item" id="nav-dg" onclick="tab('dg')"><i class="fas fa-user-circle"></i><span>Compte</span></div>
-    </nav>
 
     <script>
-        function login(methode) {
-            const nom = prompt("Bienvenue via " + methode + " ! Entrez votre nom pour l'Empire :");
-            if (nom) {
-                const user = { 
-                    name: nom, 
-                    balance: (nom.toLowerCase() === "stève" || nom.toLowerCase() === "dg") ? "4,850,000 FCFA" : "0 FCFA",
-                    role: (nom.toLowerCase() === "stève" || nom.toLowerCase() === "dg") ? "DIRECTEUR GÉNÉRAL" : "MEMBRE VÉRIFIÉ"
-                };
-                localStorage.setItem('seg_session', JSON.stringify(user));
-                start();
+        // LE SYSTÈME DE MISE À JOUR DU DG
+        const VERSION_ACTUELLE = "2.0"; // Change ceci à "3.0" plus tard pour forcer une nouvelle MAJ
+        
+        function checkVersion() {
+            const versionInstallee = localStorage.getItem('seg_version');
+            if (versionInstallee !== VERSION_ACTUELLE) {
+                document.getElementById('update-screen').style.display = 'flex';
+            } else {
+                document.getElementById('version-tag').innerText = "V" + VERSION_ACTUELLE;
             }
         }
 
-        function start() {
-            const data = localStorage.getItem('seg_session');
-            if (data) {
-                const user = JSON.parse(data);
-                document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('userName').innerText = "Salut, " + user.name;
-                document.getElementById('profileName').innerText = user.name;
-                document.getElementById('profileRole').innerText = user.role;
-                document.getElementById('userBalance').innerText = user.balance;
-            }
+        function appliquerMiseAJour() {
+            localStorage.setItem('seg_version', VERSION_ACTUELLE);
+            alert("Mise à jour S.E.G GLOBAL réussie !");
+            location.reload();
         }
 
-        function tab(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('view-' + id).classList.add('active-view');
-            document.getElementById('nav-' + id).classList.add('active');
-        }
-
-        function logout() { localStorage.removeItem('seg_session'); location.reload(); }
-        window.onload = start;
+        window.onload = checkVersion;
     </script>
 </body>
 </html>
