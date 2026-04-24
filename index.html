@@ -3,96 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL V2.0</title>
+    <title>S.E.G GLOBAL - L'Empire en Marche</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        :root { --ali-orange: #ff6a00; --seg-cyan: #19C9D1; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        
-        /* --- ÉCRAN DE MISE À JOUR (FORCE UPDATE) --- */
-        #update-screen {
-            position: fixed; inset: 0; background: white; z-index: 20000;
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            padding: 30px; text-align: center;
-        }
-        .btn-update { background: var(--ali-orange); color: white; padding: 15px 30px; border-radius: 30px; border: none; font-weight: bold; margin-top: 20px; }
+        :root { --ali-orange: #ff6a00; --seg-cyan: #19C9D1; --dark: #1a1a1a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        body { background-color: #f8f8f8; padding-bottom: 80px; }
 
-        /* --- INTERFACE ALIBABA MODERNE --- */
-        .app-header { background: linear-gradient(90deg, #ff6a00, #ee4d2d); padding: 15px; color: white; position: sticky; top: 0; z-index: 1000; }
-        .view { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
+        /* --- SYSTÈME DE TRADUCTION & DEVISES --- */
+        .top-bar { background: #333; color: white; font-size: 10px; padding: 5px 15px; display: flex; justify-content: space-between; }
+
+        /* --- HEADER STYLE ALIBABA (Comme sur ta capture) --- */
+        .app-header { background: linear-gradient(90deg, #ff6a00, #ee4d2d); padding: 15px; color: white; position: sticky; top: 0; z-index: 1000; border-radius: 0 0 15px 15px; }
+        .search-container { background: white; border-radius: 25px; display: flex; padding: 10px 15px; align-items: center; margin-top: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .search-container input { border: none; flex: 1; outline: none; margin-left: 10px; font-size: 14px; }
+
+        /* --- SECTIONS D'ACCUEIL --- */
+        .view { display: none; padding: 15px; animation: slideUp 0.4s ease; }
         .active-view { display: block; }
-        
-        /* BOUTIQUE VENDEUR */
-        .shop-card { background: white; border-radius: 15px; padding: 20px; border: 2px dashed #ddd; margin-bottom: 20px; text-align: center; }
-        .input-group { margin-bottom: 15px; text-align: left; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 8px; margin-top: 5px; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* CATEGORIES & FLASH SALES (Vu dans ton WhatsApp) */
+        .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+        .cat-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: bold; }
+        .cat-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 5px; }
+
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; }
+        .product-img { width: 100%; height: 150px; object-fit: cover; }
+        .price-tag { color: #ee4d2d; font-weight: 900; padding: 5px 10px; }
+
+        /* --- AUTHENTIFICATION SÉCURISÉE --- */
+        #auth-overlay { position: fixed; inset: 0; background: white; z-index: 10000; display: flex; flex-direction: column; padding: 40px; text-align: center; }
+        .btn-social { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; }
+
+        /* --- NAVIGATION BASSE --- */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: white; display: flex; border-top: 1px solid #eee; z-index: 2000; }
+        .nav-link { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; font-size: 11px; text-decoration: none; }
+        .nav-link.active { color: var(--ali-orange); }
     </style>
 </head>
 <body>
 
-    <div id="update-screen">
-        <div style="font-size: 60px; color: var(--ali-orange);"><i class="fas fa-cloud-download-alt"></i></div>
-        <h1 style="margin-top: 20px;">Mise à jour requise</h1>
-        <p style="color: #666; margin-top: 10px;">Le DG Stève a déployé de nouvelles fonctionnalités de sécurité et le moteur de boutique.</p>
-        <button class="btn-update" onclick="appliquerMiseAJour()">METTRE À JOUR MAINTENANT</button>
+    <div class="top-bar">
+        <span onclick="toggleLang()"><i class="fas fa-globe"></i> <span id="lang-text">FR | XAF</span></span>
+        <span>S.E.G GLOBAL v2.0</span>
+    </div>
+
+    <div id="auth-overlay">
+        <h1 style="color: var(--ali-orange); font-size: 30px; margin-bottom: 40px;">S.E.G GLOBAL</h1>
+        <p style="margin-bottom: 30px;">Connectez-vous pour entrer dans l'Empire.</p>
+        <div class="btn-social" onclick="login('Google')"><i class="fab fa-google" style="color: #4285F4;"></i> Google</div>
+        <div class="btn-social" style="background: black; color: white;" onclick="login('Apple')"><i class="fab fa-apple"></i> Apple</div>
     </div>
 
     <header class="app-header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-weight: 900;">S.E.G GLOBAL</span>
-            <span id="version-tag" style="font-size: 10px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 10px;">V1.0</span>
+            <span style="font-weight: 900; font-size: 20px;">S.E.G GLOBAL</span>
+            <i class="fas fa-comment-dots"></i>
+        </div>
+        <div class="search-container">
+            <i class="fas fa-search" style="color: #999;"></i>
+            <input type="text" id="search-input" placeholder="Rechercher des produits d'usine...">
         </div>
     </header>
 
     <main id="view-home" class="view active-view">
-        <h2>Bienvenue dans l'Empire</h2>
-        </main>
+        <div style="background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+            <h3 id="welcome-msg">Bienvenue, Stève</h3>
+            <p style="font-size: 12px; color: var(--ali-orange);">Ton Empire commence ici</p>
+        </div>
 
-    <main id="view-vendre" class="view">
-        <div class="shop-card">
-            <i class="fas fa-store" style="font-size: 40px; color: var(--ali-orange);"></i>
-            <h3>Créer ma boutique S.E.G</h3>
-            <p style="font-size: 12px; color: #999;">Commencez à vendre vos articles dans le monde entier.</p>
+        <div class="cat-grid">
+            <div class="cat-item"><div class="cat-icon" style="background: #ffb100;"><i class="fas fa-car"></i></div>Auto</div>
+            <div class="cat-item"><div class="cat-icon" style="background: #23d5e0;"><i class="fas fa-gem"></i></div>Luxe</div>
+            <div class="cat-item"><div class="cat-icon" style="background: #ff4747;"><i class="fas fa-bolt"></i></div>Tech</div>
+            <div class="cat-item"><div class="cat-icon" style="background: #9b51e0;"><i class="fas fa-tshirt"></i></div>Mode</div>
         </div>
-        
-        <div class="input-group">
-            <label>Nom de votre Boutique</label>
-            <input type="text" placeholder="ex: Cameroon Luxury Shoes">
+
+        <h4>Ventes Flash 🔥</h4>
+        <div class="product-grid" id="market-list">
+            <div class="product-card">
+                <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=300" class="product-img">
+                <div class="price-tag">450k F</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?w=300" class="product-img">
+                <div class="price-tag">120k F</div>
+            </div>
         </div>
-        <div class="input-group">
-            <label>Catégorie</label>
-            <select>
-                <option>Automobile</option>
-                <option>Precious Stones (Diamants/Or)</option>
-                <option>High-Tech</option>
-                <option>Mode & Luxe</option>
-            </select>
-        </div>
-        <button class="btn-update" style="width: 100%;" onclick="alert('Boutique en cours de création sur Firebase...')">ACTIVER MA BOUTIQUE</button>
     </main>
 
+    <nav class="bottom-nav">
+        <a href="#" class="nav-link active" onclick="showView('home')"><i class="fas fa-home"></i><span>Accueil</span></a>
+        <a href="#" class="nav-link" onclick="showView('vendre')"><i class="fas fa-plus-circle"></i><span>Vendre</span></a>
+        <a href="#" class="nav-link" onclick="showView('account')"><i class="fas fa-user-circle"></i><span>Compte</span></a>
+    </nav>
+
     <script>
-        // LE SYSTÈME DE MISE À JOUR DU DG
-        const VERSION_ACTUELLE = "2.0"; // Change ceci à "3.0" plus tard pour forcer une nouvelle MAJ
-        
-        function checkVersion() {
-            const versionInstallee = localStorage.getItem('seg_version');
-            if (versionInstallee !== VERSION_ACTUELLE) {
-                document.getElementById('update-screen').style.display = 'flex';
-            } else {
-                document.getElementById('version-tag').innerText = "V" + VERSION_ACTUELLE;
+        // CONFIGURATION FIREBASE (À REMPLIR AVEC TES CLÉS)
+        const firebaseConfig = { apiKey: "TA_CLE", projectId: "seg-global", appId: "TON_ID" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // LOGIQUE DE L'APPLICATION
+        function login(provider) {
+            // Simulation pour le test, à lier au vrai Google Auth
+            const name = prompt("Connexion " + provider + " réussie ! Votre nom :");
+            if(name) {
+                localStorage.setItem('user', name);
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('welcome-msg').innerText = "Bienvenue, " + name;
             }
         }
 
-        function appliquerMiseAJour() {
-            localStorage.setItem('seg_version', VERSION_ACTUELLE);
-            alert("Mise à jour S.E.G GLOBAL réussie !");
-            location.reload();
+        function showView(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
+            document.getElementById('view-' + id).classList.add('active-view');
         }
 
-        window.onload = checkVersion;
+        window.onload = () => {
+            if(localStorage.getItem('user')) {
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('welcome-msg').innerText = "Bienvenue, " + localStorage.getItem('user');
+            }
+        };
     </script>
 </body>
 </html>
