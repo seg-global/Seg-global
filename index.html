@@ -3,159 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire & Dashboard</title>
+    <title>S.E.G GLOBAL - Système de Transaction</title>
     <style>
-        /* --- STYLE PRESTIGE S.E.G --- */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #f4f7f6; color: #1a1a1a; transition: 0.3s; }
+        body { background-color: #f4f7f6; padding-bottom: 50px; }
 
-        /* HEADER & TRADUCTION */
-        .translate-header { background: #FEBD69; padding: 10px; text-align: center; font-weight: bold; font-size: 13px; }
+        /* HEADER PRESTIGE */
         .main-header { background-color: #232F3E; padding: 20px; text-align: center; color: white; position: sticky; top: 0; z-index: 100; }
-        .logo { color: #19C9D1; font-size: 26px; font-weight: bold; text-decoration: none; letter-spacing: 2px; }
+        .logo { color: #19C9D1; font-size: 26px; font-weight: bold; letter-spacing: 2px; }
 
-        /* SECTION ACCUEIL PUBLIC */
+        /* INTERFACE PUBLIQUE */
         .ceo-section { padding: 15px; }
         .ceo-card {
             background-image: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg'); 
-            height: 450px; background-size: cover; background-position: center;
+            height: 400px; background-size: cover; background-position: center;
             border-radius: 15px; display: flex; flex-direction: column; justify-content: flex-end;
             padding: 25px; color: white; position: relative; overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
         .ceo-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
-        .ceo-text { z-index: 2; }
+        
+        .action-btn { background: #19C9D1; color: white; border: none; padding: 18px; width: 100%; font-weight: bold; border-radius: 10px; cursor: pointer; margin: 15px 0; text-transform: uppercase; }
 
-        .reg-btn {
-            background: #19C9D1; color: white; border: none; padding: 18px; width: 100%;
-            font-weight: bold; border-radius: 10px; cursor: pointer; margin: 20px 0;
-            font-size: 15px; text-transform: uppercase;
-        }
+        /* GRILLE PRODUITS AVEC BOUTON ACHAT */
+        .article-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+        .article-card { background: white; border-radius: 12px; padding: 12px; border: 1px solid #eee; text-align: center; }
+        .buy-btn { background: #FEBD69; border: none; padding: 8px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
-        /* FLUX DYNAMIQUE */
-        .dynamic-feed { padding: 20px; background: white; border-radius: 20px 20px 0 0; }
-        .video-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
-        .video-box { min-width: 130px; height: 210px; background: #000; border-radius: 12px; position: relative; flex-shrink: 0; border: 1px solid #19C9D1; }
-        .video-label { position: absolute; bottom: 10px; left: 10px; color: white; font-size: 10px; font-weight: bold; }
-
-        /* MODALE PORTAIL SÉCURISÉ */
-        #registerModal {
+        /* MODALE DE PAIEMENT SÉCURISÉ */
+        #paymentModal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
         }
-        .modal-box { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; }
-        .modal-box input, .modal-box select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; }
-
-        /* DASHBOARD STYLE */
-        #vendor-dashboard { display: none; padding: 20px; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .payment-box { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="translate-header">
-        🌍 TRADUCTION : <div id="google_translate_element" style="display:inline-block;"></div>
-    </div>
-
     <header class="main-header">
-        <a href="#" class="logo">S.E.G GLOBAL</a>
+        <div class="logo">S.E.G GLOBAL</div>
     </header>
 
-    <main id="public-interface">
+    <main id="app-content">
         <section class="ceo-section">
             <div class="ceo-card">
-                <div class="ceo-text">
-                    <p style="color: #19C9D1; font-weight: bold;">VISION DU DIRECTEUR GÉNÉRAL</p>
-                    <h1 style="font-size: 22px;">L'EMPIRE DU LUXE MONDIAL</h1>
+                <div style="z-index: 2;">
+                    <p style="color: #19C9D1; font-weight: bold;">DIRECTEUR GÉNÉRAL</p>
+                    <h1 style="font-size: 20px;">L'EMPIRE DU LUXE</h1>
                 </div>
             </div>
-            <button class="reg-btn" onclick="toggleModal(true)">Devenir Vendeur ou Architecte</button>
+            <button class="action-btn" onclick="openPortal()">Ouvrir mon Espace Vendeur</button>
         </section>
 
-        <section class="dynamic-feed">
-            <h2 style="font-size: 18px; margin-bottom: 15px;">🔥 EN DIRECT DES BOUTIQUES</h2>
-            <div class="video-container">
-                <div class="video-box"><span class="video-label">💎 Diamants S.E.G</span></div>
-                <div class="video-box"><span class="video-label">🏛️ Archi-Luxe</span></div>
-                <div class="video-box"><span class="video-label">⌚ Montres Premium</span></div>
+        <h2 style="padding: 0 15px;">🛍️ ARTICLES DISPONIBLES</h2>
+        <div class="article-grid">
+            <div class="article-card">
+                <div style="height:100px; background:#f9f9f9; border-radius:8px; margin-bottom:8px;"></div>
+                <p style="font-weight:bold;">Montre S.E.G Néon</p>
+                <p style="color:#19C9D1;">500,000 FCFA</p>
+                <button class="buy-btn" onclick="processAchat('Montre S.E.G Néon', 500000, 'Boutique Alpha')">ACHETER MAINTENANT</button>
             </div>
-        </section>
+            <div class="article-card">
+                <div style="height:100px; background:#f9f9f9; border-radius:8px; margin-bottom:8px;"></div>
+                <p style="font-weight:bold;">Diamant Brut 2ct</p>
+                <p style="color:#19C9D1;">1,200,000 FCFA</p>
+                <button class="buy-btn" onclick="processAchat('Diamant Brut 2ct', 1200000, 'Mines S.E.G')">ACHETER MAINTENANT</button>
+            </div>
+        </div>
     </main>
 
-    <div id="vendor-dashboard">
-        <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-            <h2 id="welcome-title" style="color: #232F3E;">Bienvenue 👋</h2>
-            <p id="vendor-status" style="color: #19C9D1; font-weight: bold; margin-bottom: 20px;">Statut : Vérifié par S.E.G</p>
+    <div id="paymentModal">
+        <div class="payment-box">
+            <h2 id="pay-item">Paiement</h2>
+            <hr style="margin: 15px 0; border: 0.5px solid #eee;">
+            <p style="font-size: 14px; color: #666;">Montant à déposer sur le compte S.E.G :</p>
+            <h3 id="pay-price" style="margin: 10px 0; color: #232F3E;">0 FCFA</h3>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div style="background: #f4f7f6; padding: 20px; border-radius: 10px; text-align: center; cursor: pointer;">
-                    <span style="font-size: 24px;">📸</span>
-                    <p style="font-size: 12px; margin-top: 5px;">Ajouter Produit</p>
-                </div>
-                <div style="background: #f4f7f6; padding: 20px; border-radius: 10px; text-align: center; cursor: pointer;">
-                    <span style="font-size: 24px;">💰</span>
-                    <p style="font-size: 12px; margin-top: 5px;">Mes Ventes</p>
-                </div>
-            </div>
-
-            <button onclick="location.reload()" style="margin-top: 30px; width: 100%; padding: 12px; border: none; background: #CC0C39; color: white; border-radius: 8px; font-weight: bold;">SE DÉCONNECTER</button>
-        </div>
-    </div>
-
-    <div id="registerModal">
-        <div class="modal-box">
-            <h2 style="color: #232F3E; margin-bottom: 10px;">Portail Sécurisé</h2>
-            <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Le scanner S.E.G analysera vos données.</p>
-            
-            <select id="userRole">
-                <option value="Vendeur">Devenir Vendeur</option>
-                <option value="Architecte">Devenir Architecte</option>
+            <select style="width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px;">
+                <option>Mobile Money (MTN/Orange)</option>
+                <option>Virement Bancaire</option>
+                <option>Wallet S.E.G</option>
             </select>
-            <input type="text" id="storeName" placeholder="Nom de votre boutique/entité">
-            <input type="email" id="storeEmail" placeholder="Email professionnel">
-            <input type="password" placeholder="Mot de passe">
             
-            <button class="reg-btn" style="margin-top: 10px;" onclick="runSecurityScanner()">ACTIVER LE SCANNER & CRÉER</button>
-            <p onclick="toggleModal(false)" style="color: #CC0C39; margin-top: 20px; cursor: pointer; font-weight: bold; font-size: 13px;">ANNULER</p>
+            <button class="action-btn" onclick="confirmTransaction()">CONFIRMER LE DÉPÔT</button>
+            <p onclick="closePay()" style="color:red; cursor:pointer; font-weight:bold; margin-top:15px;">ANNULER</p>
         </div>
     </div>
 
     <script>
-        function toggleModal(show) {
-            document.getElementById('registerModal').style.display = show ? 'flex' : 'none';
+        let currentOrder = {};
+
+        function processAchat(nom, prix, boutique) {
+            currentOrder = { nom, prix, boutique };
+            document.getElementById('pay-item').innerText = nom;
+            document.getElementById('pay-price').innerText = prix.toLocaleString() + " FCFA";
+            document.getElementById('paymentModal').style.display = 'flex';
         }
 
-        // --- ALGORITHME DE SÉCURITÉ ET TRANSITION ---
-        function runSecurityScanner() {
-            const name = document.getElementById('storeName').value;
-            const email = document.getElementById('storeEmail').value;
-            const role = document.getElementById('userRole').value;
-
-            if (name.length < 3 || !email.includes("@")) {
-                alert("🚨 ALERTE SÉCURITÉ : Données invalides. Accès refusé.");
-                return;
-            }
-
-            // Simulation du scan
-            alert("🔒 SCAN SÉCURITÉ EN COURS...\n\n✅ ACCÈS AUTORISÉ par le Directeur Général.");
-
-            // Action 1 : Fermer la modale
-            toggleModal(false);
-
-            // Action 2 : Switch d'interface
-            document.getElementById('public-interface').style.display = 'none';
-            document.getElementById('vendor-dashboard').style.display = 'block';
-
-            // Action 3 : Personnaliser l'accueil
-            document.getElementById('welcome-title').innerText = "Bienvenue, " + name + " 👋";
-            document.getElementById('vendor-status').innerText = "Statut : " + role + " Vérifié par S.E.G";
+        function closePay() {
+            document.getElementById('paymentModal').style.display = 'none';
         }
 
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'fr'}, 'google_translate_element');
+        function confirmTransaction() {
+            // LOGIQUE DE RÉPARTITION S.E.G
+            const commission = currentOrder.prix * 0.10; // 10% pour l'application
+            const vendeurPart = currentOrder.prix - commission;
+
+            alert(`✅ TRANSACTION RÉUSSIE !\n\nL'argent a été déposé sur le compte central S.E.G.\n\nRépartition :\n- Boutique (${currentOrder.boutique}) : ${vendeurPart.toLocaleString()} FCFA\n- Commission S.E.G : ${commission.toLocaleString()} FCFA\n\nLe vendeur est notifié pour la livraison.`);
+            closePay();
+        }
+
+        function openPortal() {
+            alert("Accès au Portail Vendeur sécurisé...");
         }
     </script>
-    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
 </body>
 </html>
