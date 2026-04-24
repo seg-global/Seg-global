@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Sécurisé</title>
+    <title>S.E.G GLOBAL - Empire & Dashboard</title>
     <style>
-        /* --- STYLE GLOBAL PRESTIGE --- */
+        /* --- STYLE PRESTIGE S.E.G --- */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #f4f7f6; color: #1a1a1a; padding-bottom: 50px; }
+        body { background-color: #f4f7f6; color: #1a1a1a; transition: 0.3s; }
 
         /* HEADER & TRADUCTION */
         .translate-header { background: #FEBD69; padding: 10px; text-align: center; font-weight: bold; font-size: 13px; }
         .main-header { background-color: #232F3E; padding: 20px; text-align: center; color: white; position: sticky; top: 0; z-index: 100; }
         .logo { color: #19C9D1; font-size: 26px; font-weight: bold; text-decoration: none; letter-spacing: 2px; }
 
-        /* SECTION DIRECTEUR GÉNÉRAL */
+        /* SECTION ACCUEIL PUBLIC */
         .ceo-section { padding: 15px; }
         .ceo-card {
             background-image: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg'); 
@@ -26,27 +26,17 @@
         .ceo-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
         .ceo-text { z-index: 2; }
 
-        /* BOUTON D'ACCÈS EMPIRE */
         .reg-btn {
             background: #19C9D1; color: white; border: none; padding: 18px; width: 100%;
             font-weight: bold; border-radius: 10px; cursor: pointer; margin: 20px 0;
-            font-size: 15px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(25, 201, 209, 0.3);
+            font-size: 15px; text-transform: uppercase;
         }
 
-        /* FLUX DYNAMIQUE (VIDÉOS & ARTICLES) */
+        /* FLUX DYNAMIQUE */
         .dynamic-feed { padding: 20px; background: white; border-radius: 20px 20px 0 0; }
-        .section-title { font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: #232F3E; }
-        
         .video-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
-        .video-box { 
-            min-width: 130px; height: 210px; background: #000; border-radius: 12px; 
-            position: relative; flex-shrink: 0; border: 1px solid #19C9D1;
-        }
+        .video-box { min-width: 130px; height: 210px; background: #000; border-radius: 12px; position: relative; flex-shrink: 0; border: 1px solid #19C9D1; }
         .video-label { position: absolute; bottom: 10px; left: 10px; color: white; font-size: 10px; font-weight: bold; }
-
-        .article-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .article-card { background: #fff; border-radius: 12px; padding: 12px; border: 1px solid #eee; text-align: center; }
-        .article-img { height: 110px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 10px; }
 
         /* MODALE PORTAIL SÉCURISÉ */
         #registerModal {
@@ -54,7 +44,11 @@
             background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
         }
         .modal-box { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; }
-        .modal-box input, .modal-box select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+        .modal-box input, .modal-box select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; }
+
+        /* DASHBOARD STYLE */
+        #vendor-dashboard { display: none; padding: 20px; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -67,7 +61,7 @@
         <a href="#" class="logo">S.E.G GLOBAL</a>
     </header>
 
-    <main>
+    <main id="public-interface">
         <section class="ceo-section">
             <div class="ceo-card">
                 <div class="ceo-text">
@@ -75,38 +69,43 @@
                     <h1 style="font-size: 22px;">L'EMPIRE DU LUXE MONDIAL</h1>
                 </div>
             </div>
-            
             <button class="reg-btn" onclick="toggleModal(true)">Devenir Vendeur ou Architecte</button>
         </section>
 
         <section class="dynamic-feed">
-            <h2 class="section-title">🔥 EN DIRECT DES BOUTIQUES</h2>
+            <h2 style="font-size: 18px; margin-bottom: 15px;">🔥 EN DIRECT DES BOUTIQUES</h2>
             <div class="video-container">
                 <div class="video-box"><span class="video-label">💎 Diamants S.E.G</span></div>
                 <div class="video-box"><span class="video-label">🏛️ Archi-Luxe</span></div>
                 <div class="video-box"><span class="video-label">⌚ Montres Premium</span></div>
             </div>
-
-            <h2 class="section-title" style="margin-top: 25px;">🛍️ NOUVEAUTÉS LUXE</h2>
-            <div class="article-grid">
-                <div class="article-card">
-                    <div class="article-img">PRODUIT A</div>
-                    <p style="font-weight: bold; font-size: 13px;">Collier Émeraude</p>
-                    <p style="color: #19C9D1; font-size: 10px;">Expédié par le vendeur</p>
-                </div>
-                <div class="article-card">
-                    <div class="article-img">PRODUIT B</div>
-                    <p style="font-weight: bold; font-size: 13px;">Plan Villa 2026</p>
-                    <p style="color: #19C9D1; font-size: 10px;">Archi-Design S.E.G</p>
-                </div>
-            </div>
         </section>
     </main>
+
+    <div id="vendor-dashboard">
+        <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <h2 id="welcome-title" style="color: #232F3E;">Bienvenue 👋</h2>
+            <p id="vendor-status" style="color: #19C9D1; font-weight: bold; margin-bottom: 20px;">Statut : Vérifié par S.E.G</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="background: #f4f7f6; padding: 20px; border-radius: 10px; text-align: center; cursor: pointer;">
+                    <span style="font-size: 24px;">📸</span>
+                    <p style="font-size: 12px; margin-top: 5px;">Ajouter Produit</p>
+                </div>
+                <div style="background: #f4f7f6; padding: 20px; border-radius: 10px; text-align: center; cursor: pointer;">
+                    <span style="font-size: 24px;">💰</span>
+                    <p style="font-size: 12px; margin-top: 5px;">Mes Ventes</p>
+                </div>
+            </div>
+
+            <button onclick="location.reload()" style="margin-top: 30px; width: 100%; padding: 12px; border: none; background: #CC0C39; color: white; border-radius: 8px; font-weight: bold;">SE DÉCONNECTER</button>
+        </div>
+    </div>
 
     <div id="registerModal">
         <div class="modal-box">
             <h2 style="color: #232F3E; margin-bottom: 10px;">Portail Sécurisé</h2>
-            <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Le scanner S.E.G va analyser vos données.</p>
+            <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Le scanner S.E.G analysera vos données.</p>
             
             <select id="userRole">
                 <option value="Vendeur">Devenir Vendeur</option>
@@ -126,22 +125,30 @@
             document.getElementById('registerModal').style.display = show ? 'flex' : 'none';
         }
 
-        // ALGORITHME DE SÉCURITÉ AUTOMATISÉ
+        // --- ALGORITHME DE SÉCURITÉ ET TRANSITION ---
         function runSecurityScanner() {
             const name = document.getElementById('storeName').value;
             const email = document.getElementById('storeEmail').value;
             const role = document.getElementById('userRole').value;
 
-            // 1. Déclenchement du scan
             if (name.length < 3 || !email.includes("@")) {
-                alert("🚨 ALERTE SÉCURITÉ : Données invalides ou suspectes.\nLe système a bloqué l'accès pour protéger l'empire S.E.G.");
+                alert("🚨 ALERTE SÉCURITÉ : Données invalides. Accès refusé.");
                 return;
             }
 
-            // 2. Simulation de validation IA
-            alert("🔒 SCAN SÉCURITÉ EN COURS...\n\n- Vérification d'identité : OK\n- Analyse anti-fraude : 0% de risque\n- Validation du rôle : " + role + " confirmé.\n\n✅ ACCÈS AUTORISÉ par le Directeur Général.");
-            
+            // Simulation du scan
+            alert("🔒 SCAN SÉCURITÉ EN COURS...\n\n✅ ACCÈS AUTORISÉ par le Directeur Général.");
+
+            // Action 1 : Fermer la modale
             toggleModal(false);
+
+            // Action 2 : Switch d'interface
+            document.getElementById('public-interface').style.display = 'none';
+            document.getElementById('vendor-dashboard').style.display = 'block';
+
+            // Action 3 : Personnaliser l'accueil
+            document.getElementById('welcome-title').innerText = "Bienvenue, " + name + " 👋";
+            document.getElementById('vendor-status').innerText = "Statut : " + role + " Vérifié par S.E.G";
         }
 
         function googleTranslateElementInit() {
