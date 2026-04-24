@@ -3,118 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Système de Transaction</title>
+    <title>S.E.G GLOBAL - Empire du Luxe Mondial</title>
     <style>
+        /* --- STYLE PRESTIGE & INTERNATIONAL --- */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #f4f7f6; padding-bottom: 50px; }
+        body { background-color: #f4f7f6; color: #1a1a1a; padding-bottom: 50px; }
 
-        /* HEADER PRESTIGE */
+        /* HEADER & RECHERCHE */
+        .translate-header { background: #FEBD69; padding: 10px; text-align: center; font-weight: bold; font-size: 13px; }
         .main-header { background-color: #232F3E; padding: 20px; text-align: center; color: white; position: sticky; top: 0; z-index: 100; }
-        .logo { color: #19C9D1; font-size: 26px; font-weight: bold; letter-spacing: 2px; }
+        .logo { color: #19C9D1; font-size: 26px; font-weight: bold; text-decoration: none; letter-spacing: 2px; }
+        
+        .search-container { padding: 15px; background: #232F3E; display: flex; gap: 5px; }
+        .search-bar { flex: 1; padding: 12px; border-radius: 5px; border: none; }
+        .search-btn { background: #FEBD69; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
 
-        /* INTERFACE PUBLIQUE */
+        /* BANNIÈRE EXPÉDITION */
+        .shipping-banner { background: linear-gradient(45deg, #FF9900, #FFCC00); padding: 30px; text-align: center; color: white; }
+
+        /* SECTION DIRECTEUR GÉNÉRAL */
         .ceo-section { padding: 15px; }
         .ceo-card {
             background-image: url('https://i.ibb.co/tPhqzzV2/IMG-1506.jpg'); 
             height: 400px; background-size: cover; background-position: center;
             border-radius: 15px; display: flex; flex-direction: column; justify-content: flex-end;
             padding: 25px; color: white; position: relative; overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
         .ceo-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
-        
-        .action-btn { background: #19C9D1; color: white; border: none; padding: 18px; width: 100%; font-weight: bold; border-radius: 10px; cursor: pointer; margin: 15px 0; text-transform: uppercase; }
+        .ceo-text { z-index: 2; }
 
-        /* GRILLE PRODUITS AVEC BOUTON ACHAT */
+        /* BOUTON ACTION UNIQUE (VENDEUR) */
+        .action-btn {
+            background: #19C9D1; color: white; border: none; padding: 18px; width: 100%;
+            font-weight: bold; border-radius: 10px; cursor: pointer; margin: 15px 0;
+            font-size: 15px; text-transform: uppercase;
+        }
+
+        /* GRILLE ARTICLES ET FLUX */
+        .section-title { font-size: 18px; margin: 20px 15px 10px; color: #232F3E; display: flex; align-items: center; gap: 10px; }
         .article-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .article-card { background: white; border-radius: 12px; padding: 12px; border: 1px solid #eee; text-align: center; }
-        .buy-btn { background: #FEBD69; border: none; padding: 8px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .article-card { background: white; border-radius: 12px; padding: 12px; border: 1px solid #eee; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+        .article-img { height: 110px; background: #f9f9f9; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; }
+        .buy-btn { background: #FEBD69; border: none; padding: 10px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 12px; }
 
-        /* MODALE DE PAIEMENT SÉCURISÉ */
-        #paymentModal {
+        /* MODALE PAIEMENT ET SÉCURITÉ */
+        .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;
         }
-        .payment-box { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; }
+        .modal-box { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; }
+        .modal-box input, .modal-box select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; }
     </style>
 </head>
 <body>
+
+    <div class="translate-header">
+        🌍 <div id="google_translate_element" style="display:inline-block;"></div>
+    </div>
 
     <header class="main-header">
         <div class="logo">S.E.G GLOBAL</div>
     </header>
 
-    <main id="app-content">
+    <div class="search-container">
+        <input type="text" class="search-bar" placeholder="Rechercher partout dans le monde...">
+        <button class="search-btn">🔍</button>
+    </div>
+
+    <div class="shipping-banner">
+        <h1>EXPÉDITION MONDIALE</h1>
+        <p>Le luxe n'a plus de frontières.</p>
+    </div>
+
+    <main id="main-content">
         <section class="ceo-section">
             <div class="ceo-card">
-                <div style="z-index: 2;">
-                    <p style="color: #19C9D1; font-weight: bold;">DIRECTEUR GÉNÉRAL</p>
-                    <h1 style="font-size: 20px;">L'EMPIRE DU LUXE</h1>
+                <div class="ceo-text">
+                    <p style="color: #19C9D1; font-weight: bold;">VISION DU DIRECTEUR GÉNÉRAL</p>
+                    <h1 style="font-size: 22px;">L'EMPIRE DU LUXE MONDIAL</h1>
                 </div>
             </div>
-            <button class="action-btn" onclick="openPortal()">Ouvrir mon Espace Vendeur</button>
+            <button class="action-btn" onclick="toggleModal('vendeurModal', true)">Devenir Vendeur Mondial</button>
         </section>
 
-        <h2 style="padding: 0 15px;">🛍️ ARTICLES DISPONIBLES</h2>
+        <h2 class="section-title">🛍️ NOUVEAUTÉS DES BOUTIQUES</h2>
         <div class="article-grid">
             <div class="article-card">
-                <div style="height:100px; background:#f9f9f9; border-radius:8px; margin-bottom:8px;"></div>
-                <p style="font-weight:bold;">Montre S.E.G Néon</p>
-                <p style="color:#19C9D1;">500,000 FCFA</p>
-                <button class="buy-btn" onclick="processAchat('Montre S.E.G Néon', 500000, 'Boutique Alpha')">ACHETER MAINTENANT</button>
+                <div class="article-img">⌚</div>
+                <p style="font-weight: bold; font-size: 14px;">Montre S.E.G Néon</p>
+                <p style="color: #19C9D1; font-size: 13px; font-weight: bold;">500,000 FCFA</p>
+                <button class="buy-btn" onclick="startGlobalPayment('Montre S.E.G Néon', 500000, 'Boutique Alpha')">ACHETER MAINTENANT</button>
             </div>
             <div class="article-card">
-                <div style="height:100px; background:#f9f9f9; border-radius:8px; margin-bottom:8px;"></div>
-                <p style="font-weight:bold;">Diamant Brut 2ct</p>
-                <p style="color:#19C9D1;">1,200,000 FCFA</p>
-                <button class="buy-btn" onclick="processAchat('Diamant Brut 2ct', 1200000, 'Mines S.E.G')">ACHETER MAINTENANT</button>
+                <div class="article-img">💎</div>
+                <p style="font-weight: bold; font-size: 14px;">Diamant Brut 2ct</p>
+                <p style="color: #19C9D1; font-size: 13px; font-weight: bold;">1,200,000 FCFA</p>
+                <button class="buy-btn" onclick="startGlobalPayment('Diamant Brut 2ct', 1200000, 'Mines S.E.G')">ACHETER MAINTENANT</button>
             </div>
         </div>
     </main>
 
-    <div id="paymentModal">
-        <div class="payment-box">
-            <h2 id="pay-item">Paiement</h2>
+    <div id="vendeurModal" class="modal">
+        <div class="modal-box">
+            <h2>Portail Vendeur</h2>
+            <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Rejoignez l'empire S.E.G Global</p>
+            <input type="text" id="vName" placeholder="Nom de votre boutique">
+            <input type="email" id="vEmail" placeholder="Votre email professionnel">
+            <input type="password" placeholder="Mot de passe">
+            <button class="action-btn" onclick="validateVendeur()">OUVRIR MA BOUTIQUE</button>
+            <p onclick="toggleModal('vendeurModal', false)" style="color: #CC0C39; cursor: pointer; font-weight: bold; margin-top: 15px;">FERMER</p>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-box">
+            <h2 id="pay-item">Paiement S.E.G</h2>
             <hr style="margin: 15px 0; border: 0.5px solid #eee;">
-            <p style="font-size: 14px; color: #666;">Montant à déposer sur le compte S.E.G :</p>
+            <p style="font-size: 14px; color: #666;">Montant converti (Compte Central S.E.G) :</p>
             <h3 id="pay-price" style="margin: 10px 0; color: #232F3E;">0 FCFA</h3>
             
-            <select style="width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px;">
-                <option>Mobile Money (MTN/Orange)</option>
-                <option>Virement Bancaire</option>
-                <option>Wallet S.E.G</option>
+            <select style="width: 100%; padding: 12px; margin: 10px 0;">
+                <option>Mobile Money (Cameroun)</option>
+                <option>Visa / MasterCard (International)</option>
+                <option>PayPal (USA / Europe)</option>
+                <option>Crypto / Wallet S.E.G</option>
             </select>
-            
-            <button class="action-btn" onclick="confirmTransaction()">CONFIRMER LE DÉPÔT</button>
-            <p onclick="closePay()" style="color:red; cursor:pointer; font-weight:bold; margin-top:15px;">ANNULER</p>
+            <button class="action-btn" onclick="confirmGlobalTransaction()">DÉPOSER ET VALIDER L'ACHAT</button>
+            <p onclick="toggleModal('paymentModal', false)" style="color: red; cursor: pointer; font-weight: bold; margin-top: 15px;">ANNULER</p>
         </div>
     </div>
 
     <script>
         let currentOrder = {};
+        const rates = { USD: 0.0016, EUR: 0.0015 };
 
-        function processAchat(nom, prix, boutique) {
+        function toggleModal(id, show) {
+            document.getElementById(id).style.display = show ? 'flex' : 'none';
+        }
+
+        function validateVendeur() {
+            const name = document.getElementById('vName').value;
+            if(name.length < 3) { alert("🚨 Sécurité : Nom de boutique invalide."); return; }
+            alert("Félicitations ! Votre boutique est en cours de création. Le Directeur Général valide votre accès.");
+            toggleModal('vendeurModal', false);
+        }
+
+        function startGlobalPayment(nom, prix, boutique) {
             currentOrder = { nom, prix, boutique };
+            const prixUSD = (prix * rates.USD).toFixed(2);
+            const prixEUR = (prix * rates.EUR).toFixed(2);
+
             document.getElementById('pay-item').innerText = nom;
-            document.getElementById('pay-price').innerText = prix.toLocaleString() + " FCFA";
-            document.getElementById('paymentModal').style.display = 'flex';
+            document.getElementById('pay-price').innerHTML = `
+                ${prix.toLocaleString()} FCFA <br>
+                <span style="font-size:14px; color:#19C9D1;">(≈ ${prixUSD} USD / ${prixEUR} €)</span>
+            `;
+            toggleModal('paymentModal', true);
         }
 
-        function closePay() {
-            document.getElementById('paymentModal').style.display = 'none';
+        function confirmGlobalTransaction() {
+            const comm = currentOrder.prix * 0.10; // Tes 10% de commission
+            const vPart = currentOrder.prix - comm;
+
+            alert(`✅ TRANSACTION INTERNATIONALE RÉUSSIE !
+            
+Argent déposé sur le compte central S.E.G Global.
+
+Répartition :
+- Pour la boutique : ${vPart.toLocaleString()} FCFA
+- Commission S.E.G (10%) : ${comm.toLocaleString()} FCFA
+
+Statut : En attente d'expédition.`);
+            toggleModal('paymentModal', false);
         }
 
-        function confirmTransaction() {
-            // LOGIQUE DE RÉPARTITION S.E.G
-            const commission = currentOrder.prix * 0.10; // 10% pour l'application
-            const vendeurPart = currentOrder.prix - commission;
-
-            alert(`✅ TRANSACTION RÉUSSIE !\n\nL'argent a été déposé sur le compte central S.E.G.\n\nRépartition :\n- Boutique (${currentOrder.boutique}) : ${vendeurPart.toLocaleString()} FCFA\n- Commission S.E.G : ${commission.toLocaleString()} FCFA\n\nLe vendeur est notifié pour la livraison.`);
-            closePay();
-        }
-
-        function openPortal() {
-            alert("Accès au Portail Vendeur sécurisé...");
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'fr'}, 'google_translate_element');
         }
     </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 </html>
