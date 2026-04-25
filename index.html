@@ -7,145 +7,154 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0D0D0D;
+            /* On garde le doré luxe */
             --gold: #D4AF37;
-            --surface: #1A1A1A;
-            --text: #F2F2F2;
+            --text-white: #F2F2F2;
+            --overlay: rgba(13, 13, 13, 0.85); /* Un filtre noir très sombre à 85% d'opacité */
         }
 
         body {
-            margin: 0; padding: 0;
-            background-color: var(--bg);
-            color: var(--text);
+            margin: 0;
+            padding: 0;
+            background-color: #0D0D0D; /* Couleur de secours */
+            color: var(--text-white);
             font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+            /* C'est ici que tout se passe : Ta photo en arrière-plan */
+            background-image: url('https://seg-global.vercel.app/profile.jpg'); /* REMPLACE PAR TON URL D'IMAGE REELLE */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* L'image ne bouge pas quand on scrolle */
         }
 
-        /* --- NAVIGATION BASSE (STYLE MOBILE APP) --- */
+        /* Le filtre sombre pour la lisibilité */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--overlay);
+            z-index: 1; /* Derrière le contenu, mais devant l'image */
+        }
+
+        /* Le contenu de l'application */
+        .content {
+            position: relative;
+            z-index: 10; /* Devant le filtre sombre */
+            padding-bottom: 100px; /* Espace pour la nav basse */
+        }
+
+        /* --- HEADER & NAVIGATION --- */
+        header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        .lang-switch {
+            border: 1px solid var(--gold);
+            padding: 5px 10px;
+            color: var(--gold);
+            font-size: 0.8rem;
+            border-radius: 4px;
+        }
+
+        /* --- HERO SECTION (Style de l'image 10) --- */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            color: #AAA; /* Gris clair pour le sous-titre */
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .cta-button {
+            background-color: var(--gold);
+            color: black;
+            padding: 15px 35px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        /* --- NAVIGATION BASSE (Comme l'image 11 mais avec tes couleurs) --- */
         .bottom-nav {
-            position: fixed; bottom: 0; width: 100%;
-            background: rgba(26, 26, 26, 0.95);
-            display: flex; justify-content: space-around;
-            padding: 15px 0; border-top: 1px solid #333;
-            z-index: 1000; backdrop-filter: blur(10px);
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(26, 26, 26, 0.9);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid #333;
+            z-index: 1000;
         }
 
         .nav-item {
-            color: #888; text-decoration: none; font-size: 0.7rem;
-            display: flex; flex-direction: column; align-items: center;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.7rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .nav-item.active { color: var(--gold); }
-
-        /* --- SECTIONS --- */
-        .section { display: none; padding-bottom: 80px; animation: fadeIn 0.5s; }
-        .section.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        header {
-            padding: 20px; display: flex; justify-content: space-between; align-items: center;
-        }
-
-        .logo { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.4rem; }
-
-        /* --- ETAPE 1 & 3: HOME & MARKETPLACE --- */
-        .hero { text-align: center; padding: 40px 20px; }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; }
-
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .card { 
-            background: var(--surface); border-radius: 12px; padding: 10px; 
-            border: 1px solid #222; transition: 0.3s;
-        }
-        .card img { width: 100%; border-radius: 8px; }
-        .card h3 { font-size: 0.9rem; margin: 10px 0 5px; font-family: 'Playfair Display'; }
-        .card .price { color: var(--gold); font-size: 0.8rem; font-weight: 600; }
-
-        /* --- ETAPE 2: AUTH / PROFIL --- */
-        .auth-container {
-            padding: 40px 20px; text-align: center;
-        }
-        .btn-gold {
-            background: var(--gold); color: #000; border: none;
-            padding: 15px 30px; border-radius: 5px; font-weight: bold;
-            width: 100%; max-width: 300px; margin-top: 20px;
-        }
-
-        .form-input {
-            width: 100%; background: #222; border: 1px solid #444;
-            padding: 12px; margin: 10px 0; border-radius: 5px; color: white;
+        .nav-item.active {
+            color: var(--gold);
         }
 
     </style>
 </head>
 <body>
 
-    <div id="home" class="section active">
+    <div class="overlay"></div>
+
+    <div class="content">
         <header>
             <div class="logo">S.E.G GLOBAL</div>
-            <div style="color: var(--gold); font-size: 0.8rem;">EN | FR</div>
+            <div class="lang-switch">EN | FR</div>
         </header>
-        <div class="hero">
+
+        <section class="hero">
             <h1>The Bridge To <br>Global Luxury</h1>
-            <p style="color:#888; font-size: 0.9rem;">From Dubai to Africa, excellence delivered.</p>
-            <button class="btn-gold" onclick="showSection('market')">EXPLORE COLLECTION</button>
-        </div>
-    </div>
+            <p>From Dubai to Africa, excellence delivered.</p>
+            <br><br>
+            <a href="#" class="cta-button">Explore Collection</a>
+        </section>
 
-    <div id="market" class="section">
-        <header><div class="logo">MARKETPLACE</div></header>
-        <div class="grid">
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=400" alt="Watch">
-                <h3>Gold Chrono</h3>
-                <p class="price">$12,000</p>
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400" alt="Jewelry">
-                <h3>Royal Diamond</h3>
-                <p class="price">$25,000</p>
-            </div>
         </div>
-    </div>
-
-    <div id="profile" class="section">
-        <div class="auth-container">
-            <h2 font-family="Playfair Display">Welcome Back</h2>
-            <p style="color:#888">Login to access your elite vault.</p>
-            <input type="email" class="form-input" placeholder="Email Address">
-            <input type="password" class="form-input" placeholder="Password">
-            <button class="btn-gold">LOGIN TO S.E.G</button>
-            <p style="margin-top:20px; font-size: 0.8rem; color: #555;">Or continue with Google</p>
-        </div>
-    </div>
 
     <nav class="bottom-nav">
-        <a href="#" class="nav-item active" onclick="showSection('home')">
-            <span>🏠</span>
-            <span>Home</span>
+        <a href="#" class="nav-item active">
+            <span>🏠</span> <span>Home</span>
         </a>
-        <a href="#" class="nav-item" onclick="showSection('market')">
-            <span>💎</span>
-            <span>Market</span>
+        <a href="#" class="nav-item">
+            <span>💎</span> <span>Market</span>
         </a>
-        <a href="#" class="nav-item" onclick="showSection('profile')">
-            <span>👤</span>
-            <span>Account</span>
+        <a href="#" class="nav-item">
+            <span>👤</span> <span>Account</span>
         </a>
     </nav>
 
-    <script>
-        function showSection(id) {
-            // Cacher toutes les sections
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            // Afficher la section demandée
-            document.getElementById(id).classList.add('active');
-            
-            // Mettre à jour l'état de la navigation
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-    </script>
 </body>
 </html>
