@@ -3,157 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Inscription Sécurisée</title>
+    <title>S.E.G GLOBAL - Connexion Sécurisée</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root { --ali-orange: #ff6a00; --seg-gradient: linear-gradient(90deg, #ff6a00, #ee4d2d); }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #f4f4f4; }
-
-        /* --- ÉCRAN D'INSCRIPTION (OVERLAY) --- */
-        #auth-screen { position: fixed; inset: 0; background: white; z-index: 5000; display: flex; flex-direction: column; padding: 30px; }
-        .step { display: none; flex-direction: column; height: 100%; justify-content: center; }
-        .step.active { display: flex; }
+        :root { --seg-orange: #ff6a00; }
+        body { font-family: 'Segoe UI', sans-serif; background: #fff; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; }
         
-        .logo-area { text-align: center; margin-bottom: 40px; }
-        .logo-area h1 { color: var(--ali-orange); font-size: 32px; font-weight: 900; }
-
-        .btn-google { background: white; border: 1px solid #ddd; padding: 15px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .auth-container { padding: 30px; width: 90%; max-width: 400px; }
+        .logo { font-size: 35px; font-weight: 900; color: var(--seg-orange); margin-bottom: 10px; }
+        .slogan { color: #333; font-size: 14px; margin-bottom: 50px; }
         
-        /* --- CONFIDENTIALITÉ & FORMULAIRE --- */
-        .legal-box { background: #f9f9f9; padding: 15px; border-radius: 10px; height: 200px; overflow-y: scroll; font-size: 12px; color: #666; margin: 20px 0; text-align: left; border: 1px solid #eee; }
-        .checkbox-group { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; text-align: left; }
-        
-        .role-btn { padding: 20px; border: 2px solid #eee; border-radius: 15px; margin-bottom: 15px; text-align: left; cursor: pointer; transition: 0.3s; }
-        .role-btn.selected { border-color: var(--ali-orange); background: #fff5ed; }
-
-        .btn-next { background: var(--ali-orange); color: white; padding: 18px; border-radius: 12px; border: none; font-weight: bold; font-size: 16px; margin-top: 20px; cursor: pointer; }
-
-        /* --- INTERFACE PRINCIPALE (CACHÉE AU DÉBUT) --- */
-        #main-app { display: none; }
-        .app-header { background: var(--seg-gradient); padding: 15px; color: white; border-radius: 0 0 20px 20px; }
+        /* Style du bouton Google comme sur ta capture */
+        .btn-google {
+            background: white;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 500;
+            color: #3c4043;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+        .btn-google:active { background: #f7f8f8; transform: scale(0.98); }
+        .info-text { font-size: 11px; color: #70757a; margin-top: 25px; line-height: 1.5; }
     </style>
 </head>
 <body>
 
-    <div id="auth-screen">
-        
-        <div id="step-1" class="step active">
-            <div class="logo-area">
-                <h1>S.E.G GLOBAL</h1>
-                <p>La sécurité de l'Empire avant tout.</p>
-            </div>
-            <button class="btn-google" onclick="handleGoogleLogin()">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20">
-                Continuer avec Google
-            </button>
-            <p style="font-size: 11px; color: #999; margin-top: 20px; text-align: center;">
-                Validation sécurisée via les serveurs Google.
-            </p>
-        </div>
+    <div class="auth-container" id="login-box">
+        <div class="logo">S.E.G GLOBAL</div>
+        <div class="slogan">La sécurité de l'Empire avant tout.</div>
 
-        <div id="step-2" class="step">
-            <h2>Choisissez votre compte</h2>
-            <p style="color: #666; margin-bottom: 30px;">Comment souhaitez-vous utiliser S.E.G Global ?</p>
-            
-            <div class="role-btn" id="role-vendeur" onclick="selectRole('vendeur')">
-                <div style="font-weight: bold;"><i class="fas fa-store"></i> Compte Vendeur</div>
-                <div style="font-size: 12px; color: #888;">Pour créer une boutique et vendre des produits (10% commission).</div>
-            </div>
+        <button class="btn-google" onclick="signWithGoogle()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20">
+            Continuer avec Google
+        </button>
 
-            <div class="role-btn" id="role-client" onclick="selectRole('client')">
-                <div style="font-weight: bold;"><i class="fas fa-shopping-bag"></i> Compte Acheteur</div>
-                <div style="font-size: 12px; color: #888;">Pour acheter des produits de luxe et d'usine.</div>
-            </div>
-
-            <button class="btn-next" onclick="nextStep(3)">Suivant</button>
-        </div>
-
-        <div id="step-3" class="step">
-            <h2>Confidentialité & Sécurité</h2>
-            <div class="legal-box">
-                <strong>RÈGLEMENT DE L'EMPIRE S.E.G GLOBAL :</strong><br><br>
-                1. Protection des données : Votre email Google est utilisé uniquement pour valider votre identité.<br>
-                2. Transparence : Les vendeurs acceptent une commission de 10% sur les ventes effectuées via l'application.<br>
-                3. Sécurité : Tout compte suspect sera automatiquement banni par le système S.E.G.<br>
-                4. Confidentialité : Vos informations bancaires et personnelles sont cryptées.
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="accept-terms">
-                <label for="accept-terms">J'accepte les conditions de confidentialité et les règles de sécurité de S.E.G Global.</label>
-            </div>
-            <button class="btn-next" onclick="finishSignup()">CRÉER MON COMPTE</button>
-        </div>
-    </div>
-
-    <div id="main-app">
-        <header class="app-header">
-            <div style="display: flex; justify-content: space-between;">
-                <span style="font-weight: 900;">S.E.G GLOBAL</span>
-                <i class="fas fa-user-shield"></i>
-            </div>
-        </header>
-        <main style="padding: 20px;">
-            <h2 id="user-welcome">Bienvenue dans l'Empire</h2>
-            <p style="color: green;"><i class="fas fa-check-circle"></i> Votre compte est sécurisé.</p>
-        </main>
+        <p class="info-text">
+            Validation sécurisée via les serveurs Google.<br>
+            En continuant, Google partagera votre nom, adresse e-mail et photo de profil avec S.E.G Global.
+        </p>
     </div>
 
     <script>
-        let userData = { email: '', role: '' };
-
-        function nextStep(step) {
-            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            document.getElementById('step-' + step).classList.add('active');
-        }
-
-        function handleGoogleLogin() {
-            // Ici on simule la validation Google pour le test
-            // Dans le vrai déploiement, on utilise auth.signInWithPopup(provider)
-            alert("Validation Google en cours... (Email & Mot de passe validés)");
-            userData.email = "utilisateur@gmail.com";
-            nextStep(2);
-        }
-
-        function selectRole(role) {
-            userData.role = role;
-            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
-            document.getElementById('role-' + role).classList.add('selected');
-        }
-
-        function finishSignup() {
-            const accepted = document.getElementById('accept-terms').checked;
-            if(!accepted) {
-                alert("Vous devez accepter la confidentialité pour continuer.");
-                return;
-            }
-            
-            if(!userData.role) {
-                alert("Veuillez choisir un rôle.");
-                return;
-            }
-
-            // Enregistrement final
-            localStorage.setItem('seg_user_active', JSON.stringify(userData));
-            
-            alert("Compte " + userData.role + " créé avec succès !");
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            document.getElementById('user-welcome').innerText = "Bienvenue, " + userData.role;
-        }
-
-        // Vérifier si déjà connecté
-        window.onload = () => {
-            if(localStorage.getItem('seg_user_active')) {
-                document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('main-app').style.display = 'block';
-            }
+        // --- TA CONFIGURATION FIREBASE ---
+        // Remplace par tes vraies clés trouvées dans les paramètres du projet sur ta console
+        const firebaseConfig = {
+            apiKey: "TA_CLE_API",
+            authDomain: "seg-global.firebaseapp.com",
+            projectId: "seg-global",
+            storageBucket: "seg-global.appspot.com",
+            messagingSenderId: "TON_SENDER_ID",
+            appId: "TON_APP_ID"
         };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        function signWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            // Force la sélection du compte et demande les infos
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    const user = result.user;
+                    console.log("Utilisateur connecté : ", user);
+
+                    // 1. On récupère les infos Google
+                    const profileData = {
+                        uid: user.uid,
+                        nom: user.displayName,
+                        email: user.email,
+                        photo: user.photoURL,
+                        derniereConnexion: new Date()
+                    };
+
+                    // 2. On enregistre dans la base de données SEG
+                    db.collection("utilisateurs").doc(user.uid).set(profileData, { merge: true })
+                    .then(() => {
+                        alert("Bienvenue dans l'Empire, " + user.displayName);
+                        // Redirection vers l'accueil de ton app
+                        window.location.href = "accueil.html"; 
+                    });
+
+                }).catch((error) => {
+                    console.error("Erreur de validation : ", error.message);
+                    alert("Échec de la validation Google.");
+                });
+        }
     </script>
 </body>
 </html>
-
