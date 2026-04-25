@@ -1,86 +1,46 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL | Authentification Sécurisée</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --gold: #D4AF37; --bg: #0D0D0D; --surface: #1A1A1A; --text: #F2F2F2; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        
-        /* Background Photo avec filtre */
-        .bg-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('profile.jpg') center/cover; z-index: -1; }
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      // Ce code initialise ton service d'envoi
+      emailjs.init("TON_USER_ID_EMAILJS"); 
+   })();
+</script>
+// 1. On crée un code secret à 6 chiffres
+let codeSecret = Math.floor(100000 + Math.random() * 900000);
 
-        .auth-container { width: 90%; max-width: 400px; background: rgba(26, 26, 26, 0.95); padding: 40px 30px; border-radius: 20px; border: 1px solid var(--gold); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        .logo { font-family: 'Playfair Display'; color: var(--gold); font-size: 2rem; margin-bottom: 10px; }
-        .subtitle { font-size: 0.8rem; color: #888; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+function envoyerLeCode() {
+    const emailClient = document.getElementById('user-email').value;
+    
+    if(!emailClient.includes("@")) {
+        alert("Entre un vrai mail, Stève !");
+        return;
+    }
 
-        input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #333; background: #222; color: white; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--gold); }
+    // 2. On prépare le message pour ton Gmail
+    let parametresMessage = {
+        to_email: emailClient,
+        message_code: codeSecret
+    };
 
-        /* Boutons */
-        .btn-primary { width: 100%; padding: 15px; background: var(--gold); color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
-        .btn-google { width: 100%; padding: 12px; background: white; color: #555; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; font-weight: 500; }
+    // 3. L'envoi réel du mail
+    emailjs.send('service_id', 'template_id', parametresMessage)
+        .then(function() {
+            alert("Code envoyé ! Regarde tes messages.");
+            document.getElementById('email-section').style.display = 'none';
+            document.getElementById('otp-section').style.display = 'block';
+        }, function(error) {
+            alert("Erreur d'envoi... Vérifie ta connexion.");
+        });
+}
 
-        /* Section Code de Validation (Cachée par défaut) */
-        #otp-section { display: none; }
-        .otp-msg { color: var(--gold); font-size: 0.9rem; margin-bottom: 15px; }
-    </style>
-</head>
-<body>
-
-    <div class="bg-overlay"></div>
-
-    <div class="auth-container">
-        <div class="logo">S.E.G GLOBAL</div>
-        <div class="subtitle">Billionaire Club Access</div>
-
-        <div id="email-section">
-            <input type="email" id="user-email" placeholder="Entrez votre Email Gmail">
-            <input type="password" placeholder="Mot de passe">
-            <button class="btn-primary" onclick="showOtp()">DEMANDER LE CODE</button>
-            
-            <div style="margin: 20px 0; color: #555;">OU</div>
-
-            <button class="btn-google">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
-                Continuer avec Google
-            </button>
-        </div>
-
-        <div id="otp-section">
-            <p class="otp-msg">Un code d'authentification a été envoyé à votre adresse mail.</p>
-            <input type="text" id="otp-code" placeholder="Entrez le code à 6 chiffres" maxlength="6" style="text-align:center; font-size: 1.5rem; letter-spacing: 10px;">
-            <button class="btn-primary" onclick="verifyAndRedirect()">VALIDER LE COMPTE</button>
-            <p style="font-size: 0.8rem; color: #666;" onclick="location.reload()">Renvoyer le code</p>
-        </div>
-    </div>
-
-    <script>
-        // Simule l'envoi du code par mail
-        function showOtp() {
-            const email = document.getElementById('user-email').value;
-            if (email.includes("@")) {
-                document.getElementById('email-section').style.display = 'none';
-                document.getElementById('otp-section').style.display = 'block';
-            } else {
-                alert("Veuillez entrer un email valide.");
-            }
-        }
-
-        // Redirection finale vers l'app après validation
-        function verifyAndRedirect() {
-            const code = document.getElementById('otp-code').value;
-            if (code.length === 6) {
-                alert("Compte validé avec succès !");
-                // Ici tu mettras le lien vers ta page d'accueil S.E.G
-                window.location.href = "#"; 
-            } else {
-                alert("Code invalide. Vérifiez votre boîte Gmail.");
-            }
-        }
-    </script>
-</body>
-</html>
+function validerLeCompte() {
+    const codeEntre = document.getElementById('otp-code').value;
+    
+    // 4. On vérifie si c'est le bon code
+    if (codeEntre == codeSecret) {
+        alert("Bienvenue chez S.E.G GLOBAL !");
+        window.location.href = "accueil.html"; // Direction le fil d'actualité
+    } else {
+        alert("Code incorrect. Regarde bien ton mail.");
+    }
+}
