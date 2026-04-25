@@ -1,106 +1,160 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Connexion Sécurisée</title>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    
+    <title>S.E.G GLOBAL | Luxury Bridge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --seg-orange: #ff6a00; }
-        body { font-family: 'Segoe UI', sans-serif; background: #fff; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; }
-        
-        .auth-container { padding: 30px; width: 90%; max-width: 400px; }
-        .logo { font-size: 35px; font-weight: 900; color: var(--seg-orange); margin-bottom: 10px; }
-        .slogan { color: #333; font-size: 14px; margin-bottom: 50px; }
-        
-        /* Style du bouton Google comme sur ta capture */
-        .btn-google {
-            background: white;
-            border: 1px solid #dadce0;
-            border-radius: 8px;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 500;
-            color: #3c4043;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            transition: 0.2s;
+        :root {
+            --bg-color: #0D0D0D;
+            --gold: #D4AF37;
+            --text-white: #F2F2F2;
+            --card-bg: #1A1A1A;
         }
-        .btn-google:active { background: #f7f8f8; transform: scale(0.98); }
-        .info-text { font-size: 11px; color: #70757a; margin-top: 25px; line-height: 1.5; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Header Style */
+        header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        .lang-switch {
+            border: 1px solid var(--gold);
+            padding: 5px 10px;
+            color: var(--gold);
+            font-size: 0.8rem;
+            border-radius: 4px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(to bottom, #1a1a1a, #0d0d0d);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #888;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .cta-button {
+            background-color: var(--gold);
+            color: black;
+            padding: 15px 35px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        /* Product Preview */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #222;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .card h3 {
+            font-family: 'Playfair Display', serif;
+            margin: 15px 0 5px;
+        }
+
+        .card .price {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 0.7rem;
+            color: #555;
+            border-top: 1px solid #222;
+        }
     </style>
 </head>
 <body>
 
-    <div class="auth-container" id="login-box">
+    <header>
         <div class="logo">S.E.G GLOBAL</div>
-        <div class="slogan">La sécurité de l'Empire avant tout.</div>
+        <div class="lang-switch">EN | FR</div>
+    </header>
 
-        <button class="btn-google" onclick="signWithGoogle()">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20">
-            Continuer avec Google
-        </button>
+    <section class="hero">
+        <h1>Global Luxury, <br>Delivered to Africa.</h1>
+        <p>Connecting the world's finest craftsmanship with the African heart. High-end e-commerce technology for the modern elite.</p>
+        <br><br>
+        <a href="#" class="cta-button">Explore Collection</a>
+    </section>
 
-        <p class="info-text">
-            Validation sécurisée via les serveurs Google.<br>
-            En continuant, Google partagera votre nom, adresse e-mail et photo de profil avec S.E.G Global.
-        </p>
+    <div class="product-grid">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&q=80&w=500" alt="Luxury Watch">
+            <h3>Timeless Gold Edition</h3>
+            <p class="price">$12,500</p>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=500" alt="Jewelry">
+            <h3>Diamond Riviera</h3>
+            <p class="price">$8,900</p>
+        </div>
     </div>
 
-    <script>
-        // --- TA CONFIGURATION FIREBASE ---
-        // Remplace par tes vraies clés trouvées dans les paramètres du projet sur ta console
-        const firebaseConfig = {
-            apiKey: "TA_CLE_API",
-            authDomain: "seg-global.firebaseapp.com",
-            projectId: "seg-global",
-            storageBucket: "seg-global.appspot.com",
-            messagingSenderId: "TON_SENDER_ID",
-            appId: "TON_APP_ID"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+    <footer>
+        &copy; 2026 S.E.G GLOBAL - Built on a smartphone by Stève Mpina.
+    </footer>
 
-        function signWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            
-            // Force la sélection du compte et demande les infos
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    const user = result.user;
-                    console.log("Utilisateur connecté : ", user);
-
-                    // 1. On récupère les infos Google
-                    const profileData = {
-                        uid: user.uid,
-                        nom: user.displayName,
-                        email: user.email,
-                        photo: user.photoURL,
-                        derniereConnexion: new Date()
-                    };
-
-                    // 2. On enregistre dans la base de données SEG
-                    db.collection("utilisateurs").doc(user.uid).set(profileData, { merge: true })
-                    .then(() => {
-                        alert("Bienvenue dans l'Empire, " + user.displayName);
-                        // Redirection vers l'accueil de ton app
-                        window.location.href = "accueil.html"; 
-                    });
-
-                }).catch((error) => {
-                    console.error("Erreur de validation : ", error.message);
-                    alert("Échec de la validation Google.");
-                });
-        }
-    </script>
 </body>
 </html>
