@@ -3,158 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL | The Elite Ecosystem</title>
+    <title>S.E.G GLOBAL | Elite Platform</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            /* On garde le doré luxe */
-            --gold: #D4AF37;
-            --text-white: #F2F2F2;
-            --overlay: rgba(13, 13, 13, 0.85); /* Un filtre noir très sombre à 85% d'opacité */
-        }
+        :root { --gold: #D4AF37; --bg: #0D0D0D; --surface: #1A1A1A; --text: #F2F2F2; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #0D0D0D; /* Couleur de secours */
-            color: var(--text-white);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            /* C'est ici que tout se passe : Ta photo en arrière-plan */
-            background-image: url('https://seg-global.vercel.app/profile.jpg'); /* REMPLACE PAR TON URL D'IMAGE REELLE */
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed; /* L'image ne bouge pas quand on scrolle */
+        /* ARRIÈRE-PLAN AVEC TA PHOTO (Assure-toi que le nom du fichier est exact) */
+        .main-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('profile.jpg') center/cover; z-index: -2;
         }
-
-        /* Le filtre sombre pour la lisibilité */
         .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--overlay);
-            z-index: 1; /* Derrière le contenu, mais devant l'image */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: -1;
         }
 
-        /* Le contenu de l'application */
-        .content {
-            position: relative;
-            z-index: 10; /* Devant le filtre sombre */
-            padding-bottom: 100px; /* Espace pour la nav basse */
-        }
-
-        /* --- HEADER & NAVIGATION --- */
+        /* NAVIGATION HAUTE (STYLE INSTAGRAM) */
         header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            height: 60px; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 20px; border-bottom: 1px solid #333; background: rgba(13,13,13,0.9);
         }
+        .logo { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.2rem; }
 
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: var(--gold);
-            letter-spacing: 2px;
+        /* CONTENEUR DE PAGES */
+        .page-container { height: calc(100vh - 130px); overflow-y: auto; padding: 20px; }
+        .page { display: none; animation: slideIn 0.3s ease-out; }
+        .page.active { display: block; }
+
+        @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* BOUTONS & CARTES (STYLE AMAZON/ALIBABA) */
+        .hero-card { background: var(--surface); padding: 30px 20px; border-radius: 15px; text-align: center; border: 1px solid var(--gold); margin-bottom: 20px; }
+        .btn-main { background: var(--gold); color: #000; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .item-card { background: var(--surface); border-radius: 10px; padding: 10px; border: 1px solid #333; }
+        .item-card img { width: 100%; border-radius: 5px; height: 120px; object-fit: cover; background: #222; }
+
+        /* NAVIGATION BASSE (STYLE FACEBOOK/LINKEDIN) */
+        nav {
+            position: fixed; bottom: 0; width: 100%; height: 70px;
+            background: #161616; display: flex; justify-content: space-around;
+            align-items: center; border-top: 1px solid #333;
         }
-
-        .lang-switch {
-            border: 1px solid var(--gold);
-            padding: 5px 10px;
-            color: var(--gold);
-            font-size: 0.8rem;
-            border-radius: 4px;
-        }
-
-        /* --- HERO SECTION (Style de l'image 10) --- */
-        .hero {
-            text-align: center;
-            padding: 60px 20px 40px;
-        }
-
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            line-height: 1.2;
-        }
-
-        .hero p {
-            color: #AAA; /* Gris clair pour le sous-titre */
-            font-size: 1rem;
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
-
-        .cta-button {
-            background-color: var(--gold);
-            color: black;
-            padding: 15px 35px;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 2px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-
-        /* --- NAVIGATION BASSE (Comme l'image 11 mais avec tes couleurs) --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: rgba(26, 26, 26, 0.9);
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            border-top: 1px solid #333;
-            z-index: 1000;
-        }
-
-        .nav-item {
-            color: #888;
-            text-decoration: none;
-            font-size: 0.7rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .nav-item.active {
-            color: var(--gold);
-        }
-
+        .nav-btn { background: none; border: none; color: #666; display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; cursor: pointer; }
+        .nav-btn.active { color: var(--gold); }
+        .nav-btn span { font-size: 1.4rem; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
+    <div class="main-bg"></div>
     <div class="overlay"></div>
 
-    <div class="content">
-        <header>
-            <div class="logo">S.E.G GLOBAL</div>
-            <div class="lang-switch">EN | FR</div>
-        </header>
+    <header>
+        <div class="logo">S.E.G GLOBAL</div>
+        <div style="font-size: 1.2rem;">🔔</div>
+    </header>
 
-        <section class="hero">
-            <h1>The Bridge To <br>Global Luxury</h1>
-            <p>From Dubai to Africa, excellence delivered.</p>
-            <br><br>
-            <a href="#" class="cta-button">Explore Collection</a>
-        </section>
-
+    <div class="page-container">
+        <div id="home" class="page active">
+            <div class="hero-card">
+                <h1 style="font-family: 'Playfair Display'">The Billionaire Club</h1>
+                <p style="color: #888; font-size: 0.9rem;">Connecting Dubai to the heart of Africa.</p>
+                <button class="btn-main" onclick="goTo('market')">VIEW MARKETPLACE</button>
+            </div>
+            <h3 style="margin-top: 30px;">Featured Collections</h3>
+            <div class="grid">
+                <div class="item-card" onclick="goTo('details')">
+                    <img src="https://images.unsplash.com/photo-1547996160-81dfa63595dd?w=400" alt="Watch">
+                    <p style="font-size: 0.8rem; margin: 10px 0 5px;">Elite Chrono</p>
+                    <p style="color: var(--gold); font-weight: bold;">$15,000</p>
+                </div>
+                <div class="item-card">
+                    <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=400" alt="Jewel">
+                    <p style="font-size: 0.8rem; margin: 10px 0 5px;">Pure Gold Bar</p>
+                    <p style="color: var(--gold); font-weight: bold;">$2,400/oz</p>
+                </div>
+            </div>
         </div>
 
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item active">
-            <span>🏠</span> <span>Home</span>
-        </a>
-        <a href="#" class="nav-item">
-            <span>💎</span> <span>Market</span>
-        </a>
-        <a href="#" class="nav-item">
-            <span>👤</span> <span>Account</span>
-        </a>
+        <div id="market" class="page">
+            <input type="text" placeholder="Search products..." style="width:100%; padding:12px; border-radius:8px; border:none; background:#222; color:white; margin-bottom:20px;">
+            <div class="grid">
+                <div class="item-card"><h3>Diamonds</h3><p>Exploration</p></div>
+                <div class="item-card"><h3>Watches</h3><p>Luxury</p></div>
+                <div class="item-card"><h3>Cars</h3><p>Import</p></div>
+                <div class="item-card"><h3>Tech</h3><p>Hardware</p></div>
+            </div>
+        </div>
+
+        <div id="details" class="page">
+            <button onclick="goTo('home')" style="background:none; border:none; color:var(--gold); margin-bottom:20px;">← Back</button>
+            <img src="https://images.unsplash.com/photo-1547996160-81dfa63595dd?w=600" style="width:100%; border-radius:15px;">
+            <h2 style="font-family: 'Playfair Display'">Elite Chrono - Dubai Special</h2>
+            <p style="color:#aaa;">Authentic high-end watch with sapphire glass. Shipped from Dubai directly to your doorstep in Cameroon.</p>
+            <button class="btn-main" onclick="alert('Added to Cart!')">ADD TO CART</button>
+        </div>
+
+        <div id="profile" class="page">
+            <div style="text-align: center; padding: 20px;">
+                <div style="width:100px; height:100px; background:#333; border-radius:50%; margin: 0 auto; border: 2px solid var(--gold);"></div>
+                <h2>Stève Mpina</h2>
+                <p style="color: var(--gold);">Founder & CEO</p>
+                <div style="display:flex; justify-content:space-around; margin-top:20px; border-top:1px solid #333; padding-top:20px;">
+                    <div><b>12</b><br><small>Orders</small></div>
+                    <div><b>1.2M</b><br><small>Points</small></div>
+                </div>
+            </div>
+            <button class="btn-main" style="background:#222; color:white; margin-top:20px;">Account Settings</button>
+        </div>
+    </div>
+
+    <nav>
+        <button class="nav-btn active" id="btn-home" onclick="goTo('home')"><span>🏠</span>Home</button>
+        <button class="nav-btn" id="btn-market" onclick="goTo('market')"><span>🛍️</span>Market</button>
+        <button class="nav-btn" id="btn-profile" onclick="goTo('profile')"><span>👤</span>Profile</button>
     </nav>
 
+    <script>
+        function goTo(pageId) {
+            // Cacher toutes les pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Afficher la page choisie
+            document.getElementById(pageId).classList.add('active');
+
+            // Gérer les icônes actives
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            if(pageId === 'home') document.getElementById('btn-home').classList.add('active');
+            if(pageId === 'market') document.getElementById('btn-market').classList.add('active');
+            if(pageId === 'profile') document.getElementById('btn-profile').classList.add('active');
+        }
+    </script>
 </body>
 </html>
