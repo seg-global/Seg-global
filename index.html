@@ -3,123 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL | Ecosystem</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>S.E.G GLOBAL | Inscription</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --fb-blue: #0866FF; --bg-dark: #0D0D0D; --surface: #1C1C1C; --text: #FFFFFF; --gold: #D4AF37; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text); height: 100vh; overflow: hidden; }
+        :root { --gold: #D4AF37; --bg: #0D0D0D; --surface: #1A1A1A; --text: #F2F2F2; }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; }
 
-        /* HEADER STYLE FACEBOOK */
+        /* --- PAGE D'INSCRIPTION (VISIBLE PAR DÉFAUT) --- */
+        #auth-page {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('profile.jpg') center/cover;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: rgba(26, 26, 26, 0.95); padding: 30px; border-radius: 15px;
+            width: 100%; max-width: 400px; border: 1px solid var(--gold); text-align: center;
+        }
+
+        .auth-card h2 { font-family: 'Playfair Display'; color: var(--gold); margin-bottom: 20px; }
+        
+        .input-group { margin-bottom: 15px; text-align: left; }
+        input {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333;
+            background: #222; color: white; margin-top: 5px;
+        }
+
+        .btn-reg {
+            background: var(--gold); color: black; border: none; padding: 15px;
+            width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px;
+        }
+
+        /* --- INTERFACE PRINCIPALE (CACHÉE AU DÉBUT) --- */
+        #main-app { display: none; height: 100vh; }
+        
         header { 
             height: 60px; padding: 0 15px; display: flex; justify-content: space-between; 
             align-items: center; background: var(--surface); border-bottom: 1px solid #333;
         }
-        .logo-text { font-weight: 800; color: var(--gold); font-size: 1.5rem; letter-spacing: -1px; }
-        .head-icons { display: flex; gap: 15px; font-size: 1.2rem; }
+        .logo { font-family: 'Playfair Display'; color: var(--gold); font-size: 1.3rem; }
 
-        /* CONTENU DES PAGES */
-        .app-container { height: calc(100vh - 130px); overflow-y: auto; }
-        .page { display: none; padding: 15px; animation: fadeIn 0.3s; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .app-content { height: calc(100vh - 130px); overflow-y: auto; padding: 15px; }
+        
+        /* Style Post (comme ta capture) */
+        .post-card { background: var(--surface); border-radius: 12px; padding: 15px; margin-bottom: 20px; border: 1px solid #222; }
+        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gold); }
 
-        /* STYLE FIL D'ACTUALITÉ (FEEDS) */
-        .story-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
-        .story-card { min-width: 100px; height: 160px; background: #333; border-radius: 12px; position: relative; border: 1px solid #444; }
-        .post-card { background: var(--surface); border-radius: 10px; margin-bottom: 15px; padding: 12px; }
-        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .user-pic { width: 35px; height: 35px; background: var(--gold); border-radius: 50%; }
-        .post-img { width: 100%; border-radius: 8px; margin: 10px 0; background: #222; min-height: 200px; }
-
-        /* STYLE MARKETPLACE */
-        .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .market-item { background: var(--surface); border-radius: 8px; overflow: hidden; }
-        .market-img { width: 100%; height: 150px; object-fit: cover; background: #222; }
-        .market-info { padding: 8px; font-size: 0.9rem; }
-        .price { font-weight: bold; color: var(--gold); }
-
-        /* NAVIGATION BASSE (STYLE FACEBOOK) */
         nav { 
             position: fixed; bottom: 0; width: 100%; height: 70px; 
             background: var(--surface); display: flex; border-top: 1px solid #333;
         }
-        .nav-tab { 
-            flex: 1; display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; color: #888; text-decoration: none; font-size: 0.65rem;
-        }
-        .nav-tab.active { color: var(--gold); border-top: 3px solid var(--gold); }
-        .nav-tab i { font-size: 1.5rem; margin-bottom: 4px; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; text-decoration: none; font-size: 0.7rem; }
+        .nav-item.active { color: var(--gold); }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-text">S.E.G GLOBAL</div>
-        <div class="head-icons">🔍 💬</div>
-    </header>
-
-    <div class="app-container">
-        <div id="home" class="page active">
-            <div class="story-bar">
-                <div class="story-card" style="background: url('profile.jpg') center/cover;"></div>
-                <div class="story-card"></div>
-                <div class="story-card"></div>
-                <div class="story-card"></div>
+    <div id="auth-page">
+        <div class="auth-card">
+            <h2>S.E.G GLOBAL</h2>
+            <p style="font-size: 0.9rem; color: #aaa;">Rejoignez l'élite du commerce</p>
+            
+            <div class="input-group">
+                <input type="text" id="reg-name" placeholder="Nom complet (ex: Stève Mpina)">
             </div>
-            <div class="post-card">
-                <div class="post-header"><div class="user-pic"></div> <b>Stève Mpina</b></div>
-                <p>Bienvenue sur le futur du luxe en Afrique. 🌍💎</p>
-                <div class="post-img" style="background: url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=500') center/cover;"></div>
-                <div style="display:flex; justify-content:space-around; color:#888; font-size: 0.8rem;">
-                    <span>👍 J'aime</span> <span>💬 Commenter</span> <span>🔗 Partager</span>
-                </div>
+            <div class="input-group">
+                <input type="email" id="reg-email" placeholder="Adresse Email">
             </div>
-        </div>
-
-        <div id="market" class="page">
-            <h2 style="margin-top:0;">Marketplace</h2>
-            <div class="market-grid">
-                <div class="market-item">
-                    <div class="market-img" style="background: url('https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=400') center/cover;"></div>
-                    <div class="market-info">
-                        <div class="price">150 000 FCFA</div>
-                        <div>Montre de Luxe Dubai</div>
-                    </div>
-                </div>
-                <div class="market-item">
-                    <div class="market-img" style="background: url('https://images.unsplash.com/photo-1547996160-81dfa63595dd?w=400') center/cover;"></div>
-                    <div class="market-info">
-                        <div class="price">45 000 FCFA</div>
-                        <div>Bague Or 18K</div>
-                    </div>
-                </div>
+            <div class="input-group">
+                <input type="password" placeholder="Mot de passe">
             </div>
-        </div>
-
-        <div id="notif" class="page">
-            <h2>Notifications</h2>
-            <p style="color:#888;">Roberto Tabet a aimé votre projet.</p>
+            
+            <button class="btn-reg" onclick="startApp()">CRÉER MON COMPTE</button>
         </div>
     </div>
 
-    <nav>
-        <a href="javascript:void(0)" class="nav-tab active" onclick="switchPage('home', this)"><i>🏠</i><span>Accueil</span></a>
-        <a href="javascript:void(0)" class="nav-tab" onclick="switchPage('market', this)"><i>🏪</i><span>Market</span></a>
-        <a href="javascript:void(0)" class="nav-tab"><i>👥</i><span>Amis</span></a>
-        <a href="javascript:void(0)" class="nav-tab" onclick="switchPage('notif', this)"><i>🔔</i><span>Notifs</span></a>
-        <a href="javascript:void(0)" class="nav-tab"><i>≡</i><span>Menu</span></a>
-    </nav>
+    <div id="main-app">
+        <header>
+            <div class="logo">S.E.G GLOBAL</div>
+            <div style="font-size: 1.2rem;">🔍 💬</div>
+        </header>
+
+        <div class="app-content">
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="avatar"></div>
+                    <div>
+                        <b id="user-display-name">Utilisateur</b><br>
+                        <small style="color: #666;">À l'instant</small>
+                    </div>
+                </div>
+                <p>Bienvenue dans votre espace personnel. Vous pouvez maintenant poster vos articles de luxe.</p>
+                <div style="width:100%; height:200px; background: #222; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#444;">
+                    [ Image de votre premier article ]
+                </div>
+            </div>
+        </div>
+
+        <nav>
+            <a href="#" class="nav-item active">🏠<span>Accueil</span></a>
+            <a href="#" class="nav-item">🏪<span>Market</span></a>
+            <a href="#" class="nav-item">👥<span>Amis</span></a>
+            <a href="#" class="nav-item">🔔<span>Notifs</span></a>
+            <a href="#" class="nav-item">≡<span>Menu</span></a>
+        </nav>
+    </div>
 
     <script>
-        function switchPage(pageId, element) {
-            // Désactiver toutes les pages et onglets
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        function startApp() {
+            const name = document.getElementById('reg-name').value;
+            if (name.trim() === "") {
+                alert("S'il vous plaît, entrez votre nom.");
+                return;
+            }
             
-            // Activer la sélection
-            document.getElementById(pageId).classList.add('active');
-            element.classList.add('active');
+            // On enregistre le nom pour l'afficher dans l'app
+            document.getElementById('user-display-name').innerText = name;
+            
+            // Transition fluide vers l'application
+            document.getElementById('auth-page').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
         }
     </script>
 </body>
