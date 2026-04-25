@@ -1,46 +1,31 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script type="text/javascript">
-   (function(){
-      // Ce code initialise ton service d'envoi
-      emailjs.init("TON_USER_ID_EMAILJS"); 
-   })();
+
+<script>
+  (function(){
+      // REMPLACE CECI PAR TA CLÉ PUBLIQUE EMAILJS
+      emailjs.init("user_xxxxxxxxxxxxxxxx"); 
+  })();
+
+  // L'ALGORITHME DE GÉNÉRATION
+  let codeSecret = Math.floor(100000 + Math.random() * 900000);
+
+  function envoyerLeCode() {
+      const emailClient = document.getElementById('user-email').value;
+      
+      // Paramètres à envoyer à EmailJS
+      let params = {
+          to_email: emailClient,
+          otp_code: codeSecret 
+      };
+
+      // REMPLACE 'service_xxx' et 'template_xxx' par tes vrais IDs
+      emailjs.send('service_xxx', 'template_xxx', params)
+          .then(function() {
+              alert("Succès ! Code envoyé à " + emailClient);
+              // Affiche la section pour entrer le code
+              document.getElementById('otp-section').style.display = 'block';
+          }, function(error) {
+              alert("Échec de l'envoi... Erreur: " + JSON.stringify(error));
+          });
+  }
 </script>
-// 1. On crée un code secret à 6 chiffres
-let codeSecret = Math.floor(100000 + Math.random() * 900000);
-
-function envoyerLeCode() {
-    const emailClient = document.getElementById('user-email').value;
-    
-    if(!emailClient.includes("@")) {
-        alert("Entre un vrai mail, Stève !");
-        return;
-    }
-
-    // 2. On prépare le message pour ton Gmail
-    let parametresMessage = {
-        to_email: emailClient,
-        message_code: codeSecret
-    };
-
-    // 3. L'envoi réel du mail
-    emailjs.send('service_id', 'template_id', parametresMessage)
-        .then(function() {
-            alert("Code envoyé ! Regarde tes messages.");
-            document.getElementById('email-section').style.display = 'none';
-            document.getElementById('otp-section').style.display = 'block';
-        }, function(error) {
-            alert("Erreur d'envoi... Vérifie ta connexion.");
-        });
-}
-
-function validerLeCompte() {
-    const codeEntre = document.getElementById('otp-code').value;
-    
-    // 4. On vérifie si c'est le bon code
-    if (codeEntre == codeSecret) {
-        alert("Bienvenue chez S.E.G GLOBAL !");
-        window.location.href = "accueil.html"; // Direction le fil d'actualité
-    } else {
-        alert("Code incorrect. Regarde bien ton mail.");
-    }
-}
