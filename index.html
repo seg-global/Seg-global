@@ -1,110 +1,44 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL | Authentification</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-    <style>
-        :root { --gold: #D4AF37; --bg: #0D0D0D; --surface: #1A1A1A; --text: #F2F2F2; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        
-        .bg-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('votre-image.jpg') center/cover; z-index: -1; }
+<script type="text/javascript">
+   (function(){
+      // Initialisation avec ta Clé Publique
+      // IMPORTANT : Remplace 'VOTRE_CLE_PUBLIQUE' par la clé trouvée dans l'onglet 'Account' d'EmailJS
+      emailjs.init("VOTRE_CLE_PUBLIQUE");
+   })();
 
-        .auth-container { width: 90%; max-width: 400px; background: rgba(26, 26, 26, 0.95); padding: 40px 30px; border-radius: 20px; border: 1px solid var(--gold); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        .logo { font-family: 'Playfair Display'; color: var(--gold); font-size: 2rem; margin-bottom: 5px; }
-        .subtitle { font-size: 0.7rem; color: #888; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+   // Fonction pour générer un code à 6 chiffres
+   function genererOTP() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+   }
 
-        input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #333; background: #222; color: white; outline: none; box-sizing: border-box; }
-        input:focus { border-color: var(--gold); }
+   // Fonction principale d'envoi du code
+   function envoyerCodeValidation() {
+      const emailClient = document.getElementById('email-input').value; // Vérifie que l'ID de ton input est bien celui-là
+      const codeOTP = genererOTP();
 
-        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-gold:active { transform: scale(0.98); }
+      if(!emailClient) {
+         alert("Veuillez entrer une adresse email.");
+         return;
+      }
 
-        #otp-section { display: none; margin-top: 20px; }
-        .loading { display: none; color: var(--gold); font-size: 0.9rem; margin-top: 10px; }
-    </style>
-</head>
-<body>
+      // Paramètres qui seront envoyés à ton modèle EmailJS
+      const templateParams = {
+         to_email: emailClient,
+         otp_code: codeOTP,
+         from_name: "S.E.G GLOBAL"
+      };
 
-    <div class="bg-overlay"></div>
-
-    <div class="auth-container">
-        <div class="logo">S.E.G GLOBAL</div>
-        <div class="subtitle">Luxury & Security Excellence</div>
-
-        <div id="email-section">
-            <p style="font-size: 0.9rem; margin-bottom: 20px;">Inscrivez-vous pour accéder à l'univers du luxe.</p>
-            <input type="text" id="user-name" placeholder="Nom complet">
-            <input type="email" id="user-email" placeholder="votre-email@gmail.com">
-            <button class="btn-gold" onclick="envoyerCodeDauthentification()">RECEVOIR MON CODE</button>
-            <div id="loader" class="loading">Génération du code sécurisé...</div>
-        </div>
-
-        <div id="otp-section">
-            <p style="color: var(--gold); font-size: 0.9rem;">Un code à 6 chiffres a été envoyé à votre Gmail.</p>
-            <input type="text" id="otp-input" placeholder="Entrez le code" maxlength="6" style="text-align: center; font-size: 1.2rem; letter-spacing: 5px;">
-            <button class="btn-gold" onclick="verifierCode()">VALIDER MON COMPTE</button>
-        </div>
-    </div>
-
-    <script>
-        // INITIALISATION EMAILJS (Mets ta clé ici)
-        (function(){
-            emailjs.init("VOTRE_PUBLIC_KEY"); 
-        })();
-
-        // ALGORITHME DE SÉCURITÉ
-        let codeGenere = Math.floor(100000 + Math.random() * 900000);
-
-        function envoyerCodeDauthentification() {
-            const email = document.getElementById('user-email').value;
-            const nom = document.getElementById('user-name').value;
-            const loader = document.getElementById('loader');
-
-            if (!email.includes("@") || nom === "") {
-                alert("Veuillez remplir correctement tous les champs.");
-                return;
-            }
-
-            loader.style.display = "block";
-
-            // Paramètres pour le mail
-            let templateParams = {
-                to_name: nom,
-                to_email: email,
-                otp_code: codeGenere
-            };
-
-            // ENVOI RÉEL VIA EMAILJS
-            emailjs.send('VOTRE_SERVICE_ID', 'VOTRE_TEMPLATE_ID', templateParams)
-                .then(function() {
-                    loader.style.display = "none";
-                    alert("Succès ! Code envoyé à " + email);
-                    document.getElementById('email-section').style.display = "none";
-                    document.getElementById('otp-section').style.display = "block";
-                }, function(error) {
-                    loader.style.display = "none";
-                    alert("Erreur de connexion : Vérifiez vos IDs EmailJS.");
-                    console.log("Détails erreur:", error);
-                });
-        }
-
-        function verifierCode() {
-            const codeSaisi = document.getElementById('otp-input').value;
-
-            if (codeSaisi == codeGenere) {
-                alert("Compte validé ! Bienvenue Stève.");
-                // Redirige vers ton interface Facebook une fois validé
-                window.location.href = "accueil.html"; 
-            } else {
-                alert("Code incorrect. Vérifiez votre boîte mail.");
-            }
-        }
-    </script>
-</body>
-</html>
+      // Utilisation de ton nouveau Service ID : service_ble34wu
+      // IMPORTANT : Remplace 'TON_TEMPLATE_ID' par l'ID de ton modèle (onglet Email Templates)
+      emailjs.send('service_ble34wu', 'TON_TEMPLATE_ID', templateParams)
+         .then(function(response) {
+            console.log('SUCCÈS !', response.status, response.text);
+            alert("Un code de validation a été envoyé à : " + emailClient);
+            // Ici, tu peux rediriger l'utilisateur vers la page de vérification du code
+         }, function(error) {
+            console.log('ÉCHEC...', error);
+            alert("Erreur de connexion : Vérifiez vos IDs EmailJS dans le code.");
+         });
+   }
+</script>
