@@ -1,44 +1,23 @@
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+// 1. Connexion sécurisée à ton compte EmailJS
+emailjs.init("QGnoNmpH78_GuSLf4"); 
 
-<script type="text/javascript">
-   (function(){
-      // Initialisation avec ta Clé Publique
-      // IMPORTANT : Remplace 'VOTRE_CLE_PUBLIQUE' par la clé trouvée dans l'onglet 'Account' d'EmailJS
-      emailjs.init("VOTRE_CLE_PUBLIQUE");
-   })();
+// 2. Fonction pour envoyer le code de validation
+function envoyerCodeValidation() {
+    const emailClient = document.getElementById('email-input').value;
+    const codeOTP = Math.floor(100000 + Math.random() * 900000).toString();
 
-   // Fonction pour générer un code à 6 chiffres
-   function genererOTP() {
-      return Math.floor(100000 + Math.random() * 900000).toString();
-   }
+    const templateParams = {
+        to_email: emailClient,
+        otp_code: codeOTP,
+        from_name: "S.E.G GLOBAL"
+    };
 
-   // Fonction principale d'envoi du code
-   function envoyerCodeValidation() {
-      const emailClient = document.getElementById('email-input').value; // Vérifie que l'ID de ton input est bien celui-là
-      const codeOTP = genererOTP();
-
-      if(!emailClient) {
-         alert("Veuillez entrer une adresse email.");
-         return;
-      }
-
-      // Paramètres qui seront envoyés à ton modèle EmailJS
-      const templateParams = {
-         to_email: emailClient,
-         otp_code: codeOTP,
-         from_name: "S.E.G GLOBAL"
-      };
-
-      // Utilisation de ton nouveau Service ID : service_ble34wu
-      // IMPORTANT : Remplace 'TON_TEMPLATE_ID' par l'ID de ton modèle (onglet Email Templates)
-      emailjs.send('service_ble34wu', 'TON_TEMPLATE_ID', templateParams)
-         .then(function(response) {
-            console.log('SUCCÈS !', response.status, response.text);
-            alert("Un code de validation a été envoyé à : " + emailClient);
-            // Ici, tu peux rediriger l'utilisateur vers la page de vérification du code
-         }, function(error) {
-            console.log('ÉCHEC...', error);
-            alert("Erreur de connexion : Vérifiez vos IDs EmailJS dans le code.");
-         });
-   }
-</script>
+    // Utilisation de ton Service ID : service_ble34wu
+    // REMPLACE 'TON_TEMPLATE_ID' par l'ID de ton modèle (icône liste à gauche)
+    emailjs.send('service_ble34wu', 'TON_TEMPLATE_ID', templateParams)
+        .then(function(response) {
+            alert("Succès ! Code envoyé à : " + emailClient);
+        }, function(error) {
+            alert("Erreur de connexion. Vérifie ton Template ID.");
+        });
+}
