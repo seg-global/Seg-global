@@ -1,23 +1,113 @@
-// 1. Connexion sécurisée à ton compte EmailJS
-emailjs.init("QGnoNmpH78_GuSLf4"); 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.E.G GLOBAL - Luxe & Sécurité</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050505;
+            color: #d4af37; /* Couleur Or */
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            border: 1px solid #d4af37;
+            padding: 40px;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            width: 80%;
+            max-width: 400px;
+        }
+        h1 { font-size: 24px; letter-spacing: 3px; margin-bottom: 20px; }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #d4af37;
+            background: transparent;
+            color: white;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #d4af37;
+            color: black;
+            border: none;
+            padding: 15px 30px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+        button:hover { background-color: #f1c40f; transform: scale(1.02); }
+        .footer { margin-top: 20px; font-size: 10px; color: #555; }
+    </style>
+</head>
+<body>
 
-// 2. Fonction pour envoyer le code de validation
-function envoyerCodeValidation() {
-    const emailClient = document.getElementById('email-input').value;
-    const codeOTP = Math.floor(100000 + Math.random() * 900000).toString();
+    <div class="container">
+        <h1>S.E.G GLOBAL</h1>
+        <p>AUTHENTIFICATION DE LUXE</p>
+        
+        <input type="email" id="email-input" placeholder="Entrez votre email professionnel" required>
+        
+        <button onclick="envoyerCodeValidation()">OBTENIR MON CODE D'ACCÈS</button>
+        
+        <div class="footer">ÉXIGENCE • EXCLUSIVITÉ • SÉCURITÉ</div>
+    </div>
 
-    const templateParams = {
-        to_email: emailClient,
-        otp_code: codeOTP,
-        from_name: "S.E.G GLOBAL"
-    };
+    <script type="text/javascript">
+        // 1. INITIALISATION AVEC TA CLÉ PUBLIQUE
+        emailjs.init("QGnoNmpH78_GuSLf4");
 
-    // Utilisation de ton Service ID : service_ble34wu
-    // REMPLACE 'TON_TEMPLATE_ID' par l'ID de ton modèle (icône liste à gauche)
-    emailjs.send('service_ble34wu', 'TON_TEMPLATE_ID', templateParams)
-        .then(function(response) {
-            alert("Succès ! Code envoyé à : " + emailClient);
-        }, function(error) {
-            alert("Erreur de connexion. Vérifie ton Template ID.");
-        });
-}
+        function envoyerCodeValidation() {
+            const emailClient = document.getElementById('email-input').value;
+            
+            // Génération d'un code secret à 6 chiffres
+            const codeOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+            if(!emailClient || !emailClient.includes('@')) {
+                alert("Veuillez entrer une adresse email valide.");
+                return;
+            }
+
+            // Affichage d'un message de chargement
+            const btn = document.querySelector('button');
+            btn.innerText = "ENVOI EN COURS...";
+            btn.disabled = true;
+
+            // 2. PARAMÈTRES POUR TON MODÈLE EMAILJS
+            const templateParams = {
+                to_email: emailClient,
+                otp_code: codeOTP,
+                from_name: "S.E.G GLOBAL"
+            };
+
+            // 3. ENVOI VIA TON SERVICE : service_ble34wu
+            // ATTENTION : Remplace 'template_xxxx' par ton vrai Template ID
+            emailjs.send('service_ble34wu', 'TON_TEMPLATE_ID', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    alert("S.E.G GLOBAL : Un code de sécurité a été envoyé à " + emailClient);
+                    btn.innerText = "CODE ENVOYÉ !";
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    alert("Erreur technique. Vérifie ton Template ID dans EmailJS.");
+                    btn.innerText = "OBTENIR MON CODE D'ACCÈS";
+                    btn.disabled = false;
+                });
+        }
+    </script>
+</body>
+</html>
