@@ -3,42 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Authentification</title>
+    <title>S.E.G GLOBAL - Authentification de Luxe</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
+        * { box-sizing: border-box; }
         body {
             margin: 0;
             padding: 0;
-            background-color: #000;
-            color: #d4af37;
-            font-family: 'Arial', sans-serif;
+            background-color: #000; /* Fond noir profond */
+            color: #d4af37; /* Couleur Or */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
         }
-        .container {
+        .luxury-card {
             border: 1px solid #d4af37;
-            padding: 40px;
+            padding: 40px 30px;
             border-radius: 15px;
-            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+            background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
             text-align: center;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            width: 350px;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
         }
-        h1 { font-size: 24px; letter-spacing: 3px; margin-bottom: 10px; }
-        p { font-size: 14px; margin-bottom: 30px; color: #d4af37; opacity: 0.8; }
-        input {
+        .brand-name {
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .tagline {
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            opacity: 0.8;
+            color: #fff;
+        }
+        .input-group {
+            margin-bottom: 25px;
+        }
+        input[type="email"] {
             width: 100%;
             padding: 15px;
-            margin-bottom: 20px;
             border: 1px solid #d4af37;
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             color: #fff;
-            border-radius: 8px;
-            box-sizing: border-box;
+            border-radius: 5px;
+            outline: none;
             text-align: center;
+            font-size: 16px;
         }
         button {
             width: 100%;
@@ -46,60 +62,84 @@
             background-color: #d4af37;
             color: #000;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
             font-weight: bold;
+            font-size: 14px;
             cursor: pointer;
             text-transform: uppercase;
+            transition: 0.3s;
         }
-        .footer-text { margin-top: 25px; font-size: 10px; color: #555; letter-spacing: 1px; }
+        button:hover {
+            background-color: #f1c40f;
+            transform: scale(1.02);
+        }
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        .footer-branding {
+            margin-top: 30px;
+            font-size: 9px;
+            color: #666;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>S.E.G GLOBAL</h1>
-        <p>AUTHENTIFICATION DE LUXE</p>
+    <div class="luxury-card">
+        <div class="brand-name">S.E.G GLOBAL</div>
+        <div class="tagline">AUTHENTIFICATION DE LUXE</div>
         
-        <input type="email" id="user_email" placeholder="Entrez votre email" required>
-        <button onclick="envoyerCode()">Obtenir mon code d'accès</button>
+        <div class="input-group">
+            <input type="email" id="user_email" placeholder="votre@email.com" required>
+        </div>
         
-        <div class="footer-text">EXIGENCE • EXCLUSIVITÉ • SÉCURITÉ</div>
+        <button id="btn-submit" onclick="lancerProcessus()">Obtenir mon code d'accès</button>
+        
+        <div class="footer-branding">Exigence • Exclusivité • Sécurité</div>
     </div>
 
     <script type="text/javascript">
-        // Initialisation avec ta Clé Publique
+        // 1. INITIALISATION AVEC TA CLÉ PUBLIQUE
         emailjs.init("QGnoNmpH78_GuSLf4");
 
-        function envoyerCode() {
-            const email = document.getElementById('user_email').value;
-            const btn = document.querySelector('button');
+        function lancerProcessus() {
+            const emailInput = document.getElementById('user_email');
+            const btn = document.getElementById('btn-submit');
+            const emailValue = emailInput.value;
 
-            if (!email) {
+            if (!emailValue || !emailValue.includes('@')) {
                 alert("Veuillez entrer une adresse email valide.");
                 return;
             }
 
-            // On change le texte du bouton pendant l'envoi
+            // Interface : chargement
             btn.innerText = "ENVOI EN COURS...";
             btn.disabled = true;
 
-            // Génération d'un code à 6 chiffres
-            const code = Math.floor(100000 + Math.random() * 900000);
+            // 2. GÉNÉRATION DU CODE DE SÉCURITÉ (6 chiffres)
+            const codeSecu = Math.floor(100000 + Math.random() * 900000);
 
-            const params = {
-                to_email: email,
-                otp_code: code,
+            // 3. PARAMÈTRES POUR GMAIL
+            const templateParams = {
+                to_email: emailValue,
+                otp_code: codeSecu,
                 from_name: "S.E.G GLOBAL"
             };
 
-            // Envoi via ton Service ID et ton Template ID
-            // IMPORTANT : Utilise 'template_v7i6m5m' (ID standard pour le code OTP)
-            emailjs.send('service_oc73u8o', 'template_v7i6m5m', params)
-                .then(function() {
-                    alert("Succès ! Un code de sécurité a été envoyé à : " + email);
+            // 4. ENVOI VIA TON SERVICE GMAIL
+            // On utilise ton Service ID : service_oc73u8o
+            // Et l'ID de modèle par défaut d'EmailJS pour le code OTP
+            emailjs.send('service_oc73u8o', 'template_v7i6m5m', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    alert("Succès ! Un code de sécurité a été envoyé à : " + emailValue);
                     btn.innerText = "CODE ENVOYÉ";
                 }, function(error) {
-                    alert("Erreur technique : " + JSON.stringify(error));
+                    console.log('FAILED...', error);
+                    alert("Erreur technique : " + error.text + ". Vérifiez votre Service ID.");
                     btn.innerText = "OBTENIR MON CODE D'ACCÈS";
                     btn.disabled = false;
                 });
