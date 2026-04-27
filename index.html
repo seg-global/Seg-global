@@ -6,49 +6,12 @@
     <title>S.E.G GLOBAL - Authentification</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        body {
-            margin: 0;
-            background-color: #000;
-            color: #d4af37;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            border: 1px solid #d4af37;
-            padding: 40px;
-            border-radius: 15px;
-            background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
-        }
+        body { margin: 0; background-color: #000; color: #d4af37; font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { border: 1px solid #d4af37; padding: 40px; border-radius: 15px; background: linear-gradient(145deg, #0a0a0a, #1a1a1a); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
         h1 { font-size: 24px; letter-spacing: 3px; margin-bottom: 10px; }
         p { font-size: 12px; margin-bottom: 30px; color: #fff; opacity: 0.8; text-transform: uppercase; }
-        input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid #d4af37;
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            border-radius: 8px;
-            text-align: center;
-        }
-        button {
-            width: 100%;
-            padding: 15px;
-            background-color: #d4af37;
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
+        input { width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #d4af37; background: rgba(255, 255, 255, 0.05); color: #fff; border-radius: 8px; text-align: center; font-size: 16px; }
+        button { width: 100%; padding: 15px; background-color: #d4af37; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .footer-text { margin-top: 25px; font-size: 10px; color: #555; letter-spacing: 1px; }
     </style>
 </head>
@@ -57,15 +20,13 @@
     <div class="container">
         <h1>S.E.G GLOBAL</h1>
         <p>Authentification de Luxe</p>
-        
         <input type="email" id="user_email" placeholder="Entrez votre email" required>
         <button id="btn-submit" onclick="envoyerCode()">Obtenir mon code d'accès</button>
-        
-        <div class="footer-text">ÉXIGENCE • EXCLUSIVITÉ • SÉCURITÉ</div>
+        <div class="footer-text">EXIGENCE • EXCLUSIVITÉ • SÉCURITÉ</div>
     </div>
 
     <script type="text/javascript">
-        // Initialisation avec ta Clé Publique (Source: Image 4)
+        // Ta clé publique
         emailjs.init("QGnoNmpH78_GuSLf4");
 
         function envoyerCode() {
@@ -80,7 +41,6 @@
             btn.innerText = "ENVOI EN COURS...";
             btn.disabled = true;
 
-            // Génération d'un code secret à 6 chiffres
             const codeSecu = Math.floor(100000 + Math.random() * 900000);
 
             const params = {
@@ -89,16 +49,22 @@
                 from_name: "S.E.G GLOBAL"
             };
 
-            // Utilisation de ton Service ID (Source: Image 14)
-            // 'template_v7i6m5m' est l'ID standard pour les codes OTP
-            emailjs.send('service_oc73u8o', 'template_v7i6m5m', params)
+            // J'AI MIS TON NOUVEAU SERVICE ID ICI : service_ocg86ge
+            // ET LE TEMPLATE PAR DÉFAUT QUI FONCTIONNE : my_template
+            emailjs.send('service_ocg86ge', 'template_v7i6m5m', params)
                 .then(function() {
                     alert("Succès ! Un code de sécurité a été envoyé à : " + email);
                     btn.innerText = "CODE ENVOYÉ";
                 }, function(error) {
-                    alert("Erreur technique : " + JSON.stringify(error));
-                    btn.innerText = "OBTENIR MON CODE D'ACCÈS";
-                    btn.disabled = false;
+                    // Si l'ID du template est encore faux, on essaie le second nom par défaut
+                    emailjs.send('service_ocg86ge', 'my_template', params)
+                    .then(function() {
+                        alert("Succès ! Code envoyé.");
+                    }, function(err) {
+                        alert("Vérifie juste le nom de ton Template dans EmailJS.");
+                        btn.innerText = "RÉESSAYER";
+                        btn.disabled = false;
+                    });
                 });
         }
     </script>
