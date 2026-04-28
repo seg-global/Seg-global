@@ -5,66 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.E.G GLOBAL - Authentification</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
     <style>
-        body { margin: 0; background-color: #000; color: #d4af37; font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { border: 1px solid #d4af37; padding: 40px; border-radius: 15px; background: linear-gradient(145deg, #0a0a0a, #1a1a1a); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
-        h1 { font-size: 24px; letter-spacing: 3px; margin-bottom: 10px; }
-        p { font-size: 12px; margin-bottom: 30px; color: #fff; opacity: 0.8; text-transform: uppercase; }
-        input { width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #d4af37; background: rgba(255, 255, 255, 0.05); color: #fff; border-radius: 8px; text-align: center; font-size: 16px; }
-        button { width: 100%; padding: 15px; background-color: #d4af37; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .footer-text { margin-top: 25px; font-size: 10px; color: #555; letter-spacing: 1px; }
+        body { margin: 0; background-color: #000; color: #d4af37; font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .container { border: 1px solid #d4af37; padding: 40px; border-radius: 15px; background: linear-gradient(145deg, #0a0a0a, #1a1a1a); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
+        h1 { font-size: 26px; letter-spacing: 4px; margin-bottom: 5px; text-transform: uppercase; }
+        .subtitle { font-size: 10px; margin-bottom: 35px; color: #fff; opacity: 0.7; letter-spacing: 2px; }
+        input { width: 100%; padding: 15px; margin-bottom: 25px; border: 1px solid #444; background: rgba(255, 255, 255, 0.05); color: #fff; border-radius: 8px; text-align: center; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: #d4af37; }
+        button { width: 100%; padding: 16px; background-color: #d4af37; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; transition: 0.3s; }
+        button:active { transform: scale(0.98); }
+        .footer-text { margin-top: 30px; font-size: 9px; color: #555; letter-spacing: 2px; }
+        #status-msg { margin-top: 15px; font-size: 13px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>S.E.G GLOBAL</h1>
-        <p>Authentification de Luxe</p>
-        <input type="email" id="user_email" placeholder="Entrez votre email" required>
+        <div class="subtitle">AUTHENTIFICATION DE LUXE</div>
+        
+        <input type="email" id="user_email" placeholder="ENTREZ VOTRE EMAIL" required>
         <button id="btn-submit" onclick="envoyerCode()">Obtenir mon code d'accès</button>
+        
+        <div id="status-msg"></div>
         <div class="footer-text">EXIGENCE • EXCLUSIVITÉ • SÉCURITÉ</div>
     </div>
 
     <script type="text/javascript">
-        // Ta clé publique
+        // Initialisation avec ta clé publique
         emailjs.init("QGnoNmpH78_GuSLf4");
 
         function envoyerCode() {
-            const email = document.getElementById('user_email').value;
+            const emailField = document.getElementById('user_email');
             const btn = document.getElementById('btn-submit');
+            const status = document.getElementById('status-msg');
+            const email = emailField.value.trim();
 
             if (!email || !email.includes('@')) {
                 alert("Veuillez entrer une adresse email valide.");
                 return;
             }
 
-            btn.innerText = "ENVOI EN COURS...";
+            // Interface de chargement
+            btn.innerText = "CONNEXION AU SERVEUR...";
+            btn.style.opacity = "0.7";
             btn.disabled = true;
 
+            // Génération du code à 6 chiffres
             const codeSecu = Math.floor(100000 + Math.random() * 900000);
 
+            // Paramètres pour ton modèle EmailJS
             const params = {
                 to_email: email,
                 otp_code: codeSecu,
                 from_name: "S.E.G GLOBAL"
             };
 
-            // J'AI MIS TON NOUVEAU SERVICE ID ICI : service_ocg86ge
-            // ET LE TEMPLATE PAR DÉFAUT QUI FONCTIONNE : my_template
+            // ENVOI AVEC TES BONS IDENTIFIANTS
+            // Service ID: service_ocg86ge (Celui qui a réussi le test)
             emailjs.send('service_ocg86ge', 'template_v7i6m5m', params)
-                .then(function() {
-                    alert("Succès ! Un code de sécurité a été envoyé à : " + email);
-                    btn.innerText = "CODE ENVOYÉ";
-                }, function(error) {
-                    // Si l'ID du template est encore faux, on essaie le second nom par défaut
-                    emailjs.send('service_ocg86ge', 'my_template', params)
-                    .then(function() {
-                        alert("Succès ! Code envoyé.");
-                    }, function(err) {
-                        alert("Vérifie juste le nom de ton Template dans EmailJS.");
-                        btn.innerText = "RÉESSAYER";
-                        btn.disabled = false;
-                    });
+                .then(function(res) {
+                    status.style.color = "#00ff00";
+                    status.innerText = "✅ CODE ENVOYÉ À " + email.toUpperCase();
+                    btn.innerText = "SUCCÈS";
+                    alert("Succès ! Vérifie ta boîte mail : " + email);
+                }, function(err) {
+                    // Affichage de l'erreur détaillée si ça échoue
+                    console.error("Erreur:", err);
+                    status.style.color = "#ff4444";
+                    status.innerText = "❌ ERREUR : " + (err.text || "Vérifie tes IDs");
+                    btn.innerText = "RÉESSAYER";
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                    alert("Échec de l'envoi. Erreur : " + JSON.stringify(err));
                 });
         }
     </script>
