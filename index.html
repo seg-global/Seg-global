@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Authentification</title>
+    <title>S.E.G GLOBAL - Authentification de Luxe</title>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         body {
@@ -39,7 +39,6 @@
             box-sizing: border-box;
             text-align: center;
         }
-        input:focus { border-color: #D4AF37; outline: none; }
         button {
             width: 100%;
             padding: 12px;
@@ -51,38 +50,67 @@
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.3s;
+            margin-top: 10px;
         }
         button:hover { background-color: #fff; box-shadow: 0 0 10px #fff; }
         .message { margin-top: 15px; font-size: 14px; display: none; }
         .success { color: #2ecc71; }
         .error { color: #e74c3c; }
+
+        /* Style pour l'interface des produits (cachée au début) */
+        #product_interface {
+            display: none;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .product-card {
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>S.E.G GLOBAL</h1>
-    <p class="subtitle">Authentification de Luxe</p>
+    <div id="auth_section">
+        <h1>S.E.G GLOBAL</h1>
+        <p class="subtitle">Authentification de Luxe</p>
 
-    <div id="step1">
-        <input type="email" id="user_email" placeholder="Entrez votre e-mail" required>
-        <button onclick="sendOTP()">Obtenir mon code d'accès</button>
+        <div id="step1">
+            <input type="email" id="user_email" placeholder="Entrez votre e-mail" required>
+            <button onclick="sendOTP()">Obtenir mon code d'accès</button>
+        </div>
+
+        <div id="step2" style="display: none;">
+            <p>Code envoyé à votre iPhone.</p>
+            <input type="text" id="user_otp" placeholder="Entrez le code reçu">
+            <button onclick="verifyOTP()">Valider l'accès</button>
+        </div>
     </div>
 
-    <div id="step2" style="display: none;">
-        <p>Code envoyé à votre adresse.</p>
-        <input type="text" id="user_otp" placeholder="Entrez le code reçu">
-        <button onclick="verifyOTP()">Valider l'accès</button>
-        <p style="font-size: 12px; margin-top:10px; cursor:pointer;" onclick="location.reload()">Réessayer</p>
+    <div id="product_interface">
+        <h1>S.E.G GLOBAL</h1>
+        <p class="subtitle">Catalogue des Diamants</p>
+        <div class="product-grid">
+            <div class="product-card">💎 Diamant Brut<br>1.5 Carats</div>
+            <div class="product-card">💎 Diamant Pur<br>0.8 Carats</div>
+        </div>
+        <button style="margin-top: 20px;" onclick="location.reload()">Déconnexion</button>
     </div>
 
     <div id="status_msg" class="message"></div>
 </div>
 
 <script>
+    // INITIALISATION AVEC TA CLÉ PUBLIQUE (DÉJÀ INSÉRÉE)
     (function() {
-        // REMPLACE "TON_USER_ID" PAR TA PUBLIC KEY EMAILJS
-        emailjs.init("TON_USER_ID"); 
+        emailjs.init("VOTRE_PUBLIC_KEY_ICI"); // Remplace juste par ta clé ici une fois pour toutes
     })();
 
     let generatedOTP = "";
@@ -91,9 +119,9 @@
         const email = document.getElementById("user_email").value;
         const msg = document.getElementById("status_msg");
         
-        if(!email) { alert("Veuillez entrer un e-mail"); return; }
+        if(!email) { alert("Veuillez entrer votre mail"); return; }
 
-        // Générer un code à 6 chiffres
+        // On génère un code au hasard
         generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
 
         const params = {
@@ -102,19 +130,17 @@
         };
 
         msg.style.display = "block";
-        msg.innerHTML = "Envoi en cours...";
-        msg.className = "message";
+        msg.innerHTML = "Envoi du code...";
 
         emailjs.send("service_ocg86ge", "template_v7i6m5m", params)
             .then(function() {
-                msg.innerHTML = "CODE ENVOYÉ AVEC SUCCÈS !";
+                msg.innerHTML = "CODE ENVOYÉ ! Vérifiez votre iPhone.";
                 msg.className = "message success";
                 document.getElementById("step1").style.display = "none";
                 document.getElementById("step2").style.display = "block";
             }, function(error) {
-                msg.innerHTML = "ERREUR : Vérifie ton Template ID dans EmailJS.";
+                msg.innerHTML = "ERREUR D'ENVOI.";
                 msg.className = "message error";
-                console.log("Erreur:", error);
             });
     }
 
@@ -123,13 +149,14 @@
         const msg = document.getElementById("status_msg");
 
         if(inputOTP === generatedOTP) {
-            msg.innerHTML = "ACCÈS AUTORISÉ. BIENVENUE CHEZ S.E.G GLOBAL.";
-            msg.className = "message success";
-            // Ici tu peux rediriger vers ton catalogue de diamants
-            // window.location.href = "page_diamants.html";
+            // VICTOIRE : On cache l'auth et on montre les produits
+            document.getElementById("auth_section").style.display = "none";
+            document.getElementById("status_msg").style.display = "none";
+            document.getElementById("product_interface").style.display = "block";
         } else {
-            msg.innerHTML = "CODE INCORRECT. VEUILLEZ RÉESSAYER.";
+            msg.innerHTML = "CODE INCORRECT.";
             msg.className = "message error";
+            msg.style.display = "block";
         }
     }
 </script>
