@@ -3,66 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Plateforme de Luxe</title>
+    <title>S.E.G GLOBAL - Marketplace</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
 
     <style>
-        body { background-color: #000; color: #D4AF37; font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
-        .container { border: 2px solid #D4AF37; padding: 30px; border-radius: 15px; background: linear-gradient(145deg, #0f0f0f, #000); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); width: 90%; max-width: 400px; }
-        h1 { font-size: 24px; letter-spacing: 3px; margin-bottom: 5px; }
-        p.subtitle { font-size: 10px; text-transform: uppercase; margin-bottom: 30px; color: #aaa; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 8px; box-sizing: border-box; text-align: center; }
-        button { width: 100%; padding: 12px; background-color: #D4AF37; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
-        button:hover { background-color: #fff; box-shadow: 0 0 10px #fff; }
-        .message { margin-top: 15px; font-size: 14px; display: none; }
-        .success { color: #2ecc71; }
-        .error { color: #e74c3c; }
+        :root { --amazon-gold: #febd69; --amazon-dark: #131921; --seg-gold: #D4AF37; }
+        body { background-color: #f3f3f3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
         
-        /* Interface Boutique cachée par défaut */
+        /* Navbar style Amazon */
+        .header { background-color: var(--amazon-dark); padding: 10px 20px; display: flex; flex-direction: column; align-items: center; color: white; }
+        .logo { font-weight: bold; color: white; font-size: 22px; margin-bottom: 10px; }
+        .logo span { color: var(--seg-gold); }
+        .search-bar { width: 100%; display: flex; max-width: 500px; }
+        .search-bar input { flex: 1; padding: 10px; border: none; border-radius: 4px 0 0 4px; }
+        .search-bar button { background: var(--amazon-gold); border: none; padding: 10px 15px; border-radius: 0 4px 4px 0; cursor: pointer; }
+
+        /* Conteneur */
+        .container { padding: 15px; max-width: 600px; margin: auto; }
+        
+        /* Section Connexion */
+        .auth-card { background: white; padding: 25px; border-radius: 8px; border: 1px solid #ddd; margin-top: 20px; text-align: center; }
+        .btn-amazon { background: #ffd814; border: 1px solid #fcd200; border-radius: 8px; padding: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+
+        /* Grille de Produits Amazon Style */
         #product_interface { display: none; }
-        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .product-card { border: 1px solid #444; padding: 15px; border-radius: 8px; font-size: 12px; background: #0a0a0a; }
+        .hero-banner { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 1px solid #ddd; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: white; padding: 10px; border-radius: 4px; border: 1px solid #ddd; text-align: left; }
+        .card img { width: 100%; border-radius: 4px; background: #eee; }
+        .price { color: #B12704; font-size: 18px; font-weight: bold; margin: 5px 0; }
+        .delivery { font-size: 12px; color: #565959; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="auth_section">
-        <h1>S.E.G GLOBAL</h1>
-        <p class="subtitle">Authentification de Luxe</p>
-        
-        <div id="step1">
-            <input type="email" id="user_email" placeholder="Entrez votre e-mail" required>
-            <button onclick="sendOTP()">Obtenir mon code d'accès</button>
-        </div>
-
-        <div id="step2" style="display: none;">
-            <p style="font-size: 12px;">Code envoyé à votre iPhone</p>
-            <input type="text" id="user_otp" placeholder="Entrez le code reçu">
-            <button onclick="verifyOTP()">Valider l'accès</button>
+<div id="auth_section">
+    <div class="header">
+        <div class="logo">S.E.G <span>GLOBAL</span></div>
+    </div>
+    <div class="container">
+        <div class="auth-card">
+            <h3>Bienvenue chez S.E.G</h3>
+            <p style="font-size: 14px;">Connectez-vous pour accéder à votre boutique de luxe.</p>
+            <div id="step1">
+                <input type="email" id="user_email" style="width:90%; padding:10px; margin-bottom:10px;" placeholder="E-mail">
+                <button class="btn-amazon" onclick="sendOTP()">Continuer</button>
+            </div>
+            <div id="step2" style="display:none;">
+                <input type="text" id="user_otp" style="width:90%; padding:10px; margin-bottom:10px;" placeholder="Code de vérification">
+                <button class="btn-amazon" onclick="verifyOTP()">Vérifier le code</button>
+            </div>
         </div>
     </div>
+</div>
 
-    <div id="product_interface">
-        <h1>S.E.G GLOBAL</h1>
-        <p class="subtitle">Espace Membre Officiel</p>
-        <div class="product-grid">
-            <div class="product-card">💎 Diamant Brut<br>Qualité Supérieure</div>
-            <div class="product-card">🏢 Gestion<br>Ma Boutique</div>
+<div id="product_interface">
+    <div class="header">
+        <div class="logo">S.E.G <span>GLOBAL</span></div>
+        <div class="search-bar">
+            <input type="text" placeholder="Rechercher des diamants, pierres...">
+            <button>🔍</button>
         </div>
-        <button style="margin-top: 30px; background-color: #444; color: white;" onclick="logout()">Déconnexion</button>
     </div>
-
-    <div id="status_msg" class="message"></div>
+    <div class="container">
+        <div class="hero-banner">
+            <h2>L'empire est en marche</h2>
+            <p>Découvrez nos extractions exclusives.</p>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <div style="height:100px; background:#ddd;">💎</div>
+                <h4>Diamant Brut</h4>
+                <div class="price">850,00 €</div>
+                <div class="delivery">Livraison GRATUITE</div>
+            </div>
+            <div class="card">
+                <div style="height:100px; background:#ddd;">💍</div>
+                <h4>Pierre Précieuse</h4>
+                <div class="price">1 200,00 €</div>
+                <div class="delivery">Stock limité</div>
+            </div>
+        </div>
+        <button onclick="logout()" style="margin-top:20px; background:none; border:none; color:#007185; text-decoration:underline; cursor:pointer;">Déconnexion</button>
+    </div>
 </div>
 
 <script>
-    // 1. INITIALISATION FIREBASE (Ton salon)
+    // Configuration Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0", 
         authDomain: "seg-global.firebaseapp.com",
@@ -73,16 +104,10 @@
         measurementId: "G-Z5WG470MGW"
     };
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    // 2. INITIALISATION EMAILJS (Ton envoi de mail)
-    (function() {
-        emailjs.init("QGnoNmpH78_GuSLf4");
-    })();
+    emailjs.init("QGnoNmpH78_GuSLf4");
 
     let generatedOTP = "";
 
-    // 3. SYSTÈME DE MÉMOIRE (LocalStorage)
     window.onload = function() {
         if (localStorage.getItem("seg_global_session") === "active") {
             showProducts();
@@ -91,41 +116,24 @@
 
     function sendOTP() {
         const email = document.getElementById("user_email").value;
-        const msg = document.getElementById("status_msg");
-        if(!email) { alert("Entrez votre e-mail"); return; }
-
+        if(!email) return alert("E-mail requis");
         generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-        const params = { to_email: email, otp_code: generatedOTP };
-
-        msg.style.display = "block";
-        msg.innerHTML = "Envoi du code sécurisé...";
-
-        emailjs.send("service_ocg86ge", "template_v7i6m5m", params)
-            .then(function() {
-                msg.innerHTML = "CODE ENVOYÉ ! Vérifiez votre iPhone.";
-                msg.className = "message success";
+        emailjs.send("service_ocg86ge", "template_v7i6m5m", { to_email: email, otp_code: generatedOTP })
+            .then(() => {
                 document.getElementById("step1").style.display = "none";
                 document.getElementById("step2").style.display = "block";
-            }, function(error) {
-                msg.innerHTML = "ERREUR D'ENVOI. Vérifiez votre connexion.";
-                msg.className = "message error";
             });
     }
 
     function verifyOTP() {
-        const inputOTP = document.getElementById("user_otp").value;
-        if(inputOTP === generatedOTP) {
-            // Activer la mémoire de l'iPhone
+        if(document.getElementById("user_otp").value === generatedOTP) {
             localStorage.setItem("seg_global_session", "active");
             showProducts();
-        } else {
-            alert("Code incorrect. Réessayez.");
-        }
+        } else { alert("Code invalide"); }
     }
 
     function showProducts() {
         document.getElementById("auth_section").style.display = "none";
-        document.getElementById("status_msg").style.display = "none";
         document.getElementById("product_interface").style.display = "block";
     }
 
@@ -134,6 +142,5 @@
         location.reload();
     }
 </script>
-
 </body>
 </html>
