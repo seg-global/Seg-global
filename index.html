@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Authentification de Luxe</title>
+    <title>S.E.G GLOBAL - Plateforme de Luxe</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+
     <style>
         body { background-color: #000; color: #D4AF37; font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
         .container { border: 2px solid #D4AF37; padding: 30px; border-radius: 15px; background: linear-gradient(145deg, #0f0f0f, #000); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); width: 90%; max-width: 400px; }
         h1 { font-size: 24px; letter-spacing: 3px; margin-bottom: 5px; }
         p.subtitle { font-size: 10px; text-transform: uppercase; margin-bottom: 30px; color: #aaa; }
         input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 8px; box-sizing: border-box; text-align: center; }
-        button { width: 100%; padding: 12px; background-color: #D4AF37; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        button { width: 100%; padding: 12px; background-color: #D4AF37; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
+        button:hover { background-color: #fff; box-shadow: 0 0 10px #fff; }
         .message { margin-top: 15px; font-size: 14px; display: none; }
         .success { color: #2ecc71; }
         .error { color: #e74c3c; }
+        
+        /* Interface Boutique cachée par défaut */
         #product_interface { display: none; }
         .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .product-card { border: 1px solid #444; padding: 10px; border-radius: 5px; font-size: 12px; }
+        .product-card { border: 1px solid #444; padding: 15px; border-radius: 8px; font-size: 12px; background: #0a0a0a; }
     </style>
 </head>
 <body>
@@ -26,12 +35,14 @@
     <div id="auth_section">
         <h1>S.E.G GLOBAL</h1>
         <p class="subtitle">Authentification de Luxe</p>
+        
         <div id="step1">
             <input type="email" id="user_email" placeholder="Entrez votre e-mail" required>
             <button onclick="sendOTP()">Obtenir mon code d'accès</button>
         </div>
+
         <div id="step2" style="display: none;">
-            <p>Code envoyé à votre iPhone.</p>
+            <p style="font-size: 12px;">Code envoyé à votre iPhone</p>
             <input type="text" id="user_otp" placeholder="Entrez le code reçu">
             <button onclick="verifyOTP()">Valider l'accès</button>
         </div>
@@ -39,34 +50,55 @@
 
     <div id="product_interface">
         <h1>S.E.G GLOBAL</h1>
-        <p class="subtitle">Catalogue des Diamants</p>
+        <p class="subtitle">Espace Membre Officiel</p>
         <div class="product-grid">
-            <div class="product-card">💎 Diamant Brut<br>1.5 Carats</div>
-            <div class="product-card">💎 Diamant Pur<br>0.8 Carats</div>
+            <div class="product-card">💎 Diamant Brut<br>Qualité Supérieure</div>
+            <div class="product-card">🏢 Gestion<br>Ma Boutique</div>
         </div>
-        <button style="margin-top: 20px;" onclick="location.reload()">Déconnexion</button>
+        <button style="margin-top: 30px; background-color: #444; color: white;" onclick="logout()">Déconnexion</button>
     </div>
+
     <div id="status_msg" class="message"></div>
 </div>
 
 <script>
+    // 1. INITIALISATION FIREBASE (Ton salon)
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0", 
+        authDomain: "seg-global.firebaseapp.com",
+        projectId: "seg-global",
+        storageBucket: "seg-global.appspot.com",
+        messagingSenderId: "880037527683",
+        appId: "1:880037527683:web:0f0b38d469714f808c96bb",
+        measurementId: "G-Z5WG470MGW"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // 2. INITIALISATION EMAILJS (Ton envoi de mail)
     (function() {
-        // Ta clé est insérée ici, plus besoin d'y toucher !
-        emailjs.init("QGnoNmpH78_GuSLf4"); 
+        emailjs.init("QGnoNmpH78_GuSLf4");
     })();
 
     let generatedOTP = "";
 
+    // 3. SYSTÈME DE MÉMOIRE (LocalStorage)
+    window.onload = function() {
+        if (localStorage.getItem("seg_global_session") === "active") {
+            showProducts();
+        }
+    };
+
     function sendOTP() {
         const email = document.getElementById("user_email").value;
         const msg = document.getElementById("status_msg");
-        if(!email) { alert("Entrez votre mail"); return; }
+        if(!email) { alert("Entrez votre e-mail"); return; }
 
         generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
         const params = { to_email: email, otp_code: generatedOTP };
 
         msg.style.display = "block";
-        msg.innerHTML = "Envoi du code...";
+        msg.innerHTML = "Envoi du code sécurisé...";
 
         emailjs.send("service_ocg86ge", "template_v7i6m5m", params)
             .then(function() {
@@ -75,20 +107,33 @@
                 document.getElementById("step1").style.display = "none";
                 document.getElementById("step2").style.display = "block";
             }, function(error) {
-                msg.innerHTML = "ERREUR D'ENVOI.";
+                msg.innerHTML = "ERREUR D'ENVOI. Vérifiez votre connexion.";
                 msg.className = "message error";
             });
     }
 
     function verifyOTP() {
-        if(document.getElementById("user_otp").value === generatedOTP) {
-            document.getElementById("auth_section").style.display = "none";
-            document.getElementById("status_msg").style.display = "none";
-            document.getElementById("product_interface").style.display = "block";
+        const inputOTP = document.getElementById("user_otp").value;
+        if(inputOTP === generatedOTP) {
+            // Activer la mémoire de l'iPhone
+            localStorage.setItem("seg_global_session", "active");
+            showProducts();
         } else {
-            alert("Code incorrect.");
+            alert("Code incorrect. Réessayez.");
         }
     }
+
+    function showProducts() {
+        document.getElementById("auth_section").style.display = "none";
+        document.getElementById("status_msg").style.display = "none";
+        document.getElementById("product_interface").style.display = "block";
+    }
+
+    function logout() {
+        localStorage.removeItem("seg_global_session");
+        location.reload();
+    }
 </script>
+
 </body>
 </html>
