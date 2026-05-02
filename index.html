@@ -71,7 +71,7 @@
             z-index: 2000; 
         }
         
-        /* STYLE DU TITRE AVEC LE BOUTON FERMER */
+        /* TITRE AVEC LE BOUTON FERMER À DROITE */
         .chat-title { 
             background: var(--fb-blue); 
             color: white; 
@@ -89,7 +89,9 @@
             font-size: 24px;
             line-height: 20px;
             padding: 0 5px;
+            transition: 0.2s;
         }
+        .close-btn:hover { color: #ddd; }
 
         /* NAVIGATION BASSE */
         .bottom-nav { 
@@ -141,7 +143,7 @@
         </div>
     </div>
 
-    <!-- Post Admin -->
+    <!-- Flux : Post Administration -->
     <div class="post">
         <div class="post-header">
             <img src="https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media" class="post-avatar">
@@ -151,19 +153,19 @@
             </div>
         </div>
         <div style="padding:12px; font-size: 14px;">
-            Bienvenue sur le portail sécurisé de l'empire. Négociez vos pierres précieuses en toute confiance. 💎✨
+            Bienvenue sur le nouveau portail social de l'empire. Suivez nos extractions en direct et négociez vos pierres précieuses en toute sécurité. 💎✨
         </div>
     </div>
 
-    <!-- FENÊTRE DE NÉGOCIATION SÉCURISÉE -->
+    <!-- FENÊTRE DE NÉGOCIATION SÉCURISÉE AVEC BOUTON SORTIR -->
     <div id="secure_chat">
         <div class="chat-title">
             <span>🛡️ Négociation Sécurisée S.E.G</span>
-            <!-- BOUTON DE FERMETURE (CROIX) -->
-            <span class="close-btn" onclick="toggleChat()">&times;</span>
+            <!-- BOUTON DE FERMETURE AJOUTÉ ICI -->
+            <span class="close-btn" onclick="toggleChat()" title="Sortir">&times;</span>
         </div>
         <div id="chat_box" style="height:150px; overflow-y:auto; padding:10px; font-size:12px;">
-            <div style="color:red; font-weight:bold;">⚠️ Rappel : L'échange de numéros est bloqué pour votre sécurité.</div>
+            <div style="color:red; font-weight:bold;">⚠️ Rappel : L'échange de numéros est bloqué.</div>
         </div>
         <div style="display:flex; padding:8px; border-top: 1px solid #eee;">
             <input type="text" id="chat_input" placeholder="Votre offre..." style="flex:1; padding:5px; border: 1px solid #ddd; border-radius: 4px;">
@@ -181,26 +183,22 @@
     </div>
 
     <script>
-        // Fonction pour ouvrir ou fermer la fenêtre
+        // Fonction pour ouvrir/fermer la fenêtre
         function toggleChat() {
             const chat = document.getElementById('secure_chat');
-            if (chat.style.display === 'block') {
-                chat.style.display = 'none';
-            } else {
-                chat.style.display = 'block';
-            }
+            chat.style.display = (chat.style.display === 'block') ? 'none' : 'block';
         }
 
-        // Fonction pour envoyer un message avec filtre de sécurité
+        // Fonction d'envoi avec sécurité
         function envoyerMessage() {
             let msg = document.getElementById("chat_input").value;
             const box = document.getElementById("chat_box");
             
-            // Détection de numéros de téléphone (anti-arnaque)
+            // Sécurité anti-arnaque : pas de numéros de téléphone
             const regexTel = /\d{8,}/; 
 
             if (regexTel.test(msg)) {
-                alert("🚨 SÉCURITÉ S.E.G : Les coordonnées privées sont interdites ici.");
+                alert("🚨 SÉCURITÉ : Les coordonnées privées sont interdites ici.");
                 return; 
             }
 
