@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL - Plateforme Officielle</title>
+    <title>S.E.G GLOBAL - Empire Social</title>
     
+    <!-- CONFIGURATION PWA (Installation sur écran d'accueil) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="S.E.G GLOBAL">
     
+    <!-- TON LOGO OFFICIEL -->
     <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media">
     <link rel="icon" type="image/png" href="https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media">
 
@@ -24,10 +26,10 @@
             background-color: var(--bg-gray); 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; 
             margin: 0; 
-            padding-bottom: 70px; 
+            padding-bottom: 75px; 
         }
 
-        /* HEADER AVEC TON LOGO */
+        /* HEADER */
         .fb-header { 
             background: white; 
             padding: 10px 15px; 
@@ -40,19 +42,19 @@
             z-index: 1000; 
         }
         .header-logo-container { display: flex; align-items: center; gap: 8px; }
-        .header-logo-img { width: 35px; border-radius: 6px; }
-        .fb-logo-text { color: var(--fb-blue); font-size: 24px; font-weight: bold; letter-spacing: -1px; }
+        .header-logo-img { width: 32px; border-radius: 6px; }
+        .fb-logo-text { color: var(--fb-blue); font-size: 24px; font-weight: bold; }
 
-        /* NAVIGATION HAUTE */
+        /* NAVIGATION HAUTE (TABBAR) */
         .top-nav { background: white; display: flex; border-bottom: 1px solid #ddd; }
-        .nav-tab { flex:1; text-align:center; padding:12px; font-size: 20px; color: var(--text-gray); cursor: pointer; }
+        .nav-tab { flex:1; text-align:center; padding:12px; font-size: 22px; color: var(--text-gray); cursor: pointer; transition: 0.3s; }
         .nav-tab.active { border-bottom: 3px solid var(--fb-blue); color: var(--fb-blue); }
 
-        /* STORIES (Comme sur ta capture Facebook) */
+        /* STORIES */
         .stories-container { display: flex; gap: 10px; padding: 12px; overflow-x: auto; background: white; margin-bottom: 10px; }
         .story-card { 
-            min-width: 100px; 
-            height: 165px; 
+            min-width: 105px; 
+            height: 170px; 
             border-radius: 12px; 
             position: relative; 
             overflow: hidden; 
@@ -70,18 +72,18 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
-        /* POSTS (FLUX D'ACTUALITÉ) */
+        /* POSTS */
         .post { background: white; margin-bottom: 10px; border-bottom: 1px solid #ddd; }
         .post-header { padding: 12px; display: flex; align-items: center; gap: 10px; }
         .post-avatar { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #eee; }
         .post-info { font-size: 14px; }
         .post-content { padding: 0 12px 12px 12px; font-size: 14px; line-height: 1.4; }
-        .post-image { width: 100%; min-height: 300px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 60px; }
+        .post-media { width: 100%; min-height: 300px; background: #f0f2f5; display: flex; align-items: center; justify-content: center; font-size: 50px; border-top: 1px solid #eee; border-bottom: 1px solid #eee;}
         
-        .post-actions { display: flex; justify-content: space-around; padding: 10px; border-top: 1px solid #f0f2f5; }
-        .action-btn { color: var(--text-gray); font-size: 13px; font-weight: 600; cursor: pointer; }
+        .post-actions { display: flex; justify-content: space-around; padding: 10px; }
+        .action-btn { color: var(--text-gray); font-size: 13px; font-weight: 600; flex: 1; text-align: center; cursor: pointer; }
 
-        /* NAVIGATION BASSE (PWA) */
+        /* BARRE DE NAVIGATION BASSE (FIXE) */
         .bottom-nav { 
             position: fixed; 
             bottom: 0; 
@@ -89,32 +91,38 @@
             background: white; 
             display: flex; 
             justify-content: space-around; 
-            padding: 8px 0; 
+            padding: 10px 0; 
             border-top: 1px solid #ddd; 
             z-index: 1000; 
         }
-        .bottom-item { text-align: center; font-size: 10px; color: var(--text-gray); flex: 1; }
+        .bottom-item { text-align: center; font-size: 10px; color: var(--text-gray); flex: 1; cursor: pointer; }
         .bottom-item i { font-size: 22px; display: block; margin-bottom: 2px; }
         .bottom-item.active { color: var(--fb-blue); }
 
-        /* QUOI DE NEUF ? */
+        /* PUBLICATION RAPIDE */
         .publish-box { background: white; padding: 12px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid #ddd; margin-bottom: 10px; }
-        .fake-input { background: #f0f2f5; padding: 10px 15px; border-radius: 20px; flex: 1; color: var(--text-gray); font-size: 14px; }
+        .fake-input { background: #f0f2f5; padding: 10px 15px; border-radius: 20px; flex: 1; color: var(--text-gray); font-size: 14px; cursor: pointer; }
+
+        /* MESSAGERIE SÉCURISÉE (POPUP) */
+        #secure_chat { display: none; position: fixed; bottom: 80px; right: 20px; width: 280px; background: white; border: 1px solid var(--fb-blue); border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 2000; }
+        .chat-title { background: var(--fb-blue); color: white; padding: 10px; border-radius: 10px 10px 0 0; font-size: 14px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+    <!-- Header avec Logo S.E.G GLOBAL -->
     <div class="fb-header">
         <div class="header-logo-container">
-            <img src="https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media" class="header-logo-img" alt="Logo SEG">
+            <img src="https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media" class="header-logo-img" alt="Logo">
             <div class="fb-logo-text">S.E.G</div>
         </div>
-        <div style="display: flex; gap: 12px; font-size: 20px;">
-            <span>🔍</span>
-            <span>💬</span>
+        <div style="display: flex; gap: 15px; font-size: 20px;">
+            <span onclick="alert('Recherche mondiale active')">🔍</span>
+            <span onclick="toggleChat()">💬</span>
         </div>
     </div>
 
+    <!-- Navigation du Haut (Onglets) -->
     <div class="top-nav">
         <div class="nav-tab active">🏠</div>
         <div class="nav-tab">📺</div>
@@ -122,16 +130,18 @@
         <div class="nav-tab">🔔</div>
     </div>
 
+    <!-- Section "Quoi de neuf ?" -->
     <div class="publish-box">
-        <img src="https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media" style="width:35px; height:35px; border-radius:50%;" alt="User">
-        <div class="fake-input">Quoi de neuf, Stève ?</div>
+        <img src="https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media" style="width:35px; height:35px; border-radius:50%;" alt="Moi">
+        <div class="fake-input" onclick="alert('Ouverture de l\'éditeur de post...')">Quoi de neuf, Stève ?</div>
     </div>
 
+    <!-- Stories (Section Horizontale) -->
     <div class="stories-container">
-        <div class="story-card" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4)), url('https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media');">
+        <div class="story-card" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.5)), url('https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media');">
             <div class="story-overlay">Créer une story</div>
         </div>
-        <div class="story-card" style="background-color: var(--amazon-dark);">
+        <div class="story-card" style="background-color: #333;">
             <div style="font-size:40px; text-align:center; margin-top:40px;">💎</div>
             <div class="story-overlay">Diamants Mars</div>
         </div>
@@ -141,25 +151,39 @@
         </div>
     </div>
 
+    <!-- Flux d'actualité : Un Post S.E.G GLOBAL -->
     <div class="post">
         <div class="post-header">
-            <img src="https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media" class="post-avatar" alt="Logo Post">
+            <img src="https://firebasestorage.googleapis.com/v0/b/seg-global.appspot.com/o/logo_seg.png?alt=media" class="post-avatar" alt="Admin">
             <div class="post-info">
                 <div style="font-weight:bold;">S.E.G GLOBAL Administration</div>
-                <div style="color:var(--text-gray); font-size:12px;">À l'instant · 🌍</div>
+                <div style="color:var(--text-gray); font-size:12px;">À l'instant · 🌍 Public</div>
             </div>
         </div>
         <div class="post-content">
-            Bienvenue sur le nouveau portail social de l'empire. Suivez nos extractions en direct et négociez en toute sécurité. 💎✨
+            Bienvenue sur le nouveau portail social de l'empire. Suivez nos extractions en direct et négociez vos pierres précieuses en toute sécurité. 💎✨
         </div>
-        <div class="post-image">💎</div>
+        <div class="post-media">💎</div>
         <div class="post-actions">
             <div class="action-btn">👍 J'aime</div>
-            <div class="action-btn" onclick="alert('Sécurité : Chat crypté actif')">💬 Commenter</div>
+            <div class="action-btn" onclick="toggleChat()">💬 Négocier</div>
             <div class="action-btn">🔁 Partager</div>
         </div>
     </div>
 
+    <!-- Messagerie Anti-Arnaque (Popup) -->
+    <div id="secure_chat">
+        <div class="chat-title">🛡️ Négociation Sécurisée S.E.G</div>
+        <div id="chat_box" style="height:150px; overflow-y:auto; padding:10px; font-size:12px;">
+            <div style="color:red; font-weight:bold; margin-bottom:5px;">⚠️ Rappel : L'échange de numéros est bloqué.</div>
+        </div>
+        <div style="display:flex; padding:5px;">
+            <input type="text" id="chat_input" placeholder="Votre offre..." style="flex:1; padding:5px;">
+            <button onclick="envoyerMessage()">OK</button>
+        </div>
+    </div>
+
+    <!-- Barre de Navigation Basse (Facebook Style) -->
     <div class="bottom-nav">
         <div class="bottom-item active"><i>🏠</i>Accueil</div>
         <div class="bottom-item"><i>👥</i>Amis</div>
@@ -169,14 +193,28 @@
     </div>
 
     <script>
-        // Système de sécurité anti-arnaque intégré
-        function verifierSecurite(message) {
-            const regexTel = /\d{8,}/; // Bloque les numéros de téléphone
-            if (regexTel.test(message)) {
-                alert("🚨 SÉCURITÉ S.E.G : L'échange de numéros est interdit sur le flux public pour votre protection.");
-                return false;
+        function toggleChat() {
+            const chat = document.getElementById('secure_chat');
+            chat.style.display = (chat.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function envoyerMessage() {
+            let msg = document.getElementById("chat_input").value;
+            const box = document.getElementById("chat_box");
+            
+            // Système de sécurité anti-arnaque
+            const detecteTel = /\d{8,}/; 
+
+            if (detecteTel.test(msg)) {
+                alert("🚨 SÉCURITÉ : Coordonnées privées interdites pour éviter les arnaques.");
+                return; 
             }
-            return true;
+
+            if (msg.trim() !== "") {
+                box.innerHTML += `<div style="margin-top:5px;"><b>Moi:</b> ${msg}</div>`;
+                document.getElementById("chat_input").value = "";
+                box.scrollTop = box.scrollHeight;
+            }
         }
     </script>
 
