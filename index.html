@@ -3,35 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL | Feed Edition</title>
+    <title>S.E.G GLOBAL | Marché & Négociation</title>
     <style>
-        :root { --primary: #1877F2; --gold: #D4AF37; --white: #ffffff; --bg: #f0f2f5; --text: #1c1e21; }
-        body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); padding-bottom: 80px; color: var(--text); }
+        :root { --primary: #1877F2; --gold: #D4AF37; --white: #ffffff; --bg: #f0f2f5; }
+        body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); padding-bottom: 80px; }
 
-        /* HEADER */
         .header { background: var(--white); padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-weight: 900; color: var(--primary); font-size: 22px; letter-spacing: -1px; }
+        .logo { font-weight: 900; color: var(--primary); font-size: 22px; }
 
-        /* ZONE DE PUBLICATION */
-        .publish-box { background: var(--white); margin: 10px; padding: 15px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 10px; }
-        .add-post-btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; flex-grow: 1; text-align: left; }
+        /* VUE MARCHÉ */
+        .market-grid { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .product-img { width: 100%; height: 120px; background: #333; display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--gold); }
+        .product-info { padding: 10px; }
+        .product-name { font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+        .price { color: #1c1e21; font-weight: 900; font-size: 13px; }
+        .btn-nego { width: 100%; background: var(--primary); color: white; border: none; padding: 8px; border-radius: 6px; margin-top: 10px; font-weight: bold; cursor: pointer; }
 
-        /* POSTS */
-        .feed { padding: 5px 10px; }
-        .post { background: var(--white); border-radius: 12px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .post-header { padding: 12px; display: flex; align-items: center; gap: 10px; }
-        .user-avatar { width: 35px; height: 35px; background: #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-        .post-img { width: 100%; display: block; background: #eee; min-height: 200px; object-fit: cover; }
-        .post-content { padding: 12px; font-size: 14px; line-height: 1.4; }
+        /* FENÊTRE DE NÉGOCIATION (POP-UP) */
+        #negoModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: white; width: 90%; border-radius: 15px; padding: 20px; position: relative; }
+        .chat-box { height: 150px; background: #f0f2f5; border-radius: 8px; margin-bottom: 10px; padding: 10px; overflow-y: auto; font-size: 13px; }
+        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 20px; font-weight: bold; cursor: pointer; }
 
-        /* NAVIGATION BASSE */
+        /* NAVIGATION */
         .nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
-        .nav-link { flex: 1; text-align: center; color: #65676b; font-size: 10px; font-weight: 600; cursor: pointer; text-decoration: none; }
+        .nav-link { flex: 1; text-align: center; color: #65676b; font-size: 10px; font-weight: 600; cursor: pointer; }
         .nav-link.active { color: var(--primary); }
 
         .view { display: none; }
         .active { display: block; }
-        #postInput { display: none; }
     </style>
 </head>
 <body>
@@ -43,39 +44,59 @@
 
 <!-- FIL D'ACTU -->
 <div id="home" class="view active">
-    <!-- Bouton Publier -->
-    <div class="publish-box">
-        <div class="user-avatar">👤</div>
-        <label for="postInput" class="add-post-btn">Quoi de neuf pour S.E.G GLOBAL ?</label>
-        <input type="file" id="postInput" accept="image/*" onchange="createNewPost(event)">
+    <div style="padding: 20px; text-align: center;">
+        <h3 style="margin-top: 0;">Fil d'actualité</h3>
+        <p style="color: gray;">Les nouveautés de l'empire s'affichent ici.</p>
     </div>
+</div>
 
-    <!-- Conteneur des publications -->
-    <div id="feedContainer" class="feed">
-        <!-- Post de bienvenue par défaut -->
-        <div class="post">
-            <div class="post-header">
-                <div class="user-avatar">💎</div>
-                <div><strong>Admin S.E.G</strong><br><small style="color:gray;">À l'instant</small></div>
+<!-- LE MARCHÉ -->
+<div id="market" class="view">
+    <div class="market-grid">
+        <div class="product-card">
+            <div class="product-img">💎</div>
+            <div class="product-info">
+                <div class="product-name">Diamant Brut 2ct</div>
+                <div class="price">Prix à négocier</div>
+                <button class="btn-nego" onclick="openNego('Diamant Brut 2ct')">Négocier</button>
             </div>
-            <div class="post-content">Bienvenue sur l'infrastructure **auto global**. Prêt pour l'extraction ?</div>
         </div>
+        <div class="product-card">
+            <div class="product-img">⛏️</div>
+            <div class="product-info">
+                <div class="product-name">Machine d'extraction</div>
+                <div class="price">15 000 000 FCFA</div>
+                <button class="btn-nego" onclick="openNego('Machine d\'extraction')">Négocier</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE NÉGOCIATION -->
+<div id="negoModal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="document.getElementById('negoModal').style.display='none'">&times;</span>
+        <h3 id="negoTitle">Négociation</h3>
+        <div class="chat-box" id="chatBox">
+            <div style="background:white; padding:5px; border-radius:5px; margin-bottom:5px;"><strong>Serveur Sécurisé :</strong> Vous entrez dans une négociation chiffrée pour cet article.</div>
+        </div>
+        <input type="text" placeholder="Entrez votre offre..." style="width: 80%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
+        <button style="padding: 8px; background: var(--primary); color: white; border: none; border-radius: 5px; font-weight: bold;">Envoyer</button>
     </div>
 </div>
 
 <!-- MENU / PROFIL -->
 <div id="profile" class="view">
-    <div style="padding: 40px 20px; text-align: center; background: white;">
+    <div style="padding: 20px; text-align: center;">
         <div style="width: 80px; height: 80px; background: #eee; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px;">👤</div>
-        <h2 style="margin:0;">Stève</h2>
-        <p style="color: gray;">CEO auto global</p>
+        <h2>Stève</h2>
     </div>
 </div>
 
 <div class="nav">
     <div class="nav-link active" onclick="show('home', this)">🏠<br>FIL D'ACTU</div>
-    <div class="nav-link" onclick="alert('Bientôt disponible')">🏪<br>LE MARCHÉ</div>
-    <div class="nav-link" style="color: var(--gold);">💰<br>INVESTIR</div>
+    <div class="nav-link" onclick="show('market', this)">🏪<br>LE MARCHÉ</div>
+    <div class="nav-link" style="color: var(--gold);" onclick="alert('Portail Investisseur réservé')">💰<br>INVESTIR</div>
     <div class="nav-link" onclick="show('profile', this)">☰<br>MENU</div>
 </div>
 
@@ -87,28 +108,9 @@
         el.classList.add('active');
     }
 
-    // FONCTION POUR CRÉER UN NOUVEAU POST
-    function createNewPost(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            const container = document.getElementById('feedContainer');
-            
-            // Création de l'élément HTML du post
-            const newPost = document.createElement('div');
-            newPost.className = 'post';
-            newPost.innerHTML = `
-                <div class="post-header">
-                    <div class="user-avatar">👤</div>
-                    <div><strong>Stève</strong><br><small style="color:gray;">Maintenant</small></div>
-                </div>
-                <img src="${reader.result}" class="post-img">
-                <div class="post-content">Nouvelle mise à jour du projet **auto global** en direct du terrain.</div>
-            `;
-            
-            // Ajouter le nouveau post tout en haut du fil
-            container.prepend(newPost);
-        }
-        reader.readAsDataURL(event.target.files[0]);
+    function openNego(itemName) {
+        document.getElementById('negoTitle').innerText = "Négocier : " + itemName;
+        document.getElementById('negoModal').style.display = 'flex';
     }
 </script>
 
