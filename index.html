@@ -3,144 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL | Système Intégré</title>
+    <title>S.E.G GLOBAL | Empire Management</title>
     <style>
-        :root { --primary: #1877F2; --gold: #D4AF37; --white: #ffffff; --bg: #f0f2f5; }
+        :root { --primary: #1877F2; --gold: #D4AF37; --white: #ffffff; --bg: #f0f2f5; --dark: #1c1e21; }
         body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); padding-bottom: 80px; }
 
-        /* BARRE DE RECHERCHE & HEADER (Image 158) */
+        /* HEADER & RECHERCHE */
         .header { background: var(--white); padding: 10px 15px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 5px rgba(0,0,0,0.1); }
         .logo-text { font-weight: 900; color: var(--primary); font-size: 20px; }
-        .search-bar { background: #f0f2f5; border-radius: 20px; padding: 8px 15px; flex-grow: 1; display: flex; align-items: center; border: 1px solid #ddd; }
-        .search-bar input { border: none; background: transparent; width: 100%; outline: none; font-size: 14px; }
+        .search-bar { background: #f0f2f5; border-radius: 20px; padding: 8px 15px; flex-grow: 1; display: flex; border: 1px solid #ddd; }
+        .search-bar input { border: none; background: transparent; width: 100%; outline: none; }
 
-        /* BOUTONS DE CATÉGORIES (Image 158) */
+        /* CATÉGORIES */
         .categories { display: flex; justify-content: space-around; padding: 15px; background: var(--white); border-bottom: 1px solid #eee; }
-        .cat-btn { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 20px; background: white; cursor: pointer; }
-
-        /* ZONE DE PUBLICATION (Image 161) */
-        .publish-box { background: var(--white); margin: 10px; padding: 12px; border-radius: 10px; display: flex; align-items: center; gap: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: #eee; object-fit: cover; }
-        .add-post-trigger { background: #f0f2f5; padding: 10px; border-radius: 20px; flex-grow: 1; color: #65676b; font-size: 14px; cursor: pointer; }
+        .cat-btn { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 20px; background: white; }
 
         /* FIL D'ACTUALITÉ */
+        .publish-box { background: var(--white); margin: 10px; padding: 12px; border-radius: 10px; display: flex; align-items: center; gap: 10px; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: #eee; object-fit: cover; }
         .feed { padding: 0 10px; }
         .post { background: var(--white); border-radius: 12px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-        .post-header { padding: 12px; display: flex; align-items: center; gap: 10px; }
         .post-img { width: 100%; display: block; }
-        .post-content { padding: 12px; font-size: 14px; font-weight: 500; }
+        .post-content { padding: 12px; font-size: 14px; }
 
-        /* PROFIL (Image 159 & 160) */
-        .profile-view { display: none; background: white; min-height: 100vh; }
-        .profile-cover { height: 120px; background: linear-gradient(to right, #1877f2, #0052bd); position: relative; }
-        .profile-pic-main { width: 110px; height: 110px; border-radius: 50%; border: 4px solid white; position: absolute; bottom: -55px; left: 20px; object-fit: cover; background: #eee; }
-        .profile-details { padding: 65px 20px 20px; }
-        .edit-profile-btn { width: 100%; background: #e4e6eb; border: none; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 15px; }
+        /* PORTAIL INVESTISSEUR */
+        .invest-view { display: none; padding: 20px; }
+        .stats-card { background: linear-gradient(135deg, #1c1e21, #444); color: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; }
+        .gold-text { color: var(--gold); font-weight: 900; font-size: 24px; }
+        .bunker-btn { width: 100%; background: #cc0000; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; margin-top: 20px; cursor: pointer; }
 
-        /* MARCHÉ & MODAL */
-        .market-view { display: none; padding: 15px; }
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:2000; align-items:center; justify-content:center; }
-        .modal-content { background:white; width:90%; border-radius:15px; padding:20px; }
-
-        /* NAV BASSE */
+        /* NAVIGATION */
         .nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; padding: 10px 0; border-top: 1px solid #ddd; z-index: 1000; }
         .nav-link { flex: 1; text-align: center; color: #65676b; font-size: 10px; font-weight: bold; cursor: pointer; }
         .nav-link.active { color: var(--primary); }
 
+        .view { display: none; }
+        .active-view { display: block; }
         #postFile, #profileFile { display: none; }
     </style>
 </head>
 <body>
 
-<!-- HEADER AVEC BARRE DE RECHERCHE -->
 <div class="header">
     <div class="logo-text">S.E.G</div>
-    <div class="search-bar">
-        <input type="text" placeholder="Rechercher une pierre...">
-    </div>
+    <div class="search-bar"><input type="text" placeholder="Rechercher..."></div>
     <div style="font-size: 20px;">💬</div>
 </div>
 
-<!-- VUE ACCUEIL -->
-<div id="homeView" class="active-view">
+<!-- ACCUEIL -->
+<div id="homeView" class="view active-view">
     <div class="categories">
-        <div class="cat-btn">➕</div>
-        <div class="cat-btn">💎</div>
-        <div class="cat-btn">🔥</div>
-        <div class="cat-btn">🇨🇲</div>
+        <div class="cat-btn">➕</div><div class="cat-btn">💎</div><div class="cat-btn">🔥</div><div class="cat-btn">🇨🇲</div>
     </div>
-
     <div class="publish-box">
         <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="user-avatar" id="navAvatar">
-        <label for="postFile" class="add-post-trigger">Quoi de neuf pour **auto global** ?</label>
+        <label for="postFile" style="background:#f0f2f5; padding:10px; border-radius:20px; flex-grow:1; font-size:14px;">Quoi de neuf ?</label>
         <input type="file" id="postFile" accept="image/*" onchange="addPost(event)">
     </div>
-
     <div id="feedContainer" class="feed">
-        <div class="post">
-            <div class="post-header"><strong>Admin S.E.G</strong></div>
-            <div class="post-content">Bienvenue dans l'infrastructure de sécurisation.</div>
-        </div>
+        <div class="post"><div class="post-content"><strong>Admin S.E.G</strong><br>Système prêt pour l'expansion.</div></div>
     </div>
 </div>
 
-<!-- VUE MARCHÉ -->
-<div id="marketView" class="market-view">
-    <h3 style="text-align:center;">Le Marché S.E.G</h3>
-    <div style="background:white; padding:15px; border-radius:10px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
-        <div style="font-size:40px;">💎</div>
-        <h4>Diamant Brut</h4>
-        <button onclick="openNego()" style="background:var(--primary); color:white; border:none; padding:10px 20px; border-radius:5px; font-weight:bold;">Négocier</button>
+<!-- INVESTISSEUR -->
+<div id="investView" class="view">
+    <div class="stats-card">
+        <h3>💰 PORTAIL INVESTISSEUR</h3>
+        <p>Valorisation de l'Empire :</p>
+        <div class="gold-text">450 000 000 FCFA</div>
+        <p><small>Statut : Croissance Exceptionnelle</small></p>
     </div>
+    <div style="background:white; padding:15px; border-radius:10px; border-left: 5px solid var(--gold);">
+        <h4>Projets en cours</h4>
+        <ul>
+            <li>Extraction zone Centre</li>
+            <li>Infrastructures **auto global**</li>
+        </ul>
+    </div>
+    <button class="bunker-btn" onclick="alert('ACCÈS RESTREINT : Activation du Bunker de sécurité...')">🚨 ACTIVER LE BUNKER DE SÉCURITÉ</button>
 </div>
 
-<!-- VUE PROFIL -->
-<div id="profileView" class="profile-view">
-    <div class="profile-cover">
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-pic-main" id="mainProfilePic">
-    </div>
-    <div class="profile-details">
-        <h1 style="margin:0;">Stève</h1>
-        <p style="color:#65676b; margin:5px 0;">CEO de **auto global**</p>
-        <label for="profileFile" class="edit-profile-btn" style="display:block; text-align:center;">Modifier la photo de profil</label>
+<!-- PROFIL -->
+<div id="profileView" class="view">
+    <div style="background:var(--primary); height:100px;"></div>
+    <div style="padding:20px; text-align:center;">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" id="mainProfilePic" style="width:100px; height:100px; border-radius:50%; border:4px solid white; margin-top:-50px;">
+        <h2>Stève</h2>
+        <label for="profileFile" style="color:var(--primary); font-weight:bold; cursor:pointer;">Changer ma photo</label>
         <input type="file" id="profileFile" accept="image/*" onchange="updateProfilePic(event)">
-        
-        <div style="margin-top:20px; border-top:1px solid #eee; padding-top:10px;">
-            <div style="padding:15px 0; border-bottom:1px solid #f0f2f5;">💎 Mes Diamants</div>
-            <div style="padding:15px 0; border-bottom:1px solid #f0f2f5; color:var(--gold);">💰 Portail Investisseur</div>
-            <div style="padding:15px 0; color:red;">🚪 Déconnexion</div>
-        </div>
     </div>
 </div>
 
-<!-- MODAL NÉGOCIATION -->
-<div id="negoModal" class="modal">
-    <div class="modal-content">
-        <h3>Négociation Sécurisée</h3>
-        <div style="height:100px; background:#f0f2f5; margin-bottom:10px; padding:10px; border-radius:5px; font-size:12px;">
-            Système auto global : Canal sécurisé ouvert.
-        </div>
-        <button onclick="document.getElementById('negoModal').style.display='none'" style="width:100%; padding:10px; border:none; border-radius:5px;">Fermer</button>
-    </div>
-</div>
-
-<!-- NAVIGATION BASSE -->
 <div class="nav">
     <div class="nav-link active" onclick="switchTab('homeView', this)">🏠<br>FIL D'ACTU</div>
     <div class="nav-link" onclick="switchTab('marketView', this)">🏪<br>LE MARCHÉ</div>
-    <div class="nav-link" style="color:var(--gold);">💰<br>INVESTIR</div>
+    <div class="nav-link" style="color:var(--gold);" onclick="switchTab('investView', this)">💰<br>INVESTIR</div>
     <div class="nav-link" onclick="switchTab('profileView', this)">☰<br>MENU</div>
 </div>
 
 <script>
-    function switchTab(viewId, el) {
-        document.getElementById('homeView').style.display = 'none';
-        document.getElementById('marketView').style.display = 'none';
-        document.getElementById('profileView').style.display = 'none';
-        document.getElementById(viewId).style.display = 'block';
-        
+    function switchTab(id, el) {
+        document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
         document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
+    }
+
+    function addPost(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const post = document.createElement('div');
+            post.className = 'post';
+            post.innerHTML = `<img src="${reader.result}" class="post-img"><div class="post-content"><strong>CEO Stève</strong><br>Mise à jour stratégique.</div>`;
+            document.getElementById('feedContainer').prepend(post);
+        }
+        reader.readAsDataURL(event.target.files[0]);
     }
 
     function updateProfilePic(event) {
@@ -151,27 +128,6 @@
         }
         reader.readAsDataURL(event.target.files[0]);
     }
-
-    function addPost(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            const feed = document.getElementById('feedContainer');
-            const post = document.createElement('div');
-            post.className = 'post';
-            post.innerHTML = `
-                <div class="post-header"><strong>Stève</strong><br><small>Maintenant</small></div>
-                <img src="${reader.result}" class="post-img">
-                <div class="post-content">Nouvelle mise à jour du projet **auto global**.</div>
-            `;
-            feed.prepend(post);
-        }
-        reader.readAsDataURL(event.target.files[0]);
-    }
-
-    function openNego() {
-        document.getElementById('negoModal').style.display = 'flex';
-    }
 </script>
-
 </body>
 </html>
