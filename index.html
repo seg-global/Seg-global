@@ -3,143 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL - Empire Social</title>
-    
+    <title>S.E.G GLOBAL | L'Empire Numérique</title>
     <style>
-        :root { 
-            --fb-blue: #1877F2; 
-            --seg-gold: #D4AF37; 
-            --pure-white: #ffffff;
-            --pure-black: #000000;
-            --bg-light: #f7f8fa;
+        :root {
+            --primary: #1877F2; /* Bleu Global */
+            --gold: #D4AF37;    /* Or Investissement */
+            --dark: #1c1e21;    /* Texte profond */
+            --light: #f0f2f5;   /* Fond */
+            --white: #ffffff;
         }
-        
+
         body { 
-            background-color: var(--bg-light); 
-            font-family: -apple-system, sans-serif; 
-            margin: 0; 
-            padding-bottom: 80px; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; background: var(--light); color: var(--dark);
+            overflow-x: hidden;
         }
 
-        /* HEADER NOIR SUR BLANC AVEC TEXTE BLEU */
-        .fb-header { 
-            background: var(--pure-white); 
-            padding: 12px 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid #eee; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
+        /* HEADER DYNAMIQUE */
+        .header {
+            background: var(--white);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 1000;
         }
 
-        .header-title {
-            font-weight: 900; 
-            color: var(--fb-blue); 
-            font-size: 22px;
-            letter-spacing: -0.5px;
+        .logo { font-weight: 800; font-size: 20px; color: var(--primary); letter-spacing: -1px; }
+
+        /* ÉCRANS DE L'APP */
+        .screen { display: none; padding: 20px; animation: fadeIn 0.3s; }
+        .active-screen { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* CARTES DE CONTENU */
+        .card {
+            background: var(--white); border-radius: 12px;
+            padding: 20px; margin-bottom: 15px;
+            border: 1px solid #ddd;
         }
 
-        /* FENÊTRE INVESTISSEUR */
-        #investor_portal { 
-            display: none; 
-            position: fixed; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            width: 85%; 
-            max-width: 400px; 
-            background: var(--pure-white); 
-            border-radius: 20px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2); 
-            z-index: 3000; 
-            padding: 25px; 
-            border: 1px solid #eee;
-        }
-
-        /* NAVIGATION BASSE NOIR SUR BLANC */
-        .bottom-nav { 
-            position: fixed; 
-            bottom: 0; 
-            width: 100%; 
-            background: var(--pure-white); 
-            display: flex; 
-            justify-content: space-around; 
-            padding: 15px 0; 
-            border-top: 1px solid #eee; 
+        /* BARRE DE NAVIGATION (FIXE EN BAS) */
+        .nav-bar {
+            position: fixed; bottom: 0; width: 100%;
+            background: var(--white); display: flex;
+            border-top: 1px solid #ddd; padding: 10px 0;
             z-index: 1000;
         }
 
-        .bottom-item { 
-            text-align: center; 
-            font-size: 11px; 
-            color: var(--pure-black); 
-            flex: 1; 
-            cursor: pointer;
-            font-weight: 500;
+        .nav-item {
+            flex: 1; text-align: center; font-size: 11px;
+            cursor: pointer; color: #65676b; transition: 0.2s;
         }
 
-        .bottom-item i {
-            font-size: 20px;
-            display: block;
-            margin-bottom: 4px;
+        .nav-item.active { color: var(--primary); font-weight: bold; }
+        .nav-item.special { color: var(--gold); font-weight: bold; }
+
+        /* MODAL INVESTISSEUR */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.7);
+            z-index: 2000; align-items: center; justify-content: center;
         }
 
-        .gold-btn { 
-            color: var(--seg-gold) !important; 
-            font-weight: bold; 
+        .modal-content {
+            background: var(--white); width: 85%; max-width: 400px;
+            padding: 25px; border-radius: 20px; position: relative;
         }
 
-        .card {
-            background: var(--pure-white); 
-            margin: 15px;
-            padding: 20px; 
-            border-radius: 12px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <div class="fb-header">
-        <div class="header-title">S.E.G GLOBAL</div>
-        <!-- Icône Message Noir sur Blanc -->
-        <div onclick="alert('Messagerie en cours de déploiement')" style="cursor:pointer; filter: grayscale(1); font-size: 22px;">💬</div>
+    <div class="header">
+        <div class="logo">S.E.G GLOBAL</div>
+        <div onclick="showScreen('notifs')" style="cursor:pointer;">🔔</div>
     </div>
 
-    <!-- Contenu Principal -->
-    <div class="card">
-        <h3 style="margin-top:0;">Bienvenue, Stève !</h3>
-        <p style="color: #444; line-height: 1.5;">Ton application est prête pour le financement et l'acquisition de serveurs[span_2](start_span)[span_2](end_span).</p>
+    <!-- ÉCRAN ACCUEIL -->
+    <div id="home" class="screen active-screen">
+        <div class="card">
+            <h3>Bienvenue, Stève</h3>
+            <p>Ton projet avance. L'infrastructure d'<b>auto global</b> est en cours de configuration[span_4](start_span)[span_4](end_span).</p>
+        </div>
+        <div class="card" style="height: 200px; display: flex; align-items: center; justify-content: center; background: #eee;">
+            <span>Flux Vidéo (TikTok Style) en attente...</span>
+        </div>
     </div>
 
-    <!-- Portail Investisseur -->
-    <div id="investor_portal">
-        <h2 style="color: var(--fb-blue); margin-top:0;">🚀 Investissement</h2>
-        <p>Projet : <b>S.E.G GLOBAL</b><br>Société : <b>auto global</b>[span_3](start_span)[span_3](end_span)</p>
-        <hr style="border:0; border-top:1px solid #eee;">
-        <p style="font-size: 14px;">Besoins techniques : Infrastructure Cloud & Serveurs dédiés[span_4](start_span)[span_4](end_span).</p>
-        <button onclick="toggleInvestor()" style="width:100%; padding:12px; background:var(--fb-blue); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Fermer</button>
+    <!-- ÉCRAN MARCHÉ -->
+    <div id="market" class="screen">
+        <div class="card">
+            <h2 style="color: var(--primary);">Le Marché 💎</h2>
+            <p>Espace sécurisé pour la négociation de pierres précieuses[span_5](start_span)[span_5](end_span).</p>
+            <div style="border: 1px dashed #ccc; padding: 10px; text-align: center;">
+                Aucun produit disponible pour le moment.
+            </div>
+        </div>
     </div>
 
-    <!-- Barre de Navigation Basse -->
-    <div class="bottom-nav">
-        <div class="bottom-item">🏠<br>Accueil</div>
-        <div class="bottom-item">🏪<br>Marché</div>
-        <!-- Bouton Or pour se démarquer -->
-        <div class="bottom-item gold-btn" onclick="toggleInvestor()">💰<br>Investir</div>
-        <div class="bottom-item">🔔<br>Notifications</div>
-        <div class="bottom-item">☰<br>Menu</div>
+    <!-- MODAL INVESTISSEUR -->
+    <div id="investorModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 style="color: var(--gold);">Investissement</h2>
+            <p><b>S.E.G GLOBAL</b> cherche des partenaires pour son infrastructure Cloud au Cameroun[span_6](start_span)[span_6](end_span).</p>
+            <button onclick="window.location.href='mailto:tonemail@exemple.com'" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold;">Contacter Stève</button>
+        </div>
+    </div>
+
+    <!-- NAVIGATION BASSE -->
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="showScreen('home', this)">🏠<br>Accueil</div>
+        <div class="nav-item" onclick="showScreen('market', this)">🏪<br>Marché</div>
+        <div class="nav-item special" onclick="openModal()">💰<br>Investir</div>
+        <div class="nav-item">☰<br>Menu</div>
     </div>
 
     <script>
-        function toggleInvestor() {
-            const portal = document.getElementById('investor_portal');
-            portal.style.display = (portal.style.display === 'block') ? 'none' : 'block';
+        function showScreen(screenId, element) {
+            // Cacher tous les écrans
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+            // Afficher l'écran demandé
+            document.getElementById(screenId).classList.add('active-screen');
+            // Gérer l'état actif des boutons
+            if(element) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                element.classList.add('active');
+            }
         }
-    </script>
 
+        function openModal() { document.getElementById('investorModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('investorModal').style.display = 'none'; }
+    </script>
 </body>
 </html>
