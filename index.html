@@ -3,35 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL | Elite Interface</title>
+    <title>S.E.G GLOBAL | Elite Management</title>
     <style>
-        :root {
-            --primary: #1877F2; --gold: #D4AF37; --bg: #f2f4f7; --white: #ffffff;
-        }
-        body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); padding-bottom: 80px; }
+        :root { --primary: #1877F2; --gold: #D4AF37; --white: #ffffff; --bg: #f0f2f5; }
+        body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); padding-bottom: 70px; }
 
-        /* HEADER AMÉLIORÉ */
-        .header { background: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .search-bar { background: #f0f2f5; border-radius: 20px; padding: 8px 15px; width: 60%; font-size: 13px; color: #65676b; border: none; }
+        /* HEADER */
+        .header { background: var(--white); padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-weight: 900; color: var(--primary); font-size: 18px; }
 
-        /* STORIES */
-        .stories { display: flex; gap: 12px; padding: 15px; overflow-x: auto; background: var(--white); border-bottom: 1px solid #e4e6eb; }
-        .story { min-width: 62px; height: 62px; border-radius: 50%; border: 3px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; background: #fafafa; }
+        /* PROFIL UTILISATEUR */
+        .profile-header { background: linear-gradient(to bottom, var(--primary), #0a4da0); height: 120px; position: relative; }
+        .profile-pic { width: 100px; height: 100px; background: #eee; border: 4px solid var(--white); border-radius: 50%; position: absolute; bottom: -50px; left: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .profile-info { padding: 60px 20px 20px 20px; background: var(--white); border-bottom: 1px solid #ddd; }
 
-        /* CARTES PRODUITS LUXE */
-        .market-view { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: var(--white); border-radius: 18px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; }
-        .card-img { width: 100%; height: 130px; background: linear-gradient(135deg, #1c1e21, #444); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 40px; }
-        .card-body { padding: 12px; }
-        .card-title { font-weight: 700; font-size: 14px; margin-bottom: 5px; }
-        .card-price { color: var(--gold); font-size: 12px; font-weight: bold; }
-        .nego-btn { margin-top: 10px; width: 100%; background: var(--primary); color: white; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; }
+        /* LISTE DES OPTIONS */
+        .opt-list { background: var(--white); margin-top: 10px; }
+        .opt-item { padding: 15px 20px; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; cursor: pointer; font-weight: 500; }
+        .opt-icon { margin-right: 15px; font-size: 20px; }
 
-        /* NAV BASSE */
+        /* NAVIGATION BASSE */
         .nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
         .nav-link { flex: 1; text-align: center; color: #65676b; font-size: 10px; font-weight: 600; cursor: pointer; }
         .nav-link.active { color: var(--primary); }
-        .nav-link.gold { color: var(--gold); }
 
         .view { display: none; }
         .active { display: block; }
@@ -40,52 +34,43 @@
 <body>
 
 <div class="header">
-    <div style="font-weight: 900; color: var(--primary); font-size: 18px;">S.E.G</div>
-    <input type="text" class="search-bar" placeholder="Rechercher une pierre...">
+    <div class="logo">S.E.G</div>
     <div style="font-size: 18px;">💬</div>
 </div>
 
+<!-- FIL D'ACTU -->
 <div id="home" class="view active">
-    <div class="stories">
-        <div class="story">➕</div>
-        <div class="story">💎</div>
-        <div class="story">🔥</div>
-        <div class="story">🇨🇲</div>
-    </div>
-    <div style="padding: 20px;">
-        <div style="background: white; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid #eee;">
-            <h2 style="margin:0;">Statut : En ligne</h2>
-            <p style="color: #65676b;">Sécurisation des infrastructures **auto global** en cours.</p>
+    <div style="padding: 20px; text-align: center;">
+        <div style="background: white; padding: 30px; border-radius: 20px; border: 1px solid #eee;">
+            <h3>Actualités de l'Empire</h3>
+            <p style="color: #65676b;">Sécurisation des serveurs **auto global** en cours...</p>
         </div>
     </div>
 </div>
 
-<div id="market" class="view">
-    <div class="market-view">
-        <div class="card">
-            <div class="card-img">💎</div>
-            <div class="card-body">
-                <div class="card-title">Diamant Brut</div>
-                <div class="card-price">Négociation Sécurisée</div>
-                <button class="nego-btn" onclick="alert('Connexion au serveur sécurisé...')">Négocier</button>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-img">✨</div>
-            <div class="card-body">
-                <div class="card-title">Saphir Bleu</div>
-                <div class="card-price">Expertise requise</div>
-                <button class="nego-btn" onclick="alert('Appel à un expert...')">Demander</button>
-            </div>
-        </div>
+<!-- PROFIL / MENU -->
+<div id="profile" class="view">
+    <div class="profile-header">
+        <div class="profile-pic">👤</div>
+    </div>
+    <div class="profile-info">
+        <h2 style="margin:0;">Stève</h2>
+        <p style="color: var(--gray-text); margin: 5px 0;">CEO de **auto global**</p>
+        <button style="margin-top:10px; background: #e4e6eb; border:none; padding: 8px 15px; border-radius: 5px; font-weight: bold;">Modifier le profil</button>
+    </div>
+    <div class="opt-list">
+        <div class="opt-item"><span class="opt-icon">💎</span> Mes Diamants</div>
+        <div class="opt-item"><span class="opt-icon">⚙️</span> Paramètres du système</div>
+        <div class="opt-item" style="color: var(--gold);"><span class="opt-icon">💰</span> Portail Investisseur</div>
+        <div class="opt-item" style="color: red;"><span class="opt-icon">🚪</span> Déconnexion</div>
     </div>
 </div>
 
 <div class="nav">
     <div class="nav-link active" onclick="show('home', this)">🏠<br>FIL D'ACTU</div>
-    <div class="nav-link" onclick="show('market', this)">🏪<br>LE MARCHÉ</div>
-    <div class="nav-link gold" onclick="alert('Accès au portail investisseur...')">💰<br>INVESTIR</div>
-    <div class="nav-link">☰<br>MENU</div>
+    <div class="nav-link" onclick="alert('Marché en maintenance')">🏪<br>LE MARCHÉ</div>
+    <div class="nav-link" style="color: var(--gold);">💰<br>INVESTIR</div>
+    <div class="nav-link" onclick="show('profile', this)">☰<br>MENU</div>
 </div>
 
 <script>
