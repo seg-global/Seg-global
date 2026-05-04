@@ -3,82 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL | CORE SYSTEM</title>
+    <title>S.E.G GLOBAL | FUTURE CORE</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
     <style>
-        :root { --main: #1877F2; --gold: #D4AF37; --bg: #000; --deploy: #ff3131; }
-        * { box-sizing: border-box; font-family: 'SF Pro Display', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
+        :root { --main: #00f2ff; --gold: #ffd700; --bg: #000; --neon: rgba(0, 242, 255, 0.5); }
+        * { box-sizing: border-box; font-family: 'Orbitron', 'Segoe UI', sans-serif; }
+        body { background: var(--bg); color: #fff; margin: 0; overflow-x: hidden; }
 
-        /* --- VUE PUBLIQUE --- */
-        #public-view { display: block; padding: 20px; }
-        .logo-header { color: var(--main); font-weight: 900; font-size: 24px; letter-spacing: 2px; }
+        /* --- ÉCRAN FUTURISTE --- */
+        #public-view { padding: 25px; background: radial-gradient(circle at top, #001529 0%, #000 70%); min-height: 100vh; }
         
-        /* LA VIRAL CARD (IMAGE 187) */
-        .viral-card { background: #111; border: 1px solid var(--main); border-radius: 25px; padding: 20px; margin: 20px 0; text-align: center; }
-        .social-bar { display: flex; justify-content: space-around; margin: 15px 0; }
-        .icon-btn { cursor:pointer; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px; color:white; }
+        .header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--main); padding-bottom: 15px; margin-bottom: 30px; }
+        .logo-seg { font-weight: 900; font-size: 26px; color: var(--main); text-shadow: 0 0 10px var(--neon); }
 
-        /* LE MASTER-FEED (FLUX DE CONTENU) */
-        .feed-container { margin-top: 30px; }
-        .feed-item { background: #111; border-radius: 15px; padding: 20px; margin-bottom: 15px; border-left: 4px solid var(--gold); }
-        .feed-title { color: var(--gold); font-weight: bold; margin-bottom: 10px; }
+        /* VIRAL CARD FUTURISTE (IMAGE 189) */
+        .cyber-card { 
+            background: rgba(10, 10, 10, 0.9); border: 1px solid var(--main); border-radius: 15px; padding: 25px; 
+            box-shadow: 0 0 20px var(--neon); position: relative; overflow: hidden;
+        }
+        .cyber-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 2px; background: var(--main); animation: sweep 3s infinite; }
 
-        /* --- LE NEXUS FONDATEUR --- */
-        #nexus-steve { display: none; padding: 20px; background: #050505; min-height: 100vh; border: 4px solid var(--gold); }
-        .vault-card { background: linear-gradient(145deg, #111, #000); border-radius: 20px; padding: 25px; border: 1px solid var(--gold); text-align: center; margin-bottom: 20px; }
-        input, textarea { width: 100%; padding: 15px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 12px; margin-top: 10px; }
-        .btn-deploy { background: var(--deploy); color: white; border: none; padding: 20px; width: 100%; border-radius: 15px; font-weight: 900; margin-top: 20px; cursor: pointer; }
+        .social-grid { display: flex; justify-content: space-around; margin: 25px 0; }
+        .cyber-btn { 
+            width: 60px; height: 60px; border: 2px solid var(--main); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-weight: bold; 
+            cursor: pointer; box-shadow: inset 0 0 10px var(--neon); transition: 0.3s;
+        }
+        .cyber-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--main); }
+
+        /* S.E.G NEWS FLUX */
+        .news-box { 
+            margin-top: 30px; border-left: 5px solid var(--gold); background: #0a0a0a; 
+            padding: 20px; border-radius: 0 15px 15px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* --- NEXUS STÈVE --- */
+        #nexus-steve { display: none; padding: 25px; background: #000; min-height: 100vh; border: 2px solid var(--gold); }
+        .vault { border: 2px double var(--gold); padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 30px; background: rgba(212, 175, 55, 0.05); }
+        .btn-deploy { background: #ff0000; color: #fff; padding: 20px; border-radius: 10px; width: 100%; font-weight: 900; border: none; box-shadow: 0 0 15px #ff0000; cursor: pointer; }
+
+        @keyframes sweep { 0% { left: -100%; } 100% { left: 100%; } }
     </style>
 </head>
 <body>
 
 <div id="public-view">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div class="logo-header">S.E.G GLOBAL</div>
-        <div onclick="lancerConnexion()" style="cursor:pointer; font-size:24px;">☰</div>
+    <div class="header">
+        <div class="logo-seg">S.E.G GLOBAL</div>
+        <div onclick="lancerConnexion()" style="cursor:pointer; color:var(--main); font-size:28px;">⌬</div>
     </div>
     
-    <!-- VIRAL CARD (IMAGE 187) -->
-    <div class="viral-card">
-        <h3 style="margin:0;">🚀 PROPULSER L'EMPIRE</h3>
-        <p style="color:#888; font-size:13px;">Partagez Auto Global pour activer la croissance.</p>
-        <div class="social-bar">
-            <div onclick="partageDirect('whatsapp')" style="background:#25D366;" class="icon-btn">WA</div>
-            <div onclick="partageDirect('facebook')" style="background:#1877F2;" class="icon-btn">FB</div>
-            <div onclick="partageDirect('telegram')" style="background:#0088cc;" class="icon-btn">TG</div>
+    <div class="cyber-card">
+        <h3 style="margin:0; letter-spacing:3px;">🚀 PROPULSER L'EMPIRE</h3>
+        <p style="color:var(--main); font-size:12px; opacity:0.7;">ACTIVER LA CROISSANCE MONDIALE...</p>
+        
+        <div class="social-grid">
+            <div onclick="partage('whatsapp')" style="border-color:#25D366; color:#25D366;" class="cyber-btn">WA</div>
+            <div onclick="partage('facebook')" style="border-color:#1877F2; color:#1877F2;" class="cyber-btn">FB</div>
+            <div onclick="partage('telegram')" style="border-color:#0088cc; color:#0088cc;" class="cyber-btn">TG</div>
         </div>
-        <button onclick="partagerLien()" style="background:var(--gold); border:none; padding:12px; width:100%; border-radius:10px; font-weight:900; color:black;">🔗 COPIER LE LIEN UNIQUE</button>
+        <button onclick="partagerLien()" style="background:var(--gold); color:#000; width:100%; padding:15px; border-radius:8px; font-weight:900; border:none; cursor:pointer;">🔗 GÉNÉRER LIEN UNIQUE</button>
     </div>
 
-    <!-- FLUX DE CONTENU DYNAMIQUE -->
-    <div class="feed-container" id="master-feed">
-        <div class="feed-item">
-            <div class="feed-title">S.E.G NEWS</div>
-            <div id="live-message">Initialisation du réseau Auto Global...</div>
-        </div>
+    <div class="news-box">
+        <div style="color:var(--gold); font-weight:bold; font-size:14px; margin-bottom:5px;">[ S.E.G NEWS ]</div>
+        <div id="live-message" style="font-family: monospace; color:#fff;">SCAN DU RÉSEAU AUTO GLOBAL EN COURS...</div>
     </div>
 </div>
 
-<!-- NEXUS STÈVE -->
 <div id="nexus-steve">
-    <h2 style="color:var(--gold)">PILOTAGE FONDATRICE</h2>
-    <div class="vault-card">
-        <div style="color:var(--gold); font-size:12px;">ACTIF SÉCURISÉ</div>
-        <div style="font-size:32px; font-weight:900;">450 000 000 FCFA</div>
+    <h2 style="color:var(--gold); text-align:center;">COMMANDEMENT CENTRAL</h2>
+    <div class="vault">
+        <div style="color:var(--gold); font-size:12px;">ACTIF CRYPTÉ SÉCURISÉ</div>
+        <div style="font-size:35px; font-weight:900; color:#fff;">450 000 000 FCFA</div>
     </div>
-    <div style="background:#111; padding:15px; border-radius:12px;">
-        <label>Ordre Mondial :</label>
-        <textarea id="admin-message" placeholder="Tape ton message ici..."></textarea>
-    </div>
-    <button class="btn-deploy" onclick="deployer()">🚀 DÉPLOYER AU MONDE</button>
+    <textarea id="admin-msg" style="width:100%; background:#111; color:#00f2ff; border:1px solid var(--main); padding:15px; border-radius:10px;" rows="4"></textarea>
+    <button class="btn-deploy" onclick="deploy()">🚀 DÉPLOYER ORDRE MONDIAL</button>
 </div>
 
 <script>
-    // CONFIGURATION (IMAGE 180)
+    // CONFIGURATION FIREBASE (IDEM IMAGE 180)
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpc...", 
         authDomain: "seg-global.firebaseapp.com",
@@ -91,31 +98,31 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // SYNCHRONISATION
-    db.ref('empire_state').on('value', (snap) => {
+    // SYNC TEMPS RÉEL
+    db.ref('nexus_state').on('value', (snap) => {
         const d = snap.val();
         if(d) {
-            document.getElementById('live-message').innerText = d.msg;
-            document.getElementById('admin-message').value = d.msg;
+            document.getElementById('live-message').innerText = "> " + d.msg;
+            document.getElementById('admin-msg').value = d.msg;
         }
     });
 
-    function deployer() {
-        const m = document.getElementById('admin-message').value;
-        db.ref('empire_state').set({ msg: m, time: Date.now() });
-        alert("DÉPLOIEMENT EFFECTUÉ.");
+    function deploy() {
+        const m = document.getElementById('admin-msg').value;
+        db.ref('nexus_state').set({ msg: m, timestamp: Date.now() });
+        alert("ORDRE DÉPLOYÉ SUR LE RÉSEAU MONDIAL.");
     }
 
-    // PARTAGE (IMAGE 187)
-    function partageDirect(p) {
-        const l = window.location.href + "?ref=STEVE";
+    // PARTAGE FUTURISTE
+    function partage(p) {
+        const l = window.location.href + "?ref=STEVE_NEO";
         let u = p==='whatsapp' ? `https://wa.me/?text=${l}` : p==='facebook' ? `https://fb.com/sharer/sharer.php?u=${l}` : `https://t.me/share/url?url=${l}`;
         window.open(u, '_blank');
     }
 
     function lancerConnexion() {
-        let n = prompt("NOM DU FONDATEUR :");
-        if(n && n.toUpperCase().trim() === "STÈVE" || n.toUpperCase().trim() === "STEVE") {
+        let n = prompt("CODE FONDATEUR :");
+        if(n && (n.toUpperCase().trim() === "STÈVE" || n.toUpperCase().trim() === "STEVE")) {
             document.getElementById('public-view').style.display = 'none';
             document.getElementById('nexus-steve').style.display = 'block';
         }
