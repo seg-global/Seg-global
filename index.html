@@ -3,115 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AUTO GLOBAL | SYSTÈME CENTRAL SÉCURISÉ</title>
+    <title>S.E.G GLOBAL | CORE SYSTEM</title>
     <style>
-        :root { --main: #1877F2; --gold: #D4AF37; --bg: #080808; --card: #18191a; --shield: #00ff88; }
-        * { box-sizing: border-box; font-family: -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: white; margin: 0; padding-bottom: 90px; }
+        :root { --main: #1877F2; --gold: #D4AF37; --bg: #000; --safe: #00ff88; --danger: #ff3131; }
+        * { box-sizing: border-box; font-family: 'SF Pro Display', -apple-system, sans-serif; }
+        body { background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
 
-        /* HEADER & SEARCH */
-        .top-nav { position: sticky; top: 0; background: rgba(8,8,8,0.9); backdrop-filter: blur(15px); padding: 15px; z-index: 1000; border-bottom: 1px solid #222; }
-        .search-box { background: #242526; border-radius: 12px; padding: 10px 15px; margin-top: 10px; display: flex; }
-        .search-box input { background: transparent; border: none; color: white; width: 100%; outline: none; }
+        /* --- INTERFACE PUBLIQUE --- */
+        .app-shell { padding-bottom: 80px; transition: filter 0.5s; }
+        .header { padding: 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 100; }
+        .logo { font-weight: 900; font-size: 22px; color: var(--main); }
+        
+        /* --- MENU SLIDE-OVER --- */
+        #sideMenu { position: fixed; right: -100%; top: 0; width: 85%; height: 100%; background: #0a0a0a; z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px; border-left: 1px solid #333; }
+        .menu-item { padding: 20px; border-bottom: 1px solid #1a1a1a; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .menu-item:active { background: #111; }
 
-        /* CONTENU & VUES */
-        .view { display: none; padding: 15px; animation: slideUp 0.4s ease; }
-        .view.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- LE TUNNEL DE SÉCURITÉ (INVISIBLE PAR DÉFAUT) --- */
+        #securityTunnel { position: fixed; inset: 0; background: #000; z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
+        .scan-circle { width: 180px; height: 180px; border: 2px solid var(--main); border-radius: 50%; position: relative; margin-bottom: 40px; }
+        .scan-line { position: absolute; width: 100%; height: 2px; background: var(--main); box-shadow: 0 0 15px var(--main); animation: scan 2s infinite; }
+        
+        /* --- TABLEAU DE BORD CLIENT (ZONE SÉCURISÉE) --- */
+        #clientDashboard { display: none; padding: 20px; animation: fadeIn 0.5s; }
+        .vault-card { background: linear-gradient(145deg, #111, #000); border: 1px solid var(--gold); border-radius: 25px; padding: 25px; margin-top: 20px; }
+        .amount { font-size: 32px; font-weight: 900; color: var(--gold); margin: 15px 0; }
+        
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* CARTES */
-        .card { background: var(--card); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid #2d2e2f; }
-        .big-sum { color: var(--gold); font-size: 28px; font-weight: 900; margin: 10px 0; display: block; }
-
-        /* --- MODAL DE SÉCURITÉ (LE BOUCLIER) --- */
-        #securityModal { 
-            position: fixed; inset: 0; background: #000; z-index: 10000; 
-            display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; 
-        }
-        .scanner-box { width: 150px; height: 150px; border: 2px solid var(--main); border-radius: 30px; position: relative; margin-bottom: 20px; overflow: hidden; }
-        .scan-bar { position: absolute; width: 100%; height: 3px; background: var(--main); box-shadow: 0 0 10px var(--main); animation: move 2s infinite; }
-        @keyframes move { 0%, 100% { top: 0; } 50% { top: 100%; } }
-
-        /* BOTTOM NAV */
-        .bottom-tabs { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; padding: 15px 0; border-top: 1px solid #222; z-index: 5000; }
-        .tab { flex: 1; text-align: center; font-size: 10px; color: #555; font-weight: bold; cursor: pointer; }
-        .tab.active { color: var(--main); }
+        .btn-lock { background: var(--main); color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<!-- LE BOUCLIER MULTI-COUCHES (S'ACTIVE AU CLIC MENU) -->
-<div id="securityModal">
-    <div style="font-weight: 900; color: var(--main); margin-bottom: 30px;">AUTO GLOBAL SECURITY v1.0</div>
-    <div class="scanner-box"><div class="scan-bar"></div><div style="font-size: 50px; text-align: center; margin-top: 40px;">👤</div></div>
-    <h3 id="secStatus">Analyse Faciale...</h3>
-    <p style="color:#666; font-size:12px; margin-bottom:20px;">Vérification de l'identité du CEO en cours</p>
-    <div id="puzzleZone" style="background:#111; padding:15px; border-radius:15px; width:100%; max-width:250px; display:none;">
-        <p style="font-size:10px; color:var(--shield);">GLISSEZ POUR CONFIRMER (HUMAIN)</p>
-        <input type="range" style="width:100%; accent-color:var(--main);" onchange="completeAudit()">
+<div class="app-shell" id="appShell">
+    <div class="header">
+        <div class="logo">S.E.G GLOBAL</div>
+        <div onclick="toggleMenu()" style="cursor:pointer; font-size:24px;">☰</div>
     </div>
-</div>
 
-<!-- HEADER -->
-<div class="top-nav">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:900; font-size:24px; color:var(--main);">S.E.G</span>
-        <span style="font-size:12px; font-weight:bold; color:var(--gold);">STÈVE</span>
-    </div>
-    <div class="search-box"><input type="text" placeholder="Rechercher..."></div>
-</div>
-
-<!-- VUES -->
-<div id="homeView" class="view active">
-    <div class="card">
-        <p style="color:#888; font-size:14px;">Dashboard Public :</p>
-        <span class="big-sum">181 443 FCFA</span>
-    </div>
-</div>
-
-<div id="safeView" class="view">
-    <div class="card" style="border: 1px solid var(--shield);">
-        <h3 style="color:var(--shield)">🔐 COFFRE-FORT PRIVÉ</h3>
-        <p style="font-size:12px; color:#888;">Transactions confidentielles & Gestion de Trésorerie</p>
-        <div class="big-sum">450 023 573 FCFA</div>
-        <div style="background:#121212; padding:10px; border-radius:10px; font-size:11px; margin-top:10px;">
-            Dernière transaction : +2 000 000 FCFA (Luxe/S.E.G)
+    <!-- Contenu Public -->
+    <div style="padding: 20px;">
+        <div style="background:#111; padding:20px; border-radius:20px; border-left:4px solid var(--main);">
+            <h4>Bienvenue, Stève</h4>
+            <p style="font-size:12px; color:#888;">Votre infrastructure anti-fraude est active.</p>
         </div>
     </div>
 </div>
 
-<!-- NAV -->
-<div class="bottom-tabs">
-    <div class="tab active" onclick="switchTab('homeView', this)">🏠<br>TABLEAU</div>
-    <div class="tab" onclick="switchTab('invest', this)">💰<br>INVESTIR</div>
-    <div class="tab" onclick="openSecureMenu()">☰<br>MENU</div>
+<!-- MENU LATÉRAL -->
+<div id="sideMenu">
+    <div style="display:flex; justify-content:space-between; margin-bottom:40px;">
+        <h2 style="margin:0;">Menu</h2>
+        <span onclick="toggleMenu()" style="font-size:24px;">✕</span>
+    </div>
+    <div class="menu-item">⚙️ Paramètres</div>
+    <div class="menu-item" onclick="startVaultAuth()" style="color: var(--gold); font-weight: bold;">👤 Mon Compte (SÉCURISÉ)</div>
+    <div class="menu-item">📞 Assistance 24/7</div>
+</div>
+
+<!-- LE TUNNEL DE SÉCURITÉ -->
+<div id="securityTunnel">
+    <div class="scan-circle"><div class="scan-line"></div><div style="font-size:60px; text-align:center; margin-top:55px;">👤</div></div>
+    <h2 id="authStep">VÉRIFICATION IP...</h2>
+    <p id="authDetail" style="color:#666; font-size:13px; text-align:center;">Analyse des protocoles Gmail & FaceID en cours</p>
+    <div id="authProgress" style="width:100%; height:4px; background:#222; border-radius:2px; margin-top:30px;">
+        <div id="bar" style="width:0%; height:100%; background:var(--main); transition:1s;"></div>
+    </div>
+</div>
+
+<!-- TABLEAU DE BORD CLIENT PRIVÉ -->
+<div id="clientDashboard">
+    <div onclick="exitDashboard()" style="margin-bottom:20px; color:var(--main);">← Retour au menu</div>
+    <h1>Espace CEO</h1>
+    <div class="vault-card">
+        <p style="font-size:12px; letter-spacing:1px; color:#888;">SOLDE TOTAL SÉCURISÉ</p>
+        <div class="amount">450 023 573 FCFA</div>
+        <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--safe);">
+            <span>● Transactions Chiffrées</span>
+            <span>AES-256 OK</span>
+        </div>
+    </div>
+    <h3 style="margin-top:30px;">Historique Récent</h3>
+    <div style="background:#111; padding:15px; border-radius:15px; font-size:13px; margin-bottom:10px; border-left:3px solid var(--safe);">
+        Flux Sortant : Validé par FaceID
+    </div>
 </div>
 
 <script>
-    function switchTab(id, el) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        if(id === 'homeView') document.getElementById(id).classList.add('active');
-        el.classList.add('active');
+    function toggleMenu() {
+        const menu = document.getElementById('sideMenu');
+        menu.style.right = menu.style.right === '0%' ? '-100%' : '0%';
     }
 
-    function openSecureMenu() {
-        document.getElementById('securityModal').style.display = 'flex';
-        setTimeout(() => {
-            document.getElementById('secStatus').innerText = "Analyse Vocale...";
-            document.getElementById('secStatus').style.color = "#00ff88";
-            setTimeout(() => {
-                document.getElementById('secStatus').innerText = "Validation Puzzle";
-                document.getElementById('puzzleZone').style.display = 'block';
-            }, 1500);
-        }, 1500);
+    async function startVaultAuth() {
+        toggleMenu();
+        document.getElementById('appShell').style.display = 'none';
+        document.getElementById('securityTunnel').style.display = 'flex';
+        
+        const steps = [
+            {t: "VÉRIFICATION GMAIL...", p: "33%"},
+            {t: "FACEID / FACETIME...", p: "66%"},
+            {t: "DÉCRYPTAGE DES FONDS...", p: "100%"}
+        ];
+
+        for(let s of steps) {
+            document.getElementById('authStep').innerText = s.t;
+            document.getElementById('bar').style.width = s.p;
+            await new Promise(r => setTimeout(r, 1500));
+        }
+
+        document.getElementById('securityTunnel').style.display = 'none';
+        document.getElementById('clientDashboard').style.display = 'block';
     }
 
-    function completeAudit() {
-        document.getElementById('securityModal').style.display = 'none';
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById('safeView').classList.add('active');
-        alert("✅ Accès autorisé : Bienvenue dans votre interface de gestion S.E.G Global.");
+    function exitDashboard() {
+        document.getElementById('clientDashboard').style.display = 'none';
+        document.getElementById('appShell').style.display = 'block';
     }
 </script>
 </body>
