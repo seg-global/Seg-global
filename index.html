@@ -3,129 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.E.G GLOBAL - Vision</title>
     <style>
-        /* 1. LE FOND ET L'ATMOSPHÈRE */
+        /* 1. SUPPRESSION DU NOIR ET MISE EN PLACE DU CIEL */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body, html {
-            margin: 0;
-            padding: 0;
             height: 100%;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             overflow: hidden;
-            background: linear-gradient(to bottom, #1e90ff, #ffffff);
+            background: linear-gradient(to bottom, #1e90ff 0%, #87ceeb 50%, #ffffff 100%);
         }
 
-        /* 2. LE SOLEIL DANS L'ANGLE */
+        /* 2. LE SOLEIL DANS L'ANGLE (Éclaire l'appli) */
         .sun {
             position: absolute;
-            top: -20px;
-            right: -20px;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, #fff700 20%, rgba(255,247,0,0.5) 50%, transparent 70%);
+            top: -30px;
+            right: -30px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, #fff700 20%, rgba(255,247,0,0.4) 60%, transparent 80%);
             border-radius: 50%;
             z-index: 1;
+            box-shadow: 0 0 50px rgba(255, 247, 0, 0.5);
         }
 
-        /* 3. LES NUAGES (Animation de flottement) */
+        /* 3. NUAGES RÉALISTES (Statiques pour commencer) */
         .cloud {
             position: absolute;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
+            width: 150px;
+            height: 50px;
             border-radius: 50px;
-            opacity: 0.8;
             z-index: 2;
-            animation: float 20s infinite linear;
+            filter: blur(5px);
         }
-        .cloud::after, .cloud::before {
-            content: '';
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-        }
-        .c1 { width: 120px; height: 40px; top: 15%; left: -150px; }
-        .c1::after { width: 50px; height: 50px; top: -20px; left: 15px; }
-        .c1::before { width: 70px; height: 70px; top: -35px; left: 40px; }
-
-        @keyframes float {
-            from { transform: translateX(0); }
-            to { transform: translateX(calc(100vw + 200px)); }
-        }
+        .cloud::after { content: ''; position: absolute; background: white; width: 70px; height: 70px; border-radius: 50%; top: -30px; left: 20px; }
+        .cloud::before { content: ''; position: absolute; background: white; width: 50px; height: 50px; border-radius: 50%; top: -20px; left: 70px; }
+        
+        .n1 { top: 15%; left: 10%; transform: scale(0.8); }
+        .n2 { top: 25%; right: 15%; transform: scale(1.2); opacity: 0.7; }
 
         /* 4. ÉTOILES FILANTES */
-        .shooting-star {
+        .star {
             position: absolute;
-            top: 20%;
-            left: -100px;
             width: 100px;
             height: 2px;
             background: linear-gradient(90deg, white, transparent);
+            animation: move-star 5s infinite;
+            opacity: 0;
             z-index: 1;
-            animation: shoot 8s infinite;
         }
-
-        @keyframes shoot {
-            0% { transform: translateX(0) translateY(0) rotate(20deg); opacity: 1; }
-            10% { transform: translateX(100vw) translateY(30vh) rotate(20deg); opacity: 0; }
+        @keyframes move-star {
+            0% { transform: translateX(-100px) translateY(0) rotate(25deg); opacity: 1; }
+            20% { transform: translateX(100vw) translateY(40vh) rotate(25deg); opacity: 0; }
             100% { opacity: 0; }
         }
 
-        /* 5. INTERFACE ET BOUTONS (Z-INDEX ÉLEVÉ POUR QU'ILS MARCHENT) */
-        .app-container {
+        /* 5. INTERFACE ET BOUTONS (Z-INDEX 100 POUR ÊTRE SÛR QUE ÇA MARCHE) */
+        .container {
             position: relative;
-            z-index: 10; /* Indispensable pour que les boutons répondent ! */
+            z-index: 100; 
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            padding: 20px;
+        }
+
+        .logo-title {
+            color: #ffff00; /* Éclairage Jaune */
+            text-shadow: 0 0 20px rgba(255, 247, 0, 0.9);
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 40px;
             text-align: center;
         }
 
-        h1 {
-            color: #ffff00;
-            text-shadow: 0 0 15px rgba(255, 255, 0, 0.8);
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-        }
-
-        .btn-futuristic {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid #ffff00;
+        .main-button {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid #ffffff;
             color: white;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 1.2rem;
+            padding: 18px 45px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
             cursor: pointer;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
             margin: 10px;
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+            width: 80%;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .btn-futuristic:active {
-            transform: scale(0.95);
+        .main-button:active {
+            transform: scale(0.9);
             background: #ffff00;
-            color: #333;
+            color: #1e90ff;
         }
     </style>
 </head>
 <body>
 
     <div class="sun"></div>
-    <div class="cloud c1"></div>
-    <div class="shooting-star"></div>
+    <div class="cloud n1"></div>
+    <div class="cloud n2"></div>
+    <div class="star"></div>
 
-    <div class="app-container">
-        <h1>MA VISION FUTURISTE</h1>
+    <div class="container">
+        <h1 class="logo-title">S.E.G GLOBAL</h1>
         
-        <button class="btn-futuristic" onclick="alert('Bouton 1 activé !')">ACCÉDER</button>
-        <button class="btn-futuristic" onclick="alert('Bouton 2 activé !')">EXPLORER</button>
+        <button class="main-button" onclick="alert('Lien généré !')">GÉNÉRER MON LIEN</button>
+        <button class="main-button" onclick="alert('Action 2')">BOUTON ACTIF</button>
     </div>
-
-    <script>
-        // Ce petit script s'assure que tes boutons sont réactifs
-        console.log("L'application est prête et les boutons sont actifs.");
-    </script>
 
 </body>
 </html>
