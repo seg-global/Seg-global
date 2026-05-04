@@ -3,126 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL | FUTURE CORE</title>
+    <title>S.E.G GLOBAL | IMMERSIVE CORE</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
     <style>
-        :root { --main: #00f2ff; --gold: #ffd700; --bg: #000; --neon: rgba(0, 242, 255, 0.5); }
-        * { box-sizing: border-box; font-family: 'Orbitron', 'Segoe UI', sans-serif; }
-        body { background: var(--bg); color: #fff; margin: 0; overflow-x: hidden; }
-
-        /* --- ÉCRAN FUTURISTE --- */
-        #public-view { padding: 25px; background: radial-gradient(circle at top, #001529 0%, #000 70%); min-height: 100vh; }
-        
-        .header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--main); padding-bottom: 15px; margin-bottom: 30px; }
-        .logo-seg { font-weight: 900; font-size: 26px; color: var(--main); text-shadow: 0 0 10px var(--neon); }
-
-        /* VIRAL CARD FUTURISTE (IMAGE 189) */
-        .cyber-card { 
-            background: rgba(10, 10, 10, 0.9); border: 1px solid var(--main); border-radius: 15px; padding: 25px; 
-            box-shadow: 0 0 20px var(--neon); position: relative; overflow: hidden;
+        :root { 
+            --main: #00f2ff; 
+            --gold: #ffd700; 
+            --bg-deep: #00050a; 
+            --glass: rgba(255, 255, 255, 0.03);
+            --neon-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
         }
-        .cyber-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 2px; background: var(--main); animation: sweep 3s infinite; }
+
+        * { box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
+
+        /* --- LE FOND DYNAMIQUE --- */
+        body { 
+            background: var(--bg-deep); 
+            color: #fff; 
+            margin: 0; 
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px; /* Crée la grille futuriste */
+            position: relative;
+        }
+
+        /* Effet de halo lumineux en arrière-plan */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 100vw; height: 100vh;
+            background: radial-gradient(circle, rgba(0, 242, 255, 0.08) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        /* --- INTERFACE --- */
+        #public-view { padding: 25px; min-height: 100vh; }
+        
+        .header { 
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--main); padding-bottom: 10px; margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.1);
+        }
+
+        /* CARTE PROPULSER (GLASSMORPHISM) */
+        .cyber-card { 
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px); /* Floute le fond pour faire ressortir la carte */
+            border: 1px solid rgba(0, 242, 255, 0.5);
+            border-radius: 20px; 
+            padding: 25px; 
+            box-shadow: var(--neon-shadow);
+            border-top: 4px solid var(--main);
+        }
 
         .social-grid { display: flex; justify-content: space-around; margin: 25px 0; }
+        
         .cyber-btn { 
-            width: 60px; height: 60px; border: 2px solid var(--main); border-radius: 50%; 
+            width: 65px; height: 65px; border: 1px solid var(--main); border-radius: 15px; 
             display: flex; align-items: center; justify-content: center; font-weight: bold; 
-            cursor: pointer; box-shadow: inset 0 0 10px var(--neon); transition: 0.3s;
+            background: var(--glass); transition: 0.4s;
         }
-        .cyber-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--main); }
+        .cyber-btn:active { transform: scale(0.9); background: var(--main); color: #000; }
 
-        /* S.E.G NEWS FLUX */
-        .news-box { 
-            margin-top: 30px; border-left: 5px solid var(--gold); background: #0a0a0a; 
-            padding: 20px; border-radius: 0 15px 15px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        /* BOUTON D'OR UNIQUE */
+        .gold-trigger {
+            background: linear-gradient(45deg, #ffd700, #b8860b);
+            color: #000; width: 100%; padding: 18px; border-radius: 12px;
+            font-weight: 900; border: none; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* --- NEXUS STÈVE --- */
-        #nexus-steve { display: none; padding: 25px; background: #000; min-height: 100vh; border: 2px solid var(--gold); }
-        .vault { border: 2px double var(--gold); padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 30px; background: rgba(212, 175, 55, 0.05); }
-        .btn-deploy { background: #ff0000; color: #fff; padding: 20px; border-radius: 10px; width: 100%; font-weight: 900; border: none; box-shadow: 0 0 15px #ff0000; cursor: pointer; }
+        /* S.E.G NEWS BOX */
+        .news-container {
+            margin-top: 30px;
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), transparent);
+            border-left: 4px solid var(--gold);
+            padding: 20px;
+            border-radius: 0 15px 15px 0;
+        }
 
-        @keyframes sweep { 0% { left: -100%; } 100% { left: 100%; } }
+        /* --- NEXUS PRIVÉ --- */
+        #nexus-steve { display: none; padding: 25px; background: #000; min-height: 100vh; }
+        .vault-display {
+            border: 1px solid var(--gold);
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 30px;
+            background: radial-gradient(circle, #1a1a10 0%, #000 100%);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            margin-bottom: 40px;
+        }
     </style>
 </head>
 <body>
 
 <div id="public-view">
     <div class="header">
-        <div class="logo-seg">S.E.G GLOBAL</div>
-        <div onclick="lancerConnexion()" style="cursor:pointer; color:var(--main); font-size:28px;">⌬</div>
-    </div>
-    
-    <div class="cyber-card">
-        <h3 style="margin:0; letter-spacing:3px;">🚀 PROPULSER L'EMPIRE</h3>
-        <p style="color:var(--main); font-size:12px; opacity:0.7;">ACTIVER LA CROISSANCE MONDIALE...</p>
-        
-        <div class="social-grid">
-            <div onclick="partage('whatsapp')" style="border-color:#25D366; color:#25D366;" class="cyber-btn">WA</div>
-            <div onclick="partage('facebook')" style="border-color:#1877F2; color:#1877F2;" class="cyber-btn">FB</div>
-            <div onclick="partage('telegram')" style="border-color:#0088cc; color:#0088cc;" class="cyber-btn">TG</div>
-        </div>
-        <button onclick="partagerLien()" style="background:var(--gold); color:#000; width:100%; padding:15px; border-radius:8px; font-weight:900; border:none; cursor:pointer;">🔗 GÉNÉRER LIEN UNIQUE</button>
+        <div style="color:var(--main); font-size:22px; font-weight:900; text-shadow: 0 0 10px var(--main);">S.E.G GLOBAL</div>
+        <div onclick="accederNexus()" style="cursor:pointer; font-size:28px; color:var(--main);">💠</div>
     </div>
 
-    <div class="news-box">
-        <div style="color:var(--gold); font-weight:bold; font-size:14px; margin-bottom:5px;">[ S.E.G NEWS ]</div>
-        <div id="live-message" style="font-family: monospace; color:#fff;">SCAN DU RÉSEAU AUTO GLOBAL EN COURS...</div>
+    <div class="cyber-card">
+        <h2 style="margin:0; font-size:18px; letter-spacing:2px;">🚀 PROPULSER L'EMPIRE</h2>
+        <p style="color:var(--main); font-size:10px; margin-top:5px; opacity:0.8;">INITIALISATION DU PROTOCOLE DE PARTAGE...</p>
+        
+        <div class="social-grid">
+            <div onclick="share('wa')" style="border-color:#25d366; color:#25d366;" class="cyber-btn">WA</div>
+            <div onclick="share('fb')" style="border-color:#1877f2; color:#1877f2;" class="cyber-btn">FB</div>
+            <div onclick="share('tg')" style="border-color:#0088cc; color:#0088cc;" class="cyber-btn">TG</div>
+        </div>
+
+        <button class="gold-trigger" onclick="copyLink()">🔗 GÉNÉRER MON LIEN UNIQUE</button>
+    </div>
+
+    <div class="news-container">
+        <div style="color:var(--gold); font-size:12px; font-weight:bold; margin-bottom:10px;">[ TRANSMISSION EN COURS ]</div>
+        <div id="display-msg" style="font-size:14px; line-height:1.6; color:#e0e0e0;">Connexion aux serveurs Auto Global...</div>
     </div>
 </div>
 
 <div id="nexus-steve">
-    <h2 style="color:var(--gold); text-align:center;">COMMANDEMENT CENTRAL</h2>
-    <div class="vault">
-        <div style="color:var(--gold); font-size:12px;">ACTIF CRYPTÉ SÉCURISÉ</div>
-        <div style="font-size:35px; font-weight:900; color:#fff;">450 000 000 FCFA</div>
+    <h1 style="color:var(--gold); text-align:center; font-size:20px;">COMMANDEMENT CENTRAL</h1>
+    <div class="vault-display">
+        <div style="color:rgba(255,215,0,0.6); font-size:11px; margin-bottom:15px;">TOTAL ACTIFS SÉCURISÉS</div>
+        <div style="font-size:38px; font-weight:900; color:#fff; text-shadow: 0 0 15px #fff;">450 000 000</div>
+        <div style="color:var(--gold); font-size:18px; margin-top:5px;">FCFA</div>
     </div>
-    <textarea id="admin-msg" style="width:100%; background:#111; color:#00f2ff; border:1px solid var(--main); padding:15px; border-radius:10px;" rows="4"></textarea>
-    <button class="btn-deploy" onclick="deploy()">🚀 DÉPLOYER ORDRE MONDIAL</button>
+    <textarea id="input-msg" style="width:100%; background:#0a0a0a; border:1px solid var(--gold); color:#fff; padding:15px; border-radius:10px; margin-bottom:20px;" rows="5"></textarea>
+    <button onclick="updateSystem()" style="background:#ff3131; color:#fff; width:100%; padding:20px; border:none; border-radius:15px; font-weight:900; box-shadow: 0 0 20px rgba(255,49,49,0.4);">🚀 DÉPLOYER MISE À JOUR</button>
 </div>
 
 <script>
-    // CONFIGURATION FIREBASE (IDEM IMAGE 180)
-    const firebaseConfig = {
-        apiKey: "AIzaSyAMX8SfBySnpc...", 
-        authDomain: "seg-global.firebaseapp.com",
-        databaseURL: "https://seg-global-default-rtdb.firebaseio.com",
-        projectId: "seg-global",
-        storageBucket: "seg-global.appspot.com",
-        messagingSenderId: "880037527683",
-        appId: "1:880037527683:web:..."
-    };
+    // Config Firebase (Garde tes infos actuelles ici)
+    const firebaseConfig = { apiKey: "TON_API_KEY", databaseURL: "TON_URL" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // SYNC TEMPS RÉEL
-    db.ref('nexus_state').on('value', (snap) => {
-        const d = snap.val();
-        if(d) {
-            document.getElementById('live-message').innerText = "> " + d.msg;
-            document.getElementById('admin-msg').value = d.msg;
+    // Sync
+    db.ref('app_core').on('value', (snap) => {
+        const val = snap.val();
+        if(val) {
+            document.getElementById('display-msg').innerText = "> " + val.message;
+            document.getElementById('input-msg').value = val.message;
         }
     });
 
-    function deploy() {
-        const m = document.getElementById('admin-msg').value;
-        db.ref('nexus_state').set({ msg: m, timestamp: Date.now() });
-        alert("ORDRE DÉPLOYÉ SUR LE RÉSEAU MONDIAL.");
+    function updateSystem() {
+        const m = document.getElementById('input-msg').value;
+        db.ref('app_core').set({ message: m, lastUpdate: Date.now() });
+        alert("PROTOCOLE MIS À JOUR.");
     }
 
-    // PARTAGE FUTURISTE
-    function partage(p) {
-        const l = window.location.href + "?ref=STEVE_NEO";
-        let u = p==='whatsapp' ? `https://wa.me/?text=${l}` : p==='facebook' ? `https://fb.com/sharer/sharer.php?u=${l}` : `https://t.me/share/url?url=${l}`;
-        window.open(u, '_blank');
-    }
-
-    function lancerConnexion() {
-        let n = prompt("CODE FONDATEUR :");
-        if(n && (n.toUpperCase().trim() === "STÈVE" || n.toUpperCase().trim() === "STEVE")) {
+    function accederNexus() {
+        let pass = prompt("IDENTIFIANT FONDATEUR :");
+        if(pass && pass.toLowerCase() === "stève") {
             document.getElementById('public-view').style.display = 'none';
             document.getElementById('nexus-steve').style.display = 'block';
         }
