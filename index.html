@@ -5,84 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>S.E.G GLOBAL | CORE SYSTEM</title>
     
-    <!-- SDK FIREBASE (Mémoire de l'Empire) -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
     <style>
         :root { --main: #1877F2; --gold: #D4AF37; --bg: #000; --deploy: #ff3131; }
-        * { box-sizing: border-box; font-family: 'Helvetica Neue', sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; font-family: 'SF Pro Display', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
 
-        /* INTERFACE PUBLIQUE (VISIBILITÉ MONDIALE) */
-        #public-view { display: block; min-height: 100vh; padding: 20px; text-align: center; }
-        .logo-header { color: var(--main); font-weight: 900; font-size: 24px; letter-spacing: 2px; margin-bottom: 30px; }
+        /* --- VUE PUBLIQUE --- */
+        #public-view { display: block; padding: 20px; }
+        .logo-header { color: var(--main); font-weight: 900; font-size: 24px; letter-spacing: 2px; }
         
-        .viral-card { background: #111; border: 2px solid var(--main); border-radius: 25px; padding: 25px; margin: 20px 0; box-shadow: 0 0 15px rgba(24,119,242,0.2); }
-        .social-bar { display: flex; justify-content: space-around; margin: 20px 0; }
-        .icon-btn { cursor:pointer; width:55px; height:55px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:14px; color:white; transition: 0.3s; }
-        .icon-btn:active { transform: scale(0.9); }
+        /* LA VIRAL CARD (IMAGE 187) */
+        .viral-card { background: #111; border: 1px solid var(--main); border-radius: 25px; padding: 20px; margin: 20px 0; text-align: center; }
+        .social-bar { display: flex; justify-content: space-around; margin: 15px 0; }
+        .icon-btn { cursor:pointer; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px; color:white; }
 
-        /* LE NEXUS (TON ACCÈS PRIVÉ STÈVE) */
+        /* LE MASTER-FEED (FLUX DE CONTENU) */
+        .feed-container { margin-top: 30px; }
+        .feed-item { background: #111; border-radius: 15px; padding: 20px; margin-bottom: 15px; border-left: 4px solid var(--gold); }
+        .feed-title { color: var(--gold); font-weight: bold; margin-bottom: 10px; }
+
+        /* --- LE NEXUS FONDATEUR --- */
         #nexus-steve { display: none; padding: 20px; background: #050505; min-height: 100vh; border: 4px solid var(--gold); }
-        .vault-card { background: linear-gradient(145deg, #111, #000); border-radius: 20px; padding: 30px; border: 1px solid var(--gold); text-align: center; margin-bottom: 25px; }
-        .btn-deploy { background: var(--deploy); color: white; border: none; padding: 22px; width: 100%; border-radius: 18px; font-weight: 900; cursor: pointer; text-transform: uppercase; box-shadow: 0 10px 30px rgba(255,49,49,0.3); }
-
-        input, textarea { width: 100%; padding: 18px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 12px; margin-top: 10px; font-size: 16px; }
+        .vault-card { background: linear-gradient(145deg, #111, #000); border-radius: 20px; padding: 25px; border: 1px solid var(--gold); text-align: center; margin-bottom: 20px; }
+        input, textarea { width: 100%; padding: 15px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 12px; margin-top: 10px; }
+        .btn-deploy { background: var(--deploy); color: white; border: none; padding: 20px; width: 100%; border-radius: 15px; font-weight: 900; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<!-- VUE PUBLIQUE -->
 <div id="public-view">
     <div style="display:flex; justify-content:space-between; align-items:center;">
         <div class="logo-header">S.E.G GLOBAL</div>
         <div onclick="lancerConnexion()" style="cursor:pointer; font-size:24px;">☰</div>
     </div>
     
-    <h1 id="live-title">SYSTÈME EN CHARGEMENT...</h1>
-    <div id="live-message" style="color:#888; font-size:18px;">Connexion au réseau sécurisé Auto Global...</div>
-
+    <!-- VIRAL CARD (IMAGE 187) -->
     <div class="viral-card">
-        <h3>🚀 PROPULSER L'EMPIRE</h3>
-        <p style="color:#aaa;">Partagez Auto Global pour activer la croissance mondiale.</p>
+        <h3 style="margin:0;">🚀 PROPULSER L'EMPIRE</h3>
+        <p style="color:#888; font-size:13px;">Partagez Auto Global pour activer la croissance.</p>
         <div class="social-bar">
             <div onclick="partageDirect('whatsapp')" style="background:#25D366;" class="icon-btn">WA</div>
             <div onclick="partageDirect('facebook')" style="background:#1877F2;" class="icon-btn">FB</div>
             <div onclick="partageDirect('telegram')" style="background:#0088cc;" class="icon-btn">TG</div>
         </div>
-        <button onclick="partagerLien()" style="background:var(--gold); border:none; padding:15px; width:100%; border-radius:12px; font-weight:900;">🔗 COPIER LE LIEN UNIQUE</button>
+        <button onclick="partagerLien()" style="background:var(--gold); border:none; padding:12px; width:100%; border-radius:10px; font-weight:900; color:black;">🔗 COPIER LE LIEN UNIQUE</button>
+    </div>
+
+    <!-- FLUX DE CONTENU DYNAMIQUE -->
+    <div class="feed-container" id="master-feed">
+        <div class="feed-item">
+            <div class="feed-title">S.E.G NEWS</div>
+            <div id="live-message">Initialisation du réseau Auto Global...</div>
+        </div>
     </div>
 </div>
 
-<!-- LE NEXUS FONDATEUR -->
+<!-- NEXUS STÈVE -->
 <div id="nexus-steve">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-        <h2 style="color:var(--gold); margin:0;">PILOTAGE FONDATRICE</h2>
-        <button onclick="location.reload()" style="background:none; border:1px solid #444; color:white; padding:10px; border-radius:10px;">QUITTER</button>
-    </div>
-
+    <h2 style="color:var(--gold)">PILOTAGE FONDATRICE</h2>
     <div class="vault-card">
-        <div style="color:var(--gold); font-size:12px; font-weight:bold;">ACTIF SÉCURISÉ</div>
-        <div style="font-size:35px; font-weight:900; margin:10px 0;">450 000 000 FCFA</div>
-        <div style="color:#00ff88; font-size:11px;">● SURVEILLANCE IA ACTIVE</div>
+        <div style="color:var(--gold); font-size:12px;">ACTIF SÉCURISÉ</div>
+        <div style="font-size:32px; font-weight:900;">450 000 000 FCFA</div>
     </div>
-
-    <div style="background:#111; padding:20px; border-radius:15px;">
-        <label>Titre de l'Application :</label>
-        <input type="text" id="admin-title">
-        <br><br>
-        <label>Message aux utilisateurs :</label>
-        <textarea id="admin-message" rows="4"></textarea>
+    <div style="background:#111; padding:15px; border-radius:12px;">
+        <label>Ordre Mondial :</label>
+        <textarea id="admin-message" placeholder="Tape ton message ici..."></textarea>
     </div>
-
-    <button class="btn-deploy" onclick="sauvegarderMiseAJour()">🚀 DÉPLOYER LA MISE À JOUR MONDIALE</button>
+    <button class="btn-deploy" onclick="deployer()">🚀 DÉPLOYER AU MONDE</button>
 </div>
 
 <script>
-    // --- 1. CONFIGURATION FIREBASE ---
+    // CONFIGURATION (IMAGE 180)
     const firebaseConfig = {
-        apiKey: "AIzaSyAMX8SfBySnpc...", // Remplace par ta clé complète
+        apiKey: "AIzaSyAMX8SfBySnpc...", 
         authDomain: "seg-global.firebaseapp.com",
         databaseURL: "https://seg-global-default-rtdb.firebaseio.com",
         projectId: "seg-global",
@@ -90,44 +88,34 @@
         messagingSenderId: "880037527683",
         appId: "1:880037527683:web:..."
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // --- 2. SYNCHRONISATION MONDIALE ---
-    db.ref('main_config').on('value', (snap) => {
-        const data = snap.val();
-        if(data) {
-            document.getElementById('live-title').innerText = data.titre;
-            document.getElementById('live-message').innerText = data.message;
-            document.getElementById('admin-title').value = data.titre;
-            document.getElementById('admin-message').value = data.message;
+    // SYNCHRONISATION
+    db.ref('empire_state').on('value', (snap) => {
+        const d = snap.val();
+        if(d) {
+            document.getElementById('live-message').innerText = d.msg;
+            document.getElementById('admin-message').value = d.msg;
         }
     });
 
-    function sauvegarderMiseAJour() {
-        const t = document.getElementById('admin-title').value;
+    function deployer() {
         const m = document.getElementById('admin-message').value;
-        if(confirm("Confirmer le déploiement mondial ?")) {
-            db.ref('main_config').set({ titre: t, message: m, updated: Date.now() });
-        }
+        db.ref('empire_state').set({ msg: m, time: Date.now() });
+        alert("DÉPLOIEMENT EFFECTUÉ.");
     }
 
-    // --- 3. SYSTÈME DE VIRALITÉ ---
-    function partageDirect(plateforme) {
-        const lien = window.location.href.split('?')[0] + "?ref=STEVE_" + Math.random().toString(36).substring(7);
-        const texte = encodeURIComponent("Rejoignez mon empire sur Auto Global ! ");
-        let url = "";
-        if(plateforme === 'whatsapp') url = `https://api.whatsapp.com/send?text=${texte}${lien}`;
-        if(plateforme === 'facebook') url = `https://www.facebook.com/sharer/sharer.php?u=${lien}`;
-        if(plateforme === 'telegram') url = `https://t.me/share/url?url=${lien}&text=${texte}`;
-        window.open(url, '_blank');
+    // PARTAGE (IMAGE 187)
+    function partageDirect(p) {
+        const l = window.location.href + "?ref=STEVE";
+        let u = p==='whatsapp' ? `https://wa.me/?text=${l}` : p==='facebook' ? `https://fb.com/sharer/sharer.php?u=${l}` : `https://t.me/share/url?url=${l}`;
+        window.open(u, '_blank');
     }
 
-    // --- 4. ACCÈS SÉCURISÉ STÈVE ---
     function lancerConnexion() {
-        let n = prompt("IDENTIFICATION DU FONDATEUR :");
-        if(n && (n.toUpperCase().trim() === "STEVE" || n.toUpperCase().trim() === "STÈVE")) {
+        let n = prompt("NOM DU FONDATEUR :");
+        if(n && n.toUpperCase().trim() === "STÈVE" || n.toUpperCase().trim() === "STEVE") {
             document.getElementById('public-view').style.display = 'none';
             document.getElementById('nexus-steve').style.display = 'block';
         }
