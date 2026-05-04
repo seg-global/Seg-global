@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL | MASTER CONTROL</title>
+    <title>S.E.G GLOBAL | SYSTÈME CENTRAL</title>
     
-    <!-- SDK FIREBASE (La grande base de données de ton image 180) -->
+    <!-- SDK FIREBASE (Connexion à ta grande base de données Google) -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
@@ -14,71 +14,69 @@
         * { box-sizing: border-box; font-family: 'SF Pro Display', sans-serif; }
         body { background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
 
-        /* INTERFACE PUBLIQUE (CLIENT) */
-        #app-public { display: block; padding-bottom: 80px; }
-        .header { padding: 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.9); position: sticky; top: 0; z-index: 100; }
+        /* ÉCRAN PUBLIC (Ce que voient les clients sur Safari/Google) */
+        #app-public { display: block; }
+        .header { padding: 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.9); }
         .logo { font-weight: 900; font-size: 20px; color: var(--main); }
+        .status-box { padding: 30px; text-align: center; }
 
-        /* LE NEXUS (TON ÉCRAN DE FONDATEUR) */
-        #nexus-steve { display: none; padding: 20px; border: 4px solid var(--gold); min-height: 100vh; animation: fadeIn 0.5s; }
+        /* ÉCRAN NEXUS (Ton panneau de contrôle secret) */
+        #nexus-steve { display: none; padding: 20px; border: 4px solid var(--gold); min-height: 100vh; background: #050505; }
         .vault-card { background: #111; border-radius: 20px; padding: 20px; border: 1px solid var(--gold); margin-bottom: 20px; text-align: center; }
-        .editor-box { background: #111; padding: 20px; border-radius: 20px; margin-bottom: 100px; }
+        .editor-box { background: #111; padding: 20px; border-radius: 20px; margin-bottom: 30px; }
         input, textarea { width: 100%; padding: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 10px; margin-top: 10px; }
         
-        /* BOUTON DÉPLOYER */
-        .master-btn { position: fixed; bottom: 20px; left: 5%; width: 90%; background: var(--deploy); color: white; border: none; padding: 20px; border-radius: 15px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(255,49,49,0.4); }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* BOUTON DE DÉPLOIEMENT MONDIAL */
+        .master-btn { background: var(--deploy); color: white; border: none; padding: 20px; width: 100%; border-radius: 15px; font-weight: 900; cursor: pointer; box-shadow: 0 5px 20px rgba(255,49,49,0.3); }
     </style>
 </head>
 <body>
 
-<!-- 1. VUE QUE LE MONDE ENTIER VOIT -->
+<!-- VUE CLIENT -->
 <div id="app-public">
     <div class="header">
         <div class="logo">S.E.G GLOBAL</div>
-        <div onclick="startAuth()" style="cursor:pointer; font-size:24px;">☰</div>
+        <div onclick="authentificationSteve()" style="cursor:pointer; padding: 10px;">☰</div>
     </div>
-    <div style="padding: 30px; text-align: center;">
-        <h1 id="live-title" style="font-size: 32px;">Chargement...</h1>
-        <div id="live-content" style="background:#111; padding:25px; border-radius:20px; color:#aaa; font-size:18px;">
-            Connexion sécurisée aux serveurs Auto Global...
+    <div class="status-box">
+        <h1 id="live-title">S.E.G GLOBAL</h1>
+        <div id="live-content" style="background:#111; padding:25px; border-radius:20px; color:#aaa;">
+            Initialisation du flux sécurisé...
         </div>
     </div>
 </div>
 
-<!-- 2. TON NEXUS PRIVÉ (CACHE POUR LES AUTRES) -->
+<!-- VUE NEXUS (RÉSERVÉE À STÈVE) -->
 <div id="nexus-steve">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-        <h2 style="color:var(--gold); margin:0;">NEXUS FONDATEUR</h2>
-        <button onclick="location.reload()" style="background:none; border:none; color:white;">SORTIR</button>
+    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+        <h2 style="color:var(--gold)">TABLEAU DE BORD</h2>
+        <button onclick="location.reload()" style="background:none; border:none; color:white;">FERMER</button>
     </div>
 
     <div class="vault-card">
-        <small style="color:var(--gold)">RÉSERVE DE VALEUR S.E.G</small>
-        <div style="font-size:32px; font-weight:900; margin:10px 0;">450 000 000 FCFA</div>
-        <div style="font-size:12px; color:#00ff88;">● IA DE SURVEILLANCE ACTIVE</div>
+        <div style="color:var(--gold); font-size:12px;">ACTIF SÉCURISÉ</div>
+        <div style="font-size:35px; font-weight:900;">450 000 000 FCFA</div>
+        <div style="color:#00ff88; font-size:11px;">● SERVEURS OPÉRATIONNELS</div>
     </div>
 
     <div class="editor-box">
-        <h3>MISE À JOUR MONDIALE (MIROIR)</h3>
-        <label>Titre de l'application :</label>
-        <input type="text" id="input-title" placeholder="Ex: S.E.G Empire">
+        <h3>MODIFIER L'APPLICATION (MODE MIROIR)</h3>
+        <label>Titre public :</label>
+        <input type="text" id="db-title" placeholder="Ex: Auto Global">
         <br><br>
-        <label>Annonce clients :</label>
-        <textarea id="input-content" placeholder="Ecrivez votre message ici..."></textarea>
-        <p style="font-size:11px; color:#666; margin-top:15px;">Note : Vos changements ne seront visibles sur Safari/Google que si vous cliquez sur DÉPLOYER.</p>
+        <label>Message aux millions d'utilisateurs :</label>
+        <textarea id="db-content" placeholder="Entrez votre texte ici..."></textarea>
     </div>
 
-    <button class="master-btn" onclick="pushToGlobal()">🚀 DÉPLOYER POUR TOUS LES UTILISATEURS</button>
+    <button class="master-btn" onclick="deployerDonnees()">🚀 DÉPLOYER LA MISE À JOUR MONDIALE</button>
 </div>
 
 <script>
-    // --- CONFIGURATION FIREBASE (TES INFOS DE L'IMAGE 180) ---
+    // --- 1. CONFIGURATION DE TA BASE DE DONNÉES (IMAGE 180) ---
     const firebaseConfig = {
-        apiKey: "AIzaSyAMX8SfBySnpc...", // Complète avec ta clé de la photo 4
+        apiKey: "AIzaSyAMX8SfBySnpc...", // À compléter avec ta clé API
         authDomain: "seg-global.firebaseapp.com",
-        databaseURL: "https://seg-global-default-rtdb.firebaseio.com", // Ton lien de base de données
+        databaseURL: "https://seg-global-default-rtdb.firebaseio.com",
         projectId: "seg-global",
         storageBucket: "seg-global.appspot.com",
         messagingSenderId: "880037527683",
@@ -86,43 +84,49 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    const db = firebase.database();
 
-    // --- SYNCHRONISATION MONDIALE ---
-    // Cette partie assure que les millions d'utilisateurs voient tes ordres.
-    database.ref('app_state').on('value', (snapshot) => {
+    // --- 2. RÉCUPÉRATION DES DONNÉES EN TEMPS RÉEL ---
+    // Cette fonction fait en sorte que l'application "garde les informations" même après fermeture.
+    db.ref('app_state').on('value', (snapshot) => {
         const data = snapshot.val();
         if(data) {
-            document.getElementById('live-title').innerText = data.title;
-            document.getElementById('live-content').innerText = data.content;
+            document.getElementById('live-title').innerText = data.titre;
+            document.getElementById('live-content').innerText = data.message;
         }
     });
 
-    // --- LOGIQUE DE DÉPLOIEMENT ---
-    function pushToGlobal() {
-        const newTitle = document.getElementById('input-title').value;
-        const newContent = document.getElementById('input-content').value;
+    // --- 3. FONCTION DE DÉPLOIEMENT (STÈVE UNIQUEMENT) ---
+    function deployerDonnees() {
+        const t = document.getElementById('db-title').value;
+        const m = document.getElementById('db-content').value;
 
-        if(!newTitle || !newContent) return alert("Remplissez les champs !");
+        if(!t || !m) return alert("Champs vides !");
 
-        if(confirm("DÉPLOIEMENT : Voulez-vous synchroniser tous les téléphones mondiaux ?")) {
-            database.ref('app_state').set({
-                title: newTitle,
-                content: newContent,
-                updatedBy: "Stève",
-                timestamp: Date.now()
+        if(confirm("Confirmer le déploiement sur Google et Safari ?")) {
+            db.ref('app_state').set({
+                titre: t,
+                message: m,
+                auteur: "Stève",
+                date: Date.now()
             }).then(() => {
-                alert("✅ MISE À JOUR EFFECTUÉE DANS LE MONDE ENTIER !");
+                alert("✅ DÉPLOIEMENT RÉUSSI : La base de données est mise à jour.");
             });
         }
     }
 
-    // --- SÉCURITÉ D'ACCÈS ---
-    function startAuth() {
-        let access = prompt("IDENTIFICATION FONDATRICE (GMAIL/FACEID) :");
-        if(access === "STEVE") { // Ici on pourra lier ton vrai Gmail stevempina4@gmail.com
-            document.getElementById('app-public').style.display = 'none';
-            document.getElementById('nexus-steve').style.display = 'block';
+    // --- 4. SÉCURITÉ D'ACCÈS PAR NOM ---
+    function authentificationSteve() {
+        let nom = prompt("VÉRIFICATION : Entrez votre nom de Fondateur");
+        if (nom) {
+            let nomClean = nom.toUpperCase().trim();
+            // On accepte les deux versions de ton nom
+            if(nomClean === "STEVE" || nomClean === "STÈVE") {
+                document.getElementById('app-public').style.display = 'none';
+                document.getElementById('nexus-steve').style.display = 'block';
+            } else {
+                alert("Accès refusé. Vous n'êtes pas le Fondateur.");
+            }
         }
     }
 </script>
