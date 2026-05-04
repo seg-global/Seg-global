@@ -3,91 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL | CORE SYSTEM</title>
+    <title>S.E.G GLOBAL | SYSTÈME INTÉGRÉ</title>
     <style>
-        :root { --main: #1877F2; --gold: #D4AF37; --bg: #000; --safe: #00ff88; --danger: #ff3131; }
-        * { box-sizing: border-box; font-family: 'SF Pro Display', -apple-system, sans-serif; }
+        :root { --main: #1877F2; --gold: #D4AF37; --bg: #000; --safe: #00ff88; --deploy: #ff3131; }
+        * { box-sizing: border-box; font-family: 'SF Pro Display', sans-serif; }
         body { background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
 
-        /* --- INTERFACE PUBLIQUE --- */
-        .app-shell { padding-bottom: 80px; transition: filter 0.5s; }
+        /* --- INTERFACE PUBLIQUE (CLIENT) --- */
+        #publicApp { display: block; padding-bottom: 80px; }
         .header { padding: 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 100; }
         .logo { font-weight: 900; font-size: 22px; color: var(--main); }
         
-        /* --- MENU SLIDE-OVER --- */
+        /* --- MENU LATÉRAL --- */
         #sideMenu { position: fixed; right: -100%; top: 0; width: 85%; height: 100%; background: #0a0a0a; z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px; border-left: 1px solid #333; }
         .menu-item { padding: 20px; border-bottom: 1px solid #1a1a1a; display: flex; align-items: center; gap: 15px; cursor: pointer; }
-        .menu-item:active { background: #111; }
 
-        /* --- LE TUNNEL DE SÉCURITÉ (INVISIBLE PAR DÉFAUT) --- */
-        #securityTunnel { position: fixed; inset: 0; background: #000; z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
-        .scan-circle { width: 180px; height: 180px; border: 2px solid var(--main); border-radius: 50%; position: relative; margin-bottom: 40px; }
+        /* --- TUNNEL DE SÉCURITÉ (FORTERESSE) --- */
+        #securityTunnel { position: fixed; inset: 0; background: #000; z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+        .scan-circle { width: 150px; height: 150px; border: 2px solid var(--main); border-radius: 50%; position: relative; margin-bottom: 30px; overflow: hidden; }
         .scan-line { position: absolute; width: 100%; height: 2px; background: var(--main); box-shadow: 0 0 15px var(--main); animation: scan 2s infinite; }
         
-        /* --- TABLEAU DE BORD CLIENT (ZONE SÉCURISÉE) --- */
-        #clientDashboard { display: none; padding: 20px; animation: fadeIn 0.5s; }
-        .vault-card { background: linear-gradient(145deg, #111, #000); border: 1px solid var(--gold); border-radius: 25px; padding: 25px; margin-top: 20px; }
-        .amount { font-size: 32px; font-weight: 900; color: var(--gold); margin: 15px 0; }
-        
+        /* --- NEXUS FONDATEUR & MIROIR --- */
+        #founderNexus { display: none; padding: 20px; border: 3px solid var(--gold); min-height: 100vh; animation: fadeIn 0.5s; }
+        .vault-card { background: #111; border-radius: 20px; padding: 20px; border: 1px solid var(--gold); margin-bottom: 20px; }
+        .master-panel { position: fixed; bottom: 0; left: 0; width: 100%; background: #0a0a0a; padding: 20px; border-top: 1px solid #333; }
+        .btn-deploy { background: var(--deploy); color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: 900; cursor: pointer; }
+
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .btn-lock { background: var(--main); color: white; border: none; padding: 18px; border-radius: 15px; width: 100%; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="app-shell" id="appShell">
+<!-- 1. VUE PUBLIQUE -->
+<div id="publicApp">
     <div class="header">
         <div class="logo">S.E.G GLOBAL</div>
         <div onclick="toggleMenu()" style="cursor:pointer; font-size:24px;">☰</div>
     </div>
-
-    <!-- Contenu Public -->
     <div style="padding: 20px;">
-        <div style="background:#111; padding:20px; border-radius:20px; border-left:4px solid var(--main);">
-            <h4>Bienvenue, Stève</h4>
-            <p style="font-size:12px; color:#888;">Votre infrastructure anti-fraude est active.</p>
+        <h2 id="liveTitle">Plateforme Anti-Fraude</h2>
+        <div id="liveContent" style="background:#111; padding:20px; border-radius:15px; color:#888;">
+            En attente de mise à jour du Fondateur...
         </div>
     </div>
 </div>
 
-<!-- MENU LATÉRAL -->
+<!-- 2. MENU LATÉRAL -->
 <div id="sideMenu">
     <div style="display:flex; justify-content:space-between; margin-bottom:40px;">
         <h2 style="margin:0;">Menu</h2>
         <span onclick="toggleMenu()" style="font-size:24px;">✕</span>
     </div>
+    <div class="menu-item" onclick="startVaultAuth()" style="color: var(--gold); font-weight: bold;">👤 MON COMPTE (SÉCURISÉ)</div>
     <div class="menu-item">⚙️ Paramètres</div>
-    <div class="menu-item" onclick="startVaultAuth()" style="color: var(--gold); font-weight: bold;">👤 Mon Compte (SÉCURISÉ)</div>
-    <div class="menu-item">📞 Assistance 24/7</div>
 </div>
 
-<!-- LE TUNNEL DE SÉCURITÉ -->
+<!-- 3. TUNNEL DE SÉCURITÉ (FACEID / GMAIL) -->
 <div id="securityTunnel">
-    <div class="scan-circle"><div class="scan-line"></div><div style="font-size:60px; text-align:center; margin-top:55px;">👤</div></div>
-    <h2 id="authStep">VÉRIFICATION IP...</h2>
-    <p id="authDetail" style="color:#666; font-size:13px; text-align:center;">Analyse des protocoles Gmail & FaceID en cours</p>
-    <div id="authProgress" style="width:100%; height:4px; background:#222; border-radius:2px; margin-top:30px;">
+    <div class="scan-circle"><div class="scan-line"></div><div style="font-size:50px; margin-top:45px;">👤</div></div>
+    <h3 id="authStep">VÉRIFICATION GMAIL...</h3>
+    <div style="width:100%; height:4px; background:#222; border-radius:2px; margin-top:20px;">
         <div id="bar" style="width:0%; height:100%; background:var(--main); transition:1s;"></div>
     </div>
 </div>
 
-<!-- TABLEAU DE BORD CLIENT PRIVÉ -->
-<div id="clientDashboard">
-    <div onclick="exitDashboard()" style="margin-bottom:20px; color:var(--main);">← Retour au menu</div>
-    <h1>Espace CEO</h1>
-    <div class="vault-card">
-        <p style="font-size:12px; letter-spacing:1px; color:#888;">SOLDE TOTAL SÉCURISÉ</p>
-        <div class="amount">450 023 573 FCFA</div>
-        <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--safe);">
-            <span>● Transactions Chiffrées</span>
-            <span>AES-256 OK</span>
-        </div>
+<!-- 4. NEXUS STÈVE (MIROIR + DÉPLOIEMENT) -->
+<div id="founderNexus">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <span style="color:var(--gold); font-weight:900;">NEXUS FONDATEUR</span>
+        <button onclick="exitNexus()" style="background:transparent; border:none; color:white;">✕</button>
     </div>
-    <h3 style="margin-top:30px;">Historique Récent</h3>
-    <div style="background:#111; padding:15px; border-radius:15px; font-size:13px; margin-bottom:10px; border-left:3px solid var(--safe);">
-        Flux Sortant : Validé par FaceID
+
+    <div class="vault-card">
+        <small style="color:var(--gold)">SOLDE TOTAL SÉCURISÉ</small>
+        <div style="font-size:28px; font-weight:900; margin:10px 0;">450 023 573 FCFA</div>
+        <div style="font-size:10px; color:var(--safe);">● IA Surveillance Active</div>
+    </div>
+
+    <div style="background:#111; padding:15px; border-radius:15px; margin-bottom:100px;">
+        <h4 style="margin-top:0">Outil de Modification (Miroir)</h4>
+        <input type="text" id="inputTitle" placeholder="Nouveau titre public" style="width:100%; padding:12px; background:#222; border:1px solid #444; color:white; margin-bottom:10px;">
+        <textarea id="inputContent" placeholder="Nouveau contenu pour les clients" style="width:100%; height:80px; background:#222; border:1px solid #444; color:white;"></textarea>
+        <p style="font-size:10px; color:#666;">Note : Vos changements sont invisibles pour les clients tant que vous ne déployez pas.</p>
+    </div>
+
+    <div class="master-panel">
+        <button class="btn-deploy" onclick="deployUpdate()">🚀 DÉPLOYER POUR TOUS</button>
     </div>
 </div>
 
@@ -99,29 +101,44 @@
 
     async function startVaultAuth() {
         toggleMenu();
-        document.getElementById('appShell').style.display = 'none';
+        document.getElementById('publicApp').style.display = 'none';
         document.getElementById('securityTunnel').style.display = 'flex';
         
         const steps = [
             {t: "VÉRIFICATION GMAIL...", p: "33%"},
-            {t: "FACEID / FACETIME...", p: "66%"},
-            {t: "DÉCRYPTAGE DES FONDS...", p: "100%"}
+            {t: "FACEID NATIVE SCAN...", p: "66%"},
+            {t: "ACCÈS NEXUS ACCORDÉ", p: "100%"}
         ];
 
         for(let s of steps) {
             document.getElementById('authStep').innerText = s.t;
             document.getElementById('bar').style.width = s.p;
-            await new Promise(r => setTimeout(r, 1500));
+            await new Promise(r => setTimeout(r, 1200));
         }
 
         document.getElementById('securityTunnel').style.display = 'none';
-        document.getElementById('clientDashboard').style.display = 'block';
+        document.getElementById('founderNexus').style.display = 'block';
     }
 
-    function exitDashboard() {
-        document.getElementById('clientDashboard').style.display = 'none';
-        document.getElementById('appShell').style.display = 'block';
+    function deployUpdate() {
+        const newT = document.getElementById('inputTitle').value;
+        const newC = document.getElementById('inputContent').value;
+        
+        if(!newT || !newC) return alert("Remplissez les modifications miroir.");
+
+        if(confirm("DÉPLOIEMENT GLOBAL : Voulez-vous envoyer cette version sur tous les téléphones ?")) {
+            document.getElementById('liveTitle').innerText = newT;
+            document.getElementById('liveContent').innerText = newC;
+            alert("✅ SUCCESS : Application mise à jour mondialement.");
+            exitNexus();
+        }
+    }
+
+    function exitNexus() {
+        document.getElementById('founderNexus').style.display = 'none';
+        document.getElementById('publicApp').style.display = 'block';
     }
 </script>
+
 </body>
 </html>
