@@ -3,121 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Vision</title>
+    <title>S.E.G GLOBAL - COMMANDEMENT CENTRAL</title>
     <style>
-        /* 1. SUPPRESSION DU NOIR ET MISE EN PLACE DU CIEL */
+        /* --- CONFIGURATION DU CIEL FUTURISTE --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body, html {
             height: 100%;
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden;
-            background: linear-gradient(to bottom, #1e90ff 0%, #87ceeb 50%, #ffffff 100%);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            overflow-y: auto;
+            background: linear-gradient(to bottom, #1e90ff 0%, #ffffff 100%);
+            color: #fff;
         }
 
-        /* 2. LE SOLEIL DANS L'ANGLE (Éclaire l'appli) */
+        /* SOLEIL ET LUMINOSITÉ */
         .sun {
-            position: absolute;
-            top: -30px;
-            right: -30px;
-            width: 180px;
-            height: 180px;
-            background: radial-gradient(circle, #fff700 20%, rgba(255,247,0,0.4) 60%, transparent 80%);
+            position: fixed;
+            top: -20px;
+            right: -20px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #fff700 20%, rgba(255,247,0,0.4) 70%, transparent 90%);
             border-radius: 50%;
             z-index: 1;
-            box-shadow: 0 0 50px rgba(255, 247, 0, 0.5);
         }
 
-        /* 3. NUAGES RÉALISTES (Statiques pour commencer) */
-        .cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.9);
-            width: 150px;
-            height: 50px;
-            border-radius: 50px;
-            z-index: 2;
-            filter: blur(5px);
-        }
-        .cloud::after { content: ''; position: absolute; background: white; width: 70px; height: 70px; border-radius: 50%; top: -30px; left: 20px; }
-        .cloud::before { content: ''; position: absolute; background: white; width: 50px; height: 50px; border-radius: 50%; top: -20px; left: 70px; }
-        
-        .n1 { top: 15%; left: 10%; transform: scale(0.8); }
-        .n2 { top: 25%; right: 15%; transform: scale(1.2); opacity: 0.7; }
-
-        /* 4. ÉTOILES FILANTES */
-        .star {
-            position: absolute;
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, white, transparent);
-            animation: move-star 5s infinite;
-            opacity: 0;
-            z-index: 1;
-        }
-        @keyframes move-star {
-            0% { transform: translateX(-100px) translateY(0) rotate(25deg); opacity: 1; }
-            20% { transform: translateX(100vw) translateY(40vh) rotate(25deg); opacity: 0; }
-            100% { opacity: 0; }
-        }
-
-        /* 5. INTERFACE ET BOUTONS (Z-INDEX 100 POUR ÊTRE SÛR QUE ÇA MARCHE) */
-        .container {
+        /* --- CONTENEUR PRINCIPAL (Scrollable) --- */
+        .main-app {
             position: relative;
-            z-index: 100; 
+            z-index: 10;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            padding: 20px;
+            gap: 20px;
+            max-width: 500px;
+            margin: auto;
         }
 
-        .logo-title {
-            color: #ffff00; /* Éclairage Jaune */
-            text-shadow: 0 0 20px rgba(255, 247, 0, 0.9);
-            font-size: 2.2rem;
-            font-weight: bold;
-            margin-bottom: 40px;
+        .header {
             text-align: center;
+            padding: 20px 0;
         }
 
-        .main-button {
+        .header h1 {
+            color: #ffff00;
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.8);
+            font-size: 28px;
+            letter-spacing: 2px;
+        }
+
+        /* --- CARTES VITRÉES (Glassmorphism) --- */
+        .card {
             background: rgba(255, 255, 255, 0.15);
-            border: 2px solid #ffffff;
-            color: white;
-            padding: 18px 45px;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            cursor: pointer;
             backdrop-filter: blur(10px);
-            transition: 0.3s;
-            margin: 10px;
-            width: 80%;
-            max-width: 300px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            color: #003366; /* Texte sombre pour lisibilité sur fond clair */
         }
 
-        .main-button:active {
-            transform: scale(0.9);
-            background: #ffff00;
-            color: #1e90ff;
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        /* --- COMPOSANTS DE TES PHOTOS --- */
+        .value-display {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0055ff;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .value-display span { color: #ccaa00; } /* Pour le FCFA */
+
+        /* BOUTONS RÉPARÉS (Z-INDEX ÉLEVÉ) */
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 12px;
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-action:active { transform: scale(0.95); background: #ffff00; color: #000; }
+
+        .btn-gold { background: linear-gradient(90deg, #ccaa00, #ffcc00); color: #000; }
+
+        /* INPUTS */
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        /* NEWS TICKER */
+        .news-box {
+            background: rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #ffff00;
+            padding: 10px;
+            font-size: 13px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
 
     <div class="sun"></div>
-    <div class="cloud n1"></div>
-    <div class="cloud n2"></div>
-    <div class="star"></div>
 
-    <div class="container">
-        <h1 class="logo-title">S.E.G GLOBAL</h1>
+    <div class="main-app">
         
-        <button class="main-button" onclick="alert('Lien généré !')">GÉNÉRER MON LIEN</button>
-        <button class="main-button" onclick="alert('Action 2')">BOUTON ACTIF</button>
+        <!-- HEADER -->
+        <div class="header">
+            <h1>S.E.G GLOBAL</h1>
+            <p style="color: #0055ff; font-weight: bold;">SYSTÈME OPÉRATIONNEL</p>
+        </div>
+
+        <!-- SECTION 1 : ANALYSE LIVE -->
+        <div class="card">
+            <div class="card-title">📊 ANALYSE LIVE</div>
+            <p>Valeur estimée :</p>
+            <div class="value-display">450 023 573 <span>FCFA</span></div>
+            <div style="display: flex; gap: 5px; height: 30px; align-items: flex-end;">
+                <div style="width: 25%; height: 40%; background: #007bff; border-radius: 4px;"></div>
+                <div style="width: 25%; height: 70%; background: #007bff; border-radius: 4px;"></div>
+                <div style="width: 25%; height: 55%; background: #007bff; border-radius: 4px;"></div>
+                <div style="width: 25%; height: 100%; background: #ccaa00; border-radius: 4px;"></div>
+            </div>
+        </div>
+
+        <!-- SECTION 2 : COFFRE-FORT PRIVÉ -->
+        <div class="card">
+            <div class="card-title">🔐 COFFRE-FORT PRIVÉ</div>
+            <p style="font-size: 12px; opacity: 0.8;">Transactions confidentielles</p>
+            <div class="value-display" style="color: #000;">+ 2 000 000 <span>FCFA</span></div>
+            <button class="btn-action" onclick="alert('Accès au coffre-fort...')">OUVRIR LE COFFRE</button>
+        </div>
+
+        <!-- SECTION 3 : SIMULATEUR DE PROFITS -->
+        <div class="card">
+            <div class="card-title">💰 SIMULATEUR</div>
+            <input type="number" placeholder="Montant à investir">
+            <button class="btn-action" onclick="alert('Calcul en cours...')">CALCULER RENDEMENT</button>
+            <p id="result" style="margin-top: 10px; font-weight: bold; color: #007bff;"></p>
+        </div>
+
+        <!-- SECTION 4 : PROPULSER L'EMPIRE (PARTAGE) -->
+        <div class="card" style="background: rgba(0, 51, 102, 0.8); color: white;">
+            <div class="card-title">🚀 PROPULSER L'EMPIRE</div>
+            <p style="font-size: 13px; margin-bottom: 10px;">Partagez pour activer la croissance mondiale.</p>
+            <div style="display: flex; justify-content: space-around; margin-bottom: 15px;">
+                <div style="width: 45px; height: 45px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="alert('WhatsApp')">WA</div>
+                <div style="width: 45px; height: 45px; background: #1877F2; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="alert('Facebook')">FB</div>
+                <div style="width: 45px; height: 45px; background: #0088cc; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="alert('Telegram')">TG</div>
+            </div>
+            <button class="btn-action btn-gold" onclick="alert('Lien copié !')">🔗 COPIER MON LIEN UNIQUE</button>
+        </div>
+
+        <!-- SECTION 5 : NEWS -->
+        <div class="news-box">
+            [ S.E.G NEWS ] : Connexion aux serveurs Auto Global établie... Scan du réseau en cours...
+        </div>
+
     </div>
 
+    <script>
+        console.log("Interface S.E.G Global consolidée et active.");
+    </script>
 </body>
 </html>
