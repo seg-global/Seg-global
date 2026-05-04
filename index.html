@@ -3,199 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL | Système Intégré</title>
+    <title>S.E.G GLOBAL | Système Central</title>
     <style>
         :root { --primary: #1877F2; --gold: #D4AF37; --white: #ffffff; --bg: #f0f2f5; --dark: #1c1e21; }
         body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); padding-bottom: 90px; color: var(--dark); overflow-x: hidden; }
 
-        /* COUCHE DE SÉCURITÉ BIOMÉTRIQUE (Face ID / Touch ID) */
+        /* ÉCRAN BIOMÉTRIQUE S.E.G */
         #biometricOverlay { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
-        .bio-icon { font-size: 80px; margin-bottom: 20px; cursor: pointer; transition: transform 0.3s; }
-        .bio-status { font-weight: 800; color: var(--dark); font-size: 20px; letter-spacing: -0.5px; }
-        .scan-line { width: 100px; height: 2px; background: var(--primary); position: absolute; display: none; animation: scanLine 1.5s linear infinite; }
-        @keyframes scanLine { 0% { transform: translateY(-50px); } 100% { transform: translateY(50px); } }
+        .bio-icon { font-size: 80px; margin-bottom: 20px; cursor: pointer; }
+        .bio-status { font-weight: 800; color: var(--dark); font-size: 20px; }
 
-        /* HEADER (image_165.png) */
+        /* HEADER (image_167.png) */
         .header { background: var(--white); padding: 10px 15px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 5px rgba(0,0,0,0.1); }
         .logo-text { font-weight: 900; color: var(--primary); font-size: 22px; }
         .search-bar { background: #f0f2f5; border-radius: 20px; padding: 8px 15px; flex-grow: 1; display: flex; align-items: center; border: 1px solid #ddd; }
-        .search-bar input { border: none; background: transparent; width: 100%; outline: none; font-size: 14px; }
+        .search-bar input { border: none; background: transparent; width: 100%; outline: none; }
 
-        /* CATÉGORIES CIRCULAIRES */
-        .categories { display: flex; justify-content: space-around; padding: 15px; background: var(--white); border-bottom: 1px solid #eee; overflow-x: auto; }
-        .cat-btn { min-width: 55px; min-height: 55px; border-radius: 50%; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px; background: white; flex-shrink: 0; margin: 0 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-
-        /* ZONE DE PUBLICATION */
-        .publish-box { background: var(--white); margin: 12px; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .user-avatar { width: 42px; height: 42px; border-radius: 50%; background: #eee; object-fit: cover; border: 1px solid #ddd; }
-        .publish-input-btn { background: #f0f2f5; padding: 12px 18px; border-radius: 25px; flex-grow: 1; color: #65676b; font-size: 14px; cursor: pointer; border: none; text-align: left; }
-
-        /* FIL D'ACTUALITÉ */
-        .feed { padding: 0 12px; }
-        .post { background: var(--white); border-radius: 15px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #eee; }
-        .post-header { padding: 12px; display: flex; align-items: center; gap: 10px; font-weight: bold; border-bottom: 1px solid #f9f9f9; }
-        .post-img { width: 100%; display: block; background: #fafafa; }
-
-        /* LE MARCHÉ & NÉGOCIATION */
-        .market-grid { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .product-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
-        .product-img-box { height: 120px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; font-size: 45px; }
-        .nego-btn { background: var(--primary); color: white; border: none; padding: 8px; width: 90%; border-radius: 8px; font-weight: bold; margin: 10px 0; font-size: 11px; }
-
-        /* PORTAIL INVESTISSEUR */
-        .invest-card { background: linear-gradient(145deg, #1c1e21, #333); color: white; padding: 25px; border-radius: 20px; margin: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .val-text { color: var(--gold); font-size: 28px; font-weight: 900; margin: 10px 0; display: block; }
-
-        /* NAVIGATION BASSE (image_165.png) */
-        .nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; padding: 12px 0; border-top: 2px solid #eee; z-index: 2000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        .nav-link { flex: 1; text-align: center; color: #65676b; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        /* NAVIGATION BASSE */
+        .nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; padding: 12px 0; border-top: 2px solid #eee; z-index: 2000; }
+        .nav-link { flex: 1; text-align: center; color: #65676b; font-size: 11px; font-weight: 800; cursor: pointer; }
         .nav-link.active { color: var(--primary); }
 
-        /* UTILITAIRES */
-        .view { display: none; }
+        /* SECTION INVESTIR - TERMINAL CEO */
+        .invest-card { background: linear-gradient(145deg, #1c1e21, #333); color: white; padding: 25px; border-radius: 20px; margin: 15px; box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
+        .val-text { color: var(--gold); font-size: 26px; font-weight: 900; display: block; margin: 10px 0; }
+        .chart-sim { height: 60px; display: flex; align-items: flex-end; gap: 5px; margin: 15px 0; }
+        .bar { width: 15%; background: var(--primary); border-radius: 3px 3px 0 0; transition: 0.5s; }
+
+        /* FIL D'ACTU & PROFIL */
+        .view { display: none; padding: 10px; }
         .active-view { display: block; }
-        input[type="file"] { display: none; }
+        .post { background: white; border-radius: 15px; margin-bottom: 15px; overflow: hidden; border: 1px solid #eee; }
+        .post-header { padding: 12px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<!-- SYSTÈME D'ACCÈS BIOMÉTRIQUE -->
-<div id="biometricOverlay" onclick="startScan()">
-    <div id="scanLine" class="scan-line"></div>
+<!-- ACCÈS SÉCURISÉ -->
+<div id="biometricOverlay" onclick="unlockApp()">
     <div id="bioIcon" class="bio-icon">👤</div>
-    <div id="bioText" class="bio-status">Authentification requise</div>
-    <p style="color: #65676b; font-size: 12px; margin-top: 15px;">Sécurisé par le protocole auto global</p>
+    <div id="bioText" class="bio-status">Scan requis pour Auto Global</div>
 </div>
 
-<!-- HEADER FIXE -->
+<!-- INTERFACE PRINCIPALE -->
 <div class="header">
     <div class="logo-text">S.E.G</div>
-    <div class="search-bar"><input type="text" placeholder="Rechercher une pierre ou un pro..."></div>
+    <div class="search-bar"><input type="text" placeholder="Rechercher une pierre..."></div>
     <div style="font-size: 22px;">💬</div>
 </div>
 
-<!-- SECTION 1 : ACCUEIL -->
+<!-- FIL D'ACTUALITÉ -->
 <div id="homeView" class="view active-view">
-    <div class="categories">
-        <div class="cat-btn">➕</div><div class="cat-btn">💎</div><div class="cat-btn">🔥</div><div class="cat-btn">🇨🇲</div><div class="cat-btn">⚙️</div>
+    <div style="display:flex; overflow-x:auto; padding-bottom:15px; gap:10px;">
+        <div style="width:60px; height:60px; border-radius:50%; border:2px solid var(--primary); flex-shrink:0; display:flex; align-items:center; justify-content:center;">➕</div>
+        <div style="width:60px; height:60px; border-radius:50%; border:2px solid var(--primary); flex-shrink:0; background:url('https://via.placeholder.com/60');"></div>
     </div>
-    <div class="publish-box">
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="user-avatar" id="navAvatar">
-        <label for="postFile" class="publish-input-btn">Quoi de neuf pour **auto global** ?</label>
-        <input type="file" id="postFile" accept="image/*" onchange="createNewPost(event)">
-    </div>
-    <div id="feedContainer" class="feed">
-        <div class="post">
-            <div class="post-header">👤 Admin S.E.G</div>
-            <div style="padding:15px;">Bienvenue dans l'infrastructure de sécurisation. Votre empire est prêt.</div>
-        </div>
+    <div class="post">
+        <div class="post-header">👤 Admin S.E.G</div>
+        <div style="padding:15px;">Bienvenue dans l'infrastructure. Votre empire est prêt.</div>
     </div>
 </div>
 
-<!-- SECTION 2 : MARCHÉ -->
+<!-- LE MARCHÉ -->
 <div id="marketView" class="view">
-    <div class="market-grid">
-        <div class="product-card">
-            <div class="product-img-box">💎</div>
-            <div style="padding:10px;"><strong>Diamant Brut</strong><button class="nego-btn">NÉGOCIER</button></div>
-        </div>
-        <div class="product-card">
-            <div class="product-img-box">⛏️</div>
-            <div style="padding:10px;"><strong>Matériel Extraction</strong><button class="nego-btn">DÉTAILS</button></div>
-        </div>
+    <h3 style="text-align:center;">🛒 Marché des Ressources</h3>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div style="background:white; padding:15px; border-radius:10px; text-align:center;">💎<br>Diamant</div>
+        <div style="background:white; padding:15px; border-radius:10px; text-align:center;">🔥<br>Rubis</div>
     </div>
 </div>
 
-<!-- SECTION 3 : INVESTIR -->
+<!-- TERMINAL INVESTIR (MODULE FINANCIER) -->
 <div id="investView" class="view">
     <div class="invest-card">
-        <h3>💰 PORTAIL INVESTISSEUR</h3>
-        <p>Valorisation de l'Empire :</p>
-        <span class="val-text">450 000 000 FCFA</span>
-        <button style="width:100%; padding:12px; background:var(--gold); border:none; border-radius:8px; font-weight:900;">ACCÈS BUNKER</button>
+        <h3>📊 ANALYSE LIVE</h3>
+        <p>Valeur estimée :</p>
+        <span class="val-text" id="liveVal">450 000 000 FCFA</span>
+        <div class="chart-sim">
+            <div class="bar" style="height:40%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:90%; background:var(--gold);"></div>
+        </div>
+        <p style="font-size:10px; color: #45a29e;">> Statut : Serveurs Opérationnels</p>
+    </div>
+
+    <div style="background: white; padding: 20px; border-radius: 15px; border: 1px solid #ddd;">
+        <h4 style="margin:0 0 10px 0;">💰 SIMULATEUR DE PROFITS</h4>
+        <input type="number" id="amt" placeholder="Montant en FCFA" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px;">
+        <button onclick="calc()" style="width:100%; padding:12px; background:var(--dark); color:white; border:none; border-radius:8px; font-weight:bold;">CALCULER RENDEMENT</button>
+        <p id="res" style="margin-top:15px; color:var(--primary); font-weight:bold;"></p>
     </div>
 </div>
 
-<!-- SECTION 4 : PROFIL -->
-<div id="profileView" class="view">
-    <div style="text-align:center; padding:40px 20px;">
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" id="mainProfilePic" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--primary);">
-        <h2>Stève</h2>
-        <label for="profileFile" style="color:var(--primary); font-weight:bold; cursor:pointer;">Modifier la photo de profil</label>
-        <input type="file" id="profileFile" accept="image/*" onchange="updateProfilePic(event)">
-    </div>
-</div>
-
-<!-- NAVIGATION BASSE -->
+<!-- NAVIGATION BASSE (image_167.png) -->
 <div class="nav">
-    <div class="nav-link active" onclick="switchTab('homeView', this)">🏠<br>FIL D'ACTU</div>
-    <div class="nav-link" onclick="switchTab('marketView', this)">🏪<br>LE MARCHÉ</div>
-    <div class="nav-link" style="color: var(--gold);" onclick="switchTab('investView', this)">💰<br>INVESTIR</div>
-    <div class="nav-link" onclick="switchTab('profileView', this)">☰<br>MENU</div>
+    <div class="nav-link active" onclick="tab('homeView', this)">🏠<br>FIL D'ACTU</div>
+    <div class="nav-link" onclick="tab('marketView', this)">🏪<br>LE MARCHÉ</div>
+    <div class="nav-link" style="color:var(--gold);" onclick="tab('investView', this)">💰<br>INVESTIR</div>
+    <div class="nav-link">☰<br>MENU</div>
 </div>
 
 <script>
-    // 1. DÉTECTION ET INITIALISATION BIOMÉTRIQUE
+    // SÉCURITÉ BIOMÉTRIQUE
     window.onload = function() {
         const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
         const icon = document.getElementById('bioIcon');
-        const text = document.getElementById('bioText');
-        
-        if (isIOS) {
-            icon.innerText = "🆔"; // Face ID icône
-            text.innerText = "Face ID pour S.E.G";
-        } else {
-            icon.innerText = "🖐️"; // Touch ID icône
-            text.innerText = "Scanner d'empreinte";
-        }
+        if (isIOS) { icon.innerText = "🆔"; document.getElementById('bioText').innerText = "Face ID pour Auto Global"; }
+        else { icon.innerText = "🖐️"; }
     }
 
-    function startScan() {
-        const text = document.getElementById('bioText');
-        const line = document.getElementById('scanLine');
-        line.style.display = 'block';
-        text.innerText = "Analyse en cours...";
-        
+    function unlockApp() {
+        const status = document.getElementById('bioText');
+        status.innerText = "Analyse...";
         setTimeout(() => {
-            text.innerText = "Identité confirmée ✅";
-            text.style.color = "green";
-            setTimeout(() => {
-                document.getElementById('biometricOverlay').style.opacity = '0';
-                setTimeout(() => { document.getElementById('biometricOverlay').style.display = 'none'; }, 500);
-            }, 500);
-        }, 2000);
+            document.getElementById('biometricOverlay').style.display = 'none';
+        }, 1000);
     }
 
-    // 2. GESTION DES ONGLETS
-    function switchTab(id, el) {
+    // GESTION NAVIGATION
+    function tab(id, el) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
         document.getElementById(id).classList.add('active-view');
         document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
-        window.scrollTo(0,0);
     }
 
-    // 3. FONCTIONS MULTIMÉDIA (POSTS & PROFIL)
-    function createNewPost(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            const container = document.getElementById('feedContainer');
-            const newPost = document.createElement('div');
-            newPost.className = 'post';
-            newPost.innerHTML = `<div class="post-header">👤 Stève</div><img src="${reader.result}" class="post-img"><div style="padding:15px;">Mise à jour stratégique effectuée.</div>`;
-            container.prepend(newPost);
+    // LOGIQUE FINANCIÈRE
+    function calc() {
+        const val = document.getElementById('amt').value;
+        if(val) {
+            const profit = val * 1.30;
+            document.getElementById('res').innerText = "Profit estimé : " + profit.toLocaleString() + " FCFA";
         }
-        reader.readAsDataURL(event.target.files[0]);
     }
 
-    function updateProfilePic(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            document.getElementById('mainProfilePic').src = reader.result;
-            document.getElementById('navAvatar').src = reader.result;
-        }
-        reader.readAsDataURL(event.target.files[0]);
-    }
+    // Mise à jour live de la valeur
+    setInterval(() => {
+        const base = 450000000;
+        const fluct = Math.floor(Math.random() * 100000);
+        document.getElementById('liveVal').innerText = (base + fluct).toLocaleString() + " FCFA";
+    }, 4000);
 </script>
 
 </body>
