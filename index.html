@@ -3,154 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL | Système Maître</title>
+    <title>S.E.G GLOBAL | ULTIMATE</title>
     <style>
-        :root { --primary: #1877F2; --gold: #D4AF37; --white: #ffffff; --bg: #f0f2f5; --dark: #1c1e21; --admin-red: #d93025; }
-        body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); padding-bottom: 90px; color: var(--dark); overflow-x: hidden; }
+        :root { --primary: #1877F2; --gold: #D4AF37; --white: #ffffff; --bg: #0f1012; --dark-card: #1c1e21; --glass: rgba(255, 255, 255, 0.1); }
+        body { font-family: -apple-system, system-ui, sans-serif; margin: 0; background: var(--bg); color: white; overflow-x: hidden; }
 
-        /* SÉCURITÉ & NOTIFS */
-        #biometricOverlay { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
-        #notificationToast { position: fixed; top: -100px; left: 10px; right: 10px; background: var(--dark); color: white; padding: 15px; border-radius: 12px; border-left: 5px solid var(--gold); z-index: 3000; transition: 0.5s; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-
-        /* HEADER & NAVIGATION */
-        .header { background: var(--white); padding: 10px 15px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 5px rgba(0,0,0,0.1); }
-        .logo-text { font-weight: 900; color: var(--primary); font-size: 22px; }
-        .nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; padding: 12px 0; border-top: 1px solid #ddd; z-index: 2000; }
-        .nav-link { flex: 1; text-align: center; color: #65676b; font-size: 10px; font-weight: 800; cursor: pointer; }
-        .nav-link.active { color: var(--primary); }
-
-        /* VUES AUTOMATISÉES */
-        .view { display: none; padding: 15px; animation: fadeIn 0.3s; }
-        .active-view { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* PANNEAU ADMIN STÈVE */
-        .admin-panel { background: #fff1f0; border: 2px dashed var(--admin-red); padding: 15px; border-radius: 15px; margin-bottom: 20px; display: none; }
+        /* HEADER FUTURISTE */
+        .header { background: rgba(15, 16, 18, 0.8); backdrop-filter: blur(15px); padding: 15px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--glass); }
+        .search-bar { flex-grow: 1; background: var(--glass); border: none; padding: 10px 15px; border-radius: 25px; color: white; outline: none; font-size: 14px; }
         
-        /* CARTES PRODUITS & FINANCE */
-        .shop-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .tax-tag { position: absolute; top: 10px; right: 10px; background: var(--gold); color: white; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: bold; }
-        .invest-card { background: #1c1e21; color: white; padding: 25px; border-radius: 20px; margin-bottom: 20px; }
-        .btn-action { width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; background: white; transition: 0.2s; }
-        .btn-action:active { background: #eee; }
+        /* NAVIGATION */
+        .nav { position: fixed; bottom: 0; width: 100%; background: rgba(15, 16, 18, 0.95); display: flex; padding: 15px 0; border-top: 1px solid var(--glass); z-index: 2000; }
+        .nav-link { flex: 1; text-align: center; color: #888; font-size: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .nav-link.active { color: var(--primary); transform: translateY(-5px); }
+
+        /* VUES */
+        .view { display: none; padding: 20px; animation: slideUp 0.4s ease-out; height: 80vh; overflow-y: auto; }
+        .active-view { display: block; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* COMPOSANTS : CHAT */
+        .chat-container { display: flex; flex-direction: column; height: 100%; }
+        .chat-box { flex-grow: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px 15px; border-radius: 18px; max-width: 80%; font-size: 14px; }
+        .msg.sent { background: var(--primary); align-self: flex-end; }
+        .msg.received { background: var(--glass); align-self: flex-start; }
+
+        /* COMPOSANTS : VIDEO TIKTOK STYLE */
+        .video-feed { height: 100%; scroll-snap-type: y mandatory; overflow-y: scroll; }
+        .video-card { height: 80vh; scroll-snap-align: start; background: linear-gradient(to bottom, #1c1e21, #000); border-radius: 20px; margin-bottom: 15px; position: relative; display: flex; align-items: center; justify-content: center; }
+        .video-overlay { position: absolute; bottom: 20px; left: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+
+        /* DASHBOARD ADMIN (STÈVE) */
+        .admin-glass { background: linear-gradient(135deg, rgba(217, 48, 37, 0.2), rgba(24, 119, 242, 0.1)); border: 1px solid var(--glass); padding: 20px; border-radius: 25px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-<div id="notificationToast">🔔 <span id="notifMsg"></span></div>
-
-<!-- ECRAN DE SÉCURITÉ -->
-<div id="biometricOverlay" onclick="unlockApp()">
-    <div style="font-size:80px; margin-bottom:15px;">🆔</div>
-    <div style="font-weight:800; font-size:18px;">S.E.G GLOBAL SECURITY</div>
-    <p style="color:gray; font-size:12px;">Appuyez pour scanner (Face ID)</p>
-</div>
-
-<!-- HEADER FIXE -->
 <div class="header">
-    <div class="logo-text">S.E.G</div>
-    <div style="flex-grow:1; background:#f0f2f5; padding:8px; border-radius:20px; font-size:12px; color:gray;">Rechercher...</div>
-    <div id="adminBadge" style="display:none; color:var(--admin-red); font-size:10px; font-weight:bold; border:1px solid; padding:2px 5px; border-radius:5px;">CRÉATEUR</div>
+    <b style="color:var(--primary); font-size:24px;">S.E.G</b>
+    <input type="text" class="search-bar" placeholder="Rechercher dans l'Empire..." onkeyup="searchEngine(this.value)">
 </div>
 
-<!-- SECTION 1 : ACCUEIL & ADMIN -->
+<!-- ACCUEIL / DASHBOARD -->
 <div id="homeView" class="view active-view">
-    <div id="creatorTools" class="admin-panel">
-        <h4 style="margin:0; color:var(--admin-red);">🛠 CONTRÔLE AUTO GLOBAL</h4>
-        <p style="font-size:12px; margin:10px 0;">Recettes Taxes Totales : <br><span id="taxDisplay" style="font-size:20px; font-weight:900; color:var(--dark);">0 FCFA</span></p>
-        <button onclick="resetTaxes()" style="background:var(--admin-red); color:white; border:none; padding:5px 10px; border-radius:5px; font-size:10px;">Réinitialiser les comptes</button>
+    <div class="admin-glass">
+        <h4 style="margin:0; color:var(--gold);">👑 CONTRÔLE CRÉATEUR : STÈVE</h4>
+        <h2 id="revenue" style="margin:10px 0;">0 FCFA</h2>
+        <p style="font-size:11px; color:#aaa;">Système Auto Global : Connecté aux serveurs</p>
     </div>
-
-    <div style="background:white; padding:15px; border-radius:15px; margin-top:10px; border-left:4px solid var(--primary);">
-        <p style="margin:0;">Statut du Système : <span style="color:green; font-weight:bold;">Opérationnel</span></p>
-        <p style="font-size:12px; color:gray; margin-top:5px;">Bienvenue dans votre infrastructure, Stève.</p>
-    </div>
-</div>
-
-<!-- SECTION 2 : LE MARCHÉ (AVEC SYSTÈME DE TAXE RÉEL) -->
-<div id="marketView" class="view">
-    <h3 style="margin-top:0;">🏪 Boutiques Certifiées</h3>
     
-    <div class="shop-card">
-        <span class="tax-tag">TAXE : 2%</span>
-        <strong>iPhone 15 Pro Max</strong>
-        <p style="color:var(--primary); font-weight:bold; margin:5px 0;">850 000 FCFA</p>
-        <button class="btn-action" onclick="processSale(850000, 0.02, 'iPhone 15')">Simuler Vente</button>
-    </div>
-
-    <div class="shop-card">
-        <span class="tax-tag">TAXE : 5%</span>
-        <strong>Montre de Luxe Martienne</strong>
-        <p style="color:var(--primary); font-weight:bold; margin:5px 0;">1 250 000 FCFA</p>
-        <button class="btn-action" onclick="processSale(1250000, 0.05, 'Montre Martienne')">Simuler Vente</button>
+    <div style="background:var(--dark-card); padding:20px; border-radius:20px;">
+        <p>Bienvenue dans le futur de la technologie mobile. Tout est prêt pour le déploiement mondial.</p>
     </div>
 </div>
 
-<!-- SECTION 3 : INVESTIR (IMAGE_168.PNG CONSOLIDÉE) -->
-<div id="investView" class="view">
-    <div class="invest-card">
-        <div style="display:flex; justify-content:space-between;">
-            <h3 style="margin:0;">📊 VALEUR EMPIRE</h3>
-            <span style="font-size:10px; background:#42b72a; padding:2px 5px; border-radius:4px;">LIVE</span>
+<!-- FLUX VIDEO (TIKTOK STYLE) -->
+<div id="videoView" class="view">
+    <div class="video-feed">
+        <div class="video-card">
+            <span>[Flux Vidéo iPhone 15]</span>
+            <div class="video-overlay">
+                <b>@AutoGlobal</b><br>Découvrez le nouveau iPhone 15 Pro.
+            </div>
         </div>
-        <span id="liveVal" style="color:var(--gold); font-size:26px; font-weight:900; display:block; margin:15px 0;">450 023 573 FCFA</span>
-        <div style="display:flex; align-items:flex-end; gap:5px; height:60px;">
-            <div style="height:30%; width:15%; background:var(--primary); border-radius:3px;"></div>
-            <div style="height:60%; width:15%; background:var(--primary); border-radius:3px;"></div>
-            <div style="height:45%; width:15%; background:var(--primary); border-radius:3px;"></div>
-            <div style="height:95%; width:15%; background:var(--gold); border-radius:3px; box-shadow:0 0 10px var(--gold);"></div>
+        <div class="video-card">
+            <span>[Flux Vidéo Bijoux Mars]</span>
+            <div class="video-overlay">
+                <b>@Steve_CEO</b><br>Extraction terminée. Pureté 100%.
+            </div>
         </div>
     </div>
 </div>
 
-<!-- BARRE DE NAVIGATION -->
+<!-- CHAT EN LIGNE -->
+<div id="chatView" class="view">
+    <div class="chat-container">
+        <div class="chat-box" id="chatBox">
+            <div class="msg received">Bienvenue sur le chat S.E.G. Comment puis-je vous aider ?</div>
+        </div>
+        <div style="display:flex; gap:10px; padding:10px;">
+            <input type="text" id="chatInput" class="search-bar" placeholder="Message...">
+            <button onclick="sendMessage()" style="background:var(--primary); border:none; color:white; padding:10px 20px; border-radius:20px; font-weight:bold;">ENVOYER</button>
+        </div>
+    </div>
+</div>
+
+<!-- NAVIGATION BASSE -->
 <div class="nav">
-    <div class="nav-link active" onclick="tab('homeView', this)">🏠<br>TABLEAU</div>
-    <div class="nav-link" onclick="tab('marketView', this)">🏪<br>MARCHÉ</div>
-    <div class="nav-link" style="color:var(--gold);" onclick="tab('investView', this)">💰<br>INVESTIR</div>
+    <div class="nav-link active" onclick="tab('homeView', this)">🏠<br>DASHBOARD</div>
+    <div class="nav-link" onclick="tab('videoView', this)">📱<br>FLUX</div>
+    <div class="nav-link" onclick="tab('chatView', this)">💬<br>CHAT</div>
 </div>
 
 <script>
-    // --- MOTEUR DE L'APPLICATION ---
-    let isCreator = true; 
-    let totalTaxes = parseFloat(localStorage.getItem('seg_taxes')) || 0;
-
-    // Initialisation
-    updateTaxDisplay();
-
-    function unlockApp() {
-        document.getElementById('biometricOverlay').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('biometricOverlay').style.display = 'none';
-            if(isCreator) {
-                document.getElementById('creatorTools').style.display = 'block';
-                document.getElementById('adminBadge').style.display = 'block';
-            }
-            showNotif("SYSTÈME", "Accès sécurisé Stève validé.");
-        }, 500);
-    }
-
-    function processSale(price, taxRate, item) {
-        let earned = price * taxRate;
-        totalTaxes += earned;
-        localStorage.setItem('seg_taxes', totalTaxes);
-        updateTaxDisplay();
-        showNotif("VENTE", item + " vendu. Taxe de " + earned.toLocaleString() + " FCFA perçue.");
-    }
-
-    function updateTaxDisplay() {
-        document.getElementById('taxDisplay').innerText = Math.floor(totalTaxes).toLocaleString() + " FCFA";
-    }
-
-    function resetTaxes() {
-        if(confirm("Réinitialiser les revenus de l'empire ?")) {
-            totalTaxes = 0;
-            localStorage.setItem('seg_taxes', 0);
-            updateTaxDisplay();
-            showNotif("ADMIN", "Comptabilité remise à zéro.");
-        }
-    }
-
+    // MOTEUR TECHNIQUE DE STÈVE
     function tab(id, el) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
         document.getElementById(id).classList.add('active-view');
@@ -158,18 +105,39 @@
         el.classList.add('active');
     }
 
-    function showNotif(title, msg) {
-        const t = document.getElementById('notificationToast');
-        document.getElementById('notifMsg').innerText = title + ": " + msg;
-        t.style.top = '10px';
-        setTimeout(() => t.style.top = '-100px', 3500);
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const box = document.getElementById('chatBox');
+        if(input.value.trim() !== "") {
+            const msg = document.createElement('div');
+            msg.className = 'msg sent';
+            msg.innerText = input.value;
+            box.appendChild(msg);
+            input.value = "";
+            box.scrollTop = box.scrollHeight;
+            
+            // Simulation réponse IA
+            setTimeout(() => {
+                const reply = document.createElement('div');
+                reply.className = 'msg received';
+                reply.innerText = "S.E.G traite votre demande...";
+                box.appendChild(reply);
+                box.scrollTop = box.scrollHeight;
+            }, 1000);
+        }
     }
 
-    // Animation de la valeur de l'empire
+    function searchEngine(query) {
+        console.log("Recherche S.E.G pour : " + query);
+        // Ici, nous connecterons la base de données produits plus tard
+    }
+
+    // Animation Revenus
+    let currentRev = 176000;
     setInterval(() => {
-        let base = 450023573 + (Math.random() * 50000);
-        document.getElementById('liveVal').innerText = Math.floor(base).toLocaleString() + " FCFA";
-    }, 4000);
+        currentRev += Math.floor(Math.random() * 500);
+        document.getElementById('revenue').innerText = currentRev.toLocaleString() + " FCFA";
+    }, 3000);
 </script>
 </body>
 </html>
