@@ -3,144 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL | Système Central</title>
+    <title>S.E.G GLOBAL | Système Unifié</title>
     <style>
-        :root { --primary: #1877F2; --gold: #D4AF37; --white: #ffffff; --bg: #f0f2f5; --dark: #1c1e21; }
-        body { font-family: -apple-system, sans-serif; margin: 0; background: var(--bg); padding-bottom: 90px; color: var(--dark); overflow-x: hidden; }
+        :root { --primary: #1877F2; --gold: #D4AF37; --white: #ffffff; --bg: #f0f2f5; --dark: #1c1e21; --success: #42b72a; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background: var(--bg); padding-bottom: 90px; color: var(--dark); overflow-x: hidden; }
 
-        /* ÉCRAN BIOMÉTRIQUE S.E.G */
+        /* --- SYSTÈMES CRITIQUES (SÉCURITÉ & NOTIFS) --- */
         #biometricOverlay { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
-        .bio-icon { font-size: 80px; margin-bottom: 20px; cursor: pointer; }
-        .bio-status { font-weight: 800; color: var(--dark); font-size: 20px; }
+        .bio-icon { font-size: 80px; margin-bottom: 20px; cursor: pointer; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* HEADER (image_167.png) */
+        #notificationToast { position: fixed; top: -100px; left: 10px; right: 10px; background: var(--dark); color: white; padding: 15px; border-radius: 12px; border-left: 5px solid var(--gold); z-index: 3000; transition: 0.5s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 10px; }
+
+        /* --- HEADER (image_168.png) --- */
         .header { background: var(--white); padding: 10px 15px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 5px rgba(0,0,0,0.1); }
-        .logo-text { font-weight: 900; color: var(--primary); font-size: 22px; }
+        .logo-text { font-weight: 900; color: var(--primary); font-size: 22px; letter-spacing: -1px; }
         .search-bar { background: #f0f2f5; border-radius: 20px; padding: 8px 15px; flex-grow: 1; display: flex; align-items: center; border: 1px solid #ddd; }
-        .search-bar input { border: none; background: transparent; width: 100%; outline: none; }
+        .search-bar input { border: none; background: transparent; width: 100%; outline: none; font-size: 14px; }
 
-        /* NAVIGATION BASSE */
-        .nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; padding: 12px 0; border-top: 2px solid #eee; z-index: 2000; }
-        .nav-link { flex: 1; text-align: center; color: #65676b; font-size: 11px; font-weight: 800; cursor: pointer; }
+        /* --- NAVIGATION BASSE --- */
+        .nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; padding: 12px 0; border-top: 1px solid #ddd; z-index: 2000; justify-content: space-around; }
+        .nav-link { text-align: center; color: #65676b; font-size: 10px; font-weight: 800; cursor: pointer; transition: 0.3s; flex: 1; }
         .nav-link.active { color: var(--primary); }
+        .nav-link.gold { color: var(--gold); }
 
-        /* SECTION INVESTIR - TERMINAL CEO */
-        .invest-card { background: linear-gradient(145deg, #1c1e21, #333); color: white; padding: 25px; border-radius: 20px; margin: 15px; box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
-        .val-text { color: var(--gold); font-size: 26px; font-weight: 900; display: block; margin: 10px 0; }
-        .chart-sim { height: 60px; display: flex; align-items: flex-end; gap: 5px; margin: 15px 0; }
-        .bar { width: 15%; background: var(--primary); border-radius: 3px 3px 0 0; transition: 0.5s; }
-
-        /* FIL D'ACTU & PROFIL */
-        .view { display: none; padding: 10px; }
+        /* --- VUES --- */
+        .view { display: none; padding: 15px; animation: fadeIn 0.3s; }
         .active-view { display: block; }
-        .post { background: white; border-radius: 15px; margin-bottom: 15px; overflow: hidden; border: 1px solid #eee; }
-        .post-header { padding: 12px; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- MARKETPLACE (SYSTÈME DE BOUTIQUES) --- */
+        .shop-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); position: relative; }
+        .tax-tag { position: absolute; top: 10px; right: 10px; background: #fff9e6; color: #b7791f; padding: 3px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; border: 1px solid var(--gold); }
+        .btn-buy { width: 100%; background: var(--bg); border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 10px; }
+
+        /* --- TERMINAL INVESTIR (image_168.png) --- */
+        .invest-panel { background: #1c1e21; color: white; padding: 25px; border-radius: 25px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .val-display { color: var(--gold); font-size: 28px; font-weight: 900; margin: 10px 0; display: block; }
+        .chart-container { height: 60px; display: flex; align-items: flex-end; gap: 6px; margin: 20px 0; }
+        .chart-bar { flex: 1; background: var(--primary); border-radius: 4px 4px 0 0; transition: 1s ease-in-out; }
     </style>
 </head>
 <body>
 
-<!-- ACCÈS SÉCURISÉ -->
+<!-- 1. NOTIFICATIONS -->
+<div id="notificationToast">
+    <span style="font-size: 20px;">🔔</span>
+    <div>
+        <strong id="notifTitle">AUTO GLOBAL</strong><br>
+        <span id="notifMsg">Connexion sécurisée établie.</span>
+    </div>
+</div>
+
+<!-- 2. SÉCURITÉ BIOMÉTRIQUE -->
 <div id="biometricOverlay" onclick="unlockApp()">
     <div id="bioIcon" class="bio-icon">👤</div>
-    <div id="bioText" class="bio-status">Scan requis pour Auto Global</div>
+    <div id="bioStatus" style="font-weight: 800; color: #1c1e21;">Scanner pour accéder à S.E.G</div>
+    <p style="font-size: 12px; color: gray; margin-top: 10px;">Propulsé par Auto Global Infrastructure</p>
 </div>
 
-<!-- INTERFACE PRINCIPALE -->
+<!-- 3. HEADER -->
 <div class="header">
     <div class="logo-text">S.E.G</div>
-    <div class="search-bar"><input type="text" placeholder="Rechercher une pierre..."></div>
-    <div style="font-size: 22px;">💬</div>
+    <div class="search-bar"><input type="text" placeholder="Rechercher dans l'empire..."></div>
+    <div style="font-size: 22px; cursor: pointer;" onclick="showNotif('Messagerie', 'Aucun nouveau message vendeur.')">💬</div>
 </div>
 
-<!-- FIL D'ACTUALITÉ -->
+<!-- 4. VUE : FIL D'ACTU -->
 <div id="homeView" class="view active-view">
-    <div style="display:flex; overflow-x:auto; padding-bottom:15px; gap:10px;">
-        <div style="width:60px; height:60px; border-radius:50%; border:2px solid var(--primary); flex-shrink:0; display:flex; align-items:center; justify-content:center;">➕</div>
-        <div style="width:60px; height:60px; border-radius:50%; border:2px solid var(--primary); flex-shrink:0; background:url('https://via.placeholder.com/60');"></div>
-    </div>
-    <div class="post">
-        <div class="post-header">👤 Admin S.E.G</div>
-        <div style="padding:15px;">Bienvenue dans l'infrastructure. Votre empire est prêt.</div>
-    </div>
-</div>
-
-<!-- LE MARCHÉ -->
-<div id="marketView" class="view">
-    <h3 style="text-align:center;">🛒 Marché des Ressources</h3>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-        <div style="background:white; padding:15px; border-radius:10px; text-align:center;">💎<br>Diamant</div>
-        <div style="background:white; padding:15px; border-radius:10px; text-align:center;">🔥<br>Rubis</div>
-    </div>
-</div>
-
-<!-- TERMINAL INVESTIR (MODULE FINANCIER) -->
-<div id="investView" class="view">
-    <div class="invest-card">
-        <h3>📊 ANALYSE LIVE</h3>
-        <p>Valeur estimée :</p>
-        <span class="val-text" id="liveVal">450 000 000 FCFA</span>
-        <div class="chart-sim">
-            <div class="bar" style="height:40%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:90%; background:var(--gold);"></div>
+    <div style="background:white; padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid #eee;">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:40px; height:40px; border-radius:50%; background:#ddd;"></div>
+            <strong style="font-size:14px;">Quoi de neuf pour **auto global** ?</strong>
         </div>
-        <p style="font-size:10px; color: #45a29e;">> Statut : Serveurs Opérationnels</p>
     </div>
-
-    <div style="background: white; padding: 20px; border-radius: 15px; border: 1px solid #ddd;">
-        <h4 style="margin:0 0 10px 0;">💰 SIMULATEUR DE PROFITS</h4>
-        <input type="number" id="amt" placeholder="Montant en FCFA" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px;">
-        <button onclick="calc()" style="width:100%; padding:12px; background:var(--dark); color:white; border:none; border-radius:8px; font-weight:bold;">CALCULER RENDEMENT</button>
-        <p id="res" style="margin-top:15px; color:var(--primary); font-weight:bold;"></p>
+    <div style="background:white; padding:20px; border-radius:15px; text-align:center; color:gray;">
+        🚀 Bienvenue, Stève. Votre empire est opérationnel.
     </div>
 </div>
 
-<!-- NAVIGATION BASSE (image_167.png) -->
+<!-- 5. VUE : LE MARCHÉ (BOUTIQUES & TAXES) -->
+<div id="marketView" class="view">
+    <h3 style="margin-top:0;">🏪 Place de Marché</h3>
+    
+    <!-- Produit 1 : Téléphone -->
+    <div class="shop-card">
+        <span class="tax-tag">TAXE S.E.G : 2%</span>
+        <strong>iPhone 15 Pro Max - Boutique Alpha</strong>
+        <p style="color:var(--primary); font-weight:900; font-size:18px; margin:5px 0;">850 000 FCFA</p>
+        <button class="btn-buy" onclick="showNotif('Boutique Alpha', 'Commande envoyée. Taxe collectée.')">Acheter l'article</button>
+    </div>
+
+    <!-- Produit 2 : Habits -->
+    <div class="shop-card">
+        <span class="tax-tag">TAXE S.E.G : 3%</span>
+        <strong>Costume Luxe Slim Fit</strong>
+        <p style="color:var(--primary); font-weight:900; font-size:18px; margin:5px 0;">150 000 FCFA</p>
+        <button class="btn-buy" onclick="showNotif('S.E.G Mode', 'Traitement en cours...')">Acheter l'article</button>
+    </div>
+
+    <!-- Produit 3 : Montres -->
+    <div class="shop-card">
+        <span class="tax-tag">TAXE S.E.G : 5%</span>
+        <strong>Montre Connectée Sport</strong>
+        <p style="color:var(--primary); font-weight:900; font-size:18px; margin:5px 0;">45 000 FCFA</p>
+        <button class="btn-buy" onclick="showNotif('Tech Store', 'Taxe S.E.G appliquée.')">Acheter l'article</button>
+    </div>
+</div>
+
+<!-- 6. VUE : INVESTIR (TERMINAL image_168.png) -->
+<div id="investView" class="view">
+    <div class="invest-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0;">📊 ANALYSE LIVE</h3>
+            <div style="background:var(--success); width:8px; height:8px; border-radius:50%;"></div>
+        </div>
+        <p style="font-size:14px; opacity:0.8; margin:15px 0 5px 0;">Valeur estimée :</p>
+        <span class="val-display" id="liveVal">450 023 573 FCFA</span>
+        
+        <div class="chart-container">
+            <div class="chart-bar" style="height:35%"></div>
+            <div class="chart-bar" style="height:55%"></div>
+            <div class="chart-bar" style="height:45%"></div>
+            <div class="chart-bar" style="height:95%; background:var(--gold); box-shadow: 0 0 15px var(--gold);"></div>
+        </div>
+        <p style="font-size:10px; color:#45a29e; font-family:monospace;">> Statut : Serveurs Opérationnels</p>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:20px; border:1px solid #ddd; text-align:center;">
+        <h4 style="margin:0 0 15px 0;">💰 SIMULATEUR DE PROFITS</h4>
+        <input type="number" id="profitInput" placeholder="50000000" style="width:100%; padding:15px; border-radius:10px; border:1px solid #ccc; margin-bottom:15px; font-size:16px;">
+        <button onclick="runCalculation()" style="width:100%; padding:15px; background:var(--dark); color:white; border:none; border-radius:10px; font-weight:bold; font-size:16px;">CALCULER RENDEMENT</button>
+        <p id="profitResult" style="margin-top:15px; color:var(--primary); font-weight:bold; font-size:18px; display:none;"></p>
+    </div>
+</div>
+
+<!-- 7. NAVIGATION -->
 <div class="nav">
-    <div class="nav-link active" onclick="tab('homeView', this)">🏠<br>FIL D'ACTU</div>
-    <div class="nav-link" onclick="tab('marketView', this)">🏪<br>LE MARCHÉ</div>
-    <div class="nav-link" style="color:var(--gold);" onclick="tab('investView', this)">💰<br>INVESTIR</div>
+    <div class="nav-link active" onclick="switchTab('homeView', this)">🏠<br>FIL D'ACTU</div>
+    <div class="nav-link" onclick="switchTab('marketView', this)">🏪<br>LE MARCHÉ</div>
+    <div class="nav-link gold" onclick="switchTab('investView', this)">💰<br>INVESTIR</div>
     <div class="nav-link">☰<br>MENU</div>
 </div>
 
 <script>
-    // SÉCURITÉ BIOMÉTRIQUE
+    // GESTIONNAIRE DE L'INTERFACE
     window.onload = function() {
-        const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-        const icon = document.getElementById('bioIcon');
-        if (isIOS) { icon.innerText = "🆔"; document.getElementById('bioText').innerText = "Face ID pour Auto Global"; }
-        else { icon.innerText = "🖐️"; }
-    }
-
-    function unlockApp() {
-        const status = document.getElementById('bioText');
-        status.innerText = "Analyse...";
-        setTimeout(() => {
-            document.getElementById('biometricOverlay').style.display = 'none';
-        }, 1000);
-    }
-
-    // GESTION NAVIGATION
-    function tab(id, el) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
-        document.getElementById(id).classList.add('active-view');
-        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-        el.classList.add('active');
-    }
-
-    // LOGIQUE FINANCIÈRE
-    function calc() {
-        const val = document.getElementById('amt').value;
-        if(val) {
-            const profit = val * 1.30;
-            document.getElementById('res').innerText = "Profit estimé : " + profit.toLocaleString() + " FCFA";
+        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+            document.getElementById('bioIcon').innerText = "🆔";
+            document.getElementById('bioStatus').innerText = "Face ID pour S.E.G GLOBAL";
         }
     }
 
-    // Mise à jour live de la valeur
+    function unlockApp() {
+        const overlay = document.getElementById('biometricOverlay');
+        document.getElementById('bioStatus').innerText = "Vérification...";
+        setTimeout(() => { 
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 500);
+            showNotif("SYSTÈME", "Accès administrateur Stève validé.");
+        }, 800);
+    }
+
+    function switchTab(viewId, element) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
+        document.getElementById(viewId).classList.add('active-view');
+        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    function showNotif(title, msg) {
+        const toast = document.getElementById('notificationToast');
+        document.getElementById('notifTitle').innerText = title.toUpperCase();
+        document.getElementById('notifMsg').innerText = msg;
+        toast.style.top = '10px';
+        setTimeout(() => { toast.style.top = '-100px'; }, 3500);
+    }
+
+    function runCalculation() {
+        const val = document.getElementById('profitInput').value || 50000000;
+        const result = val * 1.30;
+        const resDiv = document.getElementById('profitResult');
+        resDiv.style.display = 'block';
+        resDiv.innerText = "Profit estimé : " + Math.floor(result).toLocaleString() + " FCFA";
+        showNotif("FINANCE", "Simulation terminée avec succès.");
+    }
+
+    // MISE À JOUR DE LA VALEUR (REAL-TIME)
     setInterval(() => {
-        const base = 450000000;
-        const fluct = Math.floor(Math.random() * 100000);
-        document.getElementById('liveVal').innerText = (base + fluct).toLocaleString() + " FCFA";
-    }, 4000);
+        const base = 450023573;
+        const drift = Math.floor(Math.random() * 20000);
+        document.getElementById('liveVal').innerText = (base + drift).toLocaleString() + " FCFA";
+    }, 3000);
 </script>
 
 </body>
