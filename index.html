@@ -3,141 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Futur du Shopping</title>
+    <title>S.E.G GLOBAL - L'Empire du Futur</title>
     <style>
         :root {
-            --bg-dark: #050a18;
-            --accent-purple: #6c5ce7;
-            --accent-blue: #00f3ff;
-            --card-bg: rgba(255, 255, 255, 0.05);
+            --bg-dark: #02050e;
+            --neon-purple: #8a2be2;
+            --neon-blue: #00d4ff;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
         body, html {
-            margin: 0; padding: 0; height: 100%;
+            margin: 0; padding: 0; min-height: 100%;
             background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% -10%, rgba(138, 43, 226, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(0, 212, 255, 0.15) 0%, transparent 40%);
             color: white; font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
 
-        /* FOND LUMIÈRE DERRIÈRE (Effet Cyberpunk) */
-        .background-lights {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.15) 0%, transparent 40%);
-            z-index: -1;
+        /* HEADER ANALYSE (Image_222) */
+        .header-stats {
+            margin: 15px; padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        .val-money {
+            font-size: 1.6em; font-weight: 800; color: var(--neon-blue);
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
         }
 
-        /* HEADER */
-        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .user-greeting { font-size: 0.9em; opacity: 0.7; }
-        .main-title { font-size: 1.5em; font-weight: bold; margin: 10px 0; }
-
-        /* BARRE DE RECHERCHE */
-        .search-bar {
-            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px; padding: 12px; margin: 0 20px;
-            display: flex; align-items: center; backdrop-filter: blur(10px);
-        }
-        .search-bar input { background: none; border: none; color: white; width: 100%; outline: none; }
-
-        /* BANNIÈRE TECHNOLOGIE (Comme sur ton image) */
+        /* BANNIÈRE VIOLETTE (Futuriste) */
         .hero-banner {
             margin: 20px; padding: 25px;
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-            border-radius: 25px; border: 1px solid var(--accent-purple);
-            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #2a1b5d 0%, #160d35 100%);
+            border-radius: 30px;
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.3);
         }
-        .hero-banner h3 { margin: 0; font-size: 1.2em; color: var(--accent-blue); }
-        .hero-banner p { font-size: 0.8em; margin: 10px 0; opacity: 0.8; }
         .btn-discover {
-            background: rgba(255,255,255,0.1); border: 1px solid white;
-            color: white; padding: 8px 20px; border-radius: 20px; font-size: 0.8em;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white; padding: 10px 25px;
+            border-radius: 15px; font-weight: bold; margin-top: 15px;
         }
 
-        /* CATÉGORIES NÉON */
-        .categories { display: flex; justify-content: space-around; padding: 20px; }
-        .cat-item { text-align: center; font-size: 0.7em; }
+        /* BOUTONS CATÉGORIES (Relief & Néon) */
+        .categories { display: flex; justify-content: space-around; padding: 20px 10px; }
+        .cat-item { text-align: center; font-size: 0.75em; opacity: 0.9; }
         .cat-icon {
-            width: 50px; height: 50px; border-radius: 50%;
-            background: var(--card-bg); display: flex; align-items: center;
-            justify-content: center; margin-bottom: 5px; border: 1px solid rgba(255,255,255,0.1);
+            width: 60px; height: 60px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.07);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.05), 0 8px 20px rgba(0,0,0,0.6);
+            font-size: 1.6em; transition: 0.3s;
         }
 
-        /* OFFRES DU JOUR */
-        .offers-section { padding: 0 20px; }
-        .offers-header { display: flex; justify-content: space-between; align-items: center; }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; padding-bottom: 100px; }
-        .product-card {
-            background: var(--card-bg); border-radius: 20px; padding: 15px;
-            border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(5px);
+        /* BOUTON COFFRE-FORT BLEU */
+        .btn-vault {
+            width: 90%; margin: 10px 5%;
+            background: #007bff; color: white;
+            padding: 18px; border: none; border-radius: 15px;
+            font-weight: bold; font-size: 1em;
+            box-shadow: 0 5px 20px rgba(0,123,255,0.4);
         }
-        .prod-img { width: 100%; height: 100px; background: rgba(0,0,0,0.3); border-radius: 15px; margin-bottom: 10px; }
-        .prod-price { color: var(--accent-blue); font-weight: bold; }
 
-        /* BARRE DE NAVIGATION (FIXE) */
+        /* NAV BAR FIXE */
         .nav-bar {
-            position: fixed; bottom: 0; width: 100%; height: 75px;
-            background: rgba(10, 10, 30, 0.95); backdrop-filter: blur(20px);
+            position: fixed; bottom: 0; width: 100%; height: 80px;
+            background: rgba(2, 5, 14, 0.95);
+            backdrop-filter: blur(20px);
             display: flex; justify-content: space-around; align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
-        .nav-item { text-align: center; font-size: 0.7em; opacity: 0.6; }
-        .nav-item.active { opacity: 1; color: var(--accent-purple); }
+        .nav-item { text-align: center; font-size: 0.7em; color: #888; }
+        .nav-item.active { color: var(--neon-blue); }
     </style>
 </head>
 <body>
-    <div class="background-lights"></div>
 
-    <div class="header">
-        <div class="user-greeting">Bonjour, Stève 👋</div>
-        <div style="font-size: 1.2em;">🔔</div>
+    <div class="header-stats">
+        <div style="font-size: 0.8em; opacity: 0.7;">📊 ANALYSE LIVE</div>
+        <div class="val-money">450 173 947 FCFA</div>
+        <div style="font-size: 0.65em; opacity: 0.5;">Objectif : 500 Milliards</div>
     </div>
 
-    <div class="main-title" style="padding: 0 20px;">Découvrez le futur du shopping</div>
-
-    <div class="search-bar">
-        <span style="margin-right: 10px;">🔍</span>
-        <input type="text" placeholder="Rechercher un produit, une marque...">
-    </div>
+    <div style="padding: 0 20px; font-weight: bold; font-size: 1.4em;">Découvrez le futur</div>
 
     <div class="hero-banner">
-        <h3>Technologie<br>nouvelle génération</h3>
-        <p>Performance. Style. Innovation.</p>
+        <h3 style="margin:0; color: var(--neon-blue);">S.E.G GLOBAL</h3>
+        <p style="font-size: 0.85em; opacity: 0.8;">Technologie nouvelle génération. Performance et Innovation au Cameroun.</p>
         <button class="btn-discover">Découvrir →</button>
     </div>
 
     <div class="categories">
-        <div class="cat-item"><div class="cat-icon" style="color: #00f3ff;">📱</div>Électronique</div>
-        <div class="cat-item"><div class="cat-icon" style="color: #ff7675;">👕</div>Mode</div>
-        <div class="cat-item"><div class="cat-icon" style="color: #fab1a0;">🏠</div>Maison</div>
-        <div class="cat-item"><div class="cat-icon" style="color: #fd79a8;">💄</div>Beauté</div>
+        <div class="cat-item"><div class="cat-icon" style="border-color: #00f3ff;">📱</div>Électronique</div>
+        <div class="cat-item"><div class="cat-icon" style="border-color: #ff7675;">👕</div>Mode</div>
+        <div class="cat-item"><div class="cat-icon" style="border-color: #fab1a0;">🏠</div>Maison</div>
+        <div class="cat-item"><div class="cat-icon" style="border-color: #fd79a8;">💄</div>Beauté</div>
     </div>
 
-    <div class="offers-section">
-        <div class="offers-header">
-            <span>Offres du jour</span>
-            <span style="color: var(--accent-purple); font-size: 0.8em;">Voir tout</span>
-        </div>
-        <div class="product-grid">
-            <div class="product-card">
-                <div class="prod-img"></div>
-                <div style="font-size: 0.8em; opacity: 0.8;">Casque X Sound</div>
-                <div class="prod-price">59,99 €</div>
-            </div>
-            <div class="product-card">
-                <div class="prod-img"></div>
-                <div style="font-size: 0.8em; opacity: 0.8;">Smartwatch Ultra</div>
-                <div class="prod-price">84,99 €</div>
-            </div>
-        </div>
-    </div>
+    <button class="btn-vault">🔐 DÉVERROUILLER COFFRE-FORT</button>
+
+    <div style="padding-bottom: 100px;"></div>
 
     <nav class="nav-bar">
         <div class="nav-item active">🏠<br>Accueil</div>
-        <div class="nav-item">🔲<br>Catégories</div>
-        <div class="nav-item">🛒<br>Panier</div>
+        <div class="nav-item">🛒<br>Marché</div>
+        <div class="nav-item">💎<br>Luxe</div>
         <div class="nav-item">👤<br>Compte</div>
     </nav>
+
 </body>
 </html>
