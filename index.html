@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Interactif</title>
+    <title>S.E.G GLOBAL - Empire Technologique</title>
     <style>
         :root {
             --bg-dark: #02050e;
@@ -19,16 +19,16 @@
                 radial-gradient(circle at 50% -10%, rgba(138, 43, 226, 0.25) 0%, transparent 50%),
                 radial-gradient(circle at 0% 100%, rgba(0, 212, 255, 0.15) 0%, transparent 40%);
             color: white; font-family: 'Inter', sans-serif;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* SYSTÈME DE PAGES */
-        .page { display: none; height: calc(100% - 80px); overflow-y: auto; padding: 15px; }
+        /* NAVIGATION PAGES */
+        .page { display: none; min-height: calc(100% - 85px); padding: 15px; padding-bottom: 100px; }
         .page.active { display: block; animation: fadeIn 0.3s ease-in-out; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HEADER ANALYSE (Image_227) */
+        /* HEADER STATS (image_228.png) */
         .header-stats {
             margin-bottom: 20px; padding: 15px;
             background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px);
@@ -36,45 +36,57 @@
             text-align: center;
         }
         .val-money {
-            font-size: 1.6em; font-weight: 800; color: var(--neon-blue);
+            font-size: 1.8em; font-weight: 800; color: var(--neon-blue);
             text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
         }
 
-        /* BOUTONS CATÉGORIES */
-        .categories { display: flex; justify-content: space-around; margin: 20px 0; }
+        /* BOUTONS CATÉGORIES ET ÉLÉMENTS VISUELS */
+        .categories { display: flex; justify-content: space-around; margin: 25px 0; }
+        .cat-item { text-align: center; font-size: 0.8em; }
         .cat-icon {
-            width: 60px; height: 60px; border-radius: 50%;
+            width: 65px; height: 65px; border-radius: 50%;
             background: rgba(255, 255, 255, 0.07); display: flex;
             align-items: center; justify-content: center;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6); font-size: 1.6em;
-            cursor: pointer; transition: 0.2s;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6); font-size: 1.8em;
+            cursor: pointer; transition: 0.2s; margin-bottom: 8px;
         }
         .cat-icon:active { transform: scale(0.9); border-color: var(--neon-blue); }
 
-        /* BOUTON COFFRE-FORT */
-        .btn-vault {
-            width: 100%; background: #007bff; color: white;
-            padding: 18px; border: none; border-radius: 15px;
-            font-weight: bold; font-size: 1em; cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0,123,255,0.4);
+        /* BOUTONS ACTION */
+        .btn-main {
+            width: 100%; padding: 18px; border: none; border-radius: 15px;
+            font-weight: bold; font-size: 1em; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
+        .btn-vault { background: #007bff; color: white; box-shadow: 0 5px 20px rgba(0,123,255,0.4); }
         .btn-vault:active { background: #0056b3; }
 
-        /* NAV BAR FIXE */
+        /* FORMULAIRES */
+        .seg-form {
+            background: rgba(255,255,255,0.03); padding: 20px;
+            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); margin-top: 20px;
+        }
+        input {
+            width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px;
+            border: 1px solid #333; background: #111; color: white; box-sizing: border-box;
+        }
+
+        /* BARRE DE NAVIGATION INFÉRIEURE */
         .nav-bar {
-            position: fixed; bottom: 0; width: 100%; height: 80px;
+            position: fixed; bottom: 0; width: 100%; height: 85px;
             background: rgba(2, 5, 14, 0.95); backdrop-filter: blur(20px);
             display: flex; justify-content: space-around; align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000;
         }
-        .nav-item { text-align: center; font-size: 0.7em; color: #888; cursor: pointer; }
+        .nav-item { text-align: center; font-size: 0.75em; color: #888; cursor: pointer; transition: 0.3s; }
         .nav-item.active { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+        .nav-item div { font-size: 1.5em; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <!-- PAGE ACCUEIL -->
+    <!-- PAGE 1: ACCUEIL (Basé sur image_228.png) -->
     <div id="home" class="page active">
         <div class="header-stats">
             <div style="font-size: 0.8em; opacity: 0.7;">📊 ANALYSE LIVE</div>
@@ -82,60 +94,104 @@
             <div style="font-size: 0.65em; opacity: 0.5;">Objectif : 500 Milliards</div>
         </div>
 
-        <h2>Découvrez le futur</h2>
+        <h1 style="font-weight: 800; font-size: 1.8em; margin-bottom: 20px;">Découvrez le futur</h1>
         
-        <div style="background: linear-gradient(135deg, #2a1b5d 0%, #160d35 100%); padding: 25px; border-radius: 30px; border: 2px solid var(--neon-purple);">
-            <h3 style="margin:0; color: var(--neon-blue);">S.E.G GLOBAL</h3>
-            <p style="font-size: 0.85em; opacity: 0.8;">Empire technologique et financier au Cameroun.</p>
-            <button style="background:rgba(255,255,255,0.1); border:1px solid white; color:white; padding:8px 15px; border-radius:10px;">Découvrir →</button>
+        <div style="background: linear-gradient(135deg, #2a1b5d 0%, #160d35 100%); padding: 25px; border-radius: 30px; border: 2px solid var(--neon-purple); position: relative; overflow: hidden; margin-bottom: 30px;">
+            <h2 style="margin:0; color: var(--neon-blue); font-size: 1.4em;">S.E.G GLOBAL</h2>
+            <p style="font-size: 0.9em; opacity: 0.8; line-height: 1.4;">Empire technologique et financier au Cameroun.</p>
+            <button style="background:rgba(255,255,255,0.1); border:1px solid white; color:white; padding:10px 20px; border-radius:12px; cursor:pointer;">Découvrir →</button>
         </div>
 
         <div class="categories">
-            <div class="cat-item" onclick="alert('Catégorie Électronique active')"><div class="cat-icon">📱</div>Électronique</div>
-            <div class="cat-item" onclick="alert('Catégorie Mode active')"><div class="cat-icon">👕</div>Mode</div>
-            <div class="cat-item" onclick="alert('Catégorie Maison active')"><div class="cat-icon">🏠</div>Maison</div>
+            <div class="cat-item"><div class="cat-icon" onclick="showPage('market', document.querySelector('.nav-item:nth-child(2)'))">📱</div>Électronique</div>
+            <div class="cat-item"><div class="cat-icon">👕</div>Mode</div>
+            <div class="cat-item"><div class="cat-icon">🏠</div>Maison</div>
         </div>
 
-        <button class="btn-vault" onclick="alert('Coffre-fort S.E.G Global Sécurisé')">🔐 DÉVERROUILLER COFFRE-FORT</button>
+        <button class="btn-main btn-vault" onclick="showPage('vault', document.querySelector('.nav-item:nth-child(3)'))">
+            🔐 DÉVERROUILLER COFFRE-FORT
+        </button>
     </div>
 
-    <!-- PAGE MARCHÉ (Contenu vide pour l'instant) -->
+    <!-- PAGE 2: MARCHÉ (Vente & Inscription) -->
     <div id="market" class="page">
-        <h2 style="padding: 20px;">🛒 Marché Global</h2>
-        <p style="padding: 0 20px; opacity: 0.7;">Ici, vos clients pourront voir tous les produits.</p>
+        <h2 style="color: var(--neon-blue);">🛒 Marché Global</h2>
+        
+        <div class="seg-form">
+            <h3 style="margin-top: 0;">🚀 Publier une annonce</h3>
+            <p style="font-size: 0.8em; opacity: 0.7;">Vendez vos produits. S.E.G prélève 10% de commission pour garantir la sécurité.</p>
+            
+            <input type="text" placeholder="Nom de l'article">
+            <input type="number" id="price-input" oninput="calculerCom()" placeholder="Prix (FCFA)">
+            
+            <div id="com-info" style="font-size: 0.8em; color: var(--neon-purple); margin: 5px 0 15px;">
+                Commission (10%) : 0 FCFA | Net : 0 FCFA
+            </div>
+
+            <button onclick="alert('Annonce envoyée pour validation')" style="width:100%; background: var(--neon-blue); color:black; border:none; padding:15px; border-radius:12px; font-weight:bold;">PUBLIER L'ANNONCE</button>
+        </div>
     </div>
 
-    <!-- PAGE LUXE -->
-    <div id="luxe" class="page">
-        <h2 style="padding: 20px;">💎 Secteur Luxe</h2>
-        <p style="padding: 0 20px; opacity: 0.7;">Extraction et commerce de pierres précieuses.</p>
+    <!-- PAGE 3: COFFRE-FORT (Finances & Retraits) -->
+    <div id="vault" class="page">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="font-size: 4em; margin-bottom: 10px;">🔐</div>
+            <h2 style="color: var(--neon-blue); margin: 0;">Coffre-Fort S.E.G</h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+            <div style="background: rgba(46, 204, 113, 0.1); padding: 20px; border-radius: 20px; border: 1px solid #2ecc71;">
+                <div style="font-size: 0.7em; opacity: 0.8;">DISPONIBLE</div>
+                <div style="font-size: 1.2em; font-weight: bold; color: #2ecc71;">90 000 FCFA</div>
+            </div>
+            <div style="background: rgba(138, 43, 226, 0.1); padding: 20px; border-radius: 20px; border: 1px solid var(--neon-purple);">
+                <div style="font-size: 0.7em; opacity: 0.8;">COMMISSIONS</div>
+                <div style="font-size: 1.2em; font-weight: bold; color: var(--neon-purple);">10 000 FCFA</div>
+            </div>
+        </div>
+
+        <div class="seg-form" style="text-align: center;">
+            <p style="font-size: 0.85em; margin-bottom: 15px;">Entrez votre PIN pour retirer vers MoMo/Orange</p>
+            <input type="password" placeholder="****" style="text-align: center; font-size: 1.5em; letter-spacing: 5px;">
+            <button onclick="alert('Demande de retrait transmise')" class="btn-main btn-vault" style="margin-top: 10px; background: var(--neon-blue); color: black;">CONFIRMER LE RETRAIT</button>
+        </div>
     </div>
 
-    <!-- PAGE COMPTE -->
+    <!-- PAGE 4: COMPTE -->
     <div id="account" class="page">
-        <h2 style="padding: 20px;">👤 Mon Profil</h2>
-        <p style="padding: 0 20px; opacity: 0.7;">Bienvenue Stève, fondateur de S.E.G GLOBAL.</p>
+        <h2 style="color: var(--neon-blue);">👤 Mon Profil Empire</h2>
+        <div style="padding: 20px; background: var(--glass); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+            <div style="font-size: 1.2em; font-weight: bold;">Stève - Fondateur</div>
+            <div style="font-size: 0.8em; color: var(--neon-blue);">S.E.G GLOBAL Official</div>
+            <hr style="margin: 20px 0; opacity: 0.1;">
+            <p>Ici s'afficheront les réglages de votre boutique et vos informations personnelles.</p>
+        </div>
     </div>
 
-    <!-- BARRE DE NAVIGATION -->
+    <!-- NAVIGATION BAR -->
     <nav class="nav-bar">
-        <div class="nav-item active" onclick="showPage('home', this)">🏠<br>Accueil</div>
-        <div class="nav-item" onclick="showPage('market', this)">🛒<br>Marché</div>
-        <div class="nav-item" onclick="showPage('luxe', this)">💎<br>Luxe</div>
-        <div class="nav-item" onclick="showPage('account', this)">👤<br>Compte</div>
+        <div class="nav-item active" onclick="showPage('home', this)"><div>🏠</div>Accueil</div>
+        <div class="nav-item" onclick="showPage('market', this)"><div>🛒</div>Marché</div>
+        <div class="nav-item" onclick="showPage('vault', this)"><div>💎</div>Luxe</div>
+        <div class="nav-item" onclick="showPage('account', this)"><div>👤</div>Compte</div>
     </nav>
 
     <script>
         function showPage(pageId, element) {
-            // Cacher toutes les pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Retirer le style "actif" de tous les boutons
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            
-            // Afficher la page demandée
             document.getElementById(pageId).classList.add('active');
-            // Mettre le bouton en bleu néon
             element.classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function calculerCom() {
+            const p = document.getElementById('price-input').value;
+            if(p > 0) {
+                const c = p * 0.1;
+                const n = p - c;
+                document.getElementById('com-info').innerHTML = `Commission (10%) : ${c.toLocaleString()} F | Net : ${n.toLocaleString()} F`;
+            }
         }
     </script>
 
