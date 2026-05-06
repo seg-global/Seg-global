@@ -1,93 +1,139 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Accueil Pro</title>
-    <style>
-        :root { --neon: #00f3ff; --glass: rgba(255, 255, 255, 0.1); }
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #000; color: white; overflow: hidden; }
-        
-        /* FOND CIEL ET SOLEIL */
-        .sky-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, #4facfe, #00f2fe); z-index: -1; }
-        .sun { position: absolute; top: 5%; right: 10%; width: 80px; height: 80px; background: radial-gradient(circle, #fff700 0%, transparent 75%); filter: blur(15px); }
+import 'package:flutter/material.dart';
 
-        /* ANALYSE LIVE (image_222.png) */
-        .header-stats { margin: 15px auto; width: 90%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid #444; padding: 15px; text-align: center; }
-        .val-money { font-size: 1.5em; font-weight: bold; color: #3884ff; text-shadow: 0 0 10px rgba(56,132,255,0.5); }
+void main() {
+  runApp(MyApp());
+}
 
-        /* CONTENU ACCUEIL */
-        .page { height: 75vh; overflow-y: auto; padding: 15px; scrollbar-width: none; }
-        .welcome-text { font-size: 1.4em; font-weight: bold; margin: 20px 0 10px 0; }
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
+}
 
-        /* SECTION VENTE (SCROLL HORIZONTAL) */
-        .promo-title { margin-top: 25px; font-size: 1.1em; border-left: 4px solid var(--neon); padding-left: 10px; }
-        .promo-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 15px 5px; scroll-snap-type: x mandatory; }
-        .item-card { 
-            min-width: 160px; background: rgba(255,255,255,0.1); border: 1px solid var(--neon); 
-            border-radius: 15px; padding: 10px; text-align: center; backdrop-filter: blur(5px);
-            scroll-snap-align: start; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .item-box { height: 110px; background: #222; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.7em; color: #666; }
-        .price-tag { color: #FFD700; font-weight: bold; font-size: 1.1em; display: block; margin-top: 5px; }
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF0A0F2C),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text("Bienvenue 👋"),
+        actions: [
+          Icon(Icons.notifications),
+          SizedBox(width: 10),
+          CircleAvatar(
+            backgroundImage: NetworkImage(
+              "https://i.pravatar.cc/150"
+            ),
+          ),
+          SizedBox(width: 10),
+        ],
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: ListView(
+          children: [
+            // 🔍 Barre de recherche
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              decoration: BoxDecoration(
+                color: Colors.white10,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: TextField(
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: "Rechercher un produit...",
+                  hintStyle: TextStyle(color: Colors.white54),
+                  border: InputBorder.none,
+                  icon: Icon(Icons.search, color: Colors.white),
+                ),
+              ),
+            ),
 
-        /* BOUTON COFFRE-FORT (image_222.png) */
-        .btn-blue-action { width: 100%; background: #007bff; color: white; padding: 15px; border: none; border-radius: 12px; font-weight: bold; font-size: 1em; cursor: pointer; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,123,255,0.4); }
+            SizedBox(height: 20),
 
-        /* NAVIGATION BAS */
-        .nav-bar { position: fixed; bottom: 0; width: 100%; height: 75px; background: rgba(0,0,0,0.9); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #333; }
-        .nav-btn { text-align: center; font-size: 0.75em; color: #888; text-decoration: none; }
-        .nav-btn.active { color: var(--neon); }
-    </style>
-</head>
-<body>
-    <div class="sky-bg"><div class="sun"></div></div>
+            // 🔥 Bannière futuriste
+            Container(
+              height: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                  colors: [Colors.purple, Colors.blue],
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  "Shopping du futur 🚀",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+              ),
+            ),
 
-    <div class="header-stats">
-        <div>📊 ANALYSE LIVE</div>
-        <div class="val-money" id="live-money">450 173 947 FCFA</div>
-        <div style="font-size: 0.7em; color: #888;">Objectif : 500 Milliards</div>
-    </div>
+            SizedBox(height: 20),
 
-    <div class="page" id="home-page">
-        <div class="welcome-text">Bienvenue sur S.E.G GLOBAL</div>
-        <div style="color: #ccc; font-size: 0.9em;">Votre empire technologique et financier au Cameroun.</div>
+            // 🛍️ Produits
+            Text(
+              "Offres du jour",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold
+              ),
+            ),
 
-        <button class="btn-blue-action">🔐 DÉVERROUILLER COFFRE-FORT</button>
+            SizedBox(height: 10),
 
-        <div class="promo-title">NOS MEILLEURES VENTES</div>
-        <div class="promo-scroll">
-            <div class="item-card">
-                <div class="item-box">PHOTO ARTICLE</div>
-                <span>Article Premium</span>
-                <span class="price-tag">25 000 FCFA</span>
-            </div>
-            <div class="item-card">
-                <div class="item-box">PHOTO ARTICLE</div>
-                <span>Luxe SEG Global</span>
-                <span class="price-tag">150 000 FCFA</span>
-            </div>
-            <div class="item-card">
-                <div class="item-box">PHOTO ARTICLE</div>
-                <span>Pack Entrepreneur</span>
-                <span class="price-tag">75 000 FCFA</span>
-            </div>
-        </div>
-    </div>
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                productCard("Casque", "50€"),
+                productCard("Montre", "80€"),
+              ],
+            ),
+          ],
+        ),
+      ),
 
-    <nav class="nav-bar">
-        <div class="nav-btn active">🏠<br>Accueil</div>
-        <div class="nav-btn">🛒<br>Marché</div>
-        <div class="nav-btn">💎<br>Luxe</div>
-        <div class="nav-btn">👤<br>Compte</div>
-    </nav>
+      // 🔽 Menu bas
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.black,
+        selectedItemColor: Colors.purple,
+        unselectedItemColor: Colors.white54,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Accueil"),
+          BottomNavigationBarItem(icon: Icon(Icons.category), label: "Catégories"),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Panier"),
+        ],
+      ),
+    );
+  }
 
-    <script>
-        let money = 450173947;
-        setInterval(() => {
-            money += Math.floor(Math.random() * 5000);
-            document.getElementById('live-money').innerText = money.toLocaleString() + " FCFA";
-        }, 3000);
-    </script>
-</body>
-</html>
+  Widget productCard(String name, String price) {
+    return Container(
+      width: 150,
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white10,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        children: [
+          Icon(Icons.shopping_bag, size: 50, color: Colors.white),
+          SizedBox(height: 10),
+          Text(name, style: TextStyle(color: Colors.white)),
+          Text(price, style: TextStyle(color: Colors.purple)),
+        ],
+      ),
+    );
+  }
+}
