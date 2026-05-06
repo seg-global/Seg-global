@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - L'Empire du Futur</title>
+    <title>S.E.G GLOBAL - Empire Interactif</title>
     <style>
         :root {
             --bg-dark: #02050e;
@@ -13,22 +13,26 @@
         }
 
         body, html {
-            margin: 0; padding: 0; min-height: 100%;
+            margin: 0; padding: 0; height: 100%;
             background-color: var(--bg-dark);
             background-image: 
                 radial-gradient(circle at 50% -10%, rgba(138, 43, 226, 0.25) 0%, transparent 50%),
                 radial-gradient(circle at 0% 100%, rgba(0, 212, 255, 0.15) 0%, transparent 40%);
             color: white; font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* HEADER ANALYSE (Image_222) */
+        /* SYSTÈME DE PAGES */
+        .page { display: none; height: calc(100% - 80px); overflow-y: auto; padding: 15px; }
+        .page.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* HEADER ANALYSE (Image_227) */
         .header-stats {
-            margin: 15px; padding: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px; padding: 15px;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px);
+            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
             text-align: center;
         }
         .val-money {
@@ -36,88 +40,104 @@
             text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
         }
 
-        /* BANNIÈRE VIOLETTE (Futuriste) */
-        .hero-banner {
-            margin: 20px; padding: 25px;
-            background: linear-gradient(135deg, #2a1b5d 0%, #160d35 100%);
-            border-radius: 30px;
-            border: 2px solid rgba(138, 43, 226, 0.5);
-            box-shadow: 0 0 25px rgba(138, 43, 226, 0.3);
-        }
-        .btn-discover {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white; padding: 10px 25px;
-            border-radius: 15px; font-weight: bold; margin-top: 15px;
-        }
-
-        /* BOUTONS CATÉGORIES (Relief & Néon) */
-        .categories { display: flex; justify-content: space-around; padding: 20px 10px; }
-        .cat-item { text-align: center; font-size: 0.75em; opacity: 0.9; }
+        /* BOUTONS CATÉGORIES */
+        .categories { display: flex; justify-content: space-around; margin: 20px 0; }
         .cat-icon {
             width: 60px; height: 60px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.07);
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.07); display: flex;
+            align-items: center; justify-content: center;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: inset 0 0 10px rgba(255,255,255,0.05), 0 8px 20px rgba(0,0,0,0.6);
-            font-size: 1.6em; transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6); font-size: 1.6em;
+            cursor: pointer; transition: 0.2s;
         }
+        .cat-icon:active { transform: scale(0.9); border-color: var(--neon-blue); }
 
-        /* BOUTON COFFRE-FORT BLEU */
+        /* BOUTON COFFRE-FORT */
         .btn-vault {
-            width: 90%; margin: 10px 5%;
-            background: #007bff; color: white;
+            width: 100%; background: #007bff; color: white;
             padding: 18px; border: none; border-radius: 15px;
-            font-weight: bold; font-size: 1em;
+            font-weight: bold; font-size: 1em; cursor: pointer;
             box-shadow: 0 5px 20px rgba(0,123,255,0.4);
         }
+        .btn-vault:active { background: #0056b3; }
 
         /* NAV BAR FIXE */
         .nav-bar {
             position: fixed; bottom: 0; width: 100%; height: 80px;
-            background: rgba(2, 5, 14, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(2, 5, 14, 0.95); backdrop-filter: blur(20px);
             display: flex; justify-content: space-around; align-items: center;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
-        .nav-item { text-align: center; font-size: 0.7em; color: #888; }
-        .nav-item.active { color: var(--neon-blue); }
+        .nav-item { text-align: center; font-size: 0.7em; color: #888; cursor: pointer; }
+        .nav-item.active { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
     </style>
 </head>
 <body>
 
-    <div class="header-stats">
-        <div style="font-size: 0.8em; opacity: 0.7;">📊 ANALYSE LIVE</div>
-        <div class="val-money">450 173 947 FCFA</div>
-        <div style="font-size: 0.65em; opacity: 0.5;">Objectif : 500 Milliards</div>
+    <!-- PAGE ACCUEIL -->
+    <div id="home" class="page active">
+        <div class="header-stats">
+            <div style="font-size: 0.8em; opacity: 0.7;">📊 ANALYSE LIVE</div>
+            <div class="val-money">450 173 947 FCFA</div>
+            <div style="font-size: 0.65em; opacity: 0.5;">Objectif : 500 Milliards</div>
+        </div>
+
+        <h2>Découvrez le futur</h2>
+        
+        <div style="background: linear-gradient(135deg, #2a1b5d 0%, #160d35 100%); padding: 25px; border-radius: 30px; border: 2px solid var(--neon-purple);">
+            <h3 style="margin:0; color: var(--neon-blue);">S.E.G GLOBAL</h3>
+            <p style="font-size: 0.85em; opacity: 0.8;">Empire technologique et financier au Cameroun.</p>
+            <button style="background:rgba(255,255,255,0.1); border:1px solid white; color:white; padding:8px 15px; border-radius:10px;">Découvrir →</button>
+        </div>
+
+        <div class="categories">
+            <div class="cat-item" onclick="alert('Catégorie Électronique active')"><div class="cat-icon">📱</div>Électronique</div>
+            <div class="cat-item" onclick="alert('Catégorie Mode active')"><div class="cat-icon">👕</div>Mode</div>
+            <div class="cat-item" onclick="alert('Catégorie Maison active')"><div class="cat-icon">🏠</div>Maison</div>
+        </div>
+
+        <button class="btn-vault" onclick="alert('Coffre-fort S.E.G Global Sécurisé')">🔐 DÉVERROUILLER COFFRE-FORT</button>
     </div>
 
-    <div style="padding: 0 20px; font-weight: bold; font-size: 1.4em;">Découvrez le futur</div>
-
-    <div class="hero-banner">
-        <h3 style="margin:0; color: var(--neon-blue);">S.E.G GLOBAL</h3>
-        <p style="font-size: 0.85em; opacity: 0.8;">Technologie nouvelle génération. Performance et Innovation au Cameroun.</p>
-        <button class="btn-discover">Découvrir →</button>
+    <!-- PAGE MARCHÉ (Contenu vide pour l'instant) -->
+    <div id="market" class="page">
+        <h2 style="padding: 20px;">🛒 Marché Global</h2>
+        <p style="padding: 0 20px; opacity: 0.7;">Ici, vos clients pourront voir tous les produits.</p>
     </div>
 
-    <div class="categories">
-        <div class="cat-item"><div class="cat-icon" style="border-color: #00f3ff;">📱</div>Électronique</div>
-        <div class="cat-item"><div class="cat-icon" style="border-color: #ff7675;">👕</div>Mode</div>
-        <div class="cat-item"><div class="cat-icon" style="border-color: #fab1a0;">🏠</div>Maison</div>
-        <div class="cat-item"><div class="cat-icon" style="border-color: #fd79a8;">💄</div>Beauté</div>
+    <!-- PAGE LUXE -->
+    <div id="luxe" class="page">
+        <h2 style="padding: 20px;">💎 Secteur Luxe</h2>
+        <p style="padding: 0 20px; opacity: 0.7;">Extraction et commerce de pierres précieuses.</p>
     </div>
 
-    <button class="btn-vault">🔐 DÉVERROUILLER COFFRE-FORT</button>
+    <!-- PAGE COMPTE -->
+    <div id="account" class="page">
+        <h2 style="padding: 20px;">👤 Mon Profil</h2>
+        <p style="padding: 0 20px; opacity: 0.7;">Bienvenue Stève, fondateur de S.E.G GLOBAL.</p>
+    </div>
 
-    <div style="padding-bottom: 100px;"></div>
-
+    <!-- BARRE DE NAVIGATION -->
     <nav class="nav-bar">
-        <div class="nav-item active">🏠<br>Accueil</div>
-        <div class="nav-item">🛒<br>Marché</div>
-        <div class="nav-item">💎<br>Luxe</div>
-        <div class="nav-item">👤<br>Compte</div>
+        <div class="nav-item active" onclick="showPage('home', this)">🏠<br>Accueil</div>
+        <div class="nav-item" onclick="showPage('market', this)">🛒<br>Marché</div>
+        <div class="nav-item" onclick="showPage('luxe', this)">💎<br>Luxe</div>
+        <div class="nav-item" onclick="showPage('account', this)">👤<br>Compte</div>
     </nav>
+
+    <script>
+        function showPage(pageId, element) {
+            // Cacher toutes les pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Retirer le style "actif" de tous les boutons
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            
+            // Afficher la page demandée
+            document.getElementById(pageId).classList.add('active');
+            // Mettre le bouton en bleu néon
+            element.classList.add('active');
+        }
+    </script>
 
 </body>
 </html>
