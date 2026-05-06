@@ -3,138 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - L'Empire Tout-en-Un</title>
+    <title>S.E.G GLOBAL - Marketplace</title>
     <style>
         :root {
             --neon-blue: #00f3ff;
-            --gold: #FFD700;
-            --glass: rgba(255, 255, 255, 0.2);
+            --glass: rgba(255, 255, 255, 0.15);
         }
 
         body, html {
             margin: 0; padding: 0; height: 100%;
-            background: #000; font-family: 'Segoe UI', sans-serif;
-            overflow: hidden; color: white;
+            font-family: 'Segoe UI', sans-serif; color: white;
+            overflow-x: hidden;
         }
 
-        /* FOND CIEL AVEC SOLEIL (image_218.png) */
+        /* FOND CIEL ET SOLEIL (IMAGE_218) */
         .sky-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
             z-index: -1;
         }
         .sun {
-            position: absolute; top: 5%; right: 5%; width: 120px; height: 120px;
-            background: radial-gradient(circle, #fff700 0%, transparent 75%);
-            filter: blur(20px);
+            position: absolute; top: 5%; right: 5%; width: 100px; height: 100px;
+            background: radial-gradient(circle, #fff700 0%, transparent 70%);
+            filter: blur(15px);
         }
 
-        /* 1. ANALYSE LIVE (Milliards visés) */
-        .section-card {
-            margin: 10px auto; width: 90%;
-            background: var(--glass); backdrop-filter: blur(15px);
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.3);
-            padding: 15px; text-align: center; z-index: 10;
+        /* ANALYSE LIVE */
+        .header-stats {
+            margin: 15px auto; width: 90%;
+            background: var(--glass); backdrop-filter: blur(10px);
+            border-radius: 15px; border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px; text-align: center;
         }
-        .live-value { font-size: 1.6em; font-weight: bold; color: #0047AB; text-decoration: underline; }
+        .live-value { font-size: 1.4em; font-weight: bold; color: #0047AB; }
 
-        /* 2. FLUX VIDÉO (TikTok / YouTube Style) */
-        .main-content {
-            height: 60vh; width: 95%; margin: 0 auto;
-            overflow-y: scroll; scroll-snap-type: y mandatory;
-            border: 3px solid var(--neon-blue); border-radius: 25px;
-            box-shadow: 0 0 20px var(--neon-blue);
-            position: relative; background: rgba(0,0,0,0.4);
+        /* GRILLE MARKETPLACE (ARTICLES) */
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 15px;
+            padding-bottom: 100px; /* Espace pour le menu bas */
         }
-        .video-container {
-            height: 100%; width: 100%; scroll-snap-align: start;
-            position: relative; display: flex; align-items: center; justify-content: center;
-        }
-        video { width: 100%; height: 100%; object-fit: cover; border-radius: 22px; }
 
-        /* INTERFACE VIDÉO */
-        .video-overlay {
-            position: absolute; right: 15px; bottom: 20px;
-            display: flex; flex-direction: column; gap: 15px;
-        }
-        .neon-circle {
-            width: 45px; height: 45px; border-radius: 50%;
-            border: 2px solid var(--neon-blue); background: rgba(0,0,0,0.3);
-            display: flex; align-items: center; justify-content: center;
+        .product-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--neon-blue);
+            border-radius: 15px;
+            overflow: hidden;
             box-shadow: 0 0 10px var(--neon-blue);
+            backdrop-filter: blur(5px);
         }
 
-        /* 3. COFFRE-FORT PRIVÉ & SIMULATEUR (image_218.png) */
-        .bottom-actions {
-            display: flex; flex-direction: column; gap: 10px; margin-top: 10px;
+        .product-img {
+            width: 100%;
+            height: 120px;
+            background: #333; /* Remplacer par l'image de l'article */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
         }
-        .btn-action {
-            width: 90%; margin: 0 auto; padding: 12px;
-            border-radius: 15px; border: none; font-weight: bold;
-            text-transform: uppercase; cursor: pointer;
-        }
-        .btn-unlock { background: #007bff; color: white; box-shadow: 0 4px 15px rgba(0,123,255,0.4); }
-        .btn-gold { background: var(--gold); color: #333; }
 
-        /* BARRE DE NAVIGATION (Facebook / Amazon / YouTube) */
-        .nav-bar {
-            position: fixed; bottom: 0; width: 100%; height: 60px;
-            background: rgba(255,255,255,0.1); backdrop-filter: blur(20px);
-            display: flex; justify-content: space-around; align-items: center;
-            border-top: 1px solid var(--neon-blue);
+        .product-info {
+            padding: 10px;
+            text-align: left;
         }
+
+        .product-price {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* ACTIONS BAS DE PAGE */
+        .footer-actions {
+            position: fixed; bottom: 0; width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            padding: 15px 0;
+            border-top: 2px solid var(--neon-blue);
+            display: flex; flex-direction: column; align-items: center;
+            gap: 10px;
+        }
+
+        .btn-main {
+            width: 90%; padding: 12px; border-radius: 10px;
+            border: none; font-weight: bold; cursor: pointer;
+        }
+        .btn-blue { background: #007bff; color: white; }
+
     </style>
 </head>
 <body>
 
     <div class="sky-bg"><div class="sun"></div></div>
 
-    <!-- ENTÊTE : ANALYSE LIVE -->
-    <div class="section-card">
-        <div style="font-weight: bold; color: #0047AB;">📊 ANALYSE LIVE</div>
-        <div class="live-value" id="main-counter">450 023 573 FCFA</div>
-        <div style="font-size: 0.8em; color: #444;">Objectif : 500 Milliards</div>
+    <div class="header-stats">
+        <div>📊 ANALYSE LIVE</div>
+        <div class="live-value" id="counter">450 099 454 FCFA</div>
+        <div style="font-size: 0.7em;">Objectif : 500 Milliards</div>
     </div>
 
-    <!-- CŒUR : FLUX VIDÉO -->
-    <div class="main-content">
-        <div class="video-container">
-            <video autoplay muted loop playsinline>
-                <source src="votre-video-1.mp4" type="video/mp4">
-            </video>
-            <div class="video-overlay">
-                <div class="neon-circle">❤️</div>
-                <div class="neon-circle">💬</div>
-                <div class="neon-circle">🚀</div>
+    <!-- GRILLE DES ARTICLES -->
+    <div class="marketplace-grid">
+        <!-- Article 1 -->
+        <div class="product-card">
+            <div class="product-img">IMAGE ARTICLE</div>
+            <div class="product-info">
+                <div style="font-size: 0.9em;">Article Premium</div>
+                <div class="product-price">25 000 FCFA</div>
             </div>
         </div>
-        <!-- On peut ajouter d'autres video-container ici -->
-    </div>
-
-    <!-- ACTIONS : COFFRE-FORT & PROFITS -->
-    <div class="bottom-actions">
-        <button class="btn-action btn-unlock">🔐 DÉVERROUILLER COFFRE-FORT</button>
-        <div class="section-card" style="padding: 10px;">
-            <input type="number" placeholder="Montant à investir" style="width: 80%; padding: 8px; border-radius: 10px; border: none;">
-            <button class="btn-action btn-gold" style="width: 100%; margin-top: 5px;">SIMULER PROFITS</button>
+        <!-- Article 2 -->
+        <div class="product-card">
+            <div class="product-img">IMAGE ARTICLE</div>
+            <div class="product-info">
+                <div style="font-size: 0.9em;">Luxe SEG Global</div>
+                <div class="product-price">150 000 FCFA</div>
+            </div>
         </div>
+        <!-- Tu peux copier ce bloc "product-card" pour chaque nouvel article -->
     </div>
 
-    <!-- NAVIGATION EMPIRE -->
-    <nav class="nav-bar">
-        <span>📱 Vidéos</span>
-        <span>💎 Bijoux</span>
-        <span>🛍️ Boutique</span>
-        <span>👤 Profil</span>
-    </nav>
+    <div class="footer-actions">
+        <button class="btn-main btn-blue">🔐 DÉVERROUILLER COFFRE-FORT</button>
+        <div style="font-size: 0.8em; color: var(--neon-blue);">S.E.G GLOBAL - Votre Marché Numérique</div>
+    </div>
 
     <script>
-        // Animation du compteur (Vision 500 Milliards)
-        let total = 450023573;
+        // Animation du compteur financier
+        let total = 450099454;
         setInterval(() => {
-            total += Math.floor(Math.random() * 10000);
-            document.getElementById('main-counter').innerText = total.toLocaleString() + " FCFA";
-        }, 1500);
+            total += Math.floor(Math.random() * 5000);
+            document.getElementById('counter').innerText = total.toLocaleString() + " FCFA";
+        }, 3000);
     </script>
 
 </body>
