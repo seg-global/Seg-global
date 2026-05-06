@@ -5,140 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.E.G GLOBAL - Marketplace</title>
     <style>
-        :root {
-            --neon-blue: #00f3ff;
-            --glass: rgba(255, 255, 255, 0.15);
-        }
-
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            font-family: 'Segoe UI', sans-serif; color: white;
-            overflow-x: hidden;
-        }
-
-        /* FOND CIEL ET SOLEIL (IMAGE_218) */
-        .sky-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
-            z-index: -1;
-        }
-        .sun {
-            position: absolute; top: 5%; right: 5%; width: 100px; height: 100px;
-            background: radial-gradient(circle, #fff700 0%, transparent 70%);
-            filter: blur(15px);
-        }
+        :root { --neon: #00f3ff; --glass: rgba(255, 255, 255, 0.15); }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; color: white; overflow-x: hidden; }
+        
+        /* FOND CIEL ET SOLEIL (image_220.png) */
+        .sky-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, #4facfe, #00f2fe); z-index: -1; }
+        .sun { position: absolute; top: 10%; right: 10%; width: 100px; height: 100px; background: radial-gradient(circle, #fff700 0%, transparent 70%); filter: blur(15px); }
 
         /* ANALYSE LIVE */
-        .header-stats {
-            margin: 15px auto; width: 90%;
-            background: var(--glass); backdrop-filter: blur(10px);
-            border-radius: 15px; border: 1px solid rgba(255,255,255,0.3);
-            padding: 10px; text-align: center;
-        }
-        .live-value { font-size: 1.4em; font-weight: bold; color: #0047AB; }
+        .stats { margin: 20px auto; width: 90%; background: var(--glass); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.3); padding: 15px; text-align: center; }
+        .val { font-size: 1.6em; font-weight: bold; color: #0047AB; }
 
-        /* GRILLE MARKETPLACE (ARTICLES) */
-        .marketplace-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            padding: 15px;
-            padding-bottom: 100px; /* Espace pour le menu bas */
-        }
+        /* GRILLE DE VENTE (Modèle Amazon/Alibaba) */
+        .market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; margin-bottom: 80px; }
+        .item { background: rgba(0, 0, 0, 0.4); border: 2px solid var(--neon); border-radius: 15px; overflow: hidden; box-shadow: 0 0 10px var(--neon); }
+        .item-img { height: 150px; background: #222; display: flex; align-items: center; justify-content: center; }
+        .item-info { padding: 10px; font-size: 0.9em; }
+        .price { color: #FFD700; font-weight: bold; margin-top: 5px; font-size: 1.1em; }
 
-        .product-card {
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px solid var(--neon-blue);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 0 10px var(--neon-blue);
-            backdrop-filter: blur(5px);
-        }
-
-        .product-img {
-            width: 100%;
-            height: 120px;
-            background: #333; /* Remplacer par l'image de l'article */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8em;
-        }
-
-        .product-info {
-            padding: 10px;
-            text-align: left;
-        }
-
-        .product-price {
-            color: #FFD700;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-
-        /* ACTIONS BAS DE PAGE */
-        .footer-actions {
-            position: fixed; bottom: 0; width: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(15px);
-            padding: 15px 0;
-            border-top: 2px solid var(--neon-blue);
-            display: flex; flex-direction: column; align-items: center;
-            gap: 10px;
-        }
-
-        .btn-main {
-            width: 90%; padding: 12px; border-radius: 10px;
-            border: none; font-weight: bold; cursor: pointer;
-        }
-        .btn-blue { background: #007bff; color: white; }
-
+        /* BARRE DE NAVIGATION FIXE */
+        .nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: rgba(0,0,0,0.8); display: flex; justify-content: space-around; align-items: center; border-top: 2px solid var(--neon); }
+        .btn-lock { width: 90%; position: fixed; bottom: 80px; left: 5%; background: #007bff; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
-
     <div class="sky-bg"><div class="sun"></div></div>
 
-    <div class="header-stats">
+    <div class="stats">
         <div>📊 ANALYSE LIVE</div>
-        <div class="live-value" id="counter">450 099 454 FCFA</div>
+        <div class="val" id="money">450 127 752 FCFA</div>
         <div style="font-size: 0.7em;">Objectif : 500 Milliards</div>
     </div>
 
-    <!-- GRILLE DES ARTICLES -->
-    <div class="marketplace-grid">
-        <!-- Article 1 -->
-        <div class="product-card">
-            <div class="product-img">IMAGE ARTICLE</div>
-            <div class="product-info">
-                <div style="font-size: 0.9em;">Article Premium</div>
-                <div class="product-price">25 000 FCFA</div>
-            </div>
+    <div class="market-grid">
+        <div class="item">
+            <div class="item-img">PHOTO ARTICLE</div>
+            <div class="item-info">Article Premium<div class="price">25 000 FCFA</div></div>
         </div>
-        <!-- Article 2 -->
-        <div class="product-card">
-            <div class="product-img">IMAGE ARTICLE</div>
-            <div class="product-info">
-                <div style="font-size: 0.9em;">Luxe SEG Global</div>
-                <div class="product-price">150 000 FCFA</div>
-            </div>
+        <div class="item">
+            <div class="item-img">PHOTO ARTICLE</div>
+            <div class="item-info">Luxe SEG Global<div class="price">150 000 FCFA</div></div>
         </div>
-        <!-- Tu peux copier ce bloc "product-card" pour chaque nouvel article -->
     </div>
 
-    <div class="footer-actions">
-        <button class="btn-main btn-blue">🔐 DÉVERROUILLER COFFRE-FORT</button>
-        <div style="font-size: 0.8em; color: var(--neon-blue);">S.E.G GLOBAL - Votre Marché Numérique</div>
-    </div>
+    <button class="btn-lock">🔐 DÉVERROUILLER COFFRE-FORT</button>
+
+    <nav class="nav">
+        <span>🏠 Accueil</span>
+        <span>🛒 Marché</span>
+        <span>💎 Luxe</span>
+        <span>👤 Compte</span>
+    </nav>
 
     <script>
-        // Animation du compteur financier
-        let total = 450099454;
+        let total = 450127752;
         setInterval(() => {
-            total += Math.floor(Math.random() * 5000);
-            document.getElementById('counter').innerText = total.toLocaleString() + " FCFA";
-        }, 3000);
+            total += Math.floor(Math.random() * 2000);
+            document.getElementById('money').innerText = total.toLocaleString() + " FCFA";
+        }, 4000);
     </script>
-
 </body>
 </html>
