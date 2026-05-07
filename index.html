@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Intégré</title>
+    <title>S.E.G GLOBAL - Empire Unifié</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
@@ -11,41 +11,33 @@
 
     <style>
         :root { --gold: #D4AF37; --bg: #000; --neon-blue: #00d4ff; --glass: rgba(255, 255, 255, 0.05); }
-        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Arial', sans-serif; height: 100%; }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Arial', sans-serif; min-height: 100%; }
+        .container { max-width: 450px; margin: auto; padding: 20px; padding-bottom: 100px; }
         
-        .container { max-width: 450px; margin: auto; padding: 20px; min-height: 100vh; position: relative; }
-        
-        /* AUTHENTIFICATION (LUXE) */
-        #auth_section { text-align: center; padding-top: 50px; }
-        .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 15px rgba(212,175,55,0.4); }
-        .subtitle { font-size: 10px; color: #888; text-transform: uppercase; margin-bottom: 30px; }
+        .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 15px rgba(212,175,55,0.4); text-align: center; }
+        .subtitle { font-size: 10px; color: #888; text-transform: uppercase; margin-bottom: 30px; text-align: center; }
         
         input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; }
         .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        
-        /* PAGES DE L'APPLICATION */
+        .btn-wa { background: #25D366; color: white; padding: 8px; border-radius: 5px; text-decoration: none; font-size: 11px; display: block; margin-top: 10px; font-weight: bold; }
+
         .page { display: none; animation: fadeIn 0.4s ease; }
         .active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* HEADER STATS */
         .header-stats { background: var(--glass); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 20px; }
         .val-money { font-size: 22px; color: var(--neon-blue); font-weight: bold; }
 
-        /* BOUTIQUE / MARCHÉ */
         .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .item-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; }
-        .price { color: var(--gold); font-weight: bold; }
+        .item-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; overflow: hidden; border-bottom: 2px solid var(--gold); }
+        .item-card img { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+        .price { color: var(--gold); font-weight: bold; display: block; }
 
-        /* FORMULAIRE VENDEUR */
-        .seller-box { background: rgba(212,175,55,0.05); border: 1px dashed var(--gold); padding: 15px; border-radius: 15px; margin-top: 20px; }
-
-        /* BARRE DE NAVIGATION */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #080808; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #080808; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; z-index: 1000; }
         .nav-item { color: #666; font-size: 10px; text-align: center; cursor: pointer; }
         .nav-item.active { color: var(--gold); }
-
-        .status-msg { font-size: 12px; margin-top: 10px; }
+        
+        #preview { width: 80px; height: 80px; object-fit: cover; margin: 10px auto; display: none; border-radius: 10px; border: 1px solid var(--gold); }
     </style>
 </head>
 <body>
@@ -55,53 +47,46 @@
     <div id="auth_section">
         <div class="logo-gold">S.E.G GLOBAL</div>
         <p class="subtitle">Infrastructure de Sécurisation</p>
-        
         <div id="login_step1">
-            <input type="email" id="email_input" placeholder="Entrez votre email iPhone">
+            <input type="email" id="email_input" placeholder="Email de votre iPhone">
             <button class="btn-gold" onclick="sendAccessCode()">Obtenir mon code d'accès</button>
         </div>
-
         <div id="login_step2" style="display:none;">
-            <p style="font-size:12px;">Code envoyé. Vérifiez vos emails.</p>
-            <input type="text" id="otp_input" placeholder="Entrez le code à 6 chiffres">
-            <button class="btn-gold" onclick="verifyAccessCode()">Démarrer l'Empire</button>
+            <input type="text" id="otp_input" placeholder="Code à 6 chiffres">
+            <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
         </div>
-        <div id="auth_msg" class="status-msg"></div>
     </div>
 
     <div id="main_app" style="display:none;">
         
         <div id="home_page" class="page active">
             <div class="header-stats">
-                <div style="font-size:10px; opacity:0.7;">FONDS S.E.G GLOBAL</div>
+                <div style="font-size:10px; opacity:0.7;">FONDS ACTUELS</div>
                 <div class="val-money">450 173 947 FCFA</div>
             </div>
-            <h3>Bienvenue, Fondateur</h3>
-            <div class="market-grid" id="market_feed">
-                <div class="item-card">💎 Diamant Brut<br><span class="price">750 000 F</span></div>
-                <div class="item-card">👑 Montre Luxe<br><span class="price">120 000 F</span></div>
-            </div>
+            <h3 style="text-align: center; color: var(--gold);">Marché Mondial</h3>
+            <div class="market-grid" id="market_feed"></div>
         </div>
 
         <div id="seller_page" class="page">
-            <h2 style="color:var(--gold);">Vendre un article</h2>
-            <div class="seller-box">
-                <input type="text" id="prod_name" placeholder="Nom de l'article">
-                <input type="number" id="prod_price" oninput="calcCom()" placeholder="Prix de vente (FCFA)">
-                <div id="com_calc" style="font-size:11px; color:var(--neon-blue); margin:10px 0;">
-                    Commission S.E.G (10%) : 0 F
-                </div>
-                <button class="btn-gold" onclick="publishProduct()">Publier sur le Marché</button>
-            </div>
+            <h2 style="color:var(--gold); text-align:center;">Mettre en vente</h2>
+            <input type="text" id="prod_name" placeholder="Nom de l'article">
+            <input type="number" id="prod_price" oninput="calcCom()" placeholder="Prix de vente (FCFA)">
+            <div id="com_calc" style="font-size:11px; color:var(--neon-blue); text-align:center;">Commission S.E.G (10%) : 0 F</div>
+            <input type="text" id="prod_phone" placeholder="WhatsApp (ex: 237690...)">
+            <p style="font-size: 10px; text-align:center;">PHOTO :</p>
+            <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)">
+            <img id="preview">
+            <button class="btn-gold" onclick="publishProduct()">Publier</button>
         </div>
 
         <div id="vault_page" class="page">
-            <h2 style="color:var(--gold);">🔐 Mon Coffre-fort</h2>
+            <h2 style="color:var(--gold); text-align:center;">🔐 Coffre de l'Empire</h2>
             <div class="header-stats" style="border-color:var(--neon-blue);">
-                <div style="font-size:12px;">COMMISSIONS GÉNÉRÉES</div>
-                <div class="val-money" style="color:var(--gold);">12 450 FCFA</div>
+                <div style="font-size:12px;">COMMISSIONS TOTALES</div>
+                <div id="total_commissions" class="val-money" style="color:var(--gold);">0 FCFA</div>
             </div>
-            <button class="btn-gold" style="background:#222; color:#fff;" onclick="logout()">Déconnexion Sécurisée</button>
+            <button class="btn-gold" style="background:#222; color:#fff;" onclick="logout()">Quitter la session</button>
         </div>
 
         <nav class="nav-bar">
@@ -113,7 +98,6 @@
 </div>
 
 <script>
-    // --- CONFIGURATION ---
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
 
     const firebaseConfig = {
@@ -125,41 +109,84 @@
     const db = firebase.firestore();
 
     let correctOTP = "";
+    let base64Image = "";
 
-    // --- FONCTIONS AUTHENTIFICATION ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
-        if(!email) return alert("Email requis");
-        
         correctOTP = Math.floor(100000 + Math.random() * 900000).toString();
-        document.getElementById('auth_msg').innerHTML = "Connexion aux serveurs...";
-
-        emailjs.send("service_ocg86ge", "template_v7i6m5m", {
-            to_email: email,
-            otp_code: correctOTP
-        }).then(() => {
+        emailjs.send("service_ocg86ge", "template_v7i6m5m", { to_email: email, otp_code: correctOTP })
+        .then(() => {
             document.getElementById('login_step1').style.display = 'none';
             document.getElementById('login_step2').style.display = 'block';
-            document.getElementById('auth_msg').innerHTML = "";
-        }).catch(() => alert("Erreur de clé Public. Vérifie EmailJS."));
+        });
     }
 
     function verifyAccessCode() {
-        const input = document.getElementById('otp_input').value;
-        if(input === correctOTP) {
+        if(document.getElementById('otp_input').value === correctOTP) {
             localStorage.setItem("seg_session", "active");
             startApp();
-        } else {
-            alert("Code erroné.");
         }
     }
 
     function startApp() {
         document.getElementById('auth_section').style.display = 'none';
         document.getElementById('main_app').style.display = 'block';
+        loadProducts();
     }
 
-    // --- NAVIGATION ---
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            base64Image = reader.result;
+            const prev = document.getElementById('preview');
+            prev.src = reader.result;
+            prev.style.display = "block";
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    function calcCom() {
+        const price = document.getElementById('prod_price').value;
+        document.getElementById('com_calc').innerHTML = `Commission S.E.G (10%) : ${(price * 0.1).toLocaleString()} FCFA`;
+    }
+
+    function loadProducts() {
+        const feed = document.getElementById('market_feed');
+        let totalComm = 0;
+        db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
+            feed.innerHTML = "";
+            totalComm = 0;
+            snapshot.forEach((doc) => {
+                const p = doc.data();
+                totalComm += (p.prix * 0.1);
+                const waLink = `https://wa.me/${p.tel}?text=S.E.G GLOBAL : Intéressé par ${p.nom}`;
+                feed.innerHTML += `
+                    <div class="item-card">
+                        <img src="${p.image || 'https://via.placeholder.com/150'}">
+                        <strong>${p.nom}</strong>
+                        <span class="price">${parseInt(p.prix).toLocaleString()} F</span>
+                        <a href="${waLink}" class="btn-wa">CONTACTER</a>
+                    </div>
+                `;
+            });
+            document.getElementById('total_commissions').innerText = `${totalComm.toLocaleString()} FCFA`;
+        });
+    }
+
+    function publishProduct() {
+        const name = document.getElementById('prod_name').value;
+        const price = document.getElementById('prod_price').value;
+        const tel = document.getElementById('prod_phone').value;
+        if(!name || !price || !base64Image || !tel) return alert("Champs manquants !");
+
+        db.collection("produits").add({
+            nom: name, prix: price, image: base64Image, tel: tel, date: new Date()
+        }).then(() => {
+            alert("Publié !");
+            showPage('home_page', document.querySelector('.nav-item'));
+        });
+    }
+
     function showPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
@@ -167,39 +194,8 @@
         el.classList.add('active');
     }
 
-    // --- LOGIQUE BUSINESS ---
-    function calcCom() {
-        const price = document.getElementById('prod_price').value;
-        const com = price * 0.1;
-        document.getElementById('com_calc').innerHTML = `Commission S.E.G (10%) : ${com.toLocaleString()} FCFA`;
-    }
-
-    function publishProduct() {
-        const name = document.getElementById('prod_name').value;
-        const price = document.getElementById('prod_price').value;
-        
-        if(!name || !price) return alert("Remplis tout !");
-
-        // Sauvegarde réelle dans Firebase
-        db.collection("produits").add({
-            nom: name,
-            prix: price,
-            date: new Date()
-        }).then(() => {
-            alert("Produit mis en ligne sur l'Empire !");
-            location.reload();
-        });
-    }
-
-    function logout() {
-        localStorage.removeItem("seg_session");
-        location.reload();
-    }
-
-    // Garder la session active
+    function logout() { localStorage.removeItem("seg_session"); location.reload(); }
     if(localStorage.getItem("seg_session") === "active") startApp();
-
 </script>
 </body>
 </html>
-
