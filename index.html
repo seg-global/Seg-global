@@ -10,16 +10,19 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
 
     <style>
-        :root { --gold: #D4AF37; --bg: #000; --glass: rgba(255, 255, 255, 0.05); }
+        :root { --gold: #D4AF37; --bg: #000; --neon-blue: #00d4ff; --glass: rgba(255, 255, 255, 0.05); }
         body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Arial', sans-serif; min-height: 100%; }
         .container { max-width: 450px; margin: auto; padding: 20px; padding-bottom: 100px; }
         
         .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 15px rgba(212,175,55,0.4); text-align: center; }
         .subtitle { font-size: 10px; color: #888; text-transform: uppercase; margin-bottom: 30px; text-align: center; }
         
+        .wallet-card { background: var(--glass); border: 1px solid var(--gold); border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .balance-amount { font-size: 24px; color: var(--neon-blue); font-weight: bold; }
+        .acc-number { font-size: 14px; color: var(--gold); margin-top: 5px; }
+
         input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; font-size: 16px; }
         .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-        .btn-wa { background: #25D366; color: white; padding: 8px; border-radius: 5px; text-decoration: none; font-size: 12px; display: inline-block; margin-top: 10px; font-weight: bold; width: 100%; text-align: center; box-sizing: border-box; }
 
         .page { display: none; }
         .active { display: block; }
@@ -55,6 +58,12 @@
 
     <div id="main_app" style="display:none;">
         
+        <div class="wallet-card">
+            <p style="font-size: 10px; margin: 0;">SOLDE COMPTE S.E.G</p>
+            <div id="solde_display" class="balance-amount">0 FCFA</div>
+            <div id="acc_number_display" class="acc-number">SEG-237-XXXX</div>
+        </div>
+
         <div id="home_page" class="page active">
             <h3 style="text-align: center; color: var(--gold);">Le Marché S.E.G</h3>
             <div class="market-grid" id="market_feed"></div>
@@ -64,25 +73,32 @@
             <h2 style="color:var(--gold); text-align:center;">Vendre un article</h2>
             <input type="text" id="prod_name" placeholder="Nom du produit">
             <input type="number" id="prod_price" placeholder="Prix (FCFA)">
-            <input type="text" id="prod_phone" placeholder="Numéro WhatsApp (ex: 237690...)">
             <p style="font-size: 12px; text-align: center; margin-top: 15px;">AJOUTER UNE PHOTO :</p>
             <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)">
             <center><img id="preview"></center>
             <button class="btn-gold" onclick="publishProduct()" id="pub_btn">PUBLIER SUR LE MARCHÉ</button>
         </div>
 
+        <div id="profile_page" class="page">
+            <h2 style="color:var(--gold); text-align:center;">Mon Identité S.E.G</h2>
+            <div class="wallet-card" style="background: #111;">
+                <p>Numéro de Compte Unique :</p>
+                <h3 id="acc_profile_id" style="color: var(--gold);">Chargement...</h3>
+            </div>
+            <button class="btn-gold" style="background: #444; color: #fff;" onclick="logout()">DÉCONNEXION SÉCURISÉE</button>
+        </div>
+
         <nav class="nav-bar">
             <div class="nav-item active" onclick="showPage('home_page', this)">🏠<br>ACCUEIL</div>
             <div class="nav-item" onclick="showPage('seller_page', this)">🛒<br>VENDRE</div>
-            <div class="nav-item" onclick="logout()">🚪<br>QUITTER</div>
+            <div class="nav-item" onclick="showPage('profile_page', this)">💎<br>COMPTE</div>
         </nav>
     </div>
 </div>
 
 <script>
-    // --- 1. CONFIG ET INITIALISATION ---
+    // --- INITIALISATION ---
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
-
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
@@ -91,144 +107,20 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
+    let currentUserEmail = localStorage.getItem("seg_user_email") || "";
+    let userAccountID = "";
+    let userBalance = 0;
     let correctOTP = "";
-    let compressedImage = ""; 
+    let compressedImage = "";
 
-    // --- 2. GESTION DE L'ACCÈS ---
-    function sendAccessCode() {
-        const email = document.getElementById('email_input').value;
-        if(!email) return alert("Email requis");
-        correctOTP = Math.floor(100000 + Math.random() * 900000).toString();
-        
-        emailjs.send("service_ocg86ge", "template_v7i6m5m", { to_email: email, otp_code: correctOTP })
-        .then(() => {
-            document.getElementById('login_step1').style.display = 'none';
-            document.getElementById('login_step2').style.display = 'block';
-        });
-    }
+    // --- 1. BANQUE INTERNE ET GÉNÉRATION D'ID ---
+    async function getOrCreateAccount(email) {
+        const userRef = db.collection("utilisateurs").doc(email);
+        const doc = await userRef.get();
 
-    function verifyAccessCode() {
-        if(document.getElementById('otp_input').value === correctOTP) {
-            localStorage.setItem("seg_session", "active");
-            startApp();
+        if (doc.exists) {
+            const data = doc.data();
+            userAccountID = data.accountID;
+            userBalance = data.solde;
         } else {
-            alert("Code de sécurité incorrect.");
-        }
-    }
-
-    function startApp() {
-        document.getElementById('auth_section').style.display = 'none';
-        document.getElementById('main_app').style.display = 'block';
-        loadProducts();
-    }
-
-    // --- 3. LOGIQUE MÉTIER (IMAGE & VENTE) ---
-    function previewImage(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                
-                // Compression intelligente (Max 800px)
-                const maxWidth = 800;
-                const scale = maxWidth / img.width;
-                canvas.width = maxWidth;
-                canvas.height = img.height * scale;
-
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                
-                // On transforme en JPEG compressé pour éviter l'erreur de taille Firebase
-                compressedImage = canvas.toDataURL("image/jpeg", 0.6);
-                
-                const prev = document.getElementById('preview');
-                prev.src = compressedImage;
-                prev.style.display = "block";
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-
-    async function publishProduct() {
-        const name = document.getElementById('prod_name').value;
-        const price = document.getElementById('prod_price').value;
-        const tel = document.getElementById('prod_phone').value;
-        const btn = document.getElementById('pub_btn');
-
-        if(!name || !price || !compressedImage || !tel) return alert("Infos manquantes !");
-
-        btn.innerText = "TRANSFERT AU SERVEUR...";
-        btn.disabled = true;
-
-        try {
-            await db.collection("produits").add({
-                nom: name,
-                prix: price,
-                image: compressedImage,
-                tel: tel,
-                date: new Date()
-            });
-
-            alert("🚀 Article publié avec succès !");
-            
-            // Réinitialisation automatique
-            document.getElementById('prod_name').value = "";
-            document.getElementById('prod_price').value = "";
-            document.getElementById('preview').style.display = "none";
-            compressedImage = "";
-
-            // Redirection automatique vers l'accueil
-            showPage('home_page', document.querySelector('.nav-item'));
-            btn.innerText = "PUBLIER SUR LE MARCHÉ";
-            btn.disabled = false;
-
-        } catch (err) {
-            alert("Erreur Serveur : " + err.message);
-            btn.innerText = "PUBLIER SUR LE MARCHÉ";
-            btn.disabled = false;
-        }
-    }
-
-    function loadProducts() {
-        const feed = document.getElementById('market_feed');
-        // Écoute en temps réel : les nouveaux produits apparaissent sans recharger
-        db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
-            feed.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const p = doc.data();
-                const waLink = `https://wa.me/${p.tel}?text=Salut S.E.G GLOBAL, je suis intéressé par : ${p.nom}`;
-                feed.innerHTML += `
-                    <div class="item-card">
-                        <img src="${p.image}">
-                        <strong>${p.nom}</strong>
-                        <span class="price">${parseInt(p.prix).toLocaleString()} F</span>
-                        <a href="${waLink}" target="_blank" class="btn-wa">ACHETER SUR WHATSAPP</a>
-                    </div>
-                `;
-            });
-        });
-    }
-
-    // --- 4. INTERFACE ---
-    function showPage(pageId, el) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        el.classList.add('active');
-    }
-
-    function logout() { 
-        localStorage.removeItem("seg_session"); 
-        location.reload(); 
-    }
-    
-    if(localStorage.getItem("seg_session") === "active") startApp();
-
-</script>
-</body>
-</html>
+            const
