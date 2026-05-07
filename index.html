@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
 
     <style>
         :root { --gold: #D4AF37; --bg: #000; --neon-blue: #00d4ff; --glass: rgba(255, 255, 255, 0.05); }
@@ -19,16 +18,14 @@
         .subtitle { font-size: 10px; color: #888; text-transform: uppercase; margin-bottom: 30px; text-align: center; }
         
         input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; }
-        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .btn-wa { background: #25D366; color: white; padding: 8px; border-radius: 5px; text-decoration: none; font-size: 12px; display: inline-block; margin-top: 10px; font-weight: bold; width: 100%; text-align: center; box-sizing: border-box; }
 
         .page { display: none; }
         .active { display: block; }
 
-        .header-stats { background: var(--glass); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 20px; }
-        .val-money { font-size: 20px; color: var(--neon-blue); font-weight: bold; }
-
         .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .item-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; border-bottom: 2px solid var(--gold); }
+        .item-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; overflow: hidden; border-bottom: 2px solid var(--gold); }
         .item-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
         .price { color: var(--gold); font-weight: bold; display: block; margin-bottom: 5px; }
 
@@ -36,7 +33,7 @@
         .nav-item { color: #666; font-size: 10px; text-align: center; cursor: pointer; }
         .nav-item.active { color: var(--gold); }
         
-        #preview { width: 100px; height: 100px; object-fit: cover; margin: 10px auto; display: none; border-radius: 10px; border: 1px solid var(--gold); }
+        #preview { width: 120px; height: 120px; object-fit: cover; margin: 10px auto; display: none; border-radius: 10px; border: 1px solid var(--gold); }
     </style>
 </head>
 <body>
@@ -47,11 +44,11 @@
         <div class="logo-gold">S.E.G GLOBAL</div>
         <p class="subtitle">Infrastructure de Sécurisation</p>
         <div id="login_step1">
-            <input type="email" id="email_input" placeholder="Email de votre iPhone">
+            <input type="email" id="email_input" placeholder="Email de votre compte">
             <button class="btn-gold" onclick="sendAccessCode()">Obtenir mon code d'accès</button>
         </div>
         <div id="login_step2" style="display:none;">
-            <input type="text" id="otp_input" placeholder="Code reçu">
+            <input type="text" id="otp_input" placeholder="Entrez le code reçu">
             <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
         </div>
     </div>
@@ -59,10 +56,6 @@
     <div id="main_app" style="display:none;">
         
         <div id="home_page" class="page active">
-            <div class="header-stats">
-                <div style="font-size:10px; opacity:0.7;">SOLDE COMPTE S.E.G</div>
-                <div id="user_balance_display" class="val-money">50 000 FCFA</div>
-            </div>
             <h3 style="text-align: center; color: var(--gold);">Le Marché S.E.G</h3>
             <div class="market-grid" id="market_feed"></div>
         </div>
@@ -71,52 +64,42 @@
             <h2 style="color:var(--gold); text-align:center;">Vendre un article</h2>
             <input type="text" id="prod_name" placeholder="Nom du produit">
             <input type="number" id="prod_price" placeholder="Prix (FCFA)">
-            <p style="font-size: 10px; text-align:center;">PHOTO :</p>
+            <input type="text" id="prod_phone" placeholder="Ton numéro WhatsApp (ex: 237690...)">
+            <p style="font-size: 10px; text-align: center;">PHOTO :</p>
             <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)">
             <center><img id="preview"></center>
-            <button id="publish_btn" class="btn-gold" onclick="publishProduct()">Publier sur le Marché</button>
-        </div>
-
-        <div id="vault_page" class="page">
-            <h2 style="color:var(--gold); text-align:center;">🔐 Mon Compte</h2>
-            <div class="header-stats">
-                <div style="font-size:12px;">ID S.E.G</div>
-                <div id="user_id_display" class="val-money" style="color:var(--gold);">SEG-237-3130</div>
-            </div>
-            <button class="btn-gold" style="background:#222; color:#fff;" onclick="logout()">DÉCONNEXION</button>
+            <button class="btn-gold" onclick="publishProduct()" id="pub_btn">Publier sur le Marché</button>
         </div>
 
         <nav class="nav-bar">
             <div class="nav-item active" onclick="showPage('home_page', this)">🏠<br>ACCUEIL</div>
             <div class="nav-item" onclick="showPage('seller_page', this)">🛒<br>VENDRE</div>
-            <div class="nav-item" onclick="showPage('vault_page', this)">💎<br>COMPTE</div>
+            <div class="nav-item" onclick="logout()">🚪<br>QUITTER</div>
         </nav>
     </div>
 </div>
 
 <script>
-    // 1. CONFIGURATION
+    // 1. INITIALISATION
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
 
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
-        projectId: "seg-global",
-        storageBucket: "seg-global.appspot.com"
+        projectId: "seg-global"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const storage = firebase.storage();
 
     let correctOTP = "";
-    let selectedFile;
-    let currentUser = { id: "SEG-237-3130", solde: 50000 };
+    let compressedImage = ""; 
 
     // 2. AUTHENTICATION
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
         if(!email) return alert("Email requis");
         correctOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        
         emailjs.send("service_ocg86ge", "template_v7i6m5m", { to_email: email, otp_code: correctOTP })
         .then(() => {
             document.getElementById('login_step1').style.display = 'none';
@@ -128,63 +111,71 @@
         if(document.getElementById('otp_input').value === correctOTP) {
             localStorage.setItem("seg_session", "active");
             startApp();
-        } else { alert("Code incorrect"); }
+        } else {
+            alert("Code incorrect.");
+        }
     }
 
     function startApp() {
         document.getElementById('auth_section').style.display = 'none';
         document.getElementById('main_app').style.display = 'block';
-        document.getElementById('user_balance_display').innerText = currentUser.solde.toLocaleString() + " FCFA";
         loadProducts();
     }
 
-    // 3. STORAGE & PUBLICATION (MÉTHODE FACEBOOK)
+    // 3. LOGIQUE PRODUIT (COMPRESSION INCLUSE)
     function previewImage(event) {
-        selectedFile = event.target.files[0];
-        if (selectedFile) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Compression intelligente (800px max)
+                const maxWidth = 800;
+                const scale = maxWidth / img.width;
+                canvas.width = maxWidth;
+                canvas.height = img.height * scale;
+
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                // Conversion JPEG léger pour Firestore
+                compressedImage = canvas.toDataURL("image/jpeg", 0.7);
+                
                 const prev = document.getElementById('preview');
-                prev.src = e.target.result;
+                prev.src = compressedImage;
                 prev.style.display = "block";
-            }
-            reader.readAsDataURL(selectedFile);
-        }
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
     }
 
-    async function publishProduct() {
+    function publishProduct() {
         const name = document.getElementById('prod_name').value;
         const price = document.getElementById('prod_price').value;
-        if(!name || !price || !selectedFile) return alert("Remplis tout !");
+        const tel = document.getElementById('prod_phone').value;
 
-        const btn = document.getElementById('publish_btn');
-        btn.innerText = "TRANSFERT AU SERVEUR...";
-        btn.disabled = true;
+        if(!name || !price || !compressedImage || !tel) return alert("Remplis tout, Fondateur !");
 
-        try {
-            // Étape A: Upload de la photo brute
-            const ref = storage.ref('produits/' + Date.now() + "_" + selectedFile.name);
-            await ref.put(selectedFile);
-            
-            // Étape B: Récupération du lien pro
-            const url = await ref.getDownloadURL();
+        document.getElementById('pub_btn').innerText = "PUBLICATION...";
 
-            // Étape C: Enregistrement final
-            await db.collection("produits").add({
-                nom: name,
-                prix: parseFloat(price),
-                image: url,
-                vendeurId: currentUser.id,
-                date: new Date()
-            });
-
-            alert("🚀 Succès ! Article ajouté à l'Empire.");
+        db.collection("produits").add({
+            nom: name,
+            prix: price,
+            image: compressedImage,
+            tel: tel,
+            date: new Date()
+        }).then(() => {
+            alert("🚀 Succès ! Article en ligne sur l'Empire.");
             location.reload();
-        } catch (e) {
-            alert("Erreur: " + e.message);
-            btn.innerText = "PUBLIER SUR LE MARCHÉ";
-            btn.disabled = false;
-        }
+        }).catch((err) => {
+            alert("Erreur Firebase : " + err.message);
+            document.getElementById('pub_btn').innerText = "Publier sur le Marché";
+        });
     }
 
     function loadProducts() {
@@ -193,27 +184,20 @@
             feed.innerHTML = "";
             snapshot.forEach((doc) => {
                 const p = doc.data();
+                const waLink = `https://wa.me/${p.tel}?text=Salut S.E.G Global, je veux : ${p.nom}`;
                 feed.innerHTML += `
                     <div class="item-card">
-                        <img src="${p.image}">
+                        <img src="${p.image || 'https://via.placeholder.com/150'}">
                         <strong>${p.nom}</strong>
-                        <span class="price">${p.prix.toLocaleString()} F</span>
-                        <button onclick="payInternal(${p.prix})" class="btn-gold" style="font-size:10px; padding:5px;">ACHETER VIA S.E.G</button>
+                        <span class="price">${parseInt(p.prix).toLocaleString()} F</span>
+                        <a href="${waLink}" class="btn-wa">ACHETER</a>
                     </div>
                 `;
             });
         });
     }
 
-    function payInternal(prix) {
-        if(currentUser.solde < prix) return alert("Solde insuffisant.");
-        if(confirm("Confirmer le paiement sécurisé ?")) {
-            currentUser.solde -= prix;
-            document.getElementById('user_balance_display').innerText = currentUser.solde.toLocaleString() + " FCFA";
-            alert("✅ Transaction sécurisée réussie !");
-        }
-    }
-
+    // 4. NAVIGATION
     function showPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
@@ -222,7 +206,10 @@
     }
 
     function logout() { localStorage.removeItem("seg_session"); location.reload(); }
+    
+    // Auto-connexion si session active
     if(localStorage.getItem("seg_session") === "active") startApp();
+
 </script>
 </body>
 </html>
