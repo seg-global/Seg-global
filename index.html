@@ -3,197 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Technologique</title>
+    <title>S.E.G GLOBAL - Système Intégré</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+
     <style>
-        :root {
-            --bg-dark: #02050e;
-            --neon-purple: #8a2be2;
-            --neon-blue: #00d4ff;
-            --glass: rgba(255, 255, 255, 0.05);
-        }
+        :root { --gold: #D4AF37; --bg: #000; --glass: rgba(255, 255, 255, 0.05); }
+        body { background-color: var(--bg); color: var(--gold); font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; text-align: center; }
+        .container { border: 2px solid var(--gold); padding: 30px; border-radius: 15px; background: linear-gradient(145deg, #0f0f0f, #000); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); width: 90%; max-width: 400px; }
+        
+        h1 { font-size: 24px; letter-spacing: 3px; margin-bottom: 5px; color: var(--gold); }
+        p.subtitle { font-size: 10px; text-transform: uppercase; margin-bottom: 30px; color: #aaa; }
+        
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 8px; box-sizing: border-box; text-align: center; font-size: 16px; }
+        button { width: 100%; padding: 14px; background-color: var(--gold); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
+        button:hover { background-color: #fff; box-shadow: 0 0 15px #fff; }
 
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 50% -10%, rgba(138, 43, 226, 0.25) 0%, transparent 50%),
-                radial-gradient(circle at 0% 100%, rgba(0, 212, 255, 0.15) 0%, transparent 40%);
-            color: white; font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
+        .message { margin-top: 15px; font-size: 14px; display: none; padding: 10px; border-radius: 5px; }
+        .success { color: #2ecc71; background: rgba(46, 204, 113, 0.1); }
+        .error { color: #e74c3c; background: rgba(231, 76, 60, 0.1); }
 
-        /* NAVIGATION PAGES */
-        .page { display: none; min-height: calc(100% - 85px); padding: 15px; padding-bottom: 100px; }
-        .page.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* HEADER STATS (image_228.png) */
-        .header-stats {
-            margin-bottom: 20px; padding: 15px;
-            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px);
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-        }
-        .val-money {
-            font-size: 1.8em; font-weight: 800; color: var(--neon-blue);
-            text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
-        }
-
-        /* BOUTONS CATÉGORIES ET ÉLÉMENTS VISUELS */
-        .categories { display: flex; justify-content: space-around; margin: 25px 0; }
-        .cat-item { text-align: center; font-size: 0.8em; }
-        .cat-icon {
-            width: 65px; height: 65px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.07); display: flex;
-            align-items: center; justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6); font-size: 1.8em;
-            cursor: pointer; transition: 0.2s; margin-bottom: 8px;
-        }
-        .cat-icon:active { transform: scale(0.9); border-color: var(--neon-blue); }
-
-        /* BOUTONS ACTION */
-        .btn-main {
-            width: 100%; padding: 18px; border: none; border-radius: 15px;
-            font-weight: bold; font-size: 1em; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn-vault { background: #007bff; color: white; box-shadow: 0 5px 20px rgba(0,123,255,0.4); }
-        .btn-vault:active { background: #0056b3; }
-
-        /* FORMULAIRES */
-        .seg-form {
-            background: rgba(255,255,255,0.03); padding: 20px;
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); margin-top: 20px;
-        }
-        input {
-            width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px;
-            border: 1px solid #333; background: #111; color: white; box-sizing: border-box;
-        }
-
-        /* BARRE DE NAVIGATION INFÉRIEURE */
-        .nav-bar {
-            position: fixed; bottom: 0; width: 100%; height: 85px;
-            background: rgba(2, 5, 14, 0.95); backdrop-filter: blur(20px);
-            display: flex; justify-content: space-around; align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000;
-        }
-        .nav-item { text-align: center; font-size: 0.75em; color: #888; cursor: pointer; transition: 0.3s; }
-        .nav-item.active { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
-        .nav-item div { font-size: 1.5em; margin-bottom: 4px; }
+        #product_interface { display: none; width: 100%; }
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .product-card { border: 1px solid #444; padding: 15px; border-radius: 8px; font-size: 12px; background: var(--glass); }
     </style>
 </head>
 <body>
 
-    <!-- PAGE 1: ACCUEIL (Basé sur image_228.png) -->
-    <div id="home" class="page active">
-        <div class="header-stats">
-            <div style="font-size: 0.8em; opacity: 0.7;">📊 ANALYSE LIVE</div>
-            <div class="val-money">450 173 947 FCFA</div>
-            <div style="font-size: 0.65em; opacity: 0.5;">Objectif : 500 Milliards</div>
-        </div>
-
-        <h1 style="font-weight: 800; font-size: 1.8em; margin-bottom: 20px;">Découvrez le futur</h1>
+<div class="container">
+    <div id="auth_section">
+        <h1>S.E.G GLOBAL</h1>
+        <p class="subtitle">Sécurisation Empire v2.0</p>
         
-        <div style="background: linear-gradient(135deg, #2a1b5d 0%, #160d35 100%); padding: 25px; border-radius: 30px; border: 2px solid var(--neon-purple); position: relative; overflow: hidden; margin-bottom: 30px;">
-            <h2 style="margin:0; color: var(--neon-blue); font-size: 1.4em;">S.E.G GLOBAL</h2>
-            <p style="font-size: 0.9em; opacity: 0.8; line-height: 1.4;">Empire technologique et financier au Cameroun.</p>
-            <button style="background:rgba(255,255,255,0.1); border:1px solid white; color:white; padding:10px 20px; border-radius:12px; cursor:pointer;">Découvrir →</button>
+        <div id="step1">
+            <input type="email" id="user_email" placeholder="E-mail de l'iPhone" required>
+            <button onclick="sendOTP()">Obtenir mon code d'accès</button>
         </div>
 
-        <div class="categories">
-            <div class="cat-item"><div class="cat-icon" onclick="showPage('market', document.querySelector('.nav-item:nth-child(2)'))">📱</div>Électronique</div>
-            <div class="cat-item"><div class="cat-icon">👕</div>Mode</div>
-            <div class="cat-item"><div class="cat-icon">🏠</div>Maison</div>
-        </div>
-
-        <button class="btn-main btn-vault" onclick="showPage('vault', document.querySelector('.nav-item:nth-child(3)'))">
-            🔐 DÉVERROUILLER COFFRE-FORT
-        </button>
-    </div>
-
-    <!-- PAGE 2: MARCHÉ (Vente & Inscription) -->
-    <div id="market" class="page">
-        <h2 style="color: var(--neon-blue);">🛒 Marché Global</h2>
-        
-        <div class="seg-form">
-            <h3 style="margin-top: 0;">🚀 Publier une annonce</h3>
-            <p style="font-size: 0.8em; opacity: 0.7;">Vendez vos produits. S.E.G prélève 10% de commission pour garantir la sécurité.</p>
-            
-            <input type="text" placeholder="Nom de l'article">
-            <input type="number" id="price-input" oninput="calculerCom()" placeholder="Prix (FCFA)">
-            
-            <div id="com-info" style="font-size: 0.8em; color: var(--neon-purple); margin: 5px 0 15px;">
-                Commission (10%) : 0 FCFA | Net : 0 FCFA
-            </div>
-
-            <button onclick="alert('Annonce envoyée pour validation')" style="width:100%; background: var(--neon-blue); color:black; border:none; padding:15px; border-radius:12px; font-weight:bold;">PUBLIER L'ANNONCE</button>
+        <div id="step2" style="display: none;">
+            <p style="font-size: 12px; color: #fff;">Vérifiez vos emails...</p>
+            <input type="text" id="user_otp" placeholder="Entrez le code reçu">
+            <button onclick="verifyOTP()">Valider l'accès</button>
         </div>
     </div>
 
-    <!-- PAGE 3: COFFRE-FORT (Finances & Retraits) -->
-    <div id="vault" class="page">
-        <div style="text-align: center; margin-bottom: 30px;">
-            <div style="font-size: 4em; margin-bottom: 10px;">🔐</div>
-            <h2 style="color: var(--neon-blue); margin: 0;">Coffre-Fort S.E.G</h2>
+    <div id="product_interface">
+        <h1>S.E.G GLOBAL</h1>
+        <p class="subtitle">Espace Membre Officiel</p>
+        <div class="product-grid">
+            <div class="product-card">💎 Diamant Brut<br>Disponible</div>
+            <div class="product-card">🏢 Gestion<br>Ma Boutique</div>
         </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
-            <div style="background: rgba(46, 204, 113, 0.1); padding: 20px; border-radius: 20px; border: 1px solid #2ecc71;">
-                <div style="font-size: 0.7em; opacity: 0.8;">DISPONIBLE</div>
-                <div style="font-size: 1.2em; font-weight: bold; color: #2ecc71;">90 000 FCFA</div>
-            </div>
-            <div style="background: rgba(138, 43, 226, 0.1); padding: 20px; border-radius: 20px; border: 1px solid var(--neon-purple);">
-                <div style="font-size: 0.7em; opacity: 0.8;">COMMISSIONS</div>
-                <div style="font-size: 1.2em; font-weight: bold; color: var(--neon-purple);">10 000 FCFA</div>
-            </div>
-        </div>
-
-        <div class="seg-form" style="text-align: center;">
-            <p style="font-size: 0.85em; margin-bottom: 15px;">Entrez votre PIN pour retirer vers MoMo/Orange</p>
-            <input type="password" placeholder="****" style="text-align: center; font-size: 1.5em; letter-spacing: 5px;">
-            <button onclick="alert('Demande de retrait transmise')" class="btn-main btn-vault" style="margin-top: 10px; background: var(--neon-blue); color: black;">CONFIRMER LE RETRAIT</button>
-        </div>
+        <button style="margin-top: 30px; background-color: #444; color: white;" onclick="logout()">Déconnexion</button>
     </div>
 
-    <!-- PAGE 4: COMPTE -->
-    <div id="account" class="page">
-        <h2 style="color: var(--neon-blue);">👤 Mon Profil Empire</h2>
-        <div style="padding: 20px; background: var(--glass); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
-            <div style="font-size: 1.2em; font-weight: bold;">Stève - Fondateur</div>
-            <div style="font-size: 0.8em; color: var(--neon-blue);">S.E.G GLOBAL Official</div>
-            <hr style="margin: 20px 0; opacity: 0.1;">
-            <p>Ici s'afficheront les réglages de votre boutique et vos informations personnelles.</p>
-        </div>
-    </div>
+    <div id="status_msg" class="message"></div>
+</div>
 
-    <!-- NAVIGATION BAR -->
-    <nav class="nav-bar">
-        <div class="nav-item active" onclick="showPage('home', this)"><div>🏠</div>Accueil</div>
-        <div class="nav-item" onclick="showPage('market', this)"><div>🛒</div>Marché</div>
-        <div class="nav-item" onclick="showPage('vault', this)"><div>💎</div>Luxe</div>
-        <div class="nav-item" onclick="showPage('account', this)"><div>👤</div>Compte</div>
-    </nav>
+<script>
+    // 1. CONFIGURATION FIREBASE
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0", 
+        authDomain: "seg-global.firebaseapp.com",
+        projectId: "seg-global",
+        storageBucket: "seg-global.appspot.com",
+        messagingSenderId: "880037527683",
+        appId: "1:880037527683:web:0f0b38d469714f808c96bb"
+    };
+    firebase.initializeApp(firebaseConfig);
 
-    <script>
-        function showPage(pageId, element) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            element.classList.add('active');
-            window.scrollTo(0,0);
+    // 2. CONFIGURATION EMAILJS
+    (function() {
+        emailjs.init("QGnoNmpH78_GuSLf4"); // Ta clé corrigée
+    })();
+
+    let generatedOTP = "";
+
+    // Vérifier si déjà connecté
+    window.onload = function() {
+        if (localStorage.getItem("seg_active") === "true") {
+            showProducts();
         }
+    };
 
-        function calculerCom() {
-            const p = document.getElementById('price-input').value;
-            if(p > 0) {
-                const c = p * 0.1;
-                const n = p - c;
-                document.getElementById('com-info').innerHTML = `Commission (10%) : ${c.toLocaleString()} F | Net : ${n.toLocaleString()} F`;
-            }
+    function sendOTP() {
+        const email = document.getElementById("user_email").value;
+        const msg = document.getElementById("status_msg");
+        if(!email) { alert("Entrez votre mail"); return; }
+
+        generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        const params = { to_email: email, otp_code: generatedOTP };
+
+        msg.style.display = "block";
+        msg.innerHTML = "Lancement de la procédure...";
+        msg.className = "message";
+
+        emailjs.send("service_ocg86ge", "template_v7i6m5m", params)
+            .then(function() {
+                msg.innerHTML = "CODE ENVOYÉ ! Regardez votre iPhone.";
+                msg.className = "message success";
+                document.getElementById("step1").style.display = "none";
+                document.getElementById("step2").style.display = "block";
+            }, function(error) {
+                console.log("Erreur:", error);
+                msg.innerHTML = "ERREUR D'ENVOI. Vérifiez votre Public Key.";
+                msg.className = "message error";
+            });
+    }
+
+    function verifyOTP() {
+        const val = document.getElementById("user_otp").value;
+        if(val === generatedOTP) {
+            localStorage.setItem("seg_active", "true");
+            showProducts();
+        } else {
+            alert("Code invalide.");
         }
-    </script>
+    }
+
+    function showProducts() {
+        document.getElementById("auth_section").style.display = "none";
+        document.getElementById("status_msg").style.display = "none";
+        document.getElementById("product_interface").style.display = "block";
+    }
+
+    function logout() {
+        localStorage.removeItem("seg_active");
+        location.reload();
+    }
+</script>
 
 </body>
 </html>
