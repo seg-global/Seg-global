@@ -10,15 +10,15 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
 
     <style>
-        :root { --gold: #D4AF37; --bg: #000; --neon-blue: #00d4ff; --glass: rgba(255, 255, 255, 0.05); }
+        :root { --gold: #D4AF37; --bg: #000; --glass: rgba(255, 255, 255, 0.05); }
         body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Arial', sans-serif; min-height: 100%; }
         .container { max-width: 450px; margin: auto; padding: 20px; padding-bottom: 100px; }
         
         .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 15px rgba(212,175,55,0.4); text-align: center; }
         .subtitle { font-size: 10px; color: #888; text-transform: uppercase; margin-bottom: 30px; text-align: center; }
         
-        input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; }
-        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; font-size: 16px; }
+        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
         .btn-wa { background: #25D366; color: white; padding: 8px; border-radius: 5px; text-decoration: none; font-size: 12px; display: inline-block; margin-top: 10px; font-weight: bold; width: 100%; text-align: center; box-sizing: border-box; }
 
         .page { display: none; }
@@ -33,7 +33,7 @@
         .nav-item { color: #666; font-size: 10px; text-align: center; cursor: pointer; }
         .nav-item.active { color: var(--gold); }
         
-        #preview { width: 120px; height: 120px; object-fit: cover; margin: 10px auto; display: none; border-radius: 10px; border: 1px solid var(--gold); }
+        #preview { width: 120px; height: 120px; object-fit: cover; margin: 15px auto; display: none; border-radius: 10px; border: 2px solid var(--gold); }
     </style>
 </head>
 <body>
@@ -64,11 +64,11 @@
             <h2 style="color:var(--gold); text-align:center;">Vendre un article</h2>
             <input type="text" id="prod_name" placeholder="Nom du produit">
             <input type="number" id="prod_price" placeholder="Prix (FCFA)">
-            <input type="text" id="prod_phone" placeholder="Ton numéro WhatsApp (ex: 237690...)">
-            <p style="font-size: 10px; text-align: center;">PHOTO :</p>
+            <input type="text" id="prod_phone" placeholder="Numéro WhatsApp (ex: 237690...)">
+            <p style="font-size: 12px; text-align: center; margin-top: 15px;">AJOUTER UNE PHOTO :</p>
             <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)">
             <center><img id="preview"></center>
-            <button class="btn-gold" onclick="publishProduct()" id="pub_btn">Publier sur le Marché</button>
+            <button class="btn-gold" onclick="publishProduct()" id="pub_btn">PUBLIER SUR LE MARCHÉ</button>
         </div>
 
         <nav class="nav-bar">
@@ -80,7 +80,7 @@
 </div>
 
 <script>
-    // 1. INITIALISATION
+    // --- 1. CONFIG ET INITIALISATION ---
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
 
     const firebaseConfig = {
@@ -94,7 +94,7 @@
     let correctOTP = "";
     let compressedImage = ""; 
 
-    // 2. AUTHENTICATION
+    // --- 2. GESTION DE L'ACCÈS ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
         if(!email) return alert("Email requis");
@@ -112,7 +112,7 @@
             localStorage.setItem("seg_session", "active");
             startApp();
         } else {
-            alert("Code incorrect.");
+            alert("Code de sécurité incorrect.");
         }
     }
 
@@ -122,7 +122,7 @@
         loadProducts();
     }
 
-    // 3. LOGIQUE PRODUIT (COMPRESSION INCLUSE)
+    // --- 3. LOGIQUE MÉTIER (IMAGE & VENTE) ---
     function previewImage(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -134,7 +134,7 @@
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 
-                // Compression intelligente (800px max)
+                // Compression intelligente (Max 800px)
                 const maxWidth = 800;
                 const scale = maxWidth / img.width;
                 canvas.width = maxWidth;
@@ -142,8 +142,8 @@
 
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 
-                // Conversion JPEG léger pour Firestore
-                compressedImage = canvas.toDataURL("image/jpeg", 0.7);
+                // On transforme en JPEG compressé pour éviter l'erreur de taille Firebase
+                compressedImage = canvas.toDataURL("image/jpeg", 0.6);
                 
                 const prev = document.getElementById('preview');
                 prev.src = compressedImage;
@@ -154,50 +154,67 @@
         reader.readAsDataURL(file);
     }
 
-    function publishProduct() {
+    async function publishProduct() {
         const name = document.getElementById('prod_name').value;
         const price = document.getElementById('prod_price').value;
         const tel = document.getElementById('prod_phone').value;
+        const btn = document.getElementById('pub_btn');
 
-        if(!name || !price || !compressedImage || !tel) return alert("Remplis tout, Fondateur !");
+        if(!name || !price || !compressedImage || !tel) return alert("Infos manquantes !");
 
-        document.getElementById('pub_btn').innerText = "PUBLICATION...";
+        btn.innerText = "TRANSFERT AU SERVEUR...";
+        btn.disabled = true;
 
-        db.collection("produits").add({
-            nom: name,
-            prix: price,
-            image: compressedImage,
-            tel: tel,
-            date: new Date()
-        }).then(() => {
-            alert("🚀 Succès ! Article en ligne sur l'Empire.");
-            location.reload();
-        }).catch((err) => {
-            alert("Erreur Firebase : " + err.message);
-            document.getElementById('pub_btn').innerText = "Publier sur le Marché";
-        });
+        try {
+            await db.collection("produits").add({
+                nom: name,
+                prix: price,
+                image: compressedImage,
+                tel: tel,
+                date: new Date()
+            });
+
+            alert("🚀 Article publié avec succès !");
+            
+            // Réinitialisation automatique
+            document.getElementById('prod_name').value = "";
+            document.getElementById('prod_price').value = "";
+            document.getElementById('preview').style.display = "none";
+            compressedImage = "";
+
+            // Redirection automatique vers l'accueil
+            showPage('home_page', document.querySelector('.nav-item'));
+            btn.innerText = "PUBLIER SUR LE MARCHÉ";
+            btn.disabled = false;
+
+        } catch (err) {
+            alert("Erreur Serveur : " + err.message);
+            btn.innerText = "PUBLIER SUR LE MARCHÉ";
+            btn.disabled = false;
+        }
     }
 
     function loadProducts() {
         const feed = document.getElementById('market_feed');
+        // Écoute en temps réel : les nouveaux produits apparaissent sans recharger
         db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
             feed.innerHTML = "";
             snapshot.forEach((doc) => {
                 const p = doc.data();
-                const waLink = `https://wa.me/${p.tel}?text=Salut S.E.G Global, je veux : ${p.nom}`;
+                const waLink = `https://wa.me/${p.tel}?text=Salut S.E.G GLOBAL, je suis intéressé par : ${p.nom}`;
                 feed.innerHTML += `
                     <div class="item-card">
-                        <img src="${p.image || 'https://via.placeholder.com/150'}">
+                        <img src="${p.image}">
                         <strong>${p.nom}</strong>
                         <span class="price">${parseInt(p.prix).toLocaleString()} F</span>
-                        <a href="${waLink}" class="btn-wa">ACHETER</a>
+                        <a href="${waLink}" target="_blank" class="btn-wa">ACHETER SUR WHATSAPP</a>
                     </div>
                 `;
             });
         });
     }
 
-    // 4. NAVIGATION
+    // --- 4. INTERFACE ---
     function showPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
@@ -205,9 +222,11 @@
         el.classList.add('active');
     }
 
-    function logout() { localStorage.removeItem("seg_session"); location.reload(); }
+    function logout() { 
+        localStorage.removeItem("seg_session"); 
+        location.reload(); 
+    }
     
-    // Auto-connexion si session active
     if(localStorage.getItem("seg_session") === "active") startApp();
 
 </script>
