@@ -1,8 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.E.G GLOBAL - Empire Business</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root { --gold: #D4AF37; --bg: #000; --neon-blue: #00d4ff; --glass: rgba(255, 255, 255, 0.05); }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Arial', sans-serif; min-height: 100%; }
+        .container { max-width: 450px; margin: auto; padding: 20px; padding-bottom: 100px; }
+        
+        /* AUTH & LOGO */
+        .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 15px rgba(212,175,55,0.4); text-align: center; }
+        .subtitle { font-size: 10px; color: #888; text-transform: uppercase; margin-bottom: 30px; text-align: center; }
+        
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; }
+        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* MARCHÉ & CARTES */
+        .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .item-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; border-bottom: 2px solid var(--gold); }
+        .item-card img { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+        .price { color: var(--gold); font-weight: bold; display: block; margin-bottom: 5px; }
+
+        /* HEADER STATS */
+        .header-stats { background: var(--glass); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 20px; }
+        .val-money { font-size: 22px; color: var(--neon-blue); font-weight: bold; }
+
+        /* NAV BAR */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #080808; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; z-index: 1000; }
+        .nav-item { color: #666; font-size: 10px; text-align: center; cursor: pointer; }
+        .nav-item.active { color: var(--gold); }
+        
+        #preview { width: 100px; height: 100px; object-fit: cover; margin: 10px auto; display: none; border-radius: 10px; border: 1px solid var(--gold); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div id="auth_section">
+        <div class="logo-gold">S.E.G GLOBAL</div>
+        <p class="subtitle">Authentification de Luxe</p>
+        <div id="login_step1">
+            <input type="email" id="email_input" placeholder="Email de votre compte">
+            <button class="btn-gold" onclick="sendAccessCode()">Obtenir mon code d'accès</button>
+        </div>
+        <div id="login_step2" style="display:none;">
+            <input type="text" id="otp_input" placeholder="Entrez le code reçu">
+            <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
+        </div>
+        <p id="auth_error" style="color:red; font-size:12px; text-align:center; margin-top:10px;"></p>
+    </div>
+
+    <div id="main_app" style="display:none;">
+        
+        <div id="home_page" class="page active">
+            <div class="header-stats">
+                <div style="font-size:10px; opacity:0.7;">SOLDE COMPTE S.E.G</div>
+                <div id="user_balance_display" class="val-money">50 000 FCFA</div>
+            </div>
+            <h3 style="text-align: center; color: var(--gold);">Le Marché S.E.G</h3>
+            <div class="market-grid" id="market_feed"></div>
+        </div>
+
+        <div id="seller_page" class="page">
+            <h2 style="color:var(--gold); text-align:center;">Mettre en vente</h2>
+            <input type="text" id="prod_name" placeholder="Nom du produit">
+            <input type="number" id="prod_price" oninput="calcCom()" placeholder="Prix (FCFA)">
+            <div id="com_calc" style="font-size: 11px; color: var(--neon-blue); text-align:center;">Commission S.E.G (10%) : 0 F</div>
+            
+            <p style="font-size: 10px; text-align:center; margin-top:15px;">PHOTO DE L'ARTICLE :</p>
+            <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)">
+            <center><img id="preview"></center>
+            
+            <button class="btn-gold" style="margin-top:20px;" onclick="publishProduct()">PUBLIER SUR L'EMPIRE</button>
+        </div>
+
+        <div id="vault_page" class="page">
+            <h2 style="color:var(--gold); text-align:center;">🔐 Mon Identité S.E.G</h2>
+            <div class="header-stats" style="border-color:var(--neon-blue);">
+                <div style="font-size:12px;">NUMÉRO DE COMPTE</div>
+                <div id="user_id_display" class="val-money" style="color:var(--gold); font-size:18px;">---</div>
+            </div>
+            <button class="btn-gold" style="background:#222; color:#fff;" onclick="logout()">Déconnexion Sécurisée</button>
+        </div>
+
+        <nav class="nav-bar">
+            <div class="nav-item active" onclick="showPage('home_page', this)">🏠<br>ACCUEIL</div>
+            <div class="nav-item" onclick="showPage('seller_page', this)">🛒<br>VENDRE</div>
+            <div class="nav-item" onclick="showPage('vault_page', this)">💎<br>COMPTE</div>
+        </nav>
+    </div>
+</div>
+
 <script>
-    // Initialisation EmailJS
+    // 1. CONFIGURATION
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
 
-    // Configuration Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
@@ -11,43 +114,68 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // --- SYSTÈME DE COMPTE S.E.G ---
-    // On simule un utilisateur connecté (Plus tard, cela viendra de la base de données)
+    // 2. ÉTAT DE L'UTILISATEUR
+    let correctOTP = "";
+    let base64Image = "";
     let currentUser = {
         id: "SEG-237-" + Math.floor(1000 + Math.random() * 9000),
-        solde: 50000 // Solde initial pour test (en FCFA)
+        solde: 50000 
     };
 
-    let base64Image = ""; // Pour stocker l'image convertie
+    // 3. AUTHENTIFICATION
+    function sendAccessCode() {
+        const email = document.getElementById('email_input').value;
+        if(!email) return alert("Email requis");
+        
+        correctOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        document.getElementById('auth_error').innerText = "Connexion...";
+
+        emailjs.send("service_ocg86ge", "template_v7i6m5m", {
+            to_email: email,
+            otp_code: correctOTP
+        }).then(() => {
+            document.getElementById('login_step1').style.display = 'none';
+            document.getElementById('login_step2').style.display = 'block';
+            document.getElementById('auth_error').innerText = "";
+        }).catch(() => {
+            document.getElementById('auth_error').innerText = "Erreur de clé Public EmailJS.";
+        });
+    }
+
+    function verifyAccessCode() {
+        if(document.getElementById('otp_input').value === correctOTP) {
+            localStorage.setItem("seg_session", "active");
+            startApp();
+        } else {
+            alert("Code incorrect.");
+        }
+    }
 
     function startApp() {
         document.getElementById('auth_section').style.display = 'none';
         document.getElementById('main_app').style.display = 'block';
-        
-        // Affichage de l'ID et du solde dans l'interface
-        document.querySelector('.header-stats .val-money').innerText = currentUser.solde.toLocaleString() + " FCFA";
-        console.log("Compte connecté : " + currentUser.id);
-        
+        document.getElementById('user_id_display').innerText = currentUser.id;
+        document.getElementById('user_balance_display').innerText = currentUser.solde.toLocaleString() + " FCFA";
         loadProducts();
     }
 
-    // Aperçu et conversion de l'image (Crucial pour Firebase)
+    // 4. BOUTIQUE ET VENTES
     function previewImage(event) {
-        const file = event.target.files[0];
-        if (!file) return;
         const reader = new FileReader();
         reader.onload = function() {
             base64Image = reader.result;
             const prev = document.getElementById('preview');
-            if(prev) {
-                prev.src = reader.result;
-                prev.style.display = "block";
-            }
+            prev.src = reader.result;
+            prev.style.display = "block";
         }
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(event.target.files[0]);
     }
 
-    // Chargement du Marché
+    function calcCom() {
+        const price = document.getElementById('prod_price').value;
+        document.getElementById('com_calc').innerText = `Commission S.E.G (10%) : ${(price * 0.1).toLocaleString()} FCFA`;
+    }
+
     function loadProducts() {
         const feed = document.getElementById('market_feed');
         db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
@@ -57,61 +185,56 @@
                 feed.innerHTML += `
                     <div class="item-card">
                         <img src="${p.image || 'https://via.placeholder.com/150'}">
-                        <strong>${p.nom}</strong>
+                        <div style="font-size:12px; font-weight:bold;">${p.nom}</div>
                         <span class="price">${parseInt(p.prix).toLocaleString()} F</span>
-                        <button onclick="securePay('${doc.id}', ${p.prix})" class="btn-gold" style="font-size:10px; margin-top:10px;">ACHETER VIA S.E.G</button>
+                        <button onclick="securePay('${doc.id}', ${p.prix})" class="btn-gold" style="padding:5px; font-size:10px;">ACHETER VIA S.E.G</button>
                     </div>
                 `;
             });
         });
     }
 
-    // LOGIQUE DE PAIEMENT SÉCURISÉ (Zéro Arnaque)
-    function securePay(prodId, prix) {
-        if(currentUser.solde < prix) {
-            alert("⚠️ Solde insuffisant sur votre compte S.E.G.\nVeuillez recharger via Orange ou MTN Money.");
-        } else {
-            const commission = prix * 0.10;
-            const netVendeur = prix - commission;
-            
-            if(confirm(`Confirmer l'achat ?\nPrix : ${prix} F\nFrais de service S.E.G inclus.`)) {
-                // Ici on déduit le solde (simulation)
-                currentUser.solde -= prix;
-                document.querySelector('.header-stats .val-money').innerText = currentUser.solde.toLocaleString() + " FCFA";
-                
-                alert(`✅ Succès !\nCommission S.E.G prélevée : ${commission} F\nLe vendeur recevra : ${netVendeur} F.`);
-            }
-        }
-    }
-
-    // Publication d'un article
     function publishProduct() {
         const name = document.getElementById('prod_name').value;
         const price = document.getElementById('prod_price').value;
         
-        if(!name || !price || !base64Image) {
-            return alert("⚠️ Erreur : Veuillez remplir le nom, le prix et ajouter une photo.");
-        }
+        if(!name || !price || !base64Image) return alert("Remplissez tous les champs et ajoutez une photo !");
 
         db.collection("produits").add({
             nom: name,
             prix: parseFloat(price),
             image: base64Image,
-            vendeurId: currentUser.id, // L'ID S.E.G du vendeur
+            vendeurId: currentUser.id,
             date: new Date()
         }).then(() => {
-            alert("🚀 Article publié sur l'infrastructure S.E.G GLOBAL !");
+            alert("Félicitations Fondateur ! Article en ligne.");
             showPage('home_page', document.querySelector('.nav-item'));
-        }).catch((error) => {
-            alert("Erreur base de données : " + error.message);
-        });
+        }).catch((err) => alert("Erreur Firebase : " + err));
     }
 
-    // Navigation
+    function securePay(prodId, prix) {
+        if(currentUser.solde < prix) {
+            alert("Solde S.E.G insuffisant. Veuillez recharger votre compte.");
+        } else {
+            if(confirm(`Voulez-vous acheter cet article pour ${prix.toLocaleString()} F via votre compte S.E.G ?`)) {
+                currentUser.solde -= prix;
+                document.getElementById('user_balance_display').innerText = currentUser.solde.toLocaleString() + " FCFA";
+                alert("Transaction S.E.G réussie ! Argent sécurisé en attente de livraison.");
+            }
+        }
+    }
+
+    // 5. NAVIGATION
     function showPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        if(el) el.classList.add('active');
+        el.classList.add('active');
     }
+
+    function logout() { localStorage.removeItem("seg_session"); location.reload(); }
+    if(localStorage.getItem("seg_session") === "active") startApp();
+
 </script>
+</body>
+</html>
