@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Business</title>
+    <title>S.E.G GLOBAL - Empire Intégré</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
@@ -17,23 +17,24 @@
         .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); margin-bottom: 5px; text-shadow: 0 0 15px rgba(212,175,55,0.4); text-align: center; }
         .subtitle { font-size: 10px; color: #888; text-transform: uppercase; margin-bottom: 30px; text-align: center; }
         
-        input, .file-input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; }
-        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .btn-wa { background: #25D366; color: white; padding: 8px; border-radius: 5px; text-decoration: none; font-size: 12px; display: inline-block; margin-top: 10px; font-weight: bold; }
-
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; }
+        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top:10px; }
+        
         .page { display: none; }
         .active { display: block; }
+
+        .header-stats { background: var(--glass); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 20px; }
+        .val-money { font-size: 22px; color: var(--neon-blue); font-weight: bold; }
 
         .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .item-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; overflow: hidden; border-bottom: 2px solid var(--gold); }
         .item-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
-        .price { color: var(--gold); font-weight: bold; display: block; margin-bottom: 5px; }
 
         .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #080808; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; z-index: 1000; }
         .nav-item { color: #666; font-size: 10px; text-align: center; cursor: pointer; }
         .nav-item.active { color: var(--gold); }
         
-        #preview { width: 100px; height: 100px; object-fit: cover; margin: 10px auto; display: none; border-radius: 10px; border: 1px solid var(--gold); }
+        #preview { width: 120px; height: 120px; object-fit: cover; margin: 10px auto; display: none; border-radius: 10px; border: 1px solid var(--gold); }
     </style>
 </head>
 <body>
@@ -56,25 +57,37 @@
     <div id="main_app" style="display:none;">
         
         <div id="home_page" class="page active">
+            <div class="header-stats">
+                <div style="font-size:10px; opacity:0.7;">VOTRE SOLDE S.E.G</div>
+                <div class="val-money" id="solde_display">0 FCFA</div>
+            </div>
             <h3 style="text-align: center; color: var(--gold);">Le Marché S.E.G</h3>
             <div class="market-grid" id="market_feed"></div>
         </div>
 
         <div id="seller_page" class="page">
             <h2 style="color:var(--gold); text-align:center;">Vendre un article</h2>
-            <input type="text" id="prod_name" placeholder="Nom du produit">
+            <input type="text" id="prod_name" placeholder="Nom de l'article">
             <input type="number" id="prod_price" placeholder="Prix (FCFA)">
-            <input type="text" id="prod_phone" placeholder="Ton numéro WhatsApp (ex: 237690...)">
-            <p style="font-size: 10px;">PHOTO :</p>
+            <p style="font-size: 10px; text-align: center;">PHOTO :</p>
             <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)">
-            <img id="preview">
-            <button class="btn-gold" onclick="publishProduct()">Publier sur le Marché</button>
+            <center><img id="preview"></center>
+            <button class="btn-gold" onclick="publishProduct()" id="pub_btn">Transférer au Serveur</button>
+        </div>
+
+        <div id="vault_page" class="page">
+            <h2 style="color:var(--gold); text-align:center;">🔐 Mon Identité S.E.G</h2>
+            <div class="header-stats" style="border-color:var(--neon-blue); padding: 30px 10px;">
+                <div style="font-size:12px; margin-bottom:10px;">NUMÉRO DE COMPTE</div>
+                <div class="val-money" id="acc_number_display" style="color:var(--gold); font-size:24px;">Génération...</div>
+            </div>
+            <button class="btn-gold" style="background:#222; color:#fff;" onclick="logout()">Déconnexion Sécurisée</button>
         </div>
 
         <nav class="nav-bar">
             <div class="nav-item active" onclick="showPage('home_page', this)">🏠<br>ACCUEIL</div>
             <div class="nav-item" onclick="showPage('seller_page', this)">🛒<br>VENDRE</div>
-            <div class="nav-item" onclick="logout()">🚪<br>QUITTER</div>
+            <div class="nav-item" onclick="showPage('vault_page', this)">💎<br>COMPTE</div>
         </nav>
     </div>
 </div>
@@ -91,10 +104,14 @@
     const db = firebase.firestore();
 
     let correctOTP = "";
-    let base64Image = "";
+    let compressedImage = ""; 
+    let currentUserEmail = "";
 
+    // --- ACCÈS ET IDENTITÉ ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
+        if(!email) return alert("Email requis");
+        currentUserEmail = email;
         correctOTP = Math.floor(100000 + Math.random() * 900000).toString();
         emailjs.send("service_ocg86ge", "template_v7i6m5m", { to_email: email, otp_code: correctOTP })
         .then(() => {
@@ -103,76 +120,15 @@
         });
     }
 
-    function verifyAccessCode() {
+    async function verifyAccessCode() {
         if(document.getElementById('otp_input').value === correctOTP) {
             localStorage.setItem("seg_session", "active");
+            localStorage.setItem("seg_user", currentUserEmail);
+            await setupAccount(currentUserEmail);
             startApp();
         }
     }
 
-    function startApp() {
-        document.getElementById('auth_section').style.display = 'none';
-        document.getElementById('main_app').style.display = 'block';
-        loadProducts();
-    }
-
-    function previewImage(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            base64Image = reader.result;
-            const prev = document.getElementById('preview');
-            prev.src = reader.result;
-            prev.style.display = "block";
-        }
-        reader.readAsDataURL(event.target.files[0]);
-    }
-
-    function loadProducts() {
-        const feed = document.getElementById('market_feed');
-        db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
-            feed.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const p = doc.data();
-                const waLink = `https://wa.me/${p.tel}?text=Salut, je suis intéressé par : ${p.nom}`;
-                feed.innerHTML += `
-                    <div class="item-card">
-                        <img src="${p.image || 'https://via.placeholder.com/150'}">
-                        <strong>${p.nom}</strong>
-                        <span class="price">${parseInt(p.prix).toLocaleString()} FCFA</span>
-                        <a href="${waLink}" class="btn-wa">ACHETER</a>
-                    </div>
-                `;
-            });
-        });
-    }
-
-    function publishProduct() {
-        const name = document.getElementById('prod_name').value;
-        const price = document.getElementById('prod_price').value;
-        const tel = document.getElementById('prod_phone').value;
-        if(!name || !price || !base64Image || !tel) return alert("Remplis tout, même le numéro !");
-
-        db.collection("produits").add({
-            nom: name,
-            prix: price,
-            image: base64Image,
-            tel: tel,
-            date: new Date()
-        }).then(() => {
-            alert("Annonce en ligne !");
-            location.reload();
-        });
-    }
-
-    function showPage(pageId, el) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        el.classList.add('active');
-    }
-
-    function logout() { localStorage.removeItem("seg_session"); location.reload(); }
-    if(localStorage.getItem("seg_session") === "active") startApp();
-</script>
-</body>
-</html>
+    async function setupAccount(email) {
+        const userRef = db.collection("utilisateurs").doc(email);
+        const doc = await userRef.get();
