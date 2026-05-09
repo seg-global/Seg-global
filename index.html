@@ -12,30 +12,26 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
 
     <style>
-        :root { --gold: #D4AF37; --bg: #000; --neon-blue: #00d4ff; --glass: rgba(255, 255, 255, 0.05); }
-        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Arial', sans-serif; min-height: 100%; }
+        :root { --gold: #D4AF37; --bg: #000; --glass: rgba(255, 255, 255, 0.05); }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Arial', sans-serif; min-height: 100%; overflow-x: hidden; }
         .container { max-width: 450px; margin: auto; padding: 20px; padding-bottom: 100px; }
         
-        /* Design Futuriste */
         .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); text-align: center; text-shadow: 0 0 15px rgba(212,175,55,0.4); margin-top: 20px; }
         .subtitle { font-size: 10px; color: #888; text-transform: uppercase; text-align: center; margin-bottom: 30px; }
         
         input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; font-weight: bold; }
         .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-gold:disabled { background: #555; color: #ccc; cursor: not-allowed; }
+        .btn-gold:disabled { background: #444; color: #888; cursor: not-allowed; }
         
         .page { display: none; }
         .active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Marché & Cartes */
         .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .item-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; border-bottom: 2px solid var(--gold); position: relative; }
+        .item-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; border-bottom: 2px solid var(--gold); }
         .item-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
         .price { color: var(--gold); font-weight: bold; display: block; font-size: 14px; }
-        .btn-buy { background: #222; color: var(--gold); border: 1px solid var(--gold); padding: 8px; border-radius: 5px; font-size: 10px; margin-top: 10px; cursor: pointer; width: 100%; }
-
-        /* Navigation Basse */
+        
         .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #080808; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; z-index: 1000; }
         .nav-item { color: #666; font-size: 10px; text-align: center; cursor: pointer; }
         .nav-item.active { color: var(--gold); }
@@ -46,53 +42,48 @@
 <body>
 
 <div class="container">
-    <!-- SECTION AUTHENTIFICATION -->
+    <!-- AUTHENTIFICATION -->
     <div id="auth_section">
         <div class="logo-gold">S.E.G GLOBAL</div>
-        <p class="subtitle">Infrastructure de Sécurisation</p>
+        <p class="subtitle">Système Haute Rapidité</p>
         <div id="login_step1">
-            <input type="email" id="email_input" placeholder="Email de votre iPhone">
-            <button class="btn-gold" onclick="sendAccessCode()">Obtenir mon code d'accès</button>
+            <input type="email" id="email_input" placeholder="Email de session">
+            <button class="btn-gold" onclick="sendAccessCode()">Générer Code d'Entrée</button>
         </div>
         <div id="login_step2" style="display:none;">
-            <input type="text" id="otp_input" placeholder="Entrez le code de sécurité">
-            <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
+            <input type="text" id="otp_input" placeholder="Code OTP">
+            <button class="btn-gold" onclick="verifyAccessCode()">Vérifier Identité</button>
         </div>
     </div>
 
-    <!-- APPLICATION PRINCIPALE -->
+    <!-- APP PRINCIPALE -->
     <div id="main_app" style="display:none;">
-        
-        <!-- PAGE ACCUEIL / MARCHE -->
         <div id="home_page" class="page active">
-            <h3 style="text-align: center; color: var(--gold); letter-spacing: 2px;">LE MARCHÉ S.E.G</h3>
+            <h3 style="text-align: center; color: var(--gold);">FLUX DE L'EMPIRE</h3>
             <div class="market-grid" id="market_feed"></div>
         </div>
 
-        <!-- PAGE VENDEUR -->
         <div id="seller_page" class="page">
             <h2 style="color:var(--gold); text-align:center;">Vendre un article</h2>
-            <input type="text" id="prod_name" placeholder="Nom du produit">
+            <input type="text" id="prod_name" placeholder="Désignation">
             <input type="number" id="prod_price" placeholder="Prix (FCFA)">
-            <p style="font-size: 10px; text-align:center; color: #888;">PROTOCOLE : PHOTO OBLIGATOIRE</p>
+            <p style="font-size: 10px; text-align:center; color: #888;">CAPTEUR PHOTO ACTIF</p>
             <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)" style="border: 1px dashed var(--gold); padding: 10px;">
             <img id="preview">
-            <button class="btn-gold" id="pub_btn" onclick="publishProduct()">PUBLIER DANS L'EMPIRE</button>
+            <button class="btn-gold" id="pub_btn" onclick="publishProduct()">DÉPLOYER IMMÉDIATEMENT</button>
         </div>
 
-        <!-- BARRE DE NAVIGATION -->
         <nav class="nav-bar">
-            <div class="nav-item active" onclick="showPage('home_page', this)">🏠<br>ACCUEIL</div>
+            <div class="nav-item active" onclick="showPage('home_page', this)">🏠<br>FLUX</div>
             <div class="nav-item" onclick="showPage('seller_page', this)">🛒<br>VENDRE</div>
-            <div class="nav-item" onclick="logout()">🚪<br>QUITTER</div>
+            <div class="nav-item" onclick="logout()">🚪<br>OFFLINE</div>
         </nav>
     </div>
 </div>
 
 <script>
-    // --- 1. CONFIGURATION & INITIALISATION ---
+    // --- INITIALISATION ---
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
-    
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
@@ -100,27 +91,94 @@
         storageBucket: "seg-global.appspot.com"
     };
     firebase.initializeApp(firebaseConfig);
-    
     const db = firebase.firestore();
     const storage = firebase.storage();
     const SEG_ID = "SEG-237-3130"; 
 
     let correctOTP = "";
-    let selectedFile;
+    let optimizedFile = null;
 
-    // --- 2. SÉCURITÉ (S.E.G GUARD) ---
-    const SEG_Security = {
-        filtrerTexte: function(texte) {
-            const phoneRegex = /[0-9]{8,}/g; 
-            if (phoneRegex.test(texte)) {
-                alert("🚨 SÉCURITÉ S.E.G : Échange de numéros interdit. Utilisez votre Identité SEG.");
-                return false;
-            }
-            return true;
+    // --- MOTEUR DE RAPIDITÉ (COMPRESSION) ---
+    async function compressImage(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800; 
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.7);
+                };
+            };
+        });
+    }
+
+    // --- GESTION MÉDIAS ---
+    async function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const prev = document.getElementById('preview');
+                prev.src = e.target.result;
+                prev.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+            // Compression en arrière-plan pour gagner du temps
+            optimizedFile = await compressImage(file);
         }
-    };
+    }
 
-    // --- 3. AUTHENTIFICATION ---
+    // --- PUBLICATION HAUTE VITESSE ---
+    async function publishProduct() {
+        const name = document.getElementById('prod_name').value;
+        const price = document.getElementById('prod_price').value;
+        const btn = document.getElementById('pub_btn');
+        
+        if(!name || !price || !optimizedFile) return alert("Données manquantes !");
+        
+        const phoneRegex = /[0-9]{8,}/g;
+        if(phoneRegex.test(name)) return alert("🚨 SÉCURITÉ : Pas de numéros !");
+
+        btn.innerHTML = "PROPULSION EN COURS...";
+        btn.disabled = true;
+
+        try {
+            const storageRef = storage.ref('produits_seg/' + Date.now() + ".jpg");
+            const uploadTask = storageRef.put(optimizedFile);
+
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    btn.innerText = "TRANSFERT : " + Math.round(progress) + "%";
+                }, 
+                (error) => { throw error; }, 
+                async () => {
+                    const photoURL = await uploadTask.snapshot.ref.getDownloadURL();
+                    await db.collection("produits").add({
+                        nom: name, prix: parseFloat(price),
+                        image: photoURL, vendeurId: SEG_ID, date: new Date()
+                    });
+                    btn.innerText = "TERMINÉ !";
+                    alert("🚀 Article déployé avec succès !");
+                    location.reload();
+                }
+            );
+        } catch (e) {
+            alert("Erreur: " + e.message);
+            btn.disabled = false;
+            btn.innerText = "RÉESSAYER";
+        }
+    }
+
+    // --- SYSTÈME CORE ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
         if(!email) return alert("Email requis");
@@ -136,9 +194,7 @@
         if(document.getElementById('otp_input').value === correctOTP) {
             localStorage.setItem("seg_session", "active");
             startApp();
-        } else {
-            alert("Code incorrect.");
-        }
+        } else alert("Code incorrect");
     }
 
     function startApp() {
@@ -147,89 +203,18 @@
         loadProducts();
     }
 
-    // --- 4. GESTION DES MÉDIAS & PREVIEW ---
-    function previewImage(event) {
-        selectedFile = event.target.files[0];
-        if (selectedFile) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const prev = document.getElementById('preview');
-                prev.src = e.target.result;
-                prev.style.display = "block";
-            }
-            reader.readAsDataURL(selectedFile);
-        }
-    }
-
-    // --- 5. PUBLICATION HAUTE VITESSE (STYLE FUTURISTE) ---
-    async function publishProduct() {
-        const name = document.getElementById('prod_name').value;
-        const price = document.getElementById('prod_price').value;
-        const btn = document.getElementById('pub_btn');
-        
-        if(!SEG_Security.filtrerTexte(name)) return;
-        if(!name || !price || !selectedFile) return alert("Détails manquants pour l'Empire !");
-
-        // UI : Lancement du protocole de transfert
-        btn.innerHTML = "INITIALISATION DU FLUX...";
-        btn.style.opacity = "0.7";
-        btn.disabled = true;
-
-        try {
-            // Étape Cloud Storage
-            const storageRef = storage.ref('produits_seg/' + Date.now() + "_" + selectedFile.name);
-            const uploadTask = storageRef.put(selectedFile);
-
-            // Suivi du transfert (%)
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    btn.innerText = "SÉCURISATION : " + Math.round(progress) + "%";
-                }, 
-                (error) => { 
-                    alert("Erreur Cloud : " + error.message);
-                    btn.innerText = "RÉESSAYER";
-                    btn.disabled = false;
-                }, 
-                async () => {
-                    // Finalisation dans Firestore
-                    const photoURL = await uploadTask.snapshot.ref.getDownloadURL();
-                    await db.collection("produits").add({
-                        nom: name,
-                        prix: parseFloat(price),
-                        image: photoURL,
-                        vendeurId: SEG_ID,
-                        date: new Date()
-                    });
-
-                    btn.innerText = "DÉPLOIEMENT RÉUSSI !";
-                    alert("🚀 PUBLIÉ AVEC SUCCÈS !");
-                    location.reload();
-                }
-            );
-
-        } catch (error) {
-            alert("Erreur critique : " + error.message);
-            btn.innerText = "PUBLIER DANS L'EMPIRE";
-            btn.disabled = false;
-        }
-    }
-
-    // --- 6. CHARGEMENT DU MARCHÉ ---
     function loadProducts() {
         const feed = document.getElementById('market_feed');
-        db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
+        db.collection("produits").orderBy("date", "desc").onSnapshot((snap) => {
             feed.innerHTML = "";
-            snapshot.forEach((doc) => {
+            snap.forEach((doc) => {
                 const p = doc.data();
                 feed.innerHTML += `
                     <div class="item-card">
-                        <img src="${p.image || 'https://via.placeholder.com/150'}">
+                        <img src="${p.image}">
                         <strong>${p.nom}</strong>
                         <span class="price">${p.prix.toLocaleString()} F</span>
-                        <button class="btn-buy" onclick="alert('Transaction Sécurisée S.E.G enclenchée...')">ACHETER</button>
-                    </div>
-                `;
+                    </div>`;
             });
         });
     }
