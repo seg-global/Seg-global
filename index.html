@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Business</title>
+    <title>S.E.G GLOBAL - Empire Intégré</title>
     
     <!-- Bibliothèques Cloud S.E.G -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -13,29 +13,29 @@
 
     <style>
         :root { --gold: #D4AF37; --bg: #000; --neon-blue: #00d4ff; --glass: rgba(255, 255, 255, 0.05); }
-        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Arial', sans-serif; min-height: 100vh; }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Arial', sans-serif; min-height: 100%; }
         .container { max-width: 450px; margin: auto; padding: 20px; padding-bottom: 100px; }
         
         /* Design Futuriste */
-        .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); text-align: center; text-shadow: 0 0 15px rgba(212,175,55,0.4); margin-top: 30px; }
+        .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); text-align: center; text-shadow: 0 0 15px rgba(212,175,55,0.4); margin-top: 20px; }
         .subtitle { font-size: 10px; color: #888; text-transform: uppercase; text-align: center; margin-bottom: 30px; }
         
         input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; }
-        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         
         .page { display: none; }
-        .active { display: block; animation: fadeIn 0.5s; }
+        .active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Marché & Cartes */
+        /* Marché & Cards */
         .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .item-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; border-bottom: 2px solid var(--gold); }
         .item-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
         .price { color: var(--gold); font-weight: bold; display: block; }
-        .btn-buy { background: #222; color: var(--gold); border: 1px solid var(--gold); padding: 8px; border-radius: 5px; font-size: 10px; margin-top: 10px; display: block; text-decoration: none; }
+        .btn-buy { background: #222; color: var(--gold); border: 1px solid var(--gold); padding: 8px; border-radius: 5px; font-size: 10px; margin-top: 10px; cursor: pointer; }
 
-        /* Navigation Basse */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #080808; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; }
+        /* Navigation */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #080808; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; z-index: 1000; }
         .nav-item { color: #666; font-size: 10px; text-align: center; cursor: pointer; }
         .nav-item.active { color: var(--gold); }
         
@@ -45,7 +45,7 @@
 <body>
 
 <div class="container">
-    <!-- SECTION AUTHENTIFICATION -->
+    <!-- AUTHENTIFICATION -->
     <div id="auth_section">
         <div class="logo-gold">S.E.G GLOBAL</div>
         <p class="subtitle">Infrastructure de Sécurisation</p>
@@ -54,12 +54,12 @@
             <button class="btn-gold" onclick="sendAccessCode()">Obtenir mon code d'accès</button>
         </div>
         <div id="login_step2" style="display:none;">
-            <input type="text" id="otp_input" placeholder="Code de sécurité reçu">
+            <input type="text" id="otp_input" placeholder="Code reçu">
             <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
         </div>
     </div>
 
-    <!-- APPLICATION PRINCIPALE -->
+    <!-- MAIN APP -->
     <div id="main_app" style="display:none;">
         <div id="home_page" class="page active">
             <h3 style="text-align: center; color: var(--gold);">Le Marché S.E.G</h3>
@@ -70,8 +70,8 @@
             <h2 style="color:var(--gold); text-align:center;">Vendre un article</h2>
             <input type="text" id="prod_name" placeholder="Nom du produit">
             <input type="number" id="prod_price" placeholder="Prix (FCFA)">
-            <p style="font-size: 10px; text-align:center;">FORMAT : IMAGE SEULEMENT</p>
-            <input type="file" accept="image/*" onchange="previewImage(event)">
+            <p style="font-size: 10px; text-align:center;">SÉCURITÉ : PHOTO OBLIGATOIRE</p>
+            <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)">
             <img id="preview">
             <button class="btn-gold" id="pub_btn" onclick="publishProduct()">Publier sur l'Empire</button>
         </div>
@@ -85,9 +85,9 @@
 </div>
 
 <script>
-    // --- 1. INITIALISATION ---
+    // --- INITIALISATION ---
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
-    
+
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
@@ -97,22 +97,24 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const storage = firebase.storage();
-    const SEG_ID = "SEG-237-3130"; 
+    const SEG_ID = "SEG-237-3130";
 
     let correctOTP = "";
     let selectedFile;
 
-    // --- 2. SÉCURITÉ ---
-    function filterSecurity(text) {
-        const phoneRegex = /[0-9]{8,}/g; 
-        if (phoneRegex.test(text)) {
-            alert("🚨 SÉCURITÉ S.E.G : Échange de numéros interdit.");
-            return false;
+    // --- SÉCURITÉ ---
+    const SEG_Security = {
+        filtrerTexte: function(texte) {
+            const phoneRegex = /[0-9]{8,}/g; 
+            if (phoneRegex.test(texte)) {
+                alert("🚨 SÉCURITÉ S.E.G : Échange de numéros interdit. Utilisez votre Identité SEG.");
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
+    };
 
-    // --- 3. LOGIQUE AUTH ---
+    // --- AUTHENTIFICATION ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
         correctOTP = Math.floor(100000 + Math.random() * 900000).toString();
@@ -136,16 +138,16 @@
         loadProducts();
     }
 
-    // --- 4. GESTION PRODUITS ---
+    // --- GESTION DES PRODUITS ---
     function previewImage(event) {
         selectedFile = event.target.files[0];
         if (selectedFile) {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = function(e) {
                 const prev = document.getElementById('preview');
                 prev.src = e.target.result;
                 prev.style.display = "block";
-            };
+            }
             reader.readAsDataURL(selectedFile);
         }
     }
@@ -155,17 +157,19 @@
         const price = document.getElementById('prod_price').value;
         const btn = document.getElementById('pub_btn');
 
-        if(!filterSecurity(name)) return;
-        if(!name || !price || !selectedFile) return alert("Remplis tout !");
+        if(!SEG_Security.filtrerTexte(name)) return;
+        if(!name || !price || !selectedFile) return alert("Remplissez tout, Fondateur !");
 
         btn.innerText = "TRANSFERT AU SERVEUR...";
         btn.disabled = true;
 
         try {
+            // Étape 1 : Envoi au Storage (Cloud)
             const storageRef = storage.ref('produits_seg/' + Date.now() + "_" + selectedFile.name);
             const uploadTask = await storageRef.put(selectedFile);
             const photoURL = await uploadTask.ref.getDownloadURL();
 
+            // Étape 2 : Enregistrement dans la Base de Données
             await db.collection("produits").add({
                 nom: name,
                 prix: parseFloat(price),
@@ -174,10 +178,11 @@
                 date: new Date()
             });
 
-            alert("🚀 Article publié avec succès !");
+            alert("🚀 Article publié dans l'Empire !");
             location.reload();
-        } catch (e) {
-            alert("Erreur : " + e.message);
+
+        } catch (error) {
+            alert("Erreur : " + error.message);
             btn.innerText = "PUBLIER SUR L'EMPIRE";
             btn.disabled = false;
         }
@@ -193,8 +198,8 @@
                     <div class="item-card">
                         <img src="${p.image || 'https://via.placeholder.com/150'}">
                         <strong>${p.nom}</strong>
-                        <span class="price">${p.prix.toLocaleString()} F</span>
-                        <button class="btn-buy" onclick="alert('Transaction Sécurisée S.E.G en cours...')">ACHETER</button>
+                        <span class="price">${p.prix.toLocaleString()} FCFA</span>
+                        <button class="btn-buy" onclick="alert('Paiement sécurisé S.E.G en cours...')">ACHETER</button>
                     </div>
                 `;
             });
