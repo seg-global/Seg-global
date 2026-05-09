@@ -20,8 +20,8 @@
         .subtitle { font-size: 10px; color: #888; text-transform: uppercase; text-align: center; margin-bottom: 30px; }
         
         input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; font-weight: bold; }
-        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-gold:disabled { background: #444; color: #888; cursor: not-allowed; }
+        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; position: relative; overflow: hidden; }
+        .btn-gold:disabled { color: #fff; cursor: not-allowed; }
         
         .page { display: none; }
         .active { display: block; animation: fadeIn 0.4s ease; }
@@ -131,12 +131,11 @@
                 prev.style.display = "block";
             };
             reader.readAsDataURL(file);
-            // Compression en arrière-plan pour gagner du temps
             optimizedFile = await compressImage(file);
         }
     }
 
-    // --- PUBLICATION HAUTE VITESSE ---
+    // --- PUBLICATION HAUTE VITESSE RECTIFIÉE ---
     async function publishProduct() {
         const name = document.getElementById('prod_name').value;
         const price = document.getElementById('prod_price').value;
@@ -147,24 +146,37 @@
         const phoneRegex = /[0-9]{8,}/g;
         if(phoneRegex.test(name)) return alert("🚨 SÉCURITÉ : Pas de numéros !");
 
-        btn.innerHTML = "PROPULSION EN COURS...";
+        btn.innerHTML = "PROPULSION : 1%"; 
         btn.disabled = true;
 
         try {
-            const storageRef = storage.ref('produits_seg/' + Date.now() + ".jpg");
-            const uploadTask = storageRef.put(optimizedFile);
+            const fileName = `SEG_${Date.now()}.jpg`;
+            const storageRef = storage.ref('produits_seg').child(fileName);
+            const metadata = { contentType: 'image/jpeg' };
+            const uploadTask = storageRef.put(optimizedFile, metadata);
 
             uploadTask.on('state_changed', 
                 (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    btn.innerText = "TRANSFERT : " + Math.round(progress) + "%";
+                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    let displayProgress = Math.max(1, Math.round(progress));
+                    btn.innerText = "SÉCURISATION : " + displayProgress + "%";
+                    // Barre de progression visuelle sur le bouton
+                    btn.style.background = `linear-gradient(90deg, #D4AF37 ${displayProgress}%, #444 ${displayProgress}%)`;
                 }, 
-                (error) => { throw error; }, 
+                (error) => { 
+                    console.error(error);
+                    alert("Erreur réseau : Vérifiez votre connexion.");
+                    btn.disabled = false;
+                    btn.innerText = "RÉESSAYER";
+                }, 
                 async () => {
                     const photoURL = await uploadTask.snapshot.ref.getDownloadURL();
                     await db.collection("produits").add({
-                        nom: name, prix: parseFloat(price),
-                        image: photoURL, vendeurId: SEG_ID, date: new Date()
+                        nom: name,
+                        prix: parseFloat(price),
+                        image: photoURL,
+                        vendeurId: SEG_ID,
+                        date: new Date()
                     });
                     btn.innerText = "TERMINÉ !";
                     alert("🚀 Article déployé avec succès !");
@@ -172,9 +184,9 @@
                 }
             );
         } catch (e) {
-            alert("Erreur: " + e.message);
+            alert("Erreur critique : " + e.message);
             btn.disabled = false;
-            btn.innerText = "RÉESSAYER";
+            btn.innerText = "PUBLIER";
         }
     }
 
