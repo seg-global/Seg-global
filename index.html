@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Empire Intégré</title>
+    <title>S.E.G GLOBAL - Empire Business</title>
     
-    <!-- Bibliothèques Cloud S.E.G -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
@@ -13,34 +12,41 @@
 
     <style>
         :root { --gold: #D4AF37; --bg: #000; --neon-blue: #00d4ff; --glass: rgba(255, 255, 255, 0.05); }
-        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Arial', sans-serif; min-height: 100%; }
-        .container { max-width: 450px; margin: auto; padding: 20px; padding-bottom: 100px; }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Segoe UI', Roboto, sans-serif; min-height: 100%; overflow-x: hidden; }
+        .container { max-width: 450px; margin: auto; padding: 20px; padding-bottom: 120px; }
         
-        .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); text-align: center; text-shadow: 0 0 15px rgba(212,175,55,0.4); margin-top: 20px; }
-        .subtitle { font-size: 10px; color: #888; text-transform: uppercase; text-align: center; margin-bottom: 30px; }
+        /* Design Logo & Textes */
+        .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); text-align: center; text-shadow: 0 0 15px rgba(212,175,55,0.4); margin-top: 20px; font-weight: bold; }
+        .subtitle { font-size: 10px; color: #888; text-transform: uppercase; text-align: center; margin-bottom: 30px; letter-spacing: 2px; }
         
-        input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; text-align: center; font-weight: bold; }
-        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-gold:disabled { background: #555; color: #ccc; cursor: not-allowed; }
-        
+        /* Formulaires */
+        input { width: 100%; padding: 16px; margin: 10px 0; background: #0a0a0a; border: 1px solid #222; color: #fff; border-radius: 12px; box-sizing: border-box; text-align: center; font-size: 15px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(212,175,55,0.2); }
+        .btn-gold { width: 100%; padding: 16px; background: var(--gold); color: #000; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; margin-top: 10px; }
+        .btn-gold:active { transform: scale(0.98); }
+        .btn-gold:disabled { background: #333; color: #777; cursor: not-allowed; }
+
+        /* Pages & Animations */
         .page { display: none; }
-        .active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .header-stats { background: var(--glass); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 20px; }
-        .val-money { font-size: 22px; color: var(--neon-blue); font-weight: bold; }
+        /* Stats & Cards */
+        .header-stats { background: linear-gradient(145deg, #111, #050505); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .val-money { font-size: 24px; color: var(--neon-blue); font-weight: bold; margin-top: 5px; }
 
-        .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .item-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; text-align: center; border-bottom: 2px solid var(--gold); position: relative; }
-        .item-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
-        .price { color: var(--gold); font-weight: bold; display: block; font-size: 14px; }
-        .btn-buy { background: #222; color: var(--gold); border: 1px solid var(--gold); padding: 8px; border-radius: 5px; font-size: 10px; margin-top: 10px; cursor: pointer; width: 100%; }
+        .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .item-card { background: #111; border: 1px solid #222; border-radius: 15px; padding: 12px; text-align: center; border-bottom: 3px solid var(--gold); transition: 0.3s; }
+        .item-card img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; }
+        .price { color: var(--gold); font-weight: bold; font-size: 15px; }
+        .btn-buy { background: #1a1a1a; color: var(--gold); border: 1px solid var(--gold); padding: 8px; border-radius: 8px; font-size: 11px; margin-top: 10px; cursor: pointer; width: 100%; font-weight: bold; }
 
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #080808; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; z-index: 1000; }
-        .nav-item { color: #666; font-size: 10px; text-align: center; cursor: pointer; }
-        .nav-item.active { color: var(--gold); }
+        /* Navigation */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(8, 8, 8, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 18px 0; border-top: 1px solid #222; z-index: 1000; }
+        .nav-item { color: #555; font-size: 10px; text-align: center; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .nav-item.active { color: var(--gold); transform: translateY(-5px); }
         
-        #preview { width: 120px; height: 120px; object-fit: cover; margin: 15px auto; display: none; border-radius: 10px; border: 2px solid var(--gold); box-shadow: 0 0 10px var(--gold); }
+        #preview { width: 150px; height: 150px; object-fit: cover; margin: 20px auto; display: none; border-radius: 15px; border: 2px solid var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.3); }
     </style>
 </head>
 <body>
@@ -54,7 +60,8 @@
             <button class="btn-gold" onclick="sendAccessCode()">Obtenir mon code d'accès</button>
         </div>
         <div id="login_step2" style="display:none;">
-            <input type="text" id="otp_input" placeholder="Entrez le code de sécurité">
+            <p style="text-align:center; font-size:12px; color:var(--gold);">Vérifiez vos emails pour le code</p>
+            <input type="text" id="otp_input" placeholder="Code de sécurité à 6 chiffres">
             <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
         </div>
     </div>
@@ -63,29 +70,30 @@
         
         <div id="home_page" class="page active">
             <div class="header-stats">
-                <div style="font-size:10px; opacity:0.7;">FONDS S.E.G GLOBAL</div>
+                <div style="font-size:10px; opacity:0.6; letter-spacing:1px;">FONDS S.E.G GLOBAL</div>
                 <div class="val-money">450 173 947 FCFA</div>
             </div>
-            <h3 style="text-align: center; color: var(--gold);">LE MARCHÉ S.E.G</h3>
+            <h3 style="text-align: center; color: var(--gold); margin-bottom: 20px;">LE MARCHÉ S.E.G</h3>
             <div class="market-grid" id="market_feed"></div>
         </div>
 
         <div id="seller_page" class="page">
             <h2 style="color:var(--gold); text-align:center;">Vendre un article</h2>
-            <input type="text" id="prod_name" placeholder="Nom du produit">
-            <input type="number" id="prod_price" placeholder="Prix (FCFA)">
-            <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)" style="border: 1px dashed var(--gold); padding: 10px;">
+            <input type="text" id="prod_name" placeholder="Nom de l'article">
+            <input type="number" id="prod_price" placeholder="Prix final (FCFA)">
+            <p style="font-size: 10px; text-align:center; color: #888; margin-top:15px;">PROTOCOLE PHOTO OBLIGATOIRE</p>
+            <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)" style="border: 1px dashed var(--gold); padding: 15px;">
             <img id="preview">
             <button class="btn-gold" id="pub_btn" onclick="publishProduct()">PUBLIER DANS L'EMPIRE</button>
         </div>
 
         <div id="vault_page" class="page">
-            <h2 style="color:var(--gold);">🔐 Mon Coffre-fort</h2>
+            <h2 style="color:var(--gold); text-align:center;">🔐 Mon Coffre-fort</h2>
             <div class="header-stats" style="border-color:var(--neon-blue);">
                 <div style="font-size:12px;">COMMISSIONS GÉNÉRÉES</div>
                 <div class="val-money" style="color:var(--gold);">12 450 FCFA</div>
             </div>
-            <button class="btn-gold" style="background:#222; color:#fff;" onclick="logout()">Déconnexion Sécurisée</button>
+            <button class="btn-gold" style="background:#111; color:#fff; border: 1px solid #333;" onclick="logout()">Déconnexion Sécurisée</button>
         </div>
 
         <nav class="nav-bar">
@@ -97,6 +105,7 @@
 </div>
 
 <script>
+    // --- INITIALISATION ---
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
     
     const firebaseConfig = {
@@ -114,17 +123,19 @@
     let correctOTP = "";
     let selectedFile;
 
+    // --- LOGIQUE SÉCURITÉ ---
     const SEG_Security = {
         filtrerTexte: function(texte) {
             const phoneRegex = /[0-9]{8,}/g; 
             if (phoneRegex.test(texte)) {
-                alert("🚨 SÉCURITÉ S.E.G : Échange de numéros interdit.");
+                alert("🚨 SÉCURITÉ S.E.G : Échange de numéros direct interdit.");
                 return false;
             }
             return true;
         }
     };
 
+    // --- AUTHENTIFICATION ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
         if(!email) return alert("Email requis");
@@ -149,6 +160,7 @@
         loadProducts();
     }
 
+    // --- GESTION PRODUITS ---
     function previewImage(event) {
         selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -168,21 +180,26 @@
         const btn = document.getElementById('pub_btn');
         
         if(!SEG_Security.filtrerTexte(name)) return;
-        if(!name || !price || !selectedFile) return alert("Détails manquants !");
+        if(!name || !price || !selectedFile) return alert("❌ Fondateur, remplissez tous les champs !");
 
-        btn.innerText = "TRANSFERT...";
         btn.disabled = true;
+        btn.style.opacity = "0.7";
 
         try {
-            const storageRef = storage.ref('produits_seg/' + Date.now() + "_" + selectedFile.name);
+            const fileName = Date.now() + "_" + selectedFile.name;
+            const storageRef = storage.ref('produits_seg/' + fileName);
             const uploadTask = storageRef.put(selectedFile);
 
             uploadTask.on('state_changed', 
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    btn.innerText = Math.round(progress) + "%";
+                    btn.innerText = "SÉCURISATION : " + Math.round(progress) + "%";
                 }, 
-                (error) => alert(error.message), 
+                (error) => {
+                    alert("Erreur Cloud: " + error.message);
+                    btn.disabled = false;
+                    btn.innerText = "RÉESSAYER";
+                }, 
                 async () => {
                     const photoURL = await uploadTask.snapshot.ref.getDownloadURL();
                     await db.collection("produits").add({
@@ -192,8 +209,8 @@
                         vendeurId: SEG_ID,
                         date: new Date()
                     });
-                    alert("🚀 PUBLIÉ !");
-                    location.reload();
+                    btn.innerText = "DÉPLOIEMENT RÉUSSI !";
+                    setTimeout(() => { location.reload(); }, 1000);
                 }
             );
         } catch (error) {
@@ -213,13 +230,14 @@
                         <img src="${p.image || 'https://via.placeholder.com/150'}">
                         <strong>${p.nom}</strong>
                         <span class="price">${p.prix.toLocaleString()} F</span>
-                        <button class="btn-buy" onclick="alert('Transaction Sécurisée...')">ACHETER</button>
+                        <button class="btn-buy" onclick="alert('Transaction Sécurisée enclenchée...')">ACHETER</button>
                     </div>
                 `;
             });
         });
     }
 
+    // --- NAVIGATION ---
     function showPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
