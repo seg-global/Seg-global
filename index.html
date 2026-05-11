@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL | EMPIRE INTÉGRÉ</title>
+    <title>S.E.G GLOBAL | EMPIRE INTÉGRÉ IA</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
@@ -12,31 +12,31 @@
 
     <style>
         :root { --gold: #D4AF37; --bg: #000; --neon-blue: #00d4ff; --dark-grey: #111; }
-        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100%; }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100%; overflow-x: hidden; }
         
         /* Design Futuriste */
         .dashboard-header { padding: 25px; text-align: center; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); border-bottom: 2px solid var(--gold); }
-        .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); cursor: pointer; text-shadow: 0 0 15px rgba(212,175,55,0.4); }
-        .target-text { font-size: 12px; color: var(--neon-blue); margin-top: 5px; text-transform: uppercase; }
+        .logo-gold { font-size: 28px; letter-spacing: 5px; color: var(--gold); cursor: pointer; text-shadow: 0 0 15px rgba(212,175,55,0.4); text-transform: uppercase; }
+        .target-text { font-size: 12px; color: var(--neon-blue); margin-top: 5px; text-transform: uppercase; font-weight: bold; }
         
         .container { max-width: 450px; margin: auto; padding: 20px; padding-bottom: 100px; }
         
-        /* Formulaires & Inputs */
+        /* Formulaires */
         input { width: 100%; padding: 15px; margin: 10px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 12px; box-sizing: border-box; font-weight: bold; }
         .btn-gold { width: 100%; padding: 15px; background: linear-gradient(90deg, #af8f42, #dfbd69); color: #000; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
         .btn-gold:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--gold); }
 
-        /* Poste de Commande Secret */
-        #boss_dashboard { display: none; background: #050505; border: 2px solid var(--gold); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .stat-card { background: #111; padding: 10px; border-radius: 10px; text-align: center; border: 1px solid #222; }
-
+        /* Bulle de Chat IA Intégrée */
+        #ai_chat_box { position: fixed; bottom: 90px; right: 20px; width: 280px; background: #1a1a1a; border: 1px solid var(--gold); border-radius: 15px; display: none; z-index: 2000; box-shadow: 0 0 25px rgba(212,175,55,0.3); }
+        .chat-header { background: var(--gold); color: black; padding: 10px; border-radius: 15px 15px 0 0; font-weight: bold; font-size: 11px; text-align: center; }
+        #chat_messages { height: 180px; overflow-y: auto; padding: 10px; font-size: 12px; background: #000; border-bottom: 1px solid #222; }
+        
         /* Marché */
         .market-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .item-card { background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; text-align: center; border-bottom: 3px solid var(--gold); }
-        .item-card img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; }
+        .item-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; }
         
-        /* Barre de Progression Anti-0% */
+        /* Barre de Progression */
         .progress-container { width: 100%; background: #222; border-radius: 10px; margin: 10px 0; height: 8px; overflow: hidden; display: none; }
         .progress-bar { width: 0%; height: 100%; background: var(--gold); transition: width 0.3s; }
 
@@ -45,71 +45,69 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: #080808; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; z-index: 1000; }
-        .nav-item { color: #555; font-size: 10px; text-align: center; cursor: pointer; text-decoration: none; }
+        .nav-item { color: #555; font-size: 10px; text-align: center; cursor: pointer; text-decoration: none; font-weight: bold; }
         .nav-item.active { color: var(--gold); }
     </style>
 </head>
 <body>
 
 <div id="auth_section" class="container">
-    <div class="logo-gold" style="margin-top:50px;">S.E.G GLOBAL</div>
-    <p style="text-align:center; color:#888; font-size:10px;">INFRASTRUCTURE SÉCURISÉE</p>
+    <div class="logo-gold" style="margin-top:50px; text-align: center;">S.E.G GLOBAL</div>
+    <p style="text-align:center; color:#888; font-size:10px; letter-spacing: 2px;">AUTHENTIFICATION EMPIRE</p>
     
     <div id="login_step1">
-        <input type="email" id="email_input" placeholder="Email de votre iPhone">
-        <button class="btn-gold" onclick="sendAccessCode()">Obtenir le Code d'Accès</button>
+        <input type="email" id="email_input" placeholder="Email de votre compte">
+        <button class="btn-gold" onclick="sendAccessCode()">Obtenir le Code</button>
     </div>
     <div id="login_step2" style="display:none;">
-        <input type="text" id="otp_input" placeholder="Code de sécurité">
-        <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
+        <input type="text" id="otp_input" placeholder="Code reçu">
+        <button class="btn-gold" onclick="verifyAccessCode()">Entrer dans l'Empire</button>
     </div>
 </div>
 
 <div id="main_app" style="display:none;">
     <div class="dashboard-header">
-        <h1 class="logo-gold" onclick="ouvrirPosteDeCommande()">S.E.G GLOBAL</h1>
-        <div class="target-text">Objectif : 24,000,000,000 FCFA</div>
+        <h1 class="logo-gold" onclick="toggleAIChat()">S.E.G GLOBAL IA</h1>
+        <div class="target-text">OBJECTIF : 24,000,000,000 FCFA</div>
     </div>
 
     <div class="container">
-        <div id="boss_dashboard">
-            <h3 style="color:var(--gold); text-align:center; margin:0; font-size:14px;">COMMANDEMENT CENTRAL</h3>
-            <div class="stats-grid">
-                <div class="stat-card"><small>FLUX</small><br><b style="color:var(--neon-blue)">EN ATTENTE</b></div>
-                <div class="stat-card"><small>IA OUVRIERS</small><br><b style="color:#25D366">ACTIFS</b></div>
-            </div>
-            <button class="btn-gold" style="font-size:10px;" onclick="alert('Optimisation IA lancée...')">Accélérer les flux</button>
+        <div id="ai_chat_box">
+            <div class="chat-header">COMMUNICATION OUVRIER IA</div>
+            <div id="chat_messages"><b>IA:</b> Bonjour Steve. Comment puis-je organiser l'Empire aujourd'hui ?</div>
+            <input type="text" id="ai_order" placeholder="Ordre (ex: Organise les ventes)" style="font-size: 11px; margin: 5px; width: 90%;">
+            <button class="btn-gold" style="width: 90%; margin: 5px; padding: 8px; font-size: 10px;" onclick="envoyerOrdreIA()">Envoyer</button>
         </div>
 
         <div id="home_page" class="page active">
-            <h2 style="text-align:center; color:var(--gold); font-size:18px;">MARCHÉ DE L'EMPIRE</h2>
+            <h2 style="text-align:center; color:var(--gold); font-size:16px;">MARCHÉ DE LUXE</h2>
             <div class="market-grid" id="market_feed"></div>
         </div>
 
         <div id="seller_page" class="page">
-            <h2 style="color:var(--gold); text-align:center;">Vendre un Article</h2>
-            <input type="text" id="prod_name" placeholder="Nom du produit">
+            <h2 style="color:var(--gold); text-align:center; font-size: 16px;">PUBLIER AVEC IA</h2>
+            <input type="text" id="prod_name" placeholder="Nom de l'article">
             <input type="number" id="prod_price" placeholder="Prix (FCFA)">
-            <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)">
+            <input type="file" id="prod_img" accept="image/*">
             
             <div class="progress-container" id="prog_cont">
                 <div id="progressBar" class="progress-bar"></div>
             </div>
-            <p id="statusText" style="font-size:10px; text-align:center; color:#888;"></p>
+            <p id="statusText" style="font-size:10px; text-align:center; color:var(--neon-blue);"></p>
             
-            <button class="btn-gold" id="pub_btn" onclick="publishProduct()">PUBLIER AVEC IA</button>
+            <button class="btn-gold" id="pub_btn" onclick="publishWithIA()">DÉPLOYER AVEC IA</button>
         </div>
     </div>
 
     <nav class="nav-bar">
-        <div class="nav-item active" onclick="showPage('home_page', this)">🏠<br>MARCHÉ</div>
-        <div class="nav-item" onclick="showPage('seller_page', this)">🛒<br>VENDRE</div>
+        <div class="nav-item active" onclick="showPage('home_page', this)">🏠<br>ACCUEIL</div>
+        <div class="nav-item" onclick="showPage('seller_page', this)">⚡<br>IA VENTE</div>
         <div class="nav-item" onclick="logout()">🚪<br>QUITTER</div>
     </nav>
 </div>
 
 <script>
-    // --- INITIALISATION ---
+    // --- CONFIGURATION ---
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
     
     const firebaseConfig = {
@@ -125,7 +123,26 @@
     let correctOTP = "";
     let selectedFile;
 
-    // --- SÉCURITÉ & AUTH ---
+    // --- LOGIQUE IA & CHAT ---
+    function toggleAIChat() {
+        const chat = document.getElementById('ai_chat_box');
+        chat.style.display = chat.style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function envoyerOrdreIA() {
+        const order = document.getElementById('ai_order').value;
+        const msgBox = document.getElementById('chat_messages');
+        if(!order) return;
+        msgBox.innerHTML += `<div><b>Vous:</b> ${order}</div>`;
+        
+        setTimeout(() => {
+            msgBox.innerHTML += `<div style="color:var(--gold)"><b>IA:</b> Ordre reçu. J'optimise l'interface et le flux de données pour l'objectif 24 Milliards.</div>`;
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }, 800);
+        document.getElementById('ai_order').value = "";
+    }
+
+    // --- AUTHENTIFICATION ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
         if(!email) return alert("Email requis");
@@ -141,7 +158,7 @@
         if(document.getElementById('otp_input').value === correctOTP) {
             localStorage.setItem("seg_session", "active");
             startApp();
-        } else { alert("Code de sécurité invalide."); }
+        } else { alert("Code incorrect."); }
     }
 
     function startApp() {
@@ -150,49 +167,35 @@
         loadProducts();
     }
 
-    // --- GESTION PATRON ---
-    window.ouvrirPosteDeCommande = function() {
-        const p = prompt("IDENTIFIANT FONDATEUR :");
-        if(p === "237_STEVE_BOSS") {
-            document.getElementById('boss_dashboard').style.display = 'block';
-            alert("Bienvenue, Steve. Système prêt.");
-        }
-    }
-
-    // --- VENTE & IA ---
-    function previewImage(e) { selectedFile = e.target.files[0]; }
-
-    async function publishProduct() {
+    // --- VENTE & FIREBASE ---
+    async function publishWithIA() {
         const name = document.getElementById('prod_name').value;
         const price = document.getElementById('prod_price').value;
-        const btn = document.getElementById('pub_btn');
+        const file = document.getElementById('prod_img').files[0];
+        const status = document.getElementById('statusText');
         const progCont = document.getElementById('prog_cont');
 
-        if(!name || !price || !selectedFile) return alert("Infos manquantes !");
+        if(!name || !price || !file) return alert("Données manquantes !");
         
-        btn.disabled = true;
         progCont.style.display = "block";
-        document.getElementById('statusText').innerText = "IA : Classification SEO en cours...";
+        status.innerText = "L'IA analyse l'image...";
 
-        // Simulation SEO IA
-        document.title = name + " | S.E.G GLOBAL";
+        const storageRef = storage.ref('empire/' + Date.now() + "_" + file.name);
+        const task = storageRef.put(file);
 
-        const storageRef = storage.ref('produits_seg/' + Date.now() + "_" + selectedFile.name);
-        const uploadTask = storageRef.put(selectedFile);
-
-        uploadTask.on('state_changed', 
+        task.on('state_changed', 
             (snap) => {
                 const p = (snap.bytesTransferred / snap.totalBytes) * 100;
                 document.getElementById('progressBar').style.width = p + "%";
-                document.getElementById('statusText').innerText = "ENVOI SÉCURISÉ : " + Math.round(p) + "%";
+                status.innerText = "DÉPLOIEMENT IA : " + Math.round(p) + "%";
             },
-            (err) => { alert("Erreur Storage : Activez le Mode Test !"); },
+            (err) => { alert("Erreur: Vérifiez les règles Storage (Mode Test)"); },
             async () => {
-                const url = await uploadTask.snapshot.ref.getDownloadURL();
+                const url = await task.snapshot.ref.getDownloadURL();
                 await db.collection("produits").add({
                     nom: name, prix: parseFloat(price), image: url, date: new Date()
                 });
-                alert("🚀 ARTICLE DÉPLOYÉ DANS L'EMPIRE !");
+                alert("ARTICLE CLASSÉ PAR L'IA ET PUBLIÉ !");
                 location.reload();
             }
         );
@@ -207,9 +210,8 @@
                 feed.innerHTML += `
                     <div class="item-card">
                         <img src="${p.image}">
-                        <div style="margin-top:10px;"><b>${p.nom}</b></div>
-                        <div style="color:var(--gold); font-size:12px;">${p.prix.toLocaleString()} FCFA</div>
-                        <button class="btn-gold" style="padding:5px; font-size:10px; margin-top:5px;">ACHETER</button>
+                        <div style="font-size:12px; margin-top:5px;"><b>${p.nom}</b></div>
+                        <div style="color:var(--gold); font-size:11px;">${p.prix.toLocaleString()} F</div>
                     </div>`;
             });
         });
