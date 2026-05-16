@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL IA</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="S.E.G GLOBAL">
-    <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=180&h=180&fit=crop">
-    <meta name="theme-color" content="#050505">
-
+    <meta name="apple-mobile-web-app-title" content="KIRAVEL">
+    
+    <title>KIRAVEL - S.E.G GLOBAL IA</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /*Style Général Premium */
+        /* ==========================================================================
+           STYLE GENERAL & RESET
+           ========================================================================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -27,118 +28,104 @@
             background-color: #050505;
             color: #ffffff;
             min-height: 100vh;
-            padding-bottom: 100px;
+            padding-bottom: 90px;
             overflow-x: hidden;
         }
 
+        /* ==========================================================================
+           EN-TÊTE LUMINEUX (EMPIRE SYSTEM)
+           ========================================================================== */
         .empire-header {
             text-align: center;
-            padding: 25px 10px 20px 10px;
-            background: linear-gradient(180deg, rgba(212,175,55,0.12) 0%, rgba(0,0,0,0) 100%);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+            padding: 20px 10px;
+            background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
         }
 
         .empire-header h1 {
             color: #D4AF37;
-            font-size: 26px;
+            font-size: 24px;
             letter-spacing: 2px;
-            font-weight: 800;
-            text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
 
         .objectif-badge {
             color: #00E5FF;
             font-size: 11px;
-            margin-top: 6px;
+            margin-top: 5px;
             font-weight: bold;
             letter-spacing: 1px;
         }
 
+        /* GESTION DES ECRANS ANIMÉS */
         .app-screen {
-            display: none; 
-            animation: screenFade 0.3s ease-out forwards;
+            display: none; /* Cache les écrans par défaut */
+            animation: fadeIn 0.4s ease forwards;
             padding: 20px;
         }
 
         .app-screen.active-screen {
-            display: block; 
+            display: block; /* Affiche l'écran actif */
         }
 
-        @keyframes screenFade {
-            from { opacity: 0; transform: scale(0.99); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
+        /* ==========================================================================
+           ECRAN 1 : MARCHÉ DE LUXE (ACCUEIL)
+           ========================================================================== */
         .section-title {
             color: #D4AF37;
-            font-size: 20px;
+            font-size: 18px;
             text-align: center;
-            margin-bottom: 25px;
-            letter-spacing: 1.5px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        /* Marché de l'Empire */
-        #market-feed {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .empty-market-message {
-            text-align: center;
-            color: #666;
-            padding: 40px 20px;
-            font-size: 14px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
         }
 
         .product-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 18px;
-            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 15px;
+            padding: 15px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            margin-bottom: 20px;
             position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .product-card:active {
+            transform: scale(0.98);
         }
 
         .product-badge {
             position: absolute;
-            top: 26px;
-            right: 26px;
+            top: 10px;
+            right: 10px;
             background: rgba(0, 229, 255, 0.15);
             border: 1px solid #00E5FF;
             color: #00E5FF;
             font-size: 10px;
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 20px;
-            z-index: 10;
-            font-weight: bold;
-            letter-spacing: 0.5px;
         }
 
-        .product-image-container {
+        .product-image-placeholder {
             width: 100%;
-            height: 260px;
-            background: #111111;
-            border-radius: 12px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .product-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            color: rgba(212, 175, 55, 0.3);
+            border: 1px dashed rgba(212, 175, 55, 0.2);
         }
 
         .product-info {
@@ -146,80 +133,71 @@
         }
 
         .product-info h3 {
-            font-size: 20px;
+            font-size: 19px;
             color: #ffffff;
-            font-weight: 600;
         }
 
         .price {
             color: #00E5FF;
-            font-size: 18px;
-            font-weight: 700;
-            margin: 6px 0 15px 0;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 12px;
+            font-size: 17px;
+            font-weight: bold;
+            margin: 5px 0 12px 0;
         }
 
         .btn-buy {
-            flex: 1;
+            width: 100%;
             background: linear-gradient(90deg, #D4AF37 0%, #AA7C11 100%);
             border: none;
-            padding: 15px;
+            padding: 14px;
             color: #000000;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
 
-        .btn-share {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            color: #D4AF37;
-            width: 50px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        /* Formulaire de Vente */
+        /* ==========================================================================
+           ECRAN 2 : IA VENTE (FORMULAIRE DE DEPLOIEMENT)
+           ========================================================================== */
         .form-group {
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
             color: #D4AF37;
-            margin-bottom: 9px;
+            margin-bottom: 8px;
             font-size: 14px;
-            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .form-group input[type="text"],
         .form-group input[type="number"] {
             width: 100%;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 16px;
-            border-radius: 12px;
+            padding: 14px;
+            border-radius: 10px;
             color: #ffffff;
             font-size: 16px;
             outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #00E5FF;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
         }
 
         .file-select-container {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px dashed rgba(212, 175, 55, 0.3);
-            border-radius: 12px;
-            padding: 25px;
+            border-radius: 10px;
+            padding: 15px;
             text-align: center;
             position: relative;
+            cursor: pointer;
         }
 
         .file-select-container input[type="file"] {
@@ -233,32 +211,31 @@
         }
 
         .file-custom-btn {
-            background: rgba(212, 175, 55, 0.1);
-            color: #D4AF37;
-            padding: 10px 20px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 5px;
             font-size: 13px;
             display: inline-block;
-            margin-bottom: 8px;
-            font-weight: bold;
+            margin-bottom: 5px;
         }
 
         .file-name-text {
             display: block;
-            font-size: 13px;
-            color: #777777;
+            font-size: 12px;
+            color: #888888;
         }
 
+        /* Statut d'envoi IA */
         .ia-status-box {
             text-align: center;
-            margin: 25px 0;
-            min-height: 20px;
+            margin: 20px 0;
         }
 
         .ia-percent {
             color: #00E5FF;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
@@ -269,20 +246,24 @@
             padding: 16px;
             color: #000000;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 15px;
+            letter-spacing: 1px;
             cursor: pointer;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
         }
 
-        /* Menu de Navigation Bas */
+        /* ==========================================================================
+           BARRES DE STATUT ET NAVIGATION (FIXES)
+           ========================================================================== */
         .server-status {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
             font-size: 11px;
-            color: #555555;
-            margin: 30px 0 10px 0;
+            color: #666666;
+            margin: 20px 0 10px 0;
         }
 
         .status-dot.online {
@@ -290,6 +271,7 @@
             height: 6px;
             background-color: #00FF66;
             border-radius: 50%;
+            box-shadow: 0 0 8px #00FF66;
         }
 
         .bottom-nav {
@@ -297,13 +279,12 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(5, 5, 5, 0.94);
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(5, 5, 5, 0.95);
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            backdrop-filter: blur(25px);
             display: flex;
             justify-content: space-around;
-            padding: 14px 0 24px 0;
+            padding: 12px 0;
             z-index: 1000;
         }
 
@@ -311,48 +292,59 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #555555;
+            color: #666666;
             text-decoration: none;
-            font-size: 11px;
-            gap: 6px;
+            font-size: 10px;
+            gap: 5px;
+            transition: all 0.3s ease;
             cursor: pointer;
-            font-weight: bold;
         }
 
         .nav-item i {
-            font-size: 22px;
+            font-size: 20px;
         }
 
         .nav-item.active {
             color: #D4AF37;
+            text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
 
     <header class="empire-header">
-        <h1>S.E.G GLOBAL IA</h1>
+        <h1>KIRAVEL</h1>
         <div class="objectif-badge">OBJECTIF : 24,000,000,000 FCFA</div>
     </header>
 
     <main id="screen-accueil" class="app-screen active-screen">
-        <h2 class="section-title">MARCHÉ DE L'EMPIRE</h2>
-        <div id="market-feed">
-            <div class="empty-market-message" id="empty-msg">Connexion à la base de données globale...</div>
+        <h2 class="section-title">MARCHÉ DE LUXE</h2>
+        
+        <div class="product-card">
+            <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Vérifié par l'Ouvrier IA</div>
+            <div class="product-image-placeholder">
+                <i class="fa-solid fa-gem fa-4x"></i>
+            </div>
+            <div class="product-info">
+                <h3>Mpina Premium</h3>
+                <p class="price">20 000 FCFA</p>
+                <button class="btn-buy" onclick="acheterProduit('Mpina Premium')">Acheter Maintenant</button>
+            </div>
         </div>
     </main>
 
     <main id="screen-vente" class="app-screen">
-        <h2 class="section-title">Vendre un Article</h2>
+        <h2 class="section-title">PUBLIER AVEC IA</h2>
         
         <div class="form-group">
             <label>Nom du produit</label>
-            <input type="text" id="prod-name" placeholder="Entrez le nom du produit">
+            <input type="text" id="prod-name" placeholder="Ex: Diamant Brut Brillant">
         </div>
 
         <div class="form-group">
             <label>Prix (FCFA)</label>
-            <input type="number" id="prod-price" placeholder="Entrez le prix">
+            <input type="number" id="prod-price" placeholder="Ex: 5000000">
         </div>
 
         <div class="form-group">
@@ -360,193 +352,102 @@
             <div class="file-select-container">
                 <span class="file-custom-btn">Choisir le fichier</span>
                 <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
-                <input type="file" id="prod-file" accept="image/*" onchange="traiterFichierPhoto(this)">
+                <input type="file" id="prod-file" onchange="mettreAJourFichier(this)">
             </div>
         </div>
 
         <div class="ia-status-box">
-            <div class="ia-percent" id="upload-status"></div>
+            <div class="ia-percent" id="upload-status">Déploiement IA : 0%</div>
         </div>
 
-        <button class="btn-deploy" onclick="executerPublicationIA()">DÉPLOYER AVEC IA</button>
+        <button class="btn-deploy" onclick="lancerDeploieIA()">DÉPLOYER AVEC IA</button>
     </main>
 
     <div class="server-status">
         <span class="status-dot online"></span>
-        <p>Base de données Firebase : Connectée (Mondiale)</p>
+        <p>Connexion Cloud Google : <span class="latency">22ms</span> (Stable)</p>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" id="btn-nav-accueil" onclick="basculerEcran('accueil')">
+        <div class="nav-item active" id="btn-nav-accueil" onclick="changerEcran('accueil')">
             <i class="fa-solid fa-house"></i>
-            <span>ACCUEIL</span>
+            <span>Accueil</span>
         </div>
-        <div class="nav-item" id="btn-nav-vente" onclick="basculerEcran('vente')">
+        <div class="nav-item" id="btn-nav-vente" onclick="changerEcran('vente')">
             <i class="fa-solid fa-bolt"></i>
-            <span>IA VENTE</span>
+            <span>IA Vente</span>
         </div>
-        <div class="nav-item" onclick="quitterApplication()">
+        <div class="nav-item" onclick="quitterApp()">
             <i class="fa-solid fa-door-open"></i>
-            <span>QUITTER</span>
+            <span>Quitter</span>
         </div>
     </nav>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-        // Tes configurations réelles récupérées sur Firebase
-        const firebaseConfig = {
-          apiKey: "AIzaSyAMX8SfBySnpc...",
-          authDomain: "seg-global.firebaseapp.com",
-          projectId: "seg-global",
-          storageBucket: "seg-global.appspot.com",
-          messagingSenderId: "8800375...",
-          appId: "1:880037527683:web:...",
-          measurementId: "G-Z5WG470MG..."
-        };
-
-        // Initialisation de l'infrastructure Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const articlesRef = ref(db, 'articles');
-
-        let imageBase64Global = "";
-
-        // Rendre les fonctions accessibles globalement sur mobile
-        window.basculerEcran = function(cible) {
+    <script>
+        // 1. Système de Changement d'Écran (Navigation fluide)
+        function changerEcran(nomEcran) {
             document.getElementById('screen-accueil').classList.remove('active-screen');
             document.getElementById('screen-vente').classList.remove('active-screen');
+            
             document.getElementById('btn-nav-accueil').classList.remove('active');
             document.getElementById('btn-nav-vente').classList.remove('active');
 
-            if(cible === 'accueil') {
+            if(nomEcran === 'accueil') {
                 document.getElementById('screen-accueil').classList.add('active-screen');
                 document.getElementById('btn-nav-accueil').classList.add('active');
-            } else if(cible === 'vente') {
+            } else if(nomEcran === 'vente') {
                 document.getElementById('screen-vente').classList.add('active-screen');
                 document.getElementById('btn-nav-vente').classList.add('active');
             }
         }
 
-        window.traiterFichierPhoto = function(input) {
-            const labelFichier = document.getElementById('file-name-display');
+        // 2. Affichage du nom du fichier sélectionné
+        function mettreAJourFichier(input) {
+            const display = document.getElementById('file-name-display');
             if (input.files && input.files.length > 0) {
-                const imgFile = input.files[0];
-                labelFichier.textContent = imgFile.name;
-                labelFichier.style.color = "#00E5FF";
-
-                const lecteur = new FileReader();
-                lecteur.onload = function(e) {
-                    imageBase64Global = e.target.result; 
-                };
-                lecteur.readAsDataURL(imgFile);
+                display.textContent = input.files[0].name;
+                display.style.color = "#00E5FF";
+            } else {
+                display.textContent = "aucun fichier sélectionné";
+                display.style.color = "#888888";
             }
         }
 
-        window.executerPublicationIA = function() {
-            const statusLabel = document.getElementById('upload-status');
-            const champNom = document.getElementById('prod-name');
-            const champPrix = document.getElementById('prod-price');
+        // 3. Simulation du déploiement IA
+        function lancerDeploieIA() {
+            const statusText = document.getElementById('upload-status');
+            const name = document.getElementById('prod-name').value;
+            const price = document.getElementById('prod-price').value;
 
-            if(!champNom.value || !champPrix.value) {
-                alert("Erreur : Veuillez renseigner le nom et le prix.");
+            if(!name || !price) {
+                alert("Veuillez remplir le nom et le prix avant le déploiement.");
                 return;
             }
 
-            let progression = 0;
-            const chrono = setInterval(() => {
-                progression += 25;
-                statusLabel.textContent = `ANALYSE IA EN COURS : ${progression}%`;
-                
-                if (progression >= 100) {
-                    clearInterval(chrono);
-                    
-                    // Envoi des données vers la Realtime Database globale de Google
-                    push(articlesRef, {
-                        nom: champNom.value,
-                        prix: champPrix.value,
-                        image: imageBase64Global || "",
-                        timestamp: Date.now()
-                    }).then(() => {
-                        statusLabel.textContent = "DEPLOIEMENT IA REUSSI !";
-                        statusLabel.style.color = "#00FF66";
-
-                        // Reset du formulaire
-                        champNom.value = "";
-                        champPrix.value = "";
-                        document.getElementById('prod-file').value = "";
-                        document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
-                        imageBase64Global = "";
-
-                        setTimeout(() => {
-                            statusLabel.textContent = "";
-                            statusLabel.style.color = "#00E5FF";
-                            window.basculerEcran('accueil');
-                        }, 1000);
-                    }).catch((error) => {
-                        alert("Erreur Cloud : Vérifiez vos règles Firebase. " + error.message);
-                    });
-                }
-            }, 150);
-        }
-
-        // ÉCOUTEUR EN TEMPS RÉEL : Récupère les données pour tous les utilisateurs sur Terre
-        onValue(articlesRef, (snapshot) => {
-            const fluxMarché = document.getElementById('market-feed');
-            fluxMarché.innerHTML = ""; // Vide le flux pour réactualiser proprement
+            let pourcentage = 0;
+            statusText.style.color = "#00E5FF";
             
-            if (snapshot.exists()) {
-                const donnees = snapshot.val();
-                // Convertir et trier du plus récent au plus ancien (Style TikTok)
-                const listeArticles = Object.keys(donnees).map(key => donnees[key]);
-                listeArticles.sort((a, b) => b.timestamp - a.timestamp);
-
-                listeArticles.forEach(article => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    
-                    const baliseImg = article.image ? 
-                        `<img src="${article.image}" alt="${article.nom}">` : 
-                        `<i class="fa-solid fa-gem fa-4x" style="color:rgba(212,175,55,0.2)"></i>`;
-
-                    const prixFormate = Number(article.prix).toLocaleString('fr-FR');
-
-                    card.innerHTML = `
-                        <div class="product-badge"><i class="fa-solid fa-circle-check"></i> Vérifié par l'Ouvrier IA</div>
-                        <div class="product-image-container">
-                            ${baliseImg}
-                        </div>
-                        <div class="product-info">
-                            <h3>${article.nom}</h3>
-                            <p class="price">${prixFormate} FCFA</p>
-                            <div class="card-actions">
-                                <button class="btn-buy" onclick="declencherAchat('${article.nom}')">Acheter Maintenant</button>
-                                <button class="btn-share" onclick="partagerArticle('${article.nom}', '${prixFormate}')">
-                                    <i class="fa-solid fa-share-nodes"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    fluxMarché.appendChild(card);
-                });
-            } else {
-                fluxMarché.innerHTML = `<div class="empty-market-message">Aucun article disponible sur le marché mondial.</div>`;
-            }
-        });
-
-        window.declencherAchat = function(nom) {
-            alert(`S.E.G GLOBAL - Option d'achat lancée pour : ${nom}`);
+            const intervalle = setInterval(() => {
+                pourcentage += 10;
+                statusText.textContent = `Déploiement IA : ${pourcentage}%`;
+                
+                if (pourcentage >= 100) {
+                    clearInterval(intervalle);
+                    statusText.textContent = "DEPLOIEMENT IA REUSSI !";
+                    statusText.style.color = "#00FF66";
+                    alert(`Félicitations Steve ! Le produit "${name}" a été traité par l'Ouvrier IA et publié sur KIRAVEL.`);
+                }
+            }, 200);
         }
 
-        window.partagerArticle = function(nom, prix) {
-            const texte = encodeURIComponent(`Regarde cet article sur S.E.G GLOBAL : ${nom} à ${prix} FCFA !`);
-            window.open(`https://api.whatsapp.com/send?text=${texte}`, '_blank');
+        // 4. Fonctionnalités de base des boutons
+        function acheterProduit(nom) {
+            alert(`Demande d'achat initiée pour : ${nom}. Connexion à la passerelle de paiement...`);
         }
 
-        window.quitterApplication = function() {
-            if(confirm("Quitter l'application ?")) {
-                alert("Session suspendue.");
+        function quitterApp() {
+            if(confirm("Voulez-vous fermer l'application KIRAVEL ?")) {
+                alert("Fermeture de la session de l'Empire.");
             }
         }
     </script>
