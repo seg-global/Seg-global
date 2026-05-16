@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL IA - Accueil</title>
+    <title>S.E.G GLOBAL IA - Empire System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* ==========================================================================
-           STYLE GÉNÉRAL & RESET
-           ========================================================================== */
         * {
             margin: 0;
             padding: 0;
@@ -26,9 +23,6 @@
             overflow-x: hidden;
         }
 
-        /* ==========================================================================
-           EN-TÊTE LUMINEUX (EMPIRE SYSTEM)
-           ========================================================================== */
         .empire-header {
             text-align: center;
             padding: 20px 10px;
@@ -55,7 +49,6 @@
             letter-spacing: 1px;
         }
 
-        /* GESTION DES ÉCRANS */
         .app-screen {
             display: none; 
             animation: fadeIn 0.4s ease forwards;
@@ -71,9 +64,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ==========================================================================
-           ÉCRAN 1 : MARCHÉ DE LUXE (ACCUEIL)
-           ========================================================================== */
         .section-title {
             color: #D4AF37;
             font-size: 18px;
@@ -91,11 +81,6 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             margin-bottom: 20px;
             position: relative;
-            transition: transform 0.2s ease;
-        }
-
-        .product-card:active {
-            transform: scale(0.98);
         }
 
         .product-badge {
@@ -108,11 +93,12 @@
             font-size: 10px;
             padding: 4px 8px;
             border-radius: 20px;
+            z-index: 10;
         }
 
         .product-image-placeholder {
             width: 100%;
-            height: 220px;
+            height: 250px;
             background: rgba(255, 255, 255, 0.01);
             border-radius: 10px;
             display: flex;
@@ -120,6 +106,13 @@
             align-items: center;
             color: rgba(212, 175, 55, 0.3);
             border: 1px dashed rgba(212, 175, 55, 0.2);
+            overflow: hidden;
+        }
+
+        .product-image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .product-info {
@@ -135,7 +128,13 @@
             color: #00E5FF;
             font-size: 17px;
             font-weight: bold;
-            margin: 5px 0 12px 0;
+            margin: 5px 0 5px 0;
+        }
+
+        .commission-info {
+            font-size: 11px;
+            color: #888888;
+            margin-bottom: 12px;
         }
 
         .btn-buy {
@@ -148,12 +147,8 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
 
-        /* ==========================================================================
-           ÉCRAN 2 : IA VENTE (FORMULAIRE DE DÉPLOIEMENT)
-           ========================================================================== */
         .form-group {
             margin-bottom: 20px;
         }
@@ -163,11 +158,9 @@
             color: #D4AF37;
             margin-bottom: 8px;
             font-size: 14px;
-            letter-spacing: 0.5px;
         }
 
-        .form-group input[type="text"],
-        .form-group input[type="number"] {
+        .form-group input {
             width: 100%;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(212, 175, 55, 0.2);
@@ -176,12 +169,6 @@
             color: #ffffff;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            border-color: #00E5FF;
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
         }
 
         .file-select-container {
@@ -191,7 +178,6 @@
             padding: 25px;
             text-align: center;
             position: relative;
-            cursor: pointer;
         }
 
         .file-select-container input[type="file"] {
@@ -212,7 +198,6 @@
             display: inline-block;
             margin-bottom: 8px;
             color: #D4AF37;
-            border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
         .file-name-text {
@@ -221,7 +206,6 @@
             color: #888888;
         }
 
-        /* Statut d'envoi IA */
         .ia-status-box {
             text-align: center;
             margin: 25px 0;
@@ -231,7 +215,6 @@
             color: #00E5FF;
             font-size: 14px;
             font-weight: bold;
-            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
@@ -244,14 +227,9 @@
             font-weight: bold;
             border-radius: 10px;
             font-size: 15px;
-            letter-spacing: 1px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
         }
 
-        /* ==========================================================================
-           BARRES DE STATUT ET NAVIGATION (FIXES)
-           ========================================================================== */
         .server-status {
             display: flex;
             justify-content: center;
@@ -267,7 +245,6 @@
             height: 6px;
             background-color: #00FF66;
             border-radius: 50%;
-            box-shadow: 0 0 8px #00FF66;
         }
 
         .bottom-nav {
@@ -292,7 +269,6 @@
             text-decoration: none;
             font-size: 10px;
             gap: 5px;
-            transition: all 0.3s ease;
             cursor: pointer;
         }
 
@@ -302,8 +278,6 @@
 
         .nav-item.active {
             color: #D4AF37;
-            text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
-            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -315,32 +289,33 @@
     </header>
 
     <main id="screen-accueil" class="app-screen active-screen">
-        <h2 class="section-title">MARCHÉ DE LUXE</h2>
+        <h2 class="section-title">MARCHÉ DE L'EMPIRE</h2>
         
         <div class="product-card">
             <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Vérifié par l'Ouvrier IA</div>
-            <div class="product-image-placeholder">
-                <i class="fa-solid fa-gem fa-4x"></i>
+            <div class="product-image-placeholder" id="main-product-image-box">
+                <i class="fa-solid fa-gem fa-4x" id="default-icon"></i>
             </div>
             <div class="product-info">
-                <h3>Mpina Premium</h3>
-                <p class="price">20 000 FCFA</p>
-                <button class="btn-buy" onclick="acheterProduit('Mpina Premium')">Acheter Maintenant</button>
+                <h3 id="main-product-title">Mpina Premium</h3>
+                <p class="price" id="main-product-price">20 000 FCFA</p>
+                <div class="commission-info" id="main-product-commission">Frais appli (10%) : 2 000 FCFA</div>
+                <button class="btn-buy" onclick="acheterProduit()">Acheter Maintenant</button>
             </div>
         </div>
     </main>
 
     <main id="screen-vente" class="app-screen">
-        <h2 class="section-title">PUBLIER AVEC IA</h2>
+        <h2 class="section-title">VENDRE UN ARTICLE</h2>
         
         <div class="form-group">
             <label>Nom du produit</label>
-            <input type="text" id="prod-name" placeholder="Ex: Diamant Brut Brillant">
+            <input type="text" id="prod-name" placeholder="Nom du produit">
         </div>
 
         <div class="form-group">
             <label>Prix (FCFA)</label>
-            <input type="number" id="prod-price" placeholder="Ex: 5000000">
+            <input type="number" id="prod-price" placeholder="Prix FCFA">
         </div>
 
         <div class="form-group">
@@ -348,7 +323,7 @@
             <div class="file-select-container">
                 <span class="file-custom-btn">Choisir le fichier</span>
                 <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
-                <input type="file" id="prod-file" onchange="mettreAJourFichier(this)">
+                <input type="file" id="prod-file" accept="image/*" onchange="mettreAJourFichier(this)">
             </div>
         </div>
 
@@ -367,81 +342,11 @@
     <nav class="bottom-nav">
         <div class="nav-item active" id="btn-nav-accueil" onclick="changerEcran('accueil')">
             <i class="fa-solid fa-house"></i>
-            <span>Accueil</span>
+            <span>MARCHÉ</span>
         </div>
         <div class="nav-item" id="btn-nav-vente" onclick="changerEcran('vente')">
-            <i class="fa-solid fa-bolt"></i>
-            <span>IA Vente</span>
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>VENDRE</span>
         </div>
         <div class="nav-item" onclick="quitterApp()">
             <i class="fa-solid fa-door-open"></i>
-            <span>Quitter</span>
-        </div>
-    </nav>
-
-    <script>
-        function changerEcran(nomEcran) {
-            document.getElementById('screen-accueil').classList.remove('active-screen');
-            document.getElementById('screen-vente').classList.remove('active-screen');
-            
-            document.getElementById('btn-nav-accueil').classList.remove('active');
-            document.getElementById('btn-nav-vente').classList.remove('active');
-
-            if(nomEcran === 'accueil') {
-                document.getElementById('screen-accueil').classList.add('active-screen');
-                document.getElementById('btn-nav-accueil').classList.add('active');
-            } else if(nomEcran === 'vente') {
-                document.getElementById('screen-vente').classList.add('active-screen');
-                document.getElementById('btn-nav-vente').classList.add('active');
-            }
-        }
-
-        function mettreAJourFichier(input) {
-            const display = document.getElementById('file-name-display');
-            if (input.files && input.files.length > 0) {
-                display.textContent = input.files[0].name;
-                display.style.color = "#00E5FF";
-            } else {
-                display.textContent = "aucun fichier sélectionné";
-                display.style.color = "#888888";
-            }
-        }
-
-        function lancerDeploieIA() {
-            const statusText = document.getElementById('upload-status');
-            const name = document.getElementById('prod-name').value;
-            const price = document.getElementById('prod-price').value;
-
-            if(!name || !price) {
-                alert("Veuillez remplir le nom et le prix avant le déploiement.");
-                return;
-            }
-
-            let pourcentage = 0;
-            statusText.style.color = "#00E5FF";
-            
-            const intervalle = setInterval(() => {
-                pourcentage += 10;
-                statusText.textContent = `Déploiement IA : ${pourcentage}%`;
-                
-                if (pourcentage >= 100) {
-                    clearInterval(intervalle);
-                    statusText.textContent = "DEPLOIEMENT IA REUSSI !";
-                    statusText.style.color = "#00FF66";
-                    alert(`Félicitations Steve ! Le produit "${name}" a été traité par l'Ouvrier IA.`);
-                }
-            }, 150);
-        }
-
-        function acheterProduit(nom) {
-            alert(`Demande d'achat initiée pour : ${nom}. Connexion à la passerelle de paiement...`);
-        }
-
-        function quitterApp() {
-            if(confirm("Voulez-vous fermer l'application S.E.G GLOBAL ?")) {
-                alert("Fermeture de la session de l'Empire.");
-            }
-        }
-    </script>
-</body>
-</html>
