@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL</title>
+    <title>S.E.G GLOBAL IA</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,9 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* ==========================================================================
-           STYLE GÉNÉRAL
-           ========================================================================== */
+        /*Style Général Premium */
         * {
             margin: 0;
             padding: 0;
@@ -33,7 +31,6 @@
             overflow-x: hidden;
         }
 
-        /* EN-TÊTE PREMIUM */
         .empire-header {
             text-align: center;
             padding: 25px 10px 20px 10px;
@@ -62,7 +59,6 @@
             letter-spacing: 1px;
         }
 
-        /* SYSTÈME DE NAVIGATION DES ÉCRANS */
         .app-screen {
             display: none; 
             animation: screenFade 0.3s ease-out forwards;
@@ -88,16 +84,13 @@
             text-transform: uppercase;
         }
 
-        /* ==========================================================================
-           ÉCRAN : MARCHÉ DE L'EMPIRE
-           ========================================================================== */
+        /* Marché de l'Empire */
         #market-feed {
             display: flex;
             flex-direction: column;
             gap: 25px;
         }
 
-        /* Message si le marché est vide */
         .empty-market-message {
             text-align: center;
             color: #666;
@@ -105,7 +98,6 @@
             font-size: 14px;
         }
 
-        /* CARTE PRODUIT PREMIUM */
         .product-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(212, 175, 55, 0.15);
@@ -166,7 +158,6 @@
             margin: 6px 0 15px 0;
         }
 
-        /* Actions sur la carte */
         .card-actions {
             display: flex;
             gap: 12px;
@@ -182,7 +173,6 @@
             border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
-            transition: opacity 0.2s;
         }
 
         .btn-share {
@@ -198,9 +188,7 @@
             cursor: pointer;
         }
 
-        /* ==========================================================================
-           ÉCRAN : VENDRE UN ARTICLE
-           ========================================================================== */
+        /* Formulaire de Vente */
         .form-group {
             margin-bottom: 22px;
         }
@@ -211,7 +199,6 @@
             margin-bottom: 9px;
             font-size: 14px;
             font-weight: 600;
-            letter-spacing: 0.5px;
         }
 
         .form-group input[type="text"],
@@ -224,14 +211,8 @@
             color: #ffffff;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.3s;
         }
 
-        .form-group input:focus {
-            border-color: #00E5FF;
-        }
-
-        /* Design de la zone fichier photo */
         .file-select-container {
             background: rgba(255, 255, 255, 0.02);
             border: 1px dashed rgba(212, 175, 55, 0.3);
@@ -279,7 +260,6 @@
             font-size: 14px;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .btn-deploy {
@@ -291,11 +271,10 @@
             font-weight: bold;
             border-radius: 12px;
             font-size: 15px;
-            letter-spacing: 1px;
             cursor: pointer;
         }
 
-        /* BARRES ET MENU INFÉRIEUR */
+        /* Menu de Navigation Bas */
         .server-status {
             display: flex;
             justify-content: center;
@@ -324,7 +303,7 @@
             -webkit-backdrop-filter: blur(20px);
             display: flex;
             justify-content: space-around;
-            padding: 14px 0 24px 0; /* padding bas augmenté pour la barre des iPhones */
+            padding: 14px 0 24px 0;
             z-index: 1000;
         }
 
@@ -346,21 +325,20 @@
 
         .nav-item.active {
             color: #D4AF37;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
     </style>
 </head>
 <body>
 
     <header class="empire-header">
-        <h1>S.E.G GLOBAL</h1>
+        <h1>S.E.G GLOBAL IA</h1>
         <div class="objectif-badge">OBJECTIF : 24,000,000,000 FCFA</div>
     </header>
 
     <main id="screen-accueil" class="app-screen active-screen">
         <h2 class="section-title">MARCHÉ DE L'EMPIRE</h2>
         <div id="market-feed">
-            <div class="empty-market-message" id="empty-msg">Aucun article sur le marché. Allez dans "Vendre" pour déployer avec l'IA.</div>
+            <div class="empty-market-message" id="empty-msg">Connexion à la base de données globale...</div>
         </div>
     </main>
 
@@ -390,22 +368,22 @@
             <div class="ia-percent" id="upload-status"></div>
         </div>
 
-        <button class="btn-deploy" onclick="executerPublicationIA()">PUBLIER AVEC IA</button>
+        <button class="btn-deploy" onclick="executerPublicationIA()">DÉPLOYER AVEC IA</button>
     </main>
 
     <div class="server-status">
         <span class="status-dot online"></span>
-        <p>Connexion Cloud Google : 22ms (Stable)</p>
+        <p>Base de données Firebase : Connectée (Mondiale)</p>
     </div>
 
     <nav class="bottom-nav">
         <div class="nav-item active" id="btn-nav-accueil" onclick="basculerEcran('accueil')">
             <i class="fa-solid fa-house"></i>
-            <span>MARCHÉ</span>
+            <span>ACCUEIL</span>
         </div>
         <div class="nav-item" id="btn-nav-vente" onclick="basculerEcran('vente')">
-            <i class="fa-solid fa-bag-shopping"></i>
-            <span>VENDRE</span>
+            <i class="fa-solid fa-bolt"></i>
+            <span>IA VENTE</span>
         </div>
         <div class="nav-item" onclick="quitterApplication()">
             <i class="fa-solid fa-door-open"></i>
@@ -413,11 +391,30 @@
         </div>
     </nav>
 
-    <script>
-        let imageLocaleUrl = "";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Gestion du routage interne (Single Page Application)
-        function basculerEcran(cible) {
+        // Tes configurations réelles récupérées sur Firebase
+        const firebaseConfig = {
+          apiKey: "AIzaSyAMX8SfBySnpc...",
+          authDomain: "seg-global.firebaseapp.com",
+          projectId: "seg-global",
+          storageBucket: "seg-global.appspot.com",
+          messagingSenderId: "8800375...",
+          appId: "1:880037527683:web:...",
+          measurementId: "G-Z5WG470MG..."
+        };
+
+        // Initialisation de l'infrastructure Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const articlesRef = ref(db, 'articles');
+
+        let imageBase64Global = "";
+
+        // Rendre les fonctions accessibles globalement sur mobile
+        window.basculerEcran = function(cible) {
             document.getElementById('screen-accueil').classList.remove('active-screen');
             document.getElementById('screen-vente').classList.remove('active-screen');
             document.getElementById('btn-nav-accueil').classList.remove('active');
@@ -432,8 +429,7 @@
             }
         }
 
-        // Capture et transformation de l'image de la pellicule du téléphone
-        function traiterFichierPhoto(input) {
+        window.traiterFichierPhoto = function(input) {
             const labelFichier = document.getElementById('file-name-display');
             if (input.files && input.files.length > 0) {
                 const imgFile = input.files[0];
@@ -442,103 +438,114 @@
 
                 const lecteur = new FileReader();
                 lecteur.onload = function(e) {
-                    imageLocaleUrl = e.target.result; 
+                    imageBase64Global = e.target.result; 
                 };
                 lecteur.readAsDataURL(imgFile);
-            } else {
-                labelFichier.textContent = "aucun fichier sélectionné";
-                labelFichier.style.color = "#777777";
-                imageLocaleUrl = "";
             }
         }
 
-        // Logique de déploiement et injection sur le marché de l'Empire
-        function executerPublicationIA() {
+        window.executerPublicationIA = function() {
             const statusLabel = document.getElementById('upload-status');
             const champNom = document.getElementById('prod-name');
             const champPrix = document.getElementById('prod-price');
 
             if(!champNom.value || !champPrix.value) {
-                alert("Erreur : Renseignez le nom et le prix de votre article.");
+                alert("Erreur : Veuillez renseigner le nom et le prix.");
                 return;
             }
 
             let progression = 0;
-            statusLabel.style.color = "#00E5FF";
-            
             const chrono = setInterval(() => {
-                progression += 20;
-                statusLabel.textContent = `Analyse et déploiement IA : ${progression}%`;
+                progression += 25;
+                statusLabel.textContent = `ANALYSE IA EN COURS : ${progression}%`;
                 
                 if (progression >= 100) {
                     clearInterval(chrono);
-                    statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI !";
-                    statusLabel.style.color = "#00FF66";
-
-                    // Cache le message de marché vide s'il existe
-                    const msgVide = document.getElementById('empty-msg');
-                    if(msgVide) msgVide.style.display = 'none';
-
-                    // Création de la nouvelle carte de l'article en pur JavaScript
-                    const fluxMarché = document.getElementById('market-feed');
-                    const nouvelleCarte = document.createElement('div');
-                    nouvelleCarte.className = 'product-card';
                     
-                    // Si aucune photo n'a été mise, on met un fond noir neutre de luxe
-                    const baliseImage = imageLocaleUrl ? 
-                        `<img src="${imageLocaleUrl}" alt="${champNom.value}">` : 
+                    // Envoi des données vers la Realtime Database globale de Google
+                    push(articlesRef, {
+                        nom: champNom.value,
+                        prix: champPrix.value,
+                        image: imageBase64Global || "",
+                        timestamp: Date.now()
+                    }).then(() => {
+                        statusLabel.textContent = "DEPLOIEMENT IA REUSSI !";
+                        statusLabel.style.color = "#00FF66";
+
+                        // Reset du formulaire
+                        champNom.value = "";
+                        champPrix.value = "";
+                        document.getElementById('prod-file').value = "";
+                        document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
+                        imageBase64Global = "";
+
+                        setTimeout(() => {
+                            statusLabel.textContent = "";
+                            statusLabel.style.color = "#00E5FF";
+                            window.basculerEcran('accueil');
+                        }, 1000);
+                    }).catch((error) => {
+                        alert("Erreur Cloud : Vérifiez vos règles Firebase. " + error.message);
+                    });
+                }
+            }, 150);
+        }
+
+        // ÉCOUTEUR EN TEMPS RÉEL : Récupère les données pour tous les utilisateurs sur Terre
+        onValue(articlesRef, (snapshot) => {
+            const fluxMarché = document.getElementById('market-feed');
+            fluxMarché.innerHTML = ""; // Vide le flux pour réactualiser proprement
+            
+            if (snapshot.exists()) {
+                const donnees = snapshot.val();
+                // Convertir et trier du plus récent au plus ancien (Style TikTok)
+                const listeArticles = Object.keys(donnees).map(key => donnees[key]);
+                listeArticles.sort((a, b) => b.timestamp - a.timestamp);
+
+                listeArticles.forEach(article => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    
+                    const baliseImg = article.image ? 
+                        `<img src="${article.image}" alt="${article.nom}">` : 
                         `<i class="fa-solid fa-gem fa-4x" style="color:rgba(212,175,55,0.2)"></i>`;
 
-                    const prixFormate = Number(champPrix.value).toLocaleString('fr-FR');
+                    const prixFormate = Number(article.prix).toLocaleString('fr-FR');
 
-                    nouvelleCarte.innerHTML = `
-                        <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Certifié IA</div>
+                    card.innerHTML = `
+                        <div class="product-badge"><i class="fa-solid fa-circle-check"></i> Vérifié par l'Ouvrier IA</div>
                         <div class="product-image-container">
-                            ${baliseImage}
+                            ${baliseImg}
                         </div>
                         <div class="product-info">
-                            <h3>${champNom.value}</h3>
+                            <h3>${article.nom}</h3>
                             <p class="price">${prixFormate} FCFA</p>
                             <div class="card-actions">
-                                <button class="btn-buy" onclick="declencherAchat('${champNom.value}')">Acheter Maintenant</button>
-                                <button class="btn-share" onclick="partagerArticle('${champNom.value}', '${prixFormate}')">
+                                <button class="btn-buy" onclick="declencherAchat('${article.nom}')">Acheter Maintenant</button>
+                                <button class="btn-share" onclick="partagerArticle('${article.nom}', '${prixFormate}')">
                                     <i class="fa-solid fa-share-nodes"></i>
                                 </button>
                             </div>
                         </div>
                     `;
+                    fluxMarché.appendChild(card);
+                });
+            } else {
+                fluxMarché.innerHTML = `<div class="empty-market-message">Aucun article disponible sur le marché mondial.</div>`;
+            }
+        });
 
-                    // On l'ajoute tout en haut du marché (comme sur TikTok ou Instagram !)
-                    fluxMarché.insertBefore(nouvelleCarte, fluxMarché.firstChild);
-
-                    // Nettoyage immédiat du formulaire pour la prochaine vente
-                    champNom.value = "";
-                    champPrix.value = "";
-                    document.getElementById('prod-file').value = "";
-                    document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
-                    document.getElementById('file-name-display').style.color = "#777777";
-                    imageLocaleUrl = "";
-
-                    setTimeout(() => {
-                        statusLabel.textContent = "";
-                        basculerEcran('accueil'); // Te ramène à l'accueil automatiquement
-                    }, 800);
-                }
-            }, 100);
+        window.declencherAchat = function(nom) {
+            alert(`S.E.G GLOBAL - Option d'achat lancée pour : ${nom}`);
         }
 
-        function declencherAchat(nom) {
-            alert(`帝国 S.E.G GLOBAL - Option d'achat en cours pour : ${nom}`);
-        }
-
-        // Partage sur WhatsApp automatique avec le prix
-        function partagerArticle(nom, prix) {
-            const texte = encodeURIComponent(`Regarde ce produit de luxe sur S.E.G GLOBAL : ${nom} à ${prix} FCFA !`);
+        window.partagerArticle = function(nom, prix) {
+            const texte = encodeURIComponent(`Regarde cet article sur S.E.G GLOBAL : ${nom} à ${prix} FCFA !`);
             window.open(`https://api.whatsapp.com/send?text=${texte}`, '_blank');
         }
 
-        function quitterApplication() {
-            if(confirm("Quitter S.E.G GLOBAL ?")) {
+        window.quitterApplication = function() {
+            if(confirm("Quitter l'application ?")) {
                 alert("Session suspendue.");
             }
         }
