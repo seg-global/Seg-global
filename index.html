@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL IA - Empire System</title>
+    <title>S.E.G GLOBAL</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="S.E.G GLOBAL">
+    <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=180&h=180&fit=crop">
+    <meta name="theme-color" content="#050505">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* ==========================================================================
+           STYLE GÉNÉRAL
+           ========================================================================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -19,39 +29,43 @@
             background-color: #050505;
             color: #ffffff;
             min-height: 100vh;
-            padding-bottom: 90px;
+            padding-bottom: 100px;
             overflow-x: hidden;
         }
 
+        /* EN-TÊTE PREMIUM */
         .empire-header {
             text-align: center;
-            padding: 20px 10px;
-            background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 25px 10px 20px 10px;
+            background: linear-gradient(180deg, rgba(212,175,55,0.12) 0%, rgba(0,0,0,0) 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
 
         .empire-header h1 {
             color: #D4AF37;
-            font-size: 24px;
+            font-size: 26px;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            font-weight: 800;
+            text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
         }
 
         .objectif-badge {
             color: #00E5FF;
             font-size: 11px;
-            margin-top: 5px;
+            margin-top: 6px;
             font-weight: bold;
             letter-spacing: 1px;
         }
 
+        /* SYSTÈME DE NAVIGATION DES ÉCRANS */
         .app-screen {
             display: none; 
-            animation: fadeIn 0.4s ease forwards;
+            animation: screenFade 0.3s ease-out forwards;
             padding: 20px;
         }
 
@@ -59,57 +73,77 @@
             display: block; 
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes screenFade {
+            from { opacity: 0; transform: scale(0.99); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .section-title {
             color: #D4AF37;
-            font-size: 18px;
+            font-size: 20px;
             text-align: center;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
+            margin-bottom: 25px;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
+        /* ==========================================================================
+           ÉCRAN : MARCHÉ DE L'EMPIRE
+           ========================================================================== */
+        #market-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Message si le marché est vide */
+        .empty-market-message {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+
+        /* CARTE PRODUIT PREMIUM */
         .product-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 15px;
-            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 18px;
+            padding: 16px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             position: relative;
         }
 
         .product-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 26px;
+            right: 26px;
             background: rgba(0, 229, 255, 0.15);
             border: 1px solid #00E5FF;
             color: #00E5FF;
             font-size: 10px;
-            padding: 4px 8px;
+            padding: 5px 10px;
             border-radius: 20px;
             z-index: 10;
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
 
-        .product-image-placeholder {
+        .product-image-container {
             width: 100%;
-            height: 250px;
-            background: rgba(255, 255, 255, 0.01);
-            border-radius: 10px;
+            height: 260px;
+            background: #111111;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: rgba(212, 175, 55, 0.3);
-            border: 1px dashed rgba(212, 175, 55, 0.2);
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .product-image-placeholder img {
+        .product-image-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -120,61 +154,88 @@
         }
 
         .product-info h3 {
-            font-size: 19px;
+            font-size: 20px;
             color: #ffffff;
+            font-weight: 600;
         }
 
         .price {
             color: #00E5FF;
-            font-size: 17px;
-            font-weight: bold;
-            margin: 5px 0 5px 0;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 6px 0 15px 0;
         }
 
-        .commission-info {
-            font-size: 11px;
-            color: #888888;
-            margin-bottom: 12px;
+        /* Actions sur la carte */
+        .card-actions {
+            display: flex;
+            gap: 12px;
         }
 
         .btn-buy {
-            width: 100%;
+            flex: 1;
             background: linear-gradient(90deg, #D4AF37 0%, #AA7C11 100%);
             border: none;
-            padding: 14px;
+            padding: 15px;
             color: #000000;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
+            transition: opacity 0.2s;
         }
 
+        .btn-share {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #D4AF37;
+            width: 50px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* ==========================================================================
+           ÉCRAN : VENDRE UN ARTICLE
+           ========================================================================== */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         .form-group label {
             display: block;
             color: #D4AF37;
-            margin-bottom: 8px;
+            margin-bottom: 9px;
             font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        .form-group input {
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 14px;
-            border-radius: 10px;
+            padding: 16px;
+            border-radius: 12px;
             color: #ffffff;
             font-size: 16px;
             outline: none;
+            transition: border-color 0.3s;
         }
 
+        .form-group input:focus {
+            border-color: #00E5FF;
+        }
+
+        /* Design de la zone fichier photo */
         .file-select-container {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             border: 1px dashed rgba(212, 175, 55, 0.3);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 25px;
             text-align: center;
             position: relative;
@@ -191,24 +252,26 @@
         }
 
         .file-custom-btn {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(212, 175, 55, 0.1);
+            color: #D4AF37;
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 13px;
             display: inline-block;
             margin-bottom: 8px;
-            color: #D4AF37;
+            font-weight: bold;
         }
 
         .file-name-text {
             display: block;
             font-size: 13px;
-            color: #888888;
+            color: #777777;
         }
 
         .ia-status-box {
             text-align: center;
             margin: 25px 0;
+            min-height: 20px;
         }
 
         .ia-percent {
@@ -216,6 +279,7 @@
             font-size: 14px;
             font-weight: bold;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .btn-deploy {
@@ -225,19 +289,21 @@
             padding: 16px;
             color: #000000;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 15px;
+            letter-spacing: 1px;
             cursor: pointer;
         }
 
+        /* BARRES ET MENU INFÉRIEUR */
         .server-status {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
             font-size: 11px;
-            color: #666666;
-            margin: 20px 0 10px 0;
+            color: #555555;
+            margin: 30px 0 10px 0;
         }
 
         .status-dot.online {
@@ -252,12 +318,13 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(5, 5, 5, 0.95);
-            border-top: 1px solid rgba(212, 175, 55, 0.15);
-            backdrop-filter: blur(25px);
+            background: rgba(5, 5, 5, 0.94);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             display: flex;
             justify-content: space-around;
-            padding: 12px 0;
+            padding: 14px 0 24px 0; /* padding bas augmenté pour la barre des iPhones */
             z-index: 1000;
         }
 
@@ -265,57 +332,49 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #666666;
+            color: #555555;
             text-decoration: none;
-            font-size: 10px;
-            gap: 5px;
+            font-size: 11px;
+            gap: 6px;
             cursor: pointer;
+            font-weight: bold;
         }
 
         .nav-item i {
-            font-size: 20px;
+            font-size: 22px;
         }
 
         .nav-item.active {
             color: #D4AF37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
     </style>
 </head>
 <body>
 
     <header class="empire-header">
-        <h1>S.E.G GLOBAL IA</h1>
+        <h1>S.E.G GLOBAL</h1>
         <div class="objectif-badge">OBJECTIF : 24,000,000,000 FCFA</div>
     </header>
 
     <main id="screen-accueil" class="app-screen active-screen">
         <h2 class="section-title">MARCHÉ DE L'EMPIRE</h2>
-        
-        <div class="product-card">
-            <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Vérifié par l'Ouvrier IA</div>
-            <div class="product-image-placeholder" id="main-product-image-box">
-                <i class="fa-solid fa-gem fa-4x" id="default-icon"></i>
-            </div>
-            <div class="product-info">
-                <h3 id="main-product-title">Mpina Premium</h3>
-                <p class="price" id="main-product-price">20 000 FCFA</p>
-                <div class="commission-info" id="main-product-commission">Frais appli (10%) : 2 000 FCFA</div>
-                <button class="btn-buy" onclick="acheterProduit()">Acheter Maintenant</button>
-            </div>
+        <div id="market-feed">
+            <div class="empty-market-message" id="empty-msg">Aucun article sur le marché. Allez dans "Vendre" pour déployer avec l'IA.</div>
         </div>
     </main>
 
     <main id="screen-vente" class="app-screen">
-        <h2 class="section-title">VENDRE UN ARTICLE</h2>
+        <h2 class="section-title">Vendre un Article</h2>
         
         <div class="form-group">
             <label>Nom du produit</label>
-            <input type="text" id="prod-name" placeholder="Nom du produit">
+            <input type="text" id="prod-name" placeholder="Entrez le nom du produit">
         </div>
 
         <div class="form-group">
             <label>Prix (FCFA)</label>
-            <input type="number" id="prod-price" placeholder="Prix FCFA">
+            <input type="number" id="prod-price" placeholder="Entrez le prix">
         </div>
 
         <div class="form-group">
@@ -323,30 +382,166 @@
             <div class="file-select-container">
                 <span class="file-custom-btn">Choisir le fichier</span>
                 <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
-                <input type="file" id="prod-file" accept="image/*" onchange="mettreAJourFichier(this)">
+                <input type="file" id="prod-file" accept="image/*" onchange="traiterFichierPhoto(this)">
             </div>
         </div>
 
         <div class="ia-status-box">
-            <div class="ia-percent" id="upload-status">Déploiement IA : 0%</div>
+            <div class="ia-percent" id="upload-status"></div>
         </div>
 
-        <button class="btn-deploy" onclick="lancerDeploieIA()">DÉPLOYER AVEC IA</button>
+        <button class="btn-deploy" onclick="executerPublicationIA()">PUBLIER AVEC IA</button>
     </main>
 
     <div class="server-status">
         <span class="status-dot online"></span>
-        <p>Connexion Cloud Google : <span class="latency">22ms</span> (Stable)</p>
+        <p>Connexion Cloud Google : 22ms (Stable)</p>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" id="btn-nav-accueil" onclick="changerEcran('accueil')">
+        <div class="nav-item active" id="btn-nav-accueil" onclick="basculerEcran('accueil')">
             <i class="fa-solid fa-house"></i>
             <span>MARCHÉ</span>
         </div>
-        <div class="nav-item" id="btn-nav-vente" onclick="changerEcran('vente')">
-            <i class="fa-solid fa-cart-shopping"></i>
+        <div class="nav-item" id="btn-nav-vente" onclick="basculerEcran('vente')">
+            <i class="fa-solid fa-bag-shopping"></i>
             <span>VENDRE</span>
         </div>
-        <div class="nav-item" onclick="quitterApp()">
+        <div class="nav-item" onclick="quitterApplication()">
             <i class="fa-solid fa-door-open"></i>
+            <span>QUITTER</span>
+        </div>
+    </nav>
+
+    <script>
+        let imageLocaleUrl = "";
+
+        // Gestion du routage interne (Single Page Application)
+        function basculerEcran(cible) {
+            document.getElementById('screen-accueil').classList.remove('active-screen');
+            document.getElementById('screen-vente').classList.remove('active-screen');
+            document.getElementById('btn-nav-accueil').classList.remove('active');
+            document.getElementById('btn-nav-vente').classList.remove('active');
+
+            if(cible === 'accueil') {
+                document.getElementById('screen-accueil').classList.add('active-screen');
+                document.getElementById('btn-nav-accueil').classList.add('active');
+            } else if(cible === 'vente') {
+                document.getElementById('screen-vente').classList.add('active-screen');
+                document.getElementById('btn-nav-vente').classList.add('active');
+            }
+        }
+
+        // Capture et transformation de l'image de la pellicule du téléphone
+        function traiterFichierPhoto(input) {
+            const labelFichier = document.getElementById('file-name-display');
+            if (input.files && input.files.length > 0) {
+                const imgFile = input.files[0];
+                labelFichier.textContent = imgFile.name;
+                labelFichier.style.color = "#00E5FF";
+
+                const lecteur = new FileReader();
+                lecteur.onload = function(e) {
+                    imageLocaleUrl = e.target.result; 
+                };
+                lecteur.readAsDataURL(imgFile);
+            } else {
+                labelFichier.textContent = "aucun fichier sélectionné";
+                labelFichier.style.color = "#777777";
+                imageLocaleUrl = "";
+            }
+        }
+
+        // Logique de déploiement et injection sur le marché de l'Empire
+        function executerPublicationIA() {
+            const statusLabel = document.getElementById('upload-status');
+            const champNom = document.getElementById('prod-name');
+            const champPrix = document.getElementById('prod-price');
+
+            if(!champNom.value || !champPrix.value) {
+                alert("Erreur : Renseignez le nom et le prix de votre article.");
+                return;
+            }
+
+            let progression = 0;
+            statusLabel.style.color = "#00E5FF";
+            
+            const chrono = setInterval(() => {
+                progression += 20;
+                statusLabel.textContent = `Analyse et déploiement IA : ${progression}%`;
+                
+                if (progression >= 100) {
+                    clearInterval(chrono);
+                    statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI !";
+                    statusLabel.style.color = "#00FF66";
+
+                    // Cache le message de marché vide s'il existe
+                    const msgVide = document.getElementById('empty-msg');
+                    if(msgVide) msgVide.style.display = 'none';
+
+                    // Création de la nouvelle carte de l'article en pur JavaScript
+                    const fluxMarché = document.getElementById('market-feed');
+                    const nouvelleCarte = document.createElement('div');
+                    nouvelleCarte.className = 'product-card';
+                    
+                    // Si aucune photo n'a été mise, on met un fond noir neutre de luxe
+                    const baliseImage = imageLocaleUrl ? 
+                        `<img src="${imageLocaleUrl}" alt="${champNom.value}">` : 
+                        `<i class="fa-solid fa-gem fa-4x" style="color:rgba(212,175,55,0.2)"></i>`;
+
+                    const prixFormate = Number(champPrix.value).toLocaleString('fr-FR');
+
+                    nouvelleCarte.innerHTML = `
+                        <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Certifié IA</div>
+                        <div class="product-image-container">
+                            ${baliseImage}
+                        </div>
+                        <div class="product-info">
+                            <h3>${champNom.value}</h3>
+                            <p class="price">${prixFormate} FCFA</p>
+                            <div class="card-actions">
+                                <button class="btn-buy" onclick="declencherAchat('${champNom.value}')">Acheter Maintenant</button>
+                                <button class="btn-share" onclick="partagerArticle('${champNom.value}', '${prixFormate}')">
+                                    <i class="fa-solid fa-share-nodes"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+
+                    // On l'ajoute tout en haut du marché (comme sur TikTok ou Instagram !)
+                    fluxMarché.insertBefore(nouvelleCarte, fluxMarché.firstChild);
+
+                    // Nettoyage immédiat du formulaire pour la prochaine vente
+                    champNom.value = "";
+                    champPrix.value = "";
+                    document.getElementById('prod-file').value = "";
+                    document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
+                    document.getElementById('file-name-display').style.color = "#777777";
+                    imageLocaleUrl = "";
+
+                    setTimeout(() => {
+                        statusLabel.textContent = "";
+                        basculerEcran('accueil'); // Te ramène à l'accueil automatiquement
+                    }, 800);
+                }
+            }, 100);
+        }
+
+        function declencherAchat(nom) {
+            alert(`帝国 S.E.G GLOBAL - Option d'achat en cours pour : ${nom}`);
+        }
+
+        // Partage sur WhatsApp automatique avec le prix
+        function partagerArticle(nom, prix) {
+            const texte = encodeURIComponent(`Regarde ce produit de luxe sur S.E.G GLOBAL : ${nom} à ${prix} FCFA !`);
+            window.open(`https://api.whatsapp.com/send?text=${texte}`, '_blank');
+        }
+
+        function quitterApplication() {
+            if(confirm("Quitter S.E.G GLOBAL ?")) {
+                alert("Session suspendue.");
+            }
+        }
+    </script>
+</body>
+</html>
