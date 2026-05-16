@@ -3,22 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL IA | EMPIRE INTÉGRÉ</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
+    <title>S.E.G GLOBAL IA - Accueil</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    
     <style>
-        :root { 
-            --gold: #D4AF37; 
-            --bg: #050505; 
-            --neon-blue: #00e5ff; 
-            --dark-grey: #111; 
-        }
-        
+        /* ==========================================================================
+           STYLE GÉNÉRAL & RESET
+           ========================================================================== */
         * {
             margin: 0;
             padding: 0;
@@ -27,159 +18,240 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body, html { 
-            background: var(--bg); 
-            color: #fff; 
-            min-height: 100vh; 
-            overflow-x: hidden;
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            min-height: 100vh;
             padding-bottom: 90px;
+            overflow-x: hidden;
         }
-        
-        /* En-tête Lumineux Global */
-        .dashboard-header { 
-            padding: 20px 10px; 
-            text-align: center; 
-            background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%); 
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3); 
+
+        /* ==========================================================================
+           EN-TÊTE LUMINEUX (EMPIRE SYSTEM)
+           ========================================================================== */
+        .empire-header {
+            text-align: center;
+            padding: 20px 10px;
+            background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
         }
-        
-        .logo-gold { 
-            font-size: 26px; 
-            letter-spacing: 3px; 
-            color: var(--gold); 
-            cursor: pointer; 
-            text-shadow: 0 0 15px rgba(212,175,55,0.5); 
-            font-weight: bold;
+
+        .empire-header h1 {
+            color: #D4AF37;
+            font-size: 24px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
-        
-        .target-text { 
-            font-size: 11px; 
-            color: var(--neon-blue); 
-            margin-top: 5px; 
-            text-transform: uppercase; 
+
+        .objectif-badge {
+            color: #00E5FF;
+            font-size: 11px;
+            margin-top: 5px;
             font-weight: bold;
             letter-spacing: 1px;
         }
-        
-        .container { max-width: 450px; margin: auto; padding: 20px; }
-        
-        /* Formulaires & Éléments de Design */
-        input { 
-            width: 100%; 
-            padding: 15px; 
-            margin: 10px 0; 
-            background: rgba(255, 255, 255, 0.05); 
-            border: 1px solid rgba(212, 175, 55, 0.2); 
-            color: #fff; 
-            border-radius: 12px; 
-            box-sizing: border-box; 
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-        }
-        
-        input:focus {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
-        }
 
-        .btn-gold { 
-            width: 100%; 
-            padding: 15px; 
-            background: linear-gradient(90deg, #AA7C11, var(--gold), #AA7C11); 
-            color: #000; 
-            border: none; 
-            border-radius: 12px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            font-size: 14px;
-            transition: 0.3s; 
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
-        }
-        
-        .btn-gold:hover { transform: scale(1.01); box-shadow: 0 0 20px var(--gold); }
-
-        /* Poste de Commande Secret de Steve */
-        #boss_dashboard { 
+        /* GESTION DES ÉCRANS */
+        .app-screen {
             display: none; 
-            background: rgba(255, 255, 255, 0.02); 
-            border: 1px solid var(--gold); 
-            border-radius: 15px; 
-            padding: 15px; 
-            margin-bottom: 20px; 
-            backdrop-filter: blur(10px);
-            animation: fadeIn 0.4s ease;
-        }
-        
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        
-        .stat-card { 
-            background: rgba(255, 255, 255, 0.02); 
-            padding: 12px; 
-            border-radius: 10px; 
-            text-align: center; 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
+            animation: fadeIn 0.4s ease forwards;
+            padding: 20px;
         }
 
-        /* Marché Style Instagram / Amazon */
-        .market-feed { display: flex; flex-direction: column; gap: 20px; margin-top: 10px; }
-        
-        .item-card { 
-            background: rgba(255, 255, 255, 0.03); 
-            border: 1px solid rgba(212, 175, 55, 0.2); 
-            border-radius: 15px; 
-            padding: 15px; 
-            position: relative;
+        .app-screen.active-screen {
+            display: block; 
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================================================
+           ÉCRAN 1 : MARCHÉ DE LUXE (ACCUEIL)
+           ========================================================================== */
+        .section-title {
+            color: #D4AF37;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 15px;
+            padding: 15px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            margin-bottom: 20px;
+            position: relative;
+            transition: transform 0.2s ease;
         }
-        
-        .item-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 10px; }
-        
+
+        .product-card:active {
+            transform: scale(0.98);
+        }
+
         .product-badge {
             position: absolute;
-            top: 25px;
-            right: 25px;
+            top: 10px;
+            right: 10px;
             background: rgba(0, 229, 255, 0.15);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
+            border: 1px solid #00E5FF;
+            color: #00E5FF;
             font-size: 10px;
             padding: 4px 8px;
             border-radius: 20px;
-            font-weight: bold;
         }
 
-        /* Conteneur de Fichier Stylisé */
+        .product-image-placeholder {
+            width: 100%;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(212, 175, 55, 0.3);
+            border: 1px dashed rgba(212, 175, 55, 0.2);
+        }
+
+        .product-info {
+            margin-top: 15px;
+        }
+
+        .product-info h3 {
+            font-size: 19px;
+            color: #ffffff;
+        }
+
+        .price {
+            color: #00E5FF;
+            font-size: 17px;
+            font-weight: bold;
+            margin: 5px 0 12px 0;
+        }
+
+        .btn-buy {
+            width: 100%;
+            background: linear-gradient(90deg, #D4AF37 0%, #AA7C11 100%);
+            border: none;
+            padding: 14px;
+            color: #000000;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        /* ==========================================================================
+           ÉCRAN 2 : IA VENTE (FORMULAIRE DE DÉPLOIEMENT)
+           ========================================================================== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #D4AF37;
+            margin-bottom: 8px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 14px;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #00E5FF;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+        }
+
         .file-select-container {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px dashed rgba(212, 175, 55, 0.3);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 25px;
             text-align: center;
             position: relative;
             cursor: pointer;
-            margin: 10px 0;
         }
 
         .file-select-container input[type="file"] {
-            position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
         }
 
-        /* Barre de Progression Fluide */
-        .progress-container { width: 100%; background: #222; border-radius: 10px; margin: 15px 0; height: 8px; overflow: hidden; display: none; }
-        .progress-bar { width: 0%; height: 100%; background: var(--gold); transition: width 0.1s; box-shadow: 0 0 10px var(--gold); }
+        .file-custom-btn {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 13px;
+            display: inline-block;
+            margin-bottom: 8px;
+            color: #D4AF37;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
 
-        /* Gestion de l'affichage des écrans */
-        .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.4s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .file-name-text {
+            display: block;
+            font-size: 13px;
+            color: #888888;
+        }
 
-        /* Statut Serveur */
+        /* Statut d'envoi IA */
+        .ia-status-box {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .ia-percent {
+            color: #00E5FF;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .btn-deploy {
+            width: 100%;
+            background: linear-gradient(90deg, #AA7C11 0%, #D4AF37 50%, #AA7C11 100%);
+            border: none;
+            padding: 16px;
+            color: #000000;
+            font-weight: bold;
+            border-radius: 10px;
+            font-size: 15px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        /* ==========================================================================
+           BARRES DE STATUT ET NAVIGATION (FIXES)
+           ========================================================================== */
         .server-status {
             display: flex;
             justify-content: center;
@@ -187,7 +259,7 @@
             gap: 8px;
             font-size: 11px;
             color: #666666;
-            margin-top: 20px;
+            margin: 20px 0 10px 0;
         }
 
         .status-dot.online {
@@ -198,200 +270,178 @@
             box-shadow: 0 0 8px #00FF66;
         }
 
-        /* Barre de Navigation Fixe en Bas */
-        .nav-bar { 
-            position: fixed; 
-            bottom: 0; 
-            width: 100%; 
-            background: rgba(5, 5, 5, 0.95); 
-            display: flex; 
-            justify-content: space-around; 
-            padding: 12px 0; 
-            border-top: 1px solid rgba(212, 175, 55, 0.15); 
-            z-index: 1000; 
-            backdrop-filter: blur(20px);
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(5, 5, 5, 0.95);
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            backdrop-filter: blur(25px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            z-index: 1000;
         }
-        
-        .nav-item { color: #666; font-size: 10px; text-align: center; cursor: pointer; text-decoration: none; display: flex; flex-direction: column; gap: 4px; transition: 0.3s; }
-        .nav-item i { font-size: 20px; }
-        .nav-item.active { color: var(--gold); text-shadow: 0 0 10px rgba(212,175,55,0.4); transform: translateY(-2px); }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #666666;
+            text-decoration: none;
+            font-size: 10px;
+            gap: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: #D4AF37;
+            text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
 
-<div id="auth_section" class="container">
-    <div class="logo-gold" style="margin-top:80px; text-align:center;">S.E.G GLOBAL</div>
-    <p style="text-align:center; color:#666; font-size:11px; letter-spacing: 1px; margin-top: 5px;">INFRASTRUCTURE SÉCURISÉE</p>
-    
-    <div id="login_step1" style="margin-top:30px;">
-        <input type="email" id="email_input" placeholder="Email de votre iPhone">
-        <button class="btn-gold" onclick="sendAccessCode()">Obtenir le Code d'Accès</button>
-    </div>
-    <div id="login_step2" style="display:none; margin-top:30px;">
-        <input type="text" id="otp_input" placeholder="Code de sécurité">
-        <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
-    </div>
-</div>
+    <header class="empire-header">
+        <h1>S.E.G GLOBAL IA</h1>
+        <div class="objectif-badge">OBJECTIF : 24,000,000,000 FCFA</div>
+    </header>
 
-<div id="main_app" style="display:none;">
-    <div class="dashboard-header">
-        <h1 class="logo-gold" onclick="ouvrirPosteDeCommande()">S.E.G GLOBAL</h1>
-        <div class="target-text">Objectif : 24,000,000,000 FCFA</div>
-    </div>
-
-    <div class="container">
-        <div id="boss_dashboard">
-            <h3 style="color:var(--gold); text-align:center; margin:0; font-size:13px; letter-spacing:1px;">COMMANDEMENT CENTRAL</h3>
-            <div class="stats-grid">
-                <div class="stat-card"><small style="color:#666;">FLUX</small><br><b style="color:var(--neon-blue); font-size:12px;">EN ATTENTE</b></div>
-                <div class="stat-card"><small style="color:#666;">IA OUVRIER</small><br><b style="color:#00FF66; font-size:12px;">ACTIF</b></div>
+    <main id="screen-accueil" class="app-screen active-screen">
+        <h2 class="section-title">MARCHÉ DE LUXE</h2>
+        
+        <div class="product-card">
+            <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Vérifié par l'Ouvrier IA</div>
+            <div class="product-image-placeholder">
+                <i class="fa-solid fa-gem fa-4x"></i>
             </div>
-            <button class="btn-gold" style="font-size:11px; padding:10px;" onclick="alert('Optimisation des algorithmes IA lancée...')">Accélérer les flux</button>
+            <div class="product-info">
+                <h3>Mpina Premium</h3>
+                <p class="price">20 000 FCFA</p>
+                <button class="btn-buy" onclick="acheterProduit('Mpina Premium')">Acheter Maintenant</button>
+            </div>
+        </div>
+    </main>
+
+    <main id="screen-vente" class="app-screen">
+        <h2 class="section-title">PUBLIER AVEC IA</h2>
+        
+        <div class="form-group">
+            <label>Nom du produit</label>
+            <input type="text" id="prod-name" placeholder="Ex: Diamant Brut Brillant">
         </div>
 
-        <div id="home_page" class="page active">
-            <h2 style="text-align:center; color:var(--gold); font-size:18px; margin-bottom:15px; letter-spacing:0.5px;">MARCHÉ DE LUXE</h2>
-            <div class="market-feed" id="market_feed">
-                </div>
+        <div class="form-group">
+            <label>Prix (FCFA)</label>
+            <input type="number" id="prod-price" placeholder="Ex: 5000000">
         </div>
 
-        <div id="seller_page" class="page">
-            <h2 style="color:var(--gold); text-align:center; font-size:18px; margin-bottom:15px;">PUBLIER AVEC IA</h2>
-            <input type="text" id="prod_name" placeholder="Nom du produit">
-            <input type="number" id="prod_price" placeholder="Prix (FCFA)">
-            
+        <div class="form-group">
+            <label>Fichier Média (Image/Vidéo)</label>
             <div class="file-select-container">
-                <span class="btn-gold" style="padding:8px 15px; font-size:12px; width:auto; display:inline-block;">Choisir le fichier Média</span>
-                <span id="file-name-display" style="display:block; font-size:12px; color:#666; margin-top:8px;">aucun fichier sélectionné</span>
-                <input type="file" id="prod_img" accept="image/*" onchange="previewImage(event)">
+                <span class="file-custom-btn">Choisir le fichier</span>
+                <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
+                <input type="file" id="prod-file" onchange="mettreAJourFichier(this)">
             </div>
-            
-            <div class="progress-container" id="prog_cont">
-                <div id="progressBar" class="progress-bar"></div>
-            </div>
-            <p id="statusText" style="font-size:11px; text-align:center; color:var(--neon-blue); font-weight:bold; margin: 10px 0;"></p>
-            
-            <button class="btn-gold" id="pub_btn" onclick="publishProduct()">PUBLIER DANS L'EMPIRE</button>
         </div>
-    </div>
+
+        <div class="ia-status-box">
+            <div class="ia-percent" id="upload-status">Déploiement IA : 0%</div>
+        </div>
+
+        <button class="btn-deploy" onclick="lancerDeploieIA()">DÉPLOYER AVEC IA</button>
+    </main>
 
     <div class="server-status">
         <span class="status-dot online"></span>
-        <p>Connexion Cloud Google : <span style="color: #00FF66; font-weight:bold;">22ms (Stable)</span></p>
+        <p>Connexion Cloud Google : <span class="latency">22ms</span> (Stable)</p>
     </div>
 
-    <nav class="nav-bar">
-        <div class="nav-item active" id="nav-home" onclick="showPage('home_page', this)">
-            <i class="fa-solid fa-house"></i><span>MARCHÉ</span>
+    <nav class="bottom-nav">
+        <div class="nav-item active" id="btn-nav-accueil" onclick="changerEcran('accueil')">
+            <i class="fa-solid fa-house"></i>
+            <span>Accueil</span>
         </div>
-        <div class="nav-item" id="nav-seller" onclick="showPage('seller_page', this)">
-            <i class="fa-solid fa-bolt"></i><span>IA VENDRE</span>
+        <div class="nav-item" id="btn-nav-vente" onclick="changerEcran('vente')">
+            <i class="fa-solid fa-bolt"></i>
+            <span>IA Vente</span>
         </div>
-        <div class="nav-item" onclick="logout()">
-            <i class="fa-solid fa-door-open"></i><span>QUITTER</span>
+        <div class="nav-item" onclick="quitterApp()">
+            <i class="fa-solid fa-door-open"></i>
+            <span>Quitter</span>
         </div>
     </nav>
-</div>
 
-<script>
-    // --- INITIALISATION DES SERVICES ---
-    (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
-    
-    // Ta configuration Firebase reliée à ton infrastructure Vercel
-    const firebaseConfig = {
-        apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
-        authDomain: "seg-global.firebaseapp.com",
-        projectId: "seg-global",
-        storageBucket: "seg-global.appspot.com"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const storage = firebase.storage();
+    <script>
+        function changerEcran(nomEcran) {
+            document.getElementById('screen-accueil').classList.remove('active-screen');
+            document.getElementById('screen-vente').classList.remove('active-screen');
+            
+            document.getElementById('btn-nav-accueil').classList.remove('active');
+            document.getElementById('btn-nav-vente').classList.remove('active');
 
-    let correctOTP = "";
-    let selectedFile;
-
-    // --- SÉCURITÉ ACCÈS IPHONE (OTP) ---
-    function sendAccessCode() {
-        const email = document.getElementById('email_input').value;
-        if(!email) return alert("Email requis pour authentification");
-        correctOTP = Math.floor(100000 + Math.random() * 900000).toString();
-        
-        emailjs.send("service_ocg86ge", "template_v7i6m5m", { to_email: email, otp_code: correctOTP })
-        .then(() => {
-            document.getElementById('login_step1').style.display = 'none';
-            document.getElementById('login_step2').style.display = 'block';
-        }).catch(err => alert("Erreur d'envoi du code de sécurité. Vérifie tes clés."));
-    }
-
-    function verifyAccessCode() {
-        if(document.getElementById('otp_input').value === correctOTP) {
-            localStorage.setItem("seg_session", "active");
-            startApp();
-        } else { alert("Code de sécurité invalide."); }
-    }
-
-    function startApp() {
-        document.getElementById('auth_section').style.display = 'none';
-        document.getElementById('main_app').style.display = 'block';
-        loadProducts();
-    }
-
-    // --- ACCÈS POSTE DE COMMANDE CRITIQUE ---
-    window.ouvrirPosteDeCommande = function() {
-        const p = prompt("IDENTIFIANT FONDATEUR GLOBAL :");
-        if(p === "237_STEVE_BOSS") {
-            document.getElementById('boss_dashboard').style.display = 'block';
-            alert("Accès autorisé. Système central opérationnel, Boss Steve.");
-        } else {
-            alert("Identifiant inconnu. Alerte sécurité.");
+            if(nomEcran === 'accueil') {
+                document.getElementById('screen-accueil').classList.add('active-screen');
+                document.getElementById('btn-nav-accueil').classList.add('active');
+            } else if(nomEcran === 'vente') {
+                document.getElementById('screen-vente').classList.add('active-screen');
+                document.getElementById('btn-nav-vente').classList.add('active');
+            }
         }
-    }
 
-    // --- ENVOI ET CLASSIFICATION IA ---
-    function previewImage(e) { 
-        selectedFile = e.target.files[0]; 
-        const display = document.getElementById('file-name-display');
-        if(selectedFile) {
-            display.textContent = selectedFile.name;
-            display.style.color = "var(--neon-blue)";
+        function mettreAJourFichier(input) {
+            const display = document.getElementById('file-name-display');
+            if (input.files && input.files.length > 0) {
+                display.textContent = input.files[0].name;
+                display.style.color = "#00E5FF";
+            } else {
+                display.textContent = "aucun fichier sélectionné";
+                display.style.color = "#888888";
+            }
         }
-    }
 
-    async function publishProduct() {
-        const name = document.getElementById('prod_name').value;
-        const price = document.getElementById('prod_price').value;
-        const btn = document.getElementById('pub_btn');
-        const progCont = document.getElementById('prog_cont');
-        const statusText = document.getElementById('statusText');
+        function lancerDeploieIA() {
+            const statusText = document.getElementById('upload-status');
+            const name = document.getElementById('prod-name').value;
+            const price = document.getElementById('prod-price').value;
 
-        if(!name || !price || !selectedFile) return alert("Données incomplètes pour le traitement IA !");
-        
-        btn.disabled = true;
-        progCont.style.display = "block";
-        statusText.innerText = "IA : CLASSIFICATION SEO & RECHERCHE DE MARCHÉ EN COURS...";
+            if(!name || !price) {
+                alert("Veuillez remplir le nom et le prix avant le déploiement.");
+                return;
+            }
 
-        // Application du titre dynamique pour forcer le SEO Google
-        document.title = name + " | S.E.G GLOBAL";
+            let pourcentage = 0;
+            statusText.style.color = "#00E5FF";
+            
+            const intervalle = setInterval(() => {
+                pourcentage += 10;
+                statusText.textContent = `Déploiement IA : ${pourcentage}%`;
+                
+                if (pourcentage >= 100) {
+                    clearInterval(intervalle);
+                    statusText.textContent = "DEPLOIEMENT IA REUSSI !";
+                    statusText.style.color = "#00FF66";
+                    alert(`Félicitations Steve ! Le produit "${name}" a été traité par l'Ouvrier IA.`);
+                }
+            }, 150);
+        }
 
-        const storageRef = storage.ref('produits_seg/' + Date.now() + "_" + selectedFile.name);
-        const uploadTask = storageRef.put(selectedFile);
+        function acheterProduit(nom) {
+            alert(`Demande d'achat initiée pour : ${nom}. Connexion à la passerelle de paiement...`);
+        }
 
-        uploadTask.on('state_changed', 
-            (snap) => {
-                const p = (snap.bytesTransferred / snap.totalBytes) * 100;
-                document.getElementById('progressBar').style.width = p + "%";
-                statusText.innerText = "DÉPLOYEMENT CLOUD EN COURS : " + Math.round(p) + "%";
-            },
-            (err) => { 
-                alert("Alerte Storage : Assurez-vous d'avoir activé les règles d'écriture dans Firebase (Mode Test) !"); 
-                btn.disabled = false;
-                progCont.style.display = "none";
-                statusText.innerText = "";
-            },
-            async () => {
-                const url = await uploadTask.snapshot.ref.getDownloadURL();
-                await db.collection("produits").add({
-                    nom: name, prix: parseFloat(price), image: url, date: new Date()
-                });
-                statusText.style.color = "#00FF66";
+        function quitterApp() {
+            if(confirm("Voulez-vous fermer l'application S.E.G GLOBAL ?")) {
+                alert("Fermeture de la session de l'Empire.");
+            }
+        }
+    </script>
+</body>
+</html>
