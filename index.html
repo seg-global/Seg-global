@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL</title>
+    <title>KIRAVEL - S.E.G GLOBAL</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="S.E.G GLOBAL">
-    <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=180&h=180&fit=crop">
+    <meta name="apple-mobile-web-app-title" content="KIRAVEL">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/VWV3X9Y/kiravel-logo.png">
     <meta name="theme-color" content="#050505">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -97,7 +97,6 @@
             gap: 25px;
         }
 
-        /* Message si le marché est vide */
         .empty-market-message {
             text-align: center;
             color: #666;
@@ -143,7 +142,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .product-image-container img {
+        .product-image-container img, .product-image-container video {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -166,7 +165,6 @@
             margin: 6px 0 15px 0;
         }
 
-        /* Actions sur la carte */
         .card-actions {
             display: flex;
             gap: 12px;
@@ -182,7 +180,6 @@
             border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
-            transition: opacity 0.2s;
         }
 
         .btn-share {
@@ -224,14 +221,8 @@
             color: #ffffff;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.3s;
         }
 
-        .form-group input:focus {
-            border-color: #00E5FF;
-        }
-
-        /* Design de la zone fichier photo */
         .file-select-container {
             background: rgba(255, 255, 255, 0.02);
             border: 1px dashed rgba(212, 175, 55, 0.3);
@@ -242,45 +233,16 @@
         }
 
         .file-select-container input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
+            position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;
         }
 
         .file-custom-btn {
-            background: rgba(212, 175, 55, 0.1);
-            color: #D4AF37;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 13px;
-            display: inline-block;
-            margin-bottom: 8px;
-            font-weight: bold;
+            background: rgba(212, 175, 55, 0.1); color: #D4AF37; padding: 10px 20px; border-radius: 8px; font-size: 13px; display: inline-block; margin-bottom: 8px; font-weight: bold;
         }
 
-        .file-name-text {
-            display: block;
-            font-size: 13px;
-            color: #777777;
-        }
-
-        .ia-status-box {
-            text-align: center;
-            margin: 25px 0;
-            min-height: 20px;
-        }
-
-        .ia-percent {
-            color: #00E5FF;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .file-name-text { display: block; font-size: 13px; color: #777777; }
+        .ia-status-box { text-align: center; margin: 25px 0; min-height: 20px; }
+        .ia-percent { color: #00E5FF; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
 
         .btn-deploy {
             width: 100%;
@@ -295,72 +257,36 @@
             cursor: pointer;
         }
 
-        /* BARRES ET MENU INFÉRIEUR */
+        /* BAS DE PAGE & STRUCTURE */
         .server-status {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            color: #555555;
-            margin: 30px 0 10px 0;
+            display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 11px; color: #555555; margin: 30px 0 10px 0;
         }
 
-        .status-dot.online {
-            width: 6px;
-            height: 6px;
-            background-color: #00FF66;
-            border-radius: 50%;
-        }
+        .status-dot.online { width: 6px; height: 6px; background-color: #00FF66; border-radius: 50%; }
 
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(5, 5, 5, 0.94);
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            padding: 14px 0 24px 0; /* padding bas augmenté pour la barre des iPhones */
-            z-index: 1000;
+            position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5, 5, 5, 0.94); border-top: 1px solid rgba(212, 175, 55, 0.2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-around; padding: 14px 0 24px 0; z-index: 1000;
         }
 
         .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #555555;
-            text-decoration: none;
-            font-size: 11px;
-            gap: 6px;
-            cursor: pointer;
-            font-weight: bold;
+            display: flex; flex-direction: column; align-items: center; color: #555555; text-decoration: none; font-size: 11px; gap: 6px; cursor: pointer; font-weight: bold;
         }
 
-        .nav-item i {
-            font-size: 22px;
-        }
-
-        .nav-item.active {
-            color: #D4AF37;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-        }
+        .nav-item i { font-size: 22px; }
+        .nav-item.active { color: #D4AF37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
     </style>
 </head>
 <body>
 
     <header class="empire-header">
-        <h1>S.E.G GLOBAL</h1>
+        <h1>KIRAVEL</h1>
         <div class="objectif-badge">OBJECTIF : 24,000,000,000 FCFA</div>
     </header>
 
     <main id="screen-accueil" class="app-screen active-screen">
         <h2 class="section-title">MARCHÉ DE L'EMPIRE</h2>
         <div id="market-feed">
-            <div class="empty-market-message" id="empty-msg">Aucun article sur le marché. Allez dans "Vendre" pour déployer avec l'IA.</div>
+            <div class="empty-market-message" id="empty-msg">Connexion à la base de données de l'Empire...</div>
         </div>
     </main>
 
@@ -382,7 +308,7 @@
             <div class="file-select-container">
                 <span class="file-custom-btn">Choisir le fichier</span>
                 <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
-                <input type="file" id="prod-file" accept="image/*" onchange="traiterFichierPhoto(this)">
+                <input type="file" id="prod-file" accept="image/*,video/*" onchange="traiterFichierMedia(this)">
             </div>
         </div>
 
@@ -413,10 +339,169 @@
         </div>
     </nav>
 
-    <script>
-        let imageLocaleUrl = "";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
-        // Gestion du routage interne (Single Page Application)
+        // Ta configuration officielle extraite de ta capture Google Console
+        const firebaseConfig = {
+            apiKey: "AIzaSyAMX8SfBySnpc2U8Y80D35uY55N0f2HswU",
+            authDomain: "seg-global.firebaseapp.com",
+            projectId: "seg-global",
+            storageBucket: "seg-global.appspot.com",
+            messagingSenderId: "880037527683",
+            appId: "1:880037527683:web:96e838e68cfb99b50e7939",
+            measurementId: "G-Z5WG470MGG"
+        };
+
+        // Initialisation des serveurs Firebase Cloud
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        let fichierSelectionne = null;
+
+        // Écoute automatique et affichage du flux en temps réel
+        const fluxMarché = document.getElementById('market-feed');
+        const msgVide = document.getElementById('empty-msg');
+
+        const q = query(collection(db, "produits"), orderBy("timestamp", "desc"));
+        onSnapshot(q, (snapshot) => {
+            fluxMarché.innerHTML = "";
+            if(snapshot.empty) {
+                fluxMarché.innerHTML = `<div class="empty-market-message" id="empty-msg">Aucun article sur le marché. Allez dans "Vendre" pour déployer avec l'IA.</div>`;
+                return;
+            }
+            
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const nouvelleCarte = document.createElement('div');
+                nouvelleCarte.className = 'product-card';
+                
+                // Détection intelligente du type de média (Image vs Vidéo)
+                let baliseMedia = `<i class="fa-solid fa-gem fa-4x" style="color:rgba(212,175,55,0.2)"></i>`;
+                if(data.mediaUrl) {
+                    if(data.mediaType && data.mediaType.startsWith('video')) {
+                        baliseMedia = `<video src="${data.mediaUrl}" controls loop muted playsinline></video>`;
+                    } else {
+                        baliseMedia = `<img src="${data.mediaUrl}" alt="${data.nom}">`;
+                    }
+                }
+
+                const prixFormate = Number(data.prix).toLocaleString('fr-FR');
+
+                nouvelleCarte.innerHTML = `
+                    <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Certifié IA</div>
+                    <div class="product-image-container">
+                        ${baliseMedia}
+                    </div>
+                    <div class="product-info">
+                        <h3>${data.nom}</h3>
+                        <p class="price">${prixFormate} FCFA</p>
+                        <div class="card-actions">
+                            <button class="btn-buy" onclick="window.declencherAchat('${data.nom}')">Acheter Maintenant</button>
+                            <button class="btn-share" onclick="window.partagerArticle('${data.nom}', '${prixFormate}')">
+                                <i class="fa-solid fa-share-nodes"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                fluxMarché.appendChild(nouvelleCarte);
+            });
+        });
+
+        // Lecture du fichier choisi par l'utilisateur
+        window.traiterFichierMedia = function(input) {
+            const labelFichier = document.getElementById('file-name-display');
+            if (input.files && input.files.length > 0) {
+                fichierSelectionne = input.files[0];
+                labelFichier.textContent = fichierSelectionne.name;
+                labelFichier.style.color = "#00E5FF";
+            } else {
+                labelFichier.textContent = "aucun fichier sélectionné";
+                labelFichier.style.color = "#777777";
+                fichierSelectionne = null;
+            }
+        };
+
+        // Envoi combiné : Stockage Storage + Enregistrement Base de données
+        window.executerPublicationIA = function() {
+            const statusLabel = document.getElementById('upload-status');
+            const champNom = document.getElementById('prod-name');
+            const champPrix = document.getElementById('prod-price');
+
+            if(!champNom.value || !champPrix.value) {
+                alert("Erreur : Renseignez le nom et le prix de votre article.");
+                return;
+            }
+
+            statusLabel.style.color = "#00E5FF";
+
+            if (fichierSelectionne) {
+                // Création d'une référence unique dans le Storage Cloud Google
+                const nomUnique = `${Date.now()}_${fichierSelectionne.name}`;
+                const stockageRef = ref(storage, `produits/${nomUnique}`);
+                const tacheTelechargement = uploadBytesResumable(stockageRef, fichierSelectionne);
+
+                tacheTelechargement.on('state_changed', 
+                    (snapshot) => {
+                        // Progression réelle calculée par le serveur Google
+                        const progression = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                        statusLabel.textContent = `Analyse et déploiement IA : ${progression}%`;
+                    }, 
+                    (error) => {
+                        alert("Erreur lors de l'envoi média : " + error.message);
+                    }, 
+                    () => {
+                        // Envoi réussi, récupération du lien final public
+                        getDownloadURL(tacheTelechargement.snapshot.ref).then((urlDeTelechargement) => {
+                            enregistrerDansFirestore(champNom.value, champPrix.value, urlDeTelechargement, fichierSelectionne.type);
+                        });
+                    }
+                );
+            } else {
+                // Publication sans média
+                statusLabel.textContent = "Analyse et déploiement IA : 50%";
+                enregistrerDansFirestore(champNom.value, champPrix.value, "", "");
+            }
+        };
+
+        async function enregistrerDansFirestore(nom, prix, urlMedia, typeMedia) {
+            const statusLabel = document.getElementById('upload-status');
+            try {
+                await addDoc(collection(db, "produits"), {
+                    nom: nom,
+                    prix: Number(prix),
+                    mediaUrl: urlMedia,
+                    mediaType: typeMedia,
+                    timestamp: Date.now()
+                });
+
+                statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI !";
+                statusLabel.style.color = "#00FF66";
+
+                // Reset complet du formulaire
+                document.getElementById('prod-name').value = "";
+                document.getElementById('prod-price').value = "";
+                document.getElementById('prod-file').value = "";
+                document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
+                document.getElementById('file-name-display').style.color = "#777777";
+                fichierSelectionne = null;
+
+                setTimeout(() => {
+                    statusLabel.textContent = "";
+                    basculerEcran('accueil'); 
+                }, 1000);
+
+            } catch (e) {
+                alert("Erreur de synchronisation Firestore : " + e.message);
+            }
+        }
+    </script>
+
+    <script>
+        // Fonctions globales de l'application
         function basculerEcran(cible) {
             document.getElementById('screen-accueil').classList.remove('active-screen');
             document.getElementById('screen-vente').classList.remove('active-screen');
@@ -432,113 +517,17 @@
             }
         }
 
-        // Capture et transformation de l'image de la pellicule du téléphone
-        function traiterFichierPhoto(input) {
-            const labelFichier = document.getElementById('file-name-display');
-            if (input.files && input.files.length > 0) {
-                const imgFile = input.files[0];
-                labelFichier.textContent = imgFile.name;
-                labelFichier.style.color = "#00E5FF";
-
-                const lecteur = new FileReader();
-                lecteur.onload = function(e) {
-                    imageLocaleUrl = e.target.result; 
-                };
-                lecteur.readAsDataURL(imgFile);
-            } else {
-                labelFichier.textContent = "aucun fichier sélectionné";
-                labelFichier.style.color = "#777777";
-                imageLocaleUrl = "";
-            }
-        }
-
-        // Logique de déploiement et injection sur le marché de l'Empire
-        function executerPublicationIA() {
-            const statusLabel = document.getElementById('upload-status');
-            const champNom = document.getElementById('prod-name');
-            const champPrix = document.getElementById('prod-price');
-
-            if(!champNom.value || !champPrix.value) {
-                alert("Erreur : Renseignez le nom et le prix de votre article.");
-                return;
-            }
-
-            let progression = 0;
-            statusLabel.style.color = "#00E5FF";
-            
-            const chrono = setInterval(() => {
-                progression += 20;
-                statusLabel.textContent = `Analyse et déploiement IA : ${progression}%`;
-                
-                if (progression >= 100) {
-                    clearInterval(chrono);
-                    statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI !";
-                    statusLabel.style.color = "#00FF66";
-
-                    // Cache le message de marché vide s'il existe
-                    const msgVide = document.getElementById('empty-msg');
-                    if(msgVide) msgVide.style.display = 'none';
-
-                    // Création de la nouvelle carte de l'article en pur JavaScript
-                    const fluxMarché = document.getElementById('market-feed');
-                    const nouvelleCarte = document.createElement('div');
-                    nouvelleCarte.className = 'product-card';
-                    
-                    // Si aucune photo n'a été mise, on met un fond noir neutre de luxe
-                    const baliseImage = imageLocaleUrl ? 
-                        `<img src="${imageLocaleUrl}" alt="${champNom.value}">` : 
-                        `<i class="fa-solid fa-gem fa-4x" style="color:rgba(212,175,55,0.2)"></i>`;
-
-                    const prixFormate = Number(champPrix.value).toLocaleString('fr-FR');
-
-                    nouvelleCarte.innerHTML = `
-                        <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Certifié IA</div>
-                        <div class="product-image-container">
-                            ${baliseImage}
-                        </div>
-                        <div class="product-info">
-                            <h3>${champNom.value}</h3>
-                            <p class="price">${prixFormate} FCFA</p>
-                            <div class="card-actions">
-                                <button class="btn-buy" onclick="declencherAchat('${champNom.value}')">Acheter Maintenant</button>
-                                <button class="btn-share" onclick="partagerArticle('${champNom.value}', '${prixFormate}')">
-                                    <i class="fa-solid fa-share-nodes"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-
-                    // On l'ajoute tout en haut du marché (comme sur TikTok ou Instagram !)
-                    fluxMarché.insertBefore(nouvelleCarte, fluxMarché.firstChild);
-
-                    // Nettoyage immédiat du formulaire pour la prochaine vente
-                    champNom.value = "";
-                    champPrix.value = "";
-                    document.getElementById('prod-file').value = "";
-                    document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
-                    document.getElementById('file-name-display').style.color = "#777777";
-                    imageLocaleUrl = "";
-
-                    setTimeout(() => {
-                        statusLabel.textContent = "";
-                        basculerEcran('accueil'); // Te ramène à l'accueil automatiquement
-                    }, 800);
-                }
-            }, 100);
-        }
-
         function declencherAchat(nom) {
             alert(`帝国 S.E.G GLOBAL - Option d'achat en cours pour : ${nom}`);
         }
 
-        // Partage sur WhatsApp automatique avec le prix
         function partagerArticle(nom, prix) {
-            const texte = encodeURIComponent(`Regarde ce produit de luxe sur S.E.G GLOBAL : ${nom} à ${prix} FCFA !`);
+            const texte = encodeURIComponent(`Regarde ce produit de luxe sur KIRAVEL : ${nom} à ${prix} FCFA !`);
             window.open(`https://api.whatsapp.com/send?text=${texte}`, '_blank');
         }
 
         function quitterApplication() {
-            if(confirm("Quitter S.E.G GLOBAL ?")) {
+            if(confirm("Quitter l'application KIRAVEL ?")) {
                 alert("Session suspendue.");
             }
         }
