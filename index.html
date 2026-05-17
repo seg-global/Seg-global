@@ -240,4 +240,81 @@
             align-self: center;
             max-width: 95%;
             font-weight: bold;
-            text-align: center
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 10px;
+            background: rgba(0,0,0,0.4);
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            gap: 8px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            color: #ffffff;
+            outline: none;
+        }
+
+        .btn-send-msg {
+            background: #00E5FF;
+            border: none;
+            width: 45px;
+            border-radius: 8px;
+            color: #000000;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* ==========================================================================
+           ECRAN 2 : IA VENTE (FORMULAIRE DE DEPLOIEMENT)
+           ========================================================================== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #D4AF37;
+            margin-bottom: 8px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 14px;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .file-select-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .file-select-container input[type="file"] {
+            position: absolute;
+            left: 0; top: 0; opacity: 0; width: 100%; height: 100%;
+        }
+
+        .file-custom-btn {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size:
