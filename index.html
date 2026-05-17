@@ -74,13 +74,13 @@
 
         /* GESTION DES ECRANS ANIMÉS */
         .app-screen {
-            display: none; /* Cache les écrans par défaut */
+            display: none; 
             animation: fadeIn 0.4s ease forwards;
             padding: 20px;
         }
 
         .app-screen.active-screen {
-            display: block; /* Affiche l'écran actif */
+            display: block; 
         }
 
         @keyframes fadeIn {
@@ -111,20 +111,40 @@
             transition: transform 0.2s ease;
         }
 
-        .product-card:active {
-            transform: scale(0.98);
+        .product-header-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
         .product-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
             background: rgba(0, 229, 255, 0.15);
             border: 1px solid #00E5FF;
             color: #00E5FF;
             font-size: 10px;
             padding: 4px 8px;
             border-radius: 20px;
+        }
+
+        .btn-chat-trigger {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-chat-trigger:active {
+            transform: scale(0.9);
+            background: #D4AF37;
+            color: #000000;
         }
 
         .product-image-placeholder {
@@ -155,17 +175,89 @@
             margin: 5px 0 12px 0;
         }
 
-        .btn-buy {
-            width: 100%;
-            background: linear-gradient(90deg, #D4AF37 0%, #AA7C11 100%);
-            border: none;
-            padding: 14px;
-            color: #000000;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
+        /* ==========================================================================
+           ECRAN INTERNE : MESSAGERIE IMPÉRIALE (CHAT)
+           ========================================================================== */
+        .chat-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 15px;
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 12px;
             font-size: 14px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            color: #D4AF37;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .msg.vendeur {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .msg.acheteur {
+            background: linear-gradient(90deg, #AA7C11 0%, #D4AF37 100%);
+            color: #000000;
+            align-self: flex-end;
+            font-weight: bold;
+            border-bottom-right-radius: 2px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 10px;
+            background: rgba(0,0,0,0.4);
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            gap: 8px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            color: #ffffff;
+            outline: none;
+        }
+
+        .btn-send-msg {
+            background: #00E5FF;
+            border: none;
+            width: 45px;
+            border-radius: 8px;
+            color: #000000;
+            cursor: pointer;
+            font-size: 16px;
         }
 
         /* ==========================================================================
@@ -193,12 +285,6 @@
             color: #ffffff;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            border-color: #00E5FF;
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
         }
 
         .file-select-container {
@@ -208,17 +294,11 @@
             padding: 15px;
             text-align: center;
             position: relative;
-            cursor: pointer;
         }
 
         .file-select-container input[type="file"] {
             position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
+            left: 0; top: 0; opacity: 0; width: 100%; height: 100%;
         }
 
         .file-custom-btn {
@@ -227,16 +307,15 @@
             border-radius: 5px;
             font-size: 13px;
             display: inline-block;
-            margin-bottom: 5px;
         }
 
         .file-name-text {
             display: block;
             font-size: 12px;
             color: #888888;
+            margin-top: 5px;
         }
 
-        /* Statut d'envoi IA */
         .ia-status-box {
             text-align: center;
             margin: 20px 0;
@@ -259,7 +338,6 @@
             font-weight: bold;
             border-radius: 10px;
             font-size: 15px;
-            letter-spacing: 1px;
             cursor: pointer;
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
         }
@@ -333,14 +411,38 @@
         <h2 class="section-title">MARCHÉ DE LUXE</h2>
         
         <div class="product-card">
-            <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Vérifié par l'Ouvrier IA</div>
+            <div class="product-header-box">
+                <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Vérifié par l'Ouvrier IA</div>
+                <button class="btn-chat-trigger" onclick="ouvrirMessagerie('Mpina Premium')" title="Contacter le vendeur">
+                    <i class="fa-solid fa-comments"></i>
+                </button>
+            </div>
+            
             <div class="product-image-placeholder">
                 <i class="fa-solid fa-gem fa-4x"></i>
             </div>
             <div class="product-info">
                 <h3>Mpina Premium</h3>
                 <p class="price">20 000 FCFA</p>
-                <button class="btn-buy" onclick="acheterProduit('Mpina Premium')">Acheter Maintenant</button>
+            </div>
+        </div>
+    </main>
+
+    <main id="screen-chat" class="app-screen">
+        <h2 class="section-title">NÉGOCIATION SÉCURISÉE</h2>
+        
+        <div class="chat-container">
+            <div class="chat-header" id="chat-target-title">
+                <i class="fa-solid fa-store"></i> Canal : Négociation Article
+            </div>
+            
+            <div class="chat-messages" id="chat-box-messages">
+                <div class="msg vendeur">Bonjour ! Je suis le vendeur de cet article de luxe. Quel est votre prix pour finaliser la transaction ?</div>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="user-msg-input" placeholder="Écrivez votre message secret ici...">
+                <button class="btn-send-msg" onclick="envoyerMessageInterne()"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
     </main>
@@ -395,10 +497,11 @@
     </nav>
 
     <script>
-        // 1. Système de Changement d'Écran (Navigation fluide)
+        // Navigation globale
         function changerEcran(nomEcran) {
             document.getElementById('screen-accueil').classList.remove('active-screen');
             document.getElementById('screen-vente').classList.remove('active-screen');
+            document.getElementById('screen-chat').classList.remove('active-screen');
             
             document.getElementById('btn-nav-accueil').classList.remove('active');
             document.getElementById('btn-nav-vente').classList.remove('active');
@@ -412,7 +515,51 @@
             }
         }
 
-        // 2. Affichage du nom du fichier sélectionné
+        // Système d'ouverture de la messagerie interne
+        function ouvrirMessagerie(nomProduit) {
+            document.getElementById('screen-accueil').classList.remove('active-screen');
+            document.getElementById('screen-vente').classList.remove('active-screen');
+            
+            // Activer l'écran de chat secret interne
+            document.getElementById('screen-chat').classList.add('active-screen');
+            document.getElementById('chat-target-title').innerHTML = `<i class="fa-solid fa-comments"></i> Discussion : ${nomProduit}`;
+        }
+
+        // Envoi de message dans le chat interne
+        function enviarMessageInterne() {
+            const input = document.getElementById('user-msg-input');
+            const msgText = input.value.trim();
+            if(!msgText) return;
+
+            const chatBox = document.getElementById('chat-box-messages');
+            
+            // Créer la bulle de texte de l'acheteur
+            const newMsg = document.createElement('div');
+            newMsg.className = 'msg acheteur';
+            newMsg.textContent = msgText;
+            chatBox.appendChild(newMsg);
+            
+            // Vider l'input et faire défiler vers le bas
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Simulation d'une réponse automatique du vendeur pour la démo
+            setTimeout(() => {
+                const reply = document.createElement('div');
+                reply.className = 'msg vendeur';
+                reply.textContent = "Bien reçu. Je valide l'offre via la commission KIRAVEL.";
+                chatBox.appendChild(reply);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
+        }
+
+        // Pour gérer la touche "Entrée" du clavier sur smartphone
+        document.getElementById('user-msg-input')?.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') envoyerMessageInterne();
+        });
+        function envoyerMessageInterne() { enviarMessageInterne(); }
+
+        // Gestion de l'IA Vente
         function mettreAJourFichier(input) {
             const display = document.getElementById('file-name-display');
             if (input.files && input.files.length > 0) {
@@ -424,7 +571,6 @@
             }
         }
 
-        // 3. Simulation du déploiement IA
         function lancerDeploieIA() {
             const statusText = document.getElementById('upload-status');
             const name = document.getElementById('prod-name').value;
@@ -449,11 +595,6 @@
                     alert(`Félicitations Steve ! Le produit "${name}" a été traité par l'Ouvrier IA et publié sur KIRAVEL.`);
                 }
             }, 200);
-        }
-
-        // 4. Fonctionnalités de base des boutons
-        function acheterProduit(nom) {
-            alert(`Demande d'achat initiée pour : ${nom}. Connexion à la passerelle de paiement...`);
         }
 
         function quitterApp() {
