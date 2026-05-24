@@ -12,9 +12,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
 
     <style>
         :root { 
@@ -421,7 +418,7 @@
                 <label>Adresse e-mail de l'Empire</label>
                 <input type="email" id="email_input" placeholder="exemple@segglobal.com">
             </div>
-            <button class="btn-gold" id="btn_otp" onclick="sendAccessCode()">Obtenir mon code d'accès</button>
+            <button class="btn-gold" id="btn_otp">Obtenir mon code d'accès</button>
         </div>
         
         <div id="login_step2" style="display:none;">
@@ -429,7 +426,7 @@
                 <label>Clé de sécurité à usage unique (OTP)</label>
                 <input type="text" id="otp_input" placeholder="------">
             </div>
-            <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
+            <button class="btn-gold" id="btn_verify_otp">Ouvrir l'Empire</button>
         </div>
     </div>
 
@@ -451,7 +448,7 @@
             <div class="seller-recruitment-card">
                 <h3>VOUS ÊTES VENDEUR ?</h3>
                 <p>Rejoignez l'empire S.E.G GLOBAL et vendez vos montres, sacs et bijoux au monde entier.</p>
-                <button class="btn-gold" style="border-radius: 50px;" onclick="basculerEcran('vente')">
+                <button class="btn-gold" id="btn_ouvrir_boutique" style="border-radius: 50px;">
                     OUVRIR MA BOUTIQUE ICI
                 </button>
             </div>
@@ -475,7 +472,7 @@
                 <div class="file-select-container">
                     <span class="file-custom-btn">Choisir le fichier</span>
                     <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
-                    <input type="file" id="prod-file" accept="image/*" onchange="previewImage(event)">
+                    <input type="file" id="prod-file" accept="image/*">
                 </div>
                 <img id="preview" alt="Aperçu de l'article">
             </div>
@@ -484,7 +481,7 @@
                 <div id="upload-status" style="color: var(--neon-blue); font-weight: bold; font-size:13px;"></div>
             </div>
 
-            <button class="btn-gold" id="pub_btn" onclick="publishProduct()">PUBLIER DANS L'EMPIRE</button>
+            <button class="btn-gold" id="pub_btn">PUBLIER DANS L'EMPIRE</button>
         </main>
 
         <main id="screen-chat" class="app-screen">
@@ -493,7 +490,7 @@
                 <div class="chat-messages" id="chat-flow"></div>
                 <div class="chat-input-bar">
                     <input type="text" id="chat-input-msg" placeholder="Votre message hautement sécurisé...">
-                    <button class="btn-send" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                    <button class="btn-send" id="btn_send_chat"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
         </main>
@@ -505,23 +502,23 @@
                 <div class="val-money" style="color: var(--gold); font-size: 20px;">AUTORISÉ (SEG-ID)</div>
                 <div style="font-size: 11px; color: #888; margin-top: 10px;">ID Signature : SEG-237-3130</div>
             </div>
-            <button class="btn-gold" style="background:#151515; color:#fff; border: 1px solid #333; margin-top: 40px;" onclick="logout()">Déconnexion Sécurisée</button>
+            <button class="btn-gold" id="btn_logout" style="background:#151515; color:#fff; border: 1px solid #333; margin-top: 40px;">Déconnexion Sécurisée</button>
         </main>
 
         <nav class="bottom-nav">
-            <div class="nav-item active" id="btn-nav-accueil" onclick="basculerEcran('accueil')">
+            <div class="nav-item active" id="btn-nav-accueil">
                 <i class="fa-solid fa-gem"></i>
                 <span>MARCHÉ</span>
             </div>
-            <div class="nav-item" id="btn-nav-vente" onclick="basculerEcran('vente')">
+            <div class="nav-item" id="btn-nav-vente">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span>VENDRE</span>
             </div>
-            <div class="nav-item" id="btn-nav-chat" onclick="basculerEcran('chat')">
+            <div class="nav-item" id="btn-nav-chat">
                 <i class="fa-solid fa-comments"></i>
                 <span>CHAT</span>
             </div>
-            <div class="nav-item" id="btn-nav-vault" onclick="basculerEcran('vault')">
+            <div class="nav-item" id="btn-nav-vault">
                 <i class="fa-solid fa-vault"></i>
                 <span>COFFRE</span>
             </div>
@@ -530,14 +527,16 @@
 
     <div class="server-status">
         <span class="status-dot online"></span>
-        <p>Connexion Cloud Google : 22ms (Stable)</p>
+        <p>Connexion Cloud Google v10 : Hybride (Stable)</p>
     </div>
 </div>
 
-<script>
-    // --- 1. INITIALISATION DES API ---
-    (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
-    
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+    // Configuration officielle S.E.G GLOBAL
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
@@ -547,16 +546,20 @@
         appId: "1:880037527683:web:e399589d8db19468bfb847",
         measurementId: "G-Z5WG470MGE"
     };
-    firebase.initializeApp(firebaseConfig);
-    
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-    const SEG_ID = "SEG-237-3130"; 
 
+    // Initialisation
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+    
+    const SEG_ID = "SEG-237-3130"; 
     let correctOTP = "";
     let selectedFile = null;
 
-    // --- 2. PROTOCOLE ANTI-FRAUDE ---
+    // EmailJS Init
+    emailjs.init("QGnoNmpH78_GuSLf4");
+
+    // --- SÉCURITÉ ANTI-PARTAGE DE NUMÉRO ---
     const SEG_Security = {
         filtrerTexte: function(texte) {
             const phoneRegex = /[0-9]{8,}/g; 
@@ -568,7 +571,26 @@
         }
     };
 
-    // --- 3. SYSTEME D'AUTHENTIFICATION OTP ---
+    // --- RECOUVREMENT DE SESSION ---
+    if(localStorage.getItem("seg_session") === "active") {
+        startApp();
+    }
+
+    // --- ATTACHES DES ÉVÉNEMENTS DOM ---
+    document.getElementById('btn_otp').addEventListener('click', sendAccessCode);
+    document.getElementById('btn_verify_otp').addEventListener('click', verifyAccessCode);
+    document.getElementById('btn_ouvrir_boutique').addEventListener('click', () => basculerEcran('vente'));
+    document.getElementById('prod-file').addEventListener('change', previewImage);
+    document.getElementById('pub_btn').addEventListener('click', publishProduct);
+    document.getElementById('btn_send_chat').addEventListener('click', sendChatMessage);
+    document.getElementById('btn_logout').addEventListener('click', logout);
+
+    document.getElementById('btn-nav-accueil').addEventListener('click', () => basculerEcran('accueil'));
+    document.getElementById('btn-nav-vente').addEventListener('click', () => basculerEcran('vente'));
+    document.getElementById('btn-nav-chat').addEventListener('click', () => basculerEcran('chat'));
+    document.getElementById('btn-nav-vault').addEventListener('click', () => basculerEcran('vault'));
+
+    // --- FONCTIONS LOGIQUE APP ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
         if(!email) return alert("Veuillez saisir votre adresse e-mail.");
@@ -610,7 +632,6 @@
         listenChatStream();
     }
 
-    // --- 4. ROUTAGE ET NAVIGATION ---
     function basculerEcran(cible) {
         document.getElementById('screen-accueil').classList.remove('active-screen');
         document.getElementById('screen-vente').classList.remove('active-screen');
@@ -638,7 +659,6 @@
         }
     }
 
-    // --- 5. TRAITEMENT PHOTO ---
     function previewImage(event) {
         selectedFile = event.target.files[0];
         const labelFichier = document.getElementById('file-name-display');
@@ -661,7 +681,7 @@
         }
     }
 
-    // --- 6. INTELLIGENCE DE PUBLICATION CORRIGÉE ET SÉCURISÉE ---
+    // --- LE MOTEUR COMPTEUR CORRIGÉ (FLUIDE ET CONSTANT) ---
     async function publishProduct() {
         const name = document.getElementById('prod-name').value;
         const price = document.getElementById('prod-price').value;
@@ -676,14 +696,14 @@
         statusLabel.textContent = "ANALYSE ET SÉCURISATION : 1%";
 
         try {
-            const storageRef = storage.ref('produits_seg/' + Date.now() + "_" + selectedFile.name);
-            const uploadTask = storageRef.put(selectedFile);
+            const storageRef = ref(storage, 'produits_seg/' + Date.now() + "_" + selectedFile.name);
+            const uploadTask = uploadBytesResumable(storageRef, selectedFile);
 
-            // CORRECTION SÉCURISÉE DE L'ÉCOUTEUR DE COMPTAGE
-            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
+            // Écouteur v10 réactif aux réseaux mobiles instables (LTE/3G)
+            uploadTask.on('state_changed', 
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    // On s'assure que l'affichage progresse dynamiquement de 1 à 99%
+                    // Calcule et force une progression continue fluide
                     statusLabel.textContent = "ANALYSE ET SÉCURISATION : " + Math.max(1, Math.round(progress)) + "%";
                 }, 
                 (error) => { 
@@ -693,9 +713,9 @@
                     btn.disabled = false;
                 }, 
                 async () => {
-                    // Finalisation à 100% et envoi vers Firestore
-                    const photoURL = await uploadTask.snapshot.ref.getDownloadURL();
-                    await db.collection("produits").add({
+                    const photoURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    
+                    await addDoc(collection(db, "produits"), {
                         nom: name,
                         prix: parseFloat(price),
                         image: photoURL,
@@ -733,10 +753,11 @@
         }
     }
 
-    // --- 7. ECOUTE DU MARCHÉ ---
     function loadProducts() {
         const feed = document.getElementById('market-feed');
-        db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
+        const q = query(collection(db, "produits"), orderBy("date", "desc"));
+        
+        onSnapshot(q, (snapshot) => {
             feed.innerHTML = "";
             if(snapshot.empty) {
                 feed.innerHTML = "<p style='text-align:center; color:#555; padding: 40px;'>Aucun joyau disponible sur le marché.</p>";
@@ -755,15 +776,22 @@
                         <div class="product-info">
                             <h3>${p.nom}</h3>
                             <p class="price">${prixFormate} FCFA</p>
-                            <button class="btn-buy" onclick="basculerEcran('chat')">Négocier sur le Chat</button>
+                            <button class="btn-buy" id="btn_negocier_${doc.id}">Négocier sur le Chat</button>
                         </div>
                     </div>
                 `;
             });
+
+            // Re-lier les clics des boutons dynamiques créés
+            snapshot.forEach((doc) => {
+                const btnBuy = document.getElementById(`btn_negocier_${doc.id}`);
+                if(btnBuy) {
+                    btnBuy.addEventListener('click', () => basculerEcran('chat'));
+                }
+            });
         });
     }
 
-    // --- 8. SYSTÈME DE MESSAGERIE ---
     async function sendChatMessage() {
         const inputEl = document.getElementById('chat-input-msg');
         const messageText = inputEl.value.trim();
@@ -775,10 +803,10 @@
         }
 
         try {
-            await db.collection("messages").add({
+            await addDoc(collection(db, "messages"), {
                 expediteur: SEG_ID,
                 texte: messageText,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                timestamp: new Date()
             });
             inputEl.value = "";
         } catch (error) {
@@ -788,7 +816,9 @@
 
     function listenChatStream() {
         const chatFlow = document.getElementById('chat-flow');
-        db.collection("messages").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
+        const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
+        
+        onSnapshot(q, (snapshot) => {
             chatFlow.innerHTML = "";
             snapshot.forEach((doc) => {
                 const msg = doc.data();
@@ -812,7 +842,7 @@
         chatFlow.scrollTop = chatFlow.scrollHeight;
     }
 
-    // --- 9. COMPTEUR CAPITAL ---
+    // Compteur Capital simulation
     let money = 450173947;
     setInterval(() => {
         money += Math.floor(Math.random() * 8000);
@@ -824,8 +854,6 @@
         localStorage.removeItem("seg_session"); 
         location.reload(); 
     }
-    
-    if(localStorage.getItem("seg_session") === "active") startApp();
 </script>
 </body>
 </html>
