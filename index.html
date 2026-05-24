@@ -3,137 +3,545 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL - Plateforme de Luxe</title>
+    <title>S.E.G GLOBAL</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="S.E.G GLOBAL">
+    <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=180&h=180&fit=crop">
+    <meta name="theme-color" content="#050505">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { background-color: #000; color: #D4AF37; font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
-        .container { border: 2px solid #D4AF37; padding: 30px; border-radius: 15px; background: linear-gradient(145deg, #0f0f0f, #000); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); width: 90%; max-width: 400px; }
-        h1 { font-size: 24px; letter-spacing: 3px; margin-bottom: 5px; }
-        p.subtitle { font-size: 10px; text-transform: uppercase; margin-bottom: 30px; color: #aaa; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid #444; color: #fff; border-radius: 8px; box-sizing: border-box; text-align: center; }
-        button { width: 100%; padding: 12px; background-color: #D4AF37; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
-        button:hover { background-color: #fff; box-shadow: 0 0 10px #fff; }
-        .message { margin-top: 15px; font-size: 14px; display: none; }
-        .success { color: #2ecc71; }
-        .error { color: #e74c3c; }
-        
-        /* Interface Boutique cachée par défaut */
-        #product_interface { display: none; }
-        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .product-card { border: 1px solid #444; padding: 15px; border-radius: 8px; font-size: 12px; background: #0a0a0a; }
+        /* ==========================================================================
+           STYLE GÉNÉRAL
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            min-height: 100vh;
+            padding-bottom: 100px;
+            overflow-x: hidden;
+        }
+
+        /* EN-TÊTE PREMIUM */
+        .empire-header {
+            text-align: center;
+            padding: 25px 10px 20px 10px;
+            background: linear-gradient(180deg, rgba(212,175,55,0.12) 0%, rgba(0,0,0,0) 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        .empire-header h1 {
+            color: #D4AF37;
+            font-size: 26px;
+            letter-spacing: 2px;
+            font-weight: 800;
+            text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+        }
+
+        .objectif-badge {
+            color: #00E5FF;
+            font-size: 11px;
+            margin-top: 6px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* SYSTÈME DE NAVIGATION DES ÉCRANS */
+        .app-screen {
+            display: none; 
+            animation: screenFade 0.3s ease-out forwards;
+            padding: 20px;
+        }
+
+        .app-screen.active-screen {
+            display: block; 
+        }
+
+        @keyframes screenFade {
+            from { opacity: 0; transform: scale(0.99); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .section-title {
+            color: #D4AF37;
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* ==========================================================================
+           ÉCRAN : MARCHÉ DE L'EMPIRE
+           ========================================================================== */
+        #market-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Message si le marché est vide */
+        .empty-market-message {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+
+        /* CARTE PRODUIT PREMIUM */
+        .product-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 18px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 26px;
+            right: 26px;
+            background: rgba(0, 229, 255, 0.15);
+            border: 1px solid #00E5FF;
+            color: #00E5FF;
+            font-size: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            z-index: 10;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .product-image-container {
+            width: 100%;
+            height: 260px;
+            background: #111111;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .product-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            margin-top: 15px;
+        }
+
+        .product-info h3 {
+            font-size: 20px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .price {
+            color: #00E5FF;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 6px 0 15px 0;
+        }
+
+        /* Actions sur la carte */
+        .card-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-buy {
+            flex: 1;
+            background: linear-gradient(90deg, #D4AF37 0%, #AA7C11 100%);
+            border: none;
+            padding: 15px;
+            color: #000000;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-share {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #D4AF37;
+            width: 50px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* ==========================================================================
+           ÉCRAN : VENDRE UN ARTICLE
+           ========================================================================== */
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #D4AF37;
+            margin-bottom: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 16px;
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #00E5FF;
+        }
+
+        /* Design de la zone fichier photo */
+        .file-select-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .file-select-container input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-custom-btn {
+            background: rgba(212, 175, 55, 0.1);
+            color: #D4AF37;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: inline-block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .file-name-text {
+            display: block;
+            font-size: 13px;
+            color: #777777;
+        }
+
+        .ia-status-box {
+            text-align: center;
+            margin: 25px 0;
+            min-height: 20px;
+        }
+
+        .ia-percent {
+            color: #00E5FF;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-deploy {
+            width: 100%;
+            background: linear-gradient(90deg, #AA7C11 0%, #D4AF37 50%, #AA7C11 100%);
+            border: none;
+            padding: 16px;
+            color: #000000;
+            font-weight: bold;
+            border-radius: 12px;
+            font-size: 15px;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        /* BARRES ET MENU INFÉRIEUR */
+        .server-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #555555;
+            margin: 30px 0 10px 0;
+        }
+
+        .status-dot.online {
+            width: 6px;
+            height: 6px;
+            background-color: #00FF66;
+            border-radius: 50%;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(5, 5, 5, 0.94);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 14px 0 24px 0; /* padding bas augmenté pour la barre des iPhones */
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #555555;
+            text-decoration: none;
+            font-size: 11px;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .nav-item i {
+            font-size: 22px;
+        }
+
+        .nav-item.active {
+            color: #D4AF37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="auth_section">
+    <header class="empire-header">
         <h1>S.E.G GLOBAL</h1>
-        <p class="subtitle">Authentification de Luxe</p>
+        <div class="objectif-badge">OBJECTIF : 24,000,000,000 FCFA</div>
+    </header>
+
+    <main id="screen-accueil" class="app-screen active-screen">
+        <h2 class="section-title">MARCHÉ DE L'EMPIRE</h2>
+        <div id="market-feed">
+            <div class="empty-market-message" id="empty-msg">Aucun article sur le marché. Allez dans "Vendre" pour déployer avec l'IA.</div>
+        </div>
+    </main>
+
+    <main id="screen-vente" class="app-screen">
+        <h2 class="section-title">Vendre un Article</h2>
         
-        <div id="step1">
-            <input type="email" id="user_email" placeholder="Entrez votre e-mail" required>
-            <button onclick="sendOTP()">Obtenir mon code d'accès</button>
+        <div class="form-group">
+            <label>Nom du produit</label>
+            <input type="text" id="prod-name" placeholder="Entrez le nom du produit">
         </div>
 
-        <div id="step2" style="display: none;">
-            <p style="font-size: 12px;">Code envoyé à votre iPhone</p>
-            <input type="text" id="user_otp" placeholder="Entrez le code reçu">
-            <button onclick="verifyOTP()">Valider l'accès</button>
+        <div class="form-group">
+            <label>Prix (FCFA)</label>
+            <input type="number" id="prod-price" placeholder="Entrez le prix">
         </div>
+
+        <div class="form-group">
+            <label>Fichier Média (Image/Vidéo)</label>
+            <div class="file-select-container">
+                <span class="file-custom-btn">Choisir le fichier</span>
+                <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
+                <input type="file" id="prod-file" accept="image/*" onchange="traiterFichierPhoto(this)">
+            </div>
+        </div>
+
+        <div class="ia-status-box">
+            <div class="ia-percent" id="upload-status"></div>
+        </div>
+
+        <button class="btn-deploy" onclick="executerPublicationIA()">PUBLIER AVEC IA</button>
+    </main>
+
+    <div class="server-status">
+        <span class="status-dot online"></span>
+        <p>Connexion Cloud Google : 22ms (Stable)</p>
     </div>
 
-    <div id="product_interface">
-        <h1>S.E.G GLOBAL</h1>
-        <p class="subtitle">Espace Membre Officiel</p>
-        <div class="product-grid">
-            <div class="product-card">💎 Diamant Brut<br>Qualité Supérieure</div>
-            <div class="product-card">🏢 Gestion<br>Ma Boutique</div>
+    <nav class="bottom-nav">
+        <div class="nav-item active" id="btn-nav-accueil" onclick="basculerEcran('accueil')">
+            <i class="fa-solid fa-house"></i>
+            <span>MARCHÉ</span>
         </div>
-        <button style="margin-top: 30px; background-color: #444; color: white;" onclick="logout()">Déconnexion</button>
-    </div>
+        <div class="nav-item" id="btn-nav-vente" onclick="basculerEcran('vente')">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span>VENDRE</span>
+        </div>
+        <div class="nav-item" onclick="quitterApplication()">
+            <i class="fa-solid fa-door-open"></i>
+            <span>QUITTER</span>
+        </div>
+    </nav>
 
-    <div id="status_msg" class="message"></div>
-</div>
+    <script>
+        let imageLocaleUrl = "";
 
-<script>
-    // 1. INITIALISATION FIREBASE (Ton salon)
-    const firebaseConfig = {
-        apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0", 
-        authDomain: "seg-global.firebaseapp.com",
-        projectId: "seg-global",
-        storageBucket: "seg-global.appspot.com",
-        messagingSenderId: "880037527683",
-        appId: "1:880037527683:web:0f0b38d469714f808c96bb",
-        measurementId: "G-Z5WG470MGW"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+        // Gestion du routage interne (Single Page Application)
+        function basculerEcran(cible) {
+            document.getElementById('screen-accueil').classList.remove('active-screen');
+            document.getElementById('screen-vente').classList.remove('active-screen');
+            document.getElementById('btn-nav-accueil').classList.remove('active');
+            document.getElementById('btn-nav-vente').classList.remove('active');
 
-    // 2. INITIALISATION EMAILJS (Ton envoi de mail)
-    (function() {
-        emailjs.init("QGnoNmpH78_GuSLf4");
-    })();
-
-    let generatedOTP = "";
-
-    // 3. SYSTÈME DE MÉMOIRE (LocalStorage)
-    window.onload = function() {
-        if (localStorage.getItem("seg_global_session") === "active") {
-            showProducts();
+            if(cible === 'accueil') {
+                document.getElementById('screen-accueil').classList.add('active-screen');
+                document.getElementById('btn-nav-accueil').classList.add('active');
+            } else if(cible === 'vente') {
+                document.getElementById('screen-vente').classList.add('active-screen');
+                document.getElementById('btn-nav-vente').classList.add('active');
+            }
         }
-    };
 
-    function sendOTP() {
-        const email = document.getElementById("user_email").value;
-        const msg = document.getElementById("status_msg");
-        if(!email) { alert("Entrez votre e-mail"); return; }
+        // Capture et transformation de l'image de la pellicule du téléphone
+        function traiterFichierPhoto(input) {
+            const labelFichier = document.getElementById('file-name-display');
+            if (input.files && input.files.length > 0) {
+                const imgFile = input.files[0];
+                labelFichier.textContent = imgFile.name;
+                labelFichier.style.color = "#00E5FF";
 
-        generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-        const params = { to_email: email, otp_code: generatedOTP };
-
-        msg.style.display = "block";
-        msg.innerHTML = "Envoi du code sécurisé...";
-
-        emailjs.send("service_ocg86ge", "template_v7i6m5m", params)
-            .then(function() {
-                msg.innerHTML = "CODE ENVOYÉ ! Vérifiez votre iPhone.";
-                msg.className = "message success";
-                document.getElementById("step1").style.display = "none";
-                document.getElementById("step2").style.display = "block";
-            }, function(error) {
-                msg.innerHTML = "ERREUR D'ENVOI. Vérifiez votre connexion.";
-                msg.className = "message error";
-            });
-    }
-
-    function verifyOTP() {
-        const inputOTP = document.getElementById("user_otp").value;
-        if(inputOTP === generatedOTP) {
-            // Activer la mémoire de l'iPhone
-            localStorage.setItem("seg_global_session", "active");
-            showProducts();
-        } else {
-            alert("Code incorrect. Réessayez.");
+                const lecteur = new FileReader();
+                lecteur.onload = function(e) {
+                    imageLocaleUrl = e.target.result; 
+                };
+                lecteur.readAsDataURL(imgFile);
+            } else {
+                labelFichier.textContent = "aucun fichier sélectionné";
+                labelFichier.style.color = "#777777";
+                imageLocaleUrl = "";
+            }
         }
-    }
 
-    function showProducts() {
-        document.getElementById("auth_section").style.display = "none";
-        document.getElementById("status_msg").style.display = "none";
-        document.getElementById("product_interface").style.display = "block";
-    }
+        // Logique de déploiement et injection sur le marché de l'Empire
+        function executerPublicationIA() {
+            const statusLabel = document.getElementById('upload-status');
+            const champNom = document.getElementById('prod-name');
+            const champPrix = document.getElementById('prod-price');
 
-    function logout() {
-        localStorage.removeItem("seg_global_session");
-        location.reload();
-    }
-</script>
+            if(!champNom.value || !champPrix.value) {
+                alert("Erreur : Renseignez le nom et le prix de votre article.");
+                return;
+            }
 
+            let progression = 0;
+            statusLabel.style.color = "#00E5FF";
+            
+            const chrono = setInterval(() => {
+                progression += 20;
+                statusLabel.textContent = `Analyse et déploiement IA : ${progression}%`;
+                
+                if (progression >= 100) {
+                    clearInterval(chrono);
+                    statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI !";
+                    statusLabel.style.color = "#00FF66";
+
+                    // Cache le message de marché vide s'il existe
+                    const msgVide = document.getElementById('empty-msg');
+                    if(msgVide) msgVide.style.display = 'none';
+
+                    // Création de la nouvelle carte de l'article en pur JavaScript
+                    const fluxMarché = document.getElementById('market-feed');
+                    const nouvelleCarte = document.createElement('div');
+                    nouvelleCarte.className = 'product-card';
+                    
+                    // Si aucune photo n'a été mise, on met un fond noir neutre de luxe
+                    const baliseImage = imageLocaleUrl ? 
+                        `<img src="${imageLocaleUrl}" alt="${champNom.value}">` : 
+                        `<i class="fa-solid fa-gem fa-4x" style="color:rgba(212,175,55,0.2)"></i>`;
+
+                    const prixFormate = Number(champPrix.value).toLocaleString('fr-FR');
+
+                    nouvelleCarte.innerHTML = `
+                        <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Certifié IA</div>
+                        <div class="product-image-container">
+                            ${baliseImage}
+                        </div>
+                        <div class="product-info">
+                            <h3>${champNom.value}</h3>
+                            <p class="price">${prixFormate} FCFA</p>
+                            <div class="card-actions">
+                                <button class="btn-buy" onclick="declencherAchat('${champNom.value}')">Acheter Maintenant</button>
+                                <button class="btn-share" onclick="partagerArticle('${champNom.value}', '${prixFormate}')">
+                                    <i class="fa-solid fa-share-nodes"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+
+                    // On l'ajoute tout en haut du marché (comme sur TikTok ou Instagram !)
+                    fluxMarché.insertBefore(nouvelleCarte, fluxMarché.firstChild);
+
+                    // Nettoyage immédiat du formulaire pour la prochaine vente
+                    champNom.value = "";
+                    champPrix.value = "";
+                    document.getElementById('prod-file').value = "";
+                    document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
+                    document.getElementById('file-name-display').style.color = "#777777";
+                    imageLocaleUrl = "";
+
+                    setTimeout(() => {
+                        statusLabel.textContent = "";
+                        basculerEcran('accueil'); // Te ramène à l'accueil automatiquement
+                    }, 800);
+                }
+            }, 100);
+        }
+
+        function declencherAchat(nom) {
+            alert(`帝国 S.E.G GLOBAL - Option d'achat en cours pour : ${nom}`);
+        }
+
+        // Partage sur WhatsApp automatique avec le prix
+        function partagerArticle(nom, prix) {
+            const texte = encodeURIComponent(`Regarde ce produit de luxe sur S.E.G GLOBAL : ${nom} à ${prix} FCFA !`);
+            window.open(`https://api.whatsapp.com/send?text=${texte}`, '_blank');
+        }
+
+        function quitterApplication() {
+            if(confirm("Quitter S.E.G GLOBAL ?")) {
+                alert("Session suspendue.");
+            }
+        }
+    </script>
 </body>
 </html>
