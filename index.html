@@ -2,38 +2,54 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S.E.G GLOBAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>S.E.G GLOBAL - Infrastructure Premium</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="S.E.G GLOBAL">
-    <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=180&h=180&fit=crop">
     <meta name="theme-color" content="#050505">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
+
     <style>
-        /* ==========================================================================
-           STYLE GÉNÉRAL
-           ========================================================================== */
+        :root { 
+            --gold: #D4AF37; 
+            --gold-dark: #AA7C11;
+            --bg: #050505; 
+            --neon-blue: #00E5FF; 
+            --glass: rgba(255, 255, 255, 0.03); 
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --border: rgba(212, 175, 55, 0.2);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            min-height: 100vh;
-            padding-bottom: 100px;
+        body, html { 
+            background: var(--bg); 
+            color: #fff; 
+            min-height: 100vh; 
             overflow-x: hidden;
         }
+        
+        .container { 
+            max-width: 450px; 
+            margin: auto; 
+            padding-bottom: 100px; 
+            box-sizing: border-box;
+        }
 
-        /* EN-TÊTE PREMIUM */
+        /* --- EN-TÊTE PREMIUM --- */
         .empire-header {
             text-align: center;
             padding: 25px 10px 20px 10px;
@@ -47,40 +63,103 @@
         }
 
         .empire-header h1 {
-            color: #D4AF37;
+            color: var(--gold);
             font-size: 26px;
-            letter-spacing: 2px;
-            font-weight: 800;
-            text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+            letter-spacing: 4px;
+            font-weight: 900;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
         }
 
         .objectif-badge {
-            color: #00E5FF;
+            color: var(--neon-blue);
             font-size: 11px;
             margin-top: 6px;
             font-weight: bold;
             letter-spacing: 1px;
         }
-
-        /* SYSTÈME DE NAVIGATION DES ÉCRANS */
-        .app-screen {
-            display: none; 
-            animation: screenFade 0.3s ease-out forwards;
-            padding: 20px;
+        
+        /* --- INTERFACE D'AUTHENTIFICATION OTP --- */
+        .auth-container {
+            padding: 40px 20px;
+            text-align: center;
         }
 
-        .app-screen.active-screen {
-            display: block; 
+        .auth-logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(212,175,55,0.4);
         }
 
-        @keyframes screenFade {
-            from { opacity: 0; transform: scale(0.99); }
-            to { opacity: 1; transform: scale(1); }
+        .auth-subtitle {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 50px;
         }
+
+        .form-group {
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--gold);
+            margin-bottom: 9px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        input[type="text"], input[type="email"], input[type="number"] { 
+            width: 100%; 
+            padding: 16px; 
+            background: rgba(255, 255, 255, 0.04); 
+            border: 1px solid var(--border); 
+            color: #fff; 
+            border-radius: 12px; 
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: var(--neon-blue);
+        }
+        
+        .btn-gold { 
+            width: 100%; 
+            padding: 16px; 
+            background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-dark) 100%); 
+            color: #000; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            font-size: 14px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        
+        .btn-gold:disabled { 
+            background: #222 !important; 
+            color: #555 !important; 
+            cursor: not-allowed; 
+        }
+        
+        /* --- GESTION DES ÉCRANS --- */
+        .app-screen { display: none; padding: 20px; animation: screenFade 0.4s ease-out forwards; }
+        .active-screen { display: block; }
+        @keyframes screenFade { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
 
         .section-title {
-            color: #D4AF37;
-            font-size: 20px;
+            color: var(--gold);
+            font-size: 18px;
             text-align: center;
             margin-bottom: 25px;
             letter-spacing: 1.5px;
@@ -88,107 +167,87 @@
             text-transform: uppercase;
         }
 
-        /* ==========================================================================
-           ÉCRAN : MARCHÉ DE L'EMPIRE
-           ========================================================================== */
-        #market-feed {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
+        /* --- COMPTEUR DE FONDS DYNAMIQUE --- */
+        .header-stats { 
+            background: var(--glass); 
+            border: 1px solid var(--border); 
+            border-radius: 18px; 
+            padding: 20px; 
+            text-align: center; 
+            margin-bottom: 25px; 
+            backdrop-filter: blur(10px);
+        }
+        
+        .val-money { 
+            font-size: 26px; 
+            color: var(--neon-blue); 
+            font-weight: bold; 
+            text-shadow: 0 0 12px rgba(0,229,255,0.3);
+            margin: 5px 0;
         }
 
-        /* Message si le marché est vide */
-        .empty-market-message {
-            text-align: center;
-            color: #666;
-            padding: 40px 20px;
-            font-size: 14px;
-        }
-
-        /* CARTE PRODUIT PREMIUM */
+        /* --- FLUX DU MARCHÉ EN TEMPS RÉEL --- */
+        #market-feed { display: flex; flex-direction: column; gap: 25px; }
+        
         .product-card {
-            background: rgba(255, 255, 255, 0.02);
+            background: var(--card-bg);
             border: 1px solid rgba(212, 175, 55, 0.15);
             border-radius: 18px;
             padding: 16px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
-
+        
         .product-badge {
             position: absolute;
             top: 26px;
             right: 26px;
             background: rgba(0, 229, 255, 0.15);
-            border: 1px solid #00E5FF;
-            color: #00E5FF;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
             font-size: 10px;
             padding: 5px 10px;
             border-radius: 20px;
             z-index: 10;
             font-weight: bold;
-            letter-spacing: 0.5px;
         }
-
-        .product-image-container {
-            width: 100%;
-            height: 260px;
-            background: #111111;
-            border-radius: 12px;
+        
+        .product-image-container { 
+            width: 100%; 
+            height: 260px; 
+            background: #111; 
+            border-radius: 12px; 
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow: hidden; 
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-
-        .product-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .product-info {
-            margin-top: 15px;
-        }
-
-        .product-info h3 {
-            font-size: 20px;
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        .price {
-            color: #00E5FF;
-            font-size: 18px;
-            font-weight: 700;
-            margin: 6px 0 15px 0;
-        }
-
-        /* Actions sur la carte */
-        .card-actions {
-            display: flex;
-            gap: 12px;
-        }
-
+        
+        .product-image-container img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .product-info { margin-top: 15px; }
+        .product-info h3 { font-size: 19px; color: #fff; font-weight: 600; }
+        .product-card .price { color: var(--neon-blue); font-size: 18px; font-weight: 700; margin: 6px 0 15px 0; }
+        
+        .card-actions { display: flex; gap: 12px; }
         .btn-buy {
             flex: 1;
-            background: linear-gradient(90deg, #D4AF37 0%, #AA7C11 100%);
+            background: linear-gradient(90deg, var(--gold) 0%, var(--gold-dark) 100%);
             border: none;
-            padding: 15px;
-            color: #000000;
+            padding: 14px;
+            color: #000;
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 14px;
-            transition: opacity 0.2s;
+            font-size: 13px;
+            text-transform: uppercase;
         }
-
+        
         .btn-share {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            color: #D4AF37;
+            color: var(--gold);
             width: 50px;
             border-radius: 10px;
             display: flex;
@@ -198,133 +257,37 @@
             cursor: pointer;
         }
 
-        /* ==========================================================================
-           ÉCRAN : VENDRE UN ARTICLE
-           ========================================================================== */
-        .form-group {
-            margin-bottom: 22px;
-        }
-
-        .form-group label {
-            display: block;
-            color: #D4AF37;
-            margin-bottom: 9px;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="number"] {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 16px;
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            border-color: #00E5FF;
-        }
-
-        /* Design de la zone fichier photo */
+        /* --- ARCHIVE VISUELLE ET PREVIEW --- */
         .file-select-container {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px dashed rgba(212, 175, 55, 0.3);
+            border: 1px dashed var(--border);
             border-radius: 12px;
             padding: 25px;
             text-align: center;
             position: relative;
         }
-
-        .file-select-container input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
+        .file-select-container input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+        .file-custom-btn { background: rgba(212, 175, 55, 0.1); color: var(--gold); padding: 10px 20px; border-radius: 8px; font-size: 13px; display: inline-block; margin-bottom: 8px; font-weight: bold; }
+        .file-name-text { display: block; font-size: 13px; color: #777; }
+        
+        #preview { 
+            width: 100%; height: 200px; object-fit: cover; margin-top: 15px; 
+            display: none; border-radius: 12px; border: 1px solid var(--gold); 
         }
 
-        .file-custom-btn {
-            background: rgba(212, 175, 55, 0.1);
-            color: #D4AF37;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 13px;
-            display: inline-block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .file-name-text {
-            display: block;
-            font-size: 13px;
-            color: #777777;
-        }
-
-        .ia-status-box {
-            text-align: center;
-            margin: 25px 0;
-            min-height: 20px;
-        }
-
-        .ia-percent {
-            color: #00E5FF;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-deploy {
-            width: 100%;
-            background: linear-gradient(90deg, #AA7C11 0%, #D4AF37 50%, #AA7C11 100%);
-            border: none;
-            padding: 16px;
-            color: #000000;
-            font-weight: bold;
-            border-radius: 12px;
-            font-size: 15px;
-            letter-spacing: 1px;
-            cursor: pointer;
-        }
-
-        /* BARRES ET MENU INFÉRIEUR */
-        .server-status {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            color: #555555;
-            margin: 30px 0 10px 0;
-        }
-
-        .status-dot.online {
-            width: 6px;
-            height: 6px;
-            background-color: #00FF66;
-            border-radius: 50%;
-        }
-
+        /* --- BARRE DE NAVIGATION SPÉCIALE IPHONE --- */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(5, 5, 5, 0.94);
+            background: rgba(5, 5, 5, 0.95);
             border-top: 1px solid rgba(212, 175, 55, 0.2);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             display: flex;
             justify-content: space-around;
-            padding: 14px 0 24px 0; /* padding bas augmenté pour la barre des iPhones */
+            padding: 14px 0 calc(14px + env(safe-area-inset-bottom)) 0; /* Anti-encoche basse iOS */
             z-index: 1000;
         }
 
@@ -332,216 +295,374 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #555555;
+            color: #555;
             text-decoration: none;
-            font-size: 11px;
+            font-size: 10px;
             gap: 6px;
             cursor: pointer;
             font-weight: bold;
+            text-transform: uppercase;
         }
 
-        .nav-item i {
-            font-size: 22px;
-        }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--gold); text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
 
-        .nav-item.active {
-            color: #D4AF37;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        .server-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #444;
+            margin: 30px 0 10px 0;
         }
+        .status-dot.online { width: 6px; height: 6px; background-color: #00FF66; border-radius: 50%; }
     </style>
 </head>
 <body>
 
-    <header class="empire-header">
-        <h1>S.E.G GLOBAL</h1>
-        <div class="objectif-badge">OBJECTIF : 24,000,000,000 FCFA</div>
-    </header>
-
-    <main id="screen-accueil" class="app-screen active-screen">
-        <h2 class="section-title">MARCHÉ DE L'EMPIRE</h2>
-        <div id="market-feed">
-            <div class="empty-market-message" id="empty-msg">Aucun article sur le marché. Allez dans "Vendre" pour déployer avec l'IA.</div>
-        </div>
-    </main>
-
-    <main id="screen-vente" class="app-screen">
-        <h2 class="section-title">Vendre un Article</h2>
+<div class="container">
+    
+    <div id="auth_section" class="auth-container">
+        <div class="auth-logo">S.E.G GLOBAL</div>
+        <p class="auth-subtitle">Infrastructure de Sécurisation</p>
         
-        <div class="form-group">
-            <label>Nom du produit</label>
-            <input type="text" id="prod-name" placeholder="Entrez le nom du produit">
-        </div>
-
-        <div class="form-group">
-            <label>Prix (FCFA)</label>
-            <input type="number" id="prod-price" placeholder="Entrez le prix">
-        </div>
-
-        <div class="form-group">
-            <label>Fichier Média (Image/Vidéo)</label>
-            <div class="file-select-container">
-                <span class="file-custom-btn">Choisir le fichier</span>
-                <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
-                <input type="file" id="prod-file" accept="image/*" onchange="traiterFichierPhoto(this)">
+        <div id="login_step1">
+            <div class="form-group">
+                <label>Adresse e-mail de l'Empire</label>
+                <input type="email" id="email_input" placeholder="exemple@segglobal.com">
             </div>
+            <button class="btn-gold" id="btn_otp" onclick="sendAccessCode()">Obtenir mon code d'accès</button>
         </div>
-
-        <div class="ia-status-box">
-            <div class="ia-percent" id="upload-status"></div>
+        
+        <div id="login_step2" style="display:none;">
+            <div class="form-group">
+                <label>Clé de sécurité à usage unique (OTP)</label>
+                <input type="text" id="otp_input" placeholder="------">
+            </div>
+            <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
         </div>
+    </div>
 
-        <button class="btn-deploy" onclick="executerPublicationIA()">PUBLIER AVEC IA</button>
-    </main>
+    <div id="main_app" style="display:none;">
+        
+        <header class="empire-header">
+            <h1>S.E.G GLOBAL</h1>
+            <div class="objectif-badge" id="app-objective">OBJECTIF : 500 MILLIARDS FCFA</div>
+        </header>
+
+        <main id="screen-accueil" class="app-screen active-screen">
+            <div class="header-stats">
+                <div style="font-size:10px; opacity:0.7; letter-spacing: 1px;">ANALYSE GLOBAL FONDS</div>
+                <div class="val-money" id="live-money">450 173 947 FCFA</div>
+                <div style="font-size: 9px; color: #666; margin-top: 5px;">Mise à jour Cloud en temps réel</div>
+            </div>
+            <h2 class="section-title">MARCHÉ DE L'EMPIRE</h2>
+            <div id="market-feed"></div>
+        </main>
+
+        <main id="screen-vente" class="app-screen">
+            <h2 class="section-title">Vendre un Article</h2>
+            
+            <div class="form-group">
+                <label>Nom ou Désignation du produit</label>
+                <input type="text" id="prod-name" placeholder="Ex: Diamant Brut Certifié">
+            </div>
+
+            <div class="form-group">
+                <label>Prix Final (FCFA)</label>
+                <input type="number" id="prod-price" placeholder="Entrez le montant">
+            </div>
+
+            <div class="form-group">
+                <label>Protocole : Archive Visuelle Obligatoire</label>
+                <div class="file-select-container">
+                    <span class="file-custom-btn">Choisir le fichier</span>
+                    <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
+                    <input type="file" id="prod-file" accept="image/*" onchange="previewImage(event)">
+                </div>
+                <img id="preview" alt="Aperçu de l'article">
+            </div>
+
+            <div style="text-align: center; margin: 20px 0; min-height: 20px;">
+                <div id="upload-status" style="color: var(--neon-blue); font-weight: bold; font-size:13px;"></div>
+            </div>
+
+            <button class="btn-deploy btn-gold" id="pub_btn" onclick="publishProduct()">PUBLIER DANS L'EMPIRE</button>
+        </main>
+
+        <main id="screen-vault" class="app-screen">
+            <h2 class="section-title">🔐 Coffre de Sécurité</h2>
+            <div class="header-stats" style="border-color: var(--neon-blue); margin-top: 30px;">
+                <div style="font-size:11px; opacity:0.8;">STATUT DU COMPTE FONDATEUR</div>
+                <div class="val-money" style="color: var(--gold); font-size: 20px;">AUTORISÉ (SEG-ID)</div>
+                <div style="font-size: 11px; color: #888; margin-top: 10px;">ID Signature : SEG-237-3130</div>
+            </div>
+            <button class="btn-gold" style="background:#151515; color:#fff; border: 1px solid #333; margin-top: 40px;" onclick="logout()">Déconnexion Sécurisée</button>
+        </main>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active" id="btn-nav-accueil" onclick="basculerEcran('accueil')">
+                <i class="fa-solid fa-gem"></i>
+                <span>MARCHÉ</span>
+            </div>
+            <div class="nav-item" id="btn-nav-vente" onclick="basculerEcran('vente')">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span>VENDRE</span>
+            </div>
+            <div class="nav-item" id="btn-nav-vault" onclick="basculerEcran('vault')">
+                <i class="fa-solid fa-vault"></i>
+                <span>COFFRE</span>
+            </div>
+        </nav>
+    </div>
 
     <div class="server-status">
         <span class="status-dot online"></span>
         <p>Connexion Cloud Google : 22ms (Stable)</p>
     </div>
+</div>
 
-    <nav class="bottom-nav">
-        <div class="nav-item active" id="btn-nav-accueil" onclick="basculerEcran('accueil')">
-            <i class="fa-solid fa-house"></i>
-            <span>MARCHÉ</span>
-        </div>
-        <div class="nav-item" id="btn-nav-vente" onclick="basculerEcran('vente')">
-            <i class="fa-solid fa-bag-shopping"></i>
-            <span>VENDRE</span>
-        </div>
-        <div class="nav-item" onclick="quitterApplication()">
-            <i class="fa-solid fa-door-open"></i>
-            <span>QUITTER</span>
-        </div>
-    </nav>
+<script>
+    // --- 1. INITIALISATION DES API & ARCHITECTURES ---
+    (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
+    
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
+        authDomain: "seg-global.firebaseapp.com",
+        projectId: "seg-global",
+        storageBucket: "seg-global.appspot.com"
+    };
+    firebase.initializeApp(firebaseConfig);
+    
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+    const SEG_ID = "SEG-237-3130"; 
 
-    <script>
-        let imageLocaleUrl = "";
+    let correctOTP = "";
+    let selectedFile = null;
 
-        // Gestion du routage interne (Single Page Application)
-        function basculerEcran(cible) {
-            document.getElementById('screen-accueil').classList.remove('active-screen');
-            document.getElementById('screen-vente').classList.remove('active-screen');
-            document.getElementById('btn-nav-accueil').classList.remove('active');
-            document.getElementById('btn-nav-vente').classList.remove('active');
-
-            if(cible === 'accueil') {
-                document.getElementById('screen-accueil').classList.add('active-screen');
-                document.getElementById('btn-nav-accueil').classList.add('active');
-            } else if(cible === 'vente') {
-                document.getElementById('screen-vente').classList.add('active-screen');
-                document.getElementById('btn-nav-vente').classList.add('active');
+    // --- 2. PROTOCOLE ANTI-FRAUDE (S.E.G GUARD) ---
+    const SEG_Security = {
+        filtrerTexte: function(texte) {
+            const phoneRegex = /[0-9]{8,}/g; 
+            if (phoneRegex.test(texte)) {
+                alert("🚨 SÉCURITÉ S.E.G :\nL'échange direct de numéros de téléphone est strictement restreint.\nLe protocole utilise exclusivement votre identifiant unique SEG-ID.");
+                return false;
             }
+            return true;
         }
+    };
 
-        // Capture et transformation de l'image de la pellicule du téléphone
-        function traiterFichierPhoto(input) {
-            const labelFichier = document.getElementById('file-name-display');
-            if (input.files && input.files.length > 0) {
-                const imgFile = input.files[0];
-                labelFichier.textContent = imgFile.name;
-                labelFichier.style.color = "#00E5FF";
+    // --- 3. SYSTEME D'AUTHENTIFICATION OTP SECURISE ---
+    function sendAccessCode() {
+        const email = document.getElementById('email_input').value;
+        if(!email) return alert("Veuillez saisir votre adresse e-mail.");
+        
+        correctOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        const btn = document.getElementById('btn_otp');
+        btn.innerText = "CONNEXION AU SERVEUR...";
+        btn.disabled = true;
 
-                const lecteur = new FileReader();
-                lecteur.onload = function(e) {
-                    imageLocaleUrl = e.target.result; 
-                };
-                lecteur.readAsDataURL(imgFile);
-            } else {
-                labelFichier.textContent = "aucun fichier sélectionné";
-                labelFichier.style.color = "#777777";
-                imageLocaleUrl = "";
-            }
+        emailjs.send("service_ocg86ge", "template_v7i6m5m", { 
+            to_email: email, 
+            otp_code: correctOTP 
+        })
+        .then(() => {
+            document.getElementById('login_step1').style.display = 'none';
+            document.getElementById('login_step2').style.display = 'block';
+        })
+        .catch((err) => {
+            alert("Erreur d'initialisation de la passerelle d'accès.");
+            btn.innerText = "Obtenir mon code d'accès";
+            btn.disabled = false;
+        });
+    }
+
+    function verifyAccessCode() {
+        const inputCode = document.getElementById('otp_input').value;
+        if(inputCode === correctOTP) {
+            localStorage.setItem("seg_session", "active");
+            startApp();
+        } else {
+            alert("Code de vérification erroné. Accès refusé.");
         }
+    }
 
-        // Logique de déploiement et injection sur le marché de l'Empire
-        function executerPublicationIA() {
-            const statusLabel = document.getElementById('upload-status');
-            const champNom = document.getElementById('prod-name');
-            const champPrix = document.getElementById('prod-price');
+    function startApp() {
+        document.getElementById('auth_section').style.display = 'none';
+        document.getElementById('main_app').style.display = 'block';
+        loadProducts();
+    }
 
-            if(!champNom.value || !champPrix.value) {
-                alert("Erreur : Renseignez le nom et le prix de votre article.");
-                return;
-            }
+    // --- 4. ROUTAGE ET NAVIGATION FLUIDE (SPA) ---
+    function basculerEcran(cible) {
+        document.getElementById('screen-accueil').classList.remove('active-screen');
+        document.getElementById('screen-vente').classList.remove('active-screen');
+        document.getElementById('screen-vault').classList.remove('active-screen');
+        
+        document.getElementById('btn-nav-accueil').classList.remove('active');
+        document.getElementById('btn-nav-vente').classList.remove('active');
+        document.getElementById('btn-nav-vault').classList.remove('active');
 
-            let progression = 0;
-            statusLabel.style.color = "#00E5FF";
+        if(cible === 'accueil') {
+            document.getElementById('screen-accueil').classList.add('active-screen');
+            document.getElementById('btn-nav-accueil').classList.add('active');
+        } else if(cible === 'vente') {
+            document.getElementById('screen-vente').classList.add('active-screen');
+            document.getElementById('btn-nav-vente').classList.add('active');
+        } else if(cible === 'vault') {
+            document.getElementById('screen-vault').classList.add('active-screen');
+            document.getElementById('btn-nav-vault').classList.add('active');
+        }
+    }
+
+    // --- 5. TRAITEMENT PHOTO ET PREVIEW ---
+    function previewImage(event) {
+        selectedFile = event.target.files[0];
+        const labelFichier = document.getElementById('file-name-display');
+        
+        if (selectedFile) {
+            labelFichier.textContent = selectedFile.name;
+            labelFichier.style.color = "var(--neon-blue)";
             
-            const chrono = setInterval(() => {
-                progression += 20;
-                statusLabel.textContent = `Analyse et déploiement IA : ${progression}%`;
-                
-                if (progression >= 100) {
-                    clearInterval(chrono);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const prev = document.getElementById('preview');
+                prev.src = e.target.result;
+                prev.style.display = "block";
+            }
+            reader.readAsDataURL(selectedFile);
+        } else {
+            labelFichier.textContent = "aucun fichier sélectionné";
+            labelFichier.style.color = "#777";
+            document.getElementById('preview').style.display = "none";
+        }
+    }
+
+    // --- 6. INTELLIGENCE DE PUBLICATION (CLOUD FIREBASE) ---
+    async function publishProduct() {
+        const name = document.getElementById('prod-name').value;
+        const price = document.getElementById('prod-price').value;
+        const statusLabel = document.getElementById('upload-status');
+        const btn = document.getElementById('pub_btn');
+        
+        if(!SEG_Security.filtrerTexte(name)) return;
+        if(!name || !price || !selectedFile) return alert("Informations incomplètes pour la publication.");
+
+        btn.innerText = "INITIALISATION DU FLUX...";
+        btn.disabled = true;
+
+        try {
+            const storageRef = storage.ref('produits_seg/' + Date.now() + "_" + selectedFile.name);
+            const uploadTask = storageRef.put(selectedFile);
+
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    statusLabel.textContent = "ANALYSE ET SÉCURISATION : " + Math.round(progress) + "%";
+                }, 
+                (error) => { 
+                    alert("Interruption du transfert Cloud : " + error.message);
+                    btn.innerText = "RÉESSAYER LE DÉPLOIEMENT";
+                    btn.disabled = false;
+                }, 
+                async () => {
+                    const photoURL = await uploadTask.snapshot.ref.getDownloadURL();
+                    await db.collection("produits").add({
+                        nom: name,
+                        prix: parseFloat(price),
+                        image: photoURL,
+                        vendeurId: SEG_ID,
+                        date: new Date()
+                    });
+
                     statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI !";
                     statusLabel.style.color = "#00FF66";
-
-                    // Cache le message de marché vide s'il existe
-                    const msgVide = document.getElementById('empty-msg');
-                    if(msgVide) msgVide.style.display = 'none';
-
-                    // Création de la nouvelle carte de l'article en pur JavaScript
-                    const fluxMarché = document.getElementById('market-feed');
-                    const nouvelleCarte = document.createElement('div');
-                    nouvelleCarte.className = 'product-card';
                     
-                    // Si aucune photo n'a été mise, on met un fond noir neutre de luxe
-                    const baliseImage = imageLocaleUrl ? 
-                        `<img src="${imageLocaleUrl}" alt="${champNom.value}">` : 
-                        `<i class="fa-solid fa-gem fa-4x" style="color:rgba(212,175,55,0.2)"></i>`;
+                    alert("🚀 Félicitations Fondateur !\nVotre article de luxe est déployé en direct sur le marché de l'Empire.");
+                    
+                    // Reset du formulaire complet
+                    document.getElementById('prod-name').value = "";
+                    document.getElementById('prod-price').value = "";
+                    document.getElementById('prod-file').value = "";
+                    document.getElementById('preview').style.display = "none";
+                    document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
+                    document.getElementById('file-name-display').style.color = "#777";
+                    selectedFile = null;
+                    
+                    setTimeout(() => {
+                        statusLabel.textContent = "";
+                        statusLabel.style.color = "var(--neon-blue)";
+                        btn.innerText = "PUBLIER DANS L'EMPIRE";
+                        btn.disabled = false;
+                        basculerEcran('accueil');
+                    }, 1000);
+                }
+            );
 
-                    const prixFormate = Number(champPrix.value).toLocaleString('fr-FR');
+        } catch (error) {
+            alert("Erreur critique d'infrastructure : " + error.message);
+            btn.innerText = "PUBLIER DANS L'EMPIRE";
+            btn.disabled = false;
+        }
+    }
 
-                    nouvelleCarte.innerHTML = `
-                        <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Certifié IA</div>
+    // --- 7. ECOUTE EN TEMPS RÉEL DU MARCHÉ (FIRESTORE STREAM) ---
+    function loadProducts() {
+        const feed = document.getElementById('market-feed');
+        db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
+            feed.innerHTML = "";
+            if(snapshot.empty) {
+                feed.innerHTML = "<p style='text-align:center; color:#555; padding: 40px;'>Aucun joyau disponible sur le marché.</p>";
+                return;
+            }
+            snapshot.forEach((doc) => {
+                const p = doc.data();
+                const prixFormate = Number(p.prix).toLocaleString('fr-FR');
+                
+                feed.innerHTML += `
+                    <div class="product-card">
+                        <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Certifié</div>
                         <div class="product-image-container">
-                            ${baliseImage}
+                            <img src="${p.image || 'https://via.placeholder.com/150'}" alt="Luxury Item">
                         </div>
                         <div class="product-info">
-                            <h3>${champNom.value}</h3>
+                            <h3>${p.nom}</h3>
                             <p class="price">${prixFormate} FCFA</p>
                             <div class="card-actions">
-                                <button class="btn-buy" onclick="declencherAchat('${champNom.value}')">Acheter Maintenant</button>
-                                <button class="btn-share" onclick="partagerArticle('${champNom.value}', '${prixFormate}')">
+                                <button class="btn-buy" onclick="alert('Protocole de Séquestre S.E.G enclenché pour cet article.')">Acheter Maintenant</button>
+                                <button class="btn-share" onclick="partagerArticle('${p.nom}', '${prixFormate}')">
                                     <i class="fa-solid fa-share-nodes"></i>
                                 </button>
                             </div>
                         </div>
-                    `;
+                    </div>
+                `;
+            });
+        });
+    }
 
-                    // On l'ajoute tout en haut du marché (comme sur TikTok ou Instagram !)
-                    fluxMarché.insertBefore(nouvelleCarte, fluxMarché.firstChild);
+    // --- 8. SYSTÈME WA & COMPTEUR CAPITAL DE L'EMPIRE ---
+    function partagerArticle(nom, prix) {
+        const texte = encodeURIComponent(`Découvrez cette opportunité d'exception sur S.E.G GLOBAL : ${nom} à ${prix} FCFA !`);
+        window.open(`https://api.whatsapp.com/send?text=${texte}`, '_blank');
+    }
 
-                    // Nettoyage immédiat du formulaire pour la prochaine vente
-                    champNom.value = "";
-                    champPrix.value = "";
-                    document.getElementById('prod-file').value = "";
-                    document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
-                    document.getElementById('file-name-display').style.color = "#777777";
-                    imageLocaleUrl = "";
+    let money = 450173947;
+    setInterval(() => {
+        money += Math.floor(Math.random() * 8000);
+        const liveMoneyEl = document.getElementById('live-money');
+        if(liveMoneyEl) liveMoneyEl.innerText = money.toLocaleString('fr-FR') + " FCFA";
+    }, 4000);
 
-                    setTimeout(() => {
-                        statusLabel.textContent = "";
-                        basculerEcran('accueil'); // Te ramène à l'accueil automatiquement
-                    }, 800);
-                }
-            }, 100);
-        }
-
-        function declencherAchat(nom) {
-            alert(`帝国 S.E.G GLOBAL - Option d'achat en cours pour : ${nom}`);
-        }
-
-        // Partage sur WhatsApp automatique avec le prix
-        function partagerArticle(nom, prix) {
-            const texte = encodeURIComponent(`Regarde ce produit de luxe sur S.E.G GLOBAL : ${nom} à ${prix} FCFA !`);
-            window.open(`https://api.whatsapp.com/send?text=${texte}`, '_blank');
-        }
-
-        function quitterApplication() {
-            if(confirm("Quitter S.E.G GLOBAL ?")) {
-                alert("Session suspendue.");
-            }
-        }
-    </script>
+    function logout() { 
+        localStorage.removeItem("seg_session"); 
+        location.reload(); 
+    }
+    
+    // Persistance Session Smartphone
+    if(localStorage.getItem("seg_session") === "active") startApp();
+</script>
 </body>
 </html>
