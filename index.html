@@ -230,9 +230,8 @@
         .product-info h3 { font-size: 19px; color: #fff; font-weight: 600; }
         .product-card .price { color: var(--neon-blue); font-size: 18px; font-weight: 700; margin: 6px 0 15px 0; }
         
-        .card-actions { display: flex; gap: 12px; }
         .btn-buy {
-            flex: 1;
+            width: 100%;
             background: linear-gradient(90deg, var(--gold) 0%, var(--gold-dark) 100%);
             border: none;
             padding: 14px;
@@ -243,18 +242,108 @@
             font-size: 13px;
             text-transform: uppercase;
         }
-        
-        .btn-share {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            color: var(--gold);
+
+        /* --- SECTION DE RECRUTEMENT EMPIRE (STYLE CORRIGÉ) --- */
+        .seller-recruitment-card {
+            margin-top: 50px; 
+            padding: 30px; 
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.05) 0%, rgba(5, 5, 5, 0.6) 100%); 
+            border-radius: 18px; 
+            border: 2px dashed var(--neon-blue); 
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+        }
+        .seller-recruitment-card h3 {
+            color: var(--neon-blue);
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        .seller-recruitment-card p {
+            color: #bbb;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* --- SYSTÈME DE CHAT INTEGRÉ --- */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 50vh;
+            background: rgba(255,255,255,0.01);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .msg-me {
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+            color: #000;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+            font-weight: 500;
+        }
+
+        .msg-other {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .msg-meta {
+            font-size: 9px;
+            opacity: 0.6;
+            margin-top: 4px;
+            display: block;
+            text-align: right;
+        }
+
+        .chat-input-bar {
+            display: flex;
+            padding: 10px;
+            background: rgba(0,0,0,0.4);
+            border-top: 1px solid rgba(212,175,55,0.1);
+            gap: 8px;
+        }
+
+        .chat-input-bar input {
+            flex: 1;
+            margin: 0;
+        }
+
+        .btn-send {
+            background: var(--gold);
+            border: none;
+            color: #000;
             width: 50px;
-            border-radius: 10px;
+            border-radius: 12px;
+            cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 18px;
-            cursor: pointer;
+            font-size: 16px;
         }
 
         /* --- ARCHIVE VISUELLE ET PREVIEW --- */
@@ -275,7 +364,7 @@
             display: none; border-radius: 12px; border: 1px solid var(--gold); 
         }
 
-        /* --- BARRE DE NAVIGATION SPÉCIALE IPHONE --- */
+        /* --- BARRE DE NAVIGATION IPHONE --- */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -287,7 +376,7 @@
             -webkit-backdrop-filter: blur(20px);
             display: flex;
             justify-content: space-around;
-            padding: 14px 0 calc(14px + env(safe-area-inset-bottom)) 0; /* Anti-encoche basse iOS */
+            padding: 14px 0 calc(14px + env(safe-area-inset-bottom)) 0; 
             z-index: 1000;
         }
 
@@ -348,17 +437,24 @@
         
         <header class="empire-header">
             <h1>S.E.G GLOBAL</h1>
-            <div class="objectif-badge" id="app-objective">OBJECTIF : 500 MILLIARDS FCFA</div>
+            <div class="objectif-badge">OBJECTIF : 500 MILLIARDS FCFA</div>
         </header>
 
         <main id="screen-accueil" class="app-screen active-screen">
             <div class="header-stats">
                 <div style="font-size:10px; opacity:0.7; letter-spacing: 1px;">ANALYSE GLOBAL FONDS</div>
                 <div class="val-money" id="live-money">450 173 947 FCFA</div>
-                <div style="font-size: 9px; color: #666; margin-top: 5px;">Mise à jour Cloud en temps réel</div>
             </div>
             <h2 class="section-title">MARCHÉ DE L'EMPIRE</h2>
             <div id="market-feed"></div>
+
+            <div class="seller-recruitment-card">
+                <h3>VOUS ÊTES VENDEUR ?</h3>
+                <p>Rejoignez l'empire S.E.G GLOBAL et vendez vos montres, sacs et bijoux au monde entier.</p>
+                <button class="btn-gold" style="border-radius: 50px;" onclick="basculerEcran('vente')">
+                    OUVRIR MA BOUTIQUE ICI
+                </button>
+            </div>
         </main>
 
         <main id="screen-vente" class="app-screen">
@@ -388,7 +484,18 @@
                 <div id="upload-status" style="color: var(--neon-blue); font-weight: bold; font-size:13px;"></div>
             </div>
 
-            <button class="btn-deploy btn-gold" id="pub_btn" onclick="publishProduct()">PUBLIER DANS L'EMPIRE</button>
+            <button class="btn-gold" id="pub_btn" onclick="publishProduct()">PUBLIER DANS L'EMPIRE</button>
+        </main>
+
+        <main id="screen-chat" class="app-screen">
+            <h2 class="section-title">💬 SALON DE DISCUSSION S.E.G</h2>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-flow"></div>
+                <div class="chat-input-bar">
+                    <input type="text" id="chat-input-msg" placeholder="Votre message hautement sécurisé...">
+                    <button class="btn-send" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
         </main>
 
         <main id="screen-vault" class="app-screen">
@@ -410,6 +517,10 @@
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span>VENDRE</span>
             </div>
+            <div class="nav-item" id="btn-nav-chat" onclick="basculerEcran('chat')">
+                <i class="fa-solid fa-comments"></i>
+                <span>CHAT</span>
+            </div>
             <div class="nav-item" id="btn-nav-vault" onclick="basculerEcran('vault')">
                 <i class="fa-solid fa-vault"></i>
                 <span>COFFRE</span>
@@ -424,14 +535,18 @@
 </div>
 
 <script>
-    // --- 1. INITIALISATION DES API & ARCHITECTURES ---
+    // --- 1. INITIALISATION CLASSIQUE COMPATIBLE ---
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
     
+    // Config unifiée tirée directement des paramètres Google Cloud Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
         projectId: "seg-global",
-        storageBucket: "seg-global.appspot.com"
+        storageBucket: "seg-global.appspot.com",
+        messagingSenderId: "880037527683",
+        appId: "1:880037527683:web:e399589d8db19468bfb847",
+        measurementId: "G-Z5WG470MGE"
     };
     firebase.initializeApp(firebaseConfig);
     
@@ -493,16 +608,19 @@
         document.getElementById('auth_section').style.display = 'none';
         document.getElementById('main_app').style.display = 'block';
         loadProducts();
+        listenChatStream();
     }
 
-    // --- 4. ROUTAGE ET NAVIGATION FLUIDE (SPA) ---
+    // --- 4. NAVIGATION DE L'APPLICATION ---
     function basculerEcran(cible) {
         document.getElementById('screen-accueil').classList.remove('active-screen');
         document.getElementById('screen-vente').classList.remove('active-screen');
+        document.getElementById('screen-chat').classList.remove('active-screen');
         document.getElementById('screen-vault').classList.remove('active-screen');
         
         document.getElementById('btn-nav-accueil').classList.remove('active');
         document.getElementById('btn-nav-vente').classList.remove('active');
+        document.getElementById('btn-nav-chat').classList.remove('active');
         document.getElementById('btn-nav-vault').classList.remove('active');
 
         if(cible === 'accueil') {
@@ -511,13 +629,17 @@
         } else if(cible === 'vente') {
             document.getElementById('screen-vente').classList.add('active-screen');
             document.getElementById('btn-nav-vente').classList.add('active');
+        } else if(cible === 'chat') {
+            document.getElementById('screen-chat').classList.add('active-screen');
+            document.getElementById('btn-nav-chat').classList.add('active');
+            scrollToBottomChat();
         } else if(cible === 'vault') {
             document.getElementById('screen-vault').classList.add('active-screen');
             document.getElementById('btn-nav-vault').classList.add('active');
         }
     }
 
-    // --- 5. TRAITEMENT PHOTO ET PREVIEW ---
+    // --- 5. GESTION DE L'IMAGE ET APERÇU ---
     function previewImage(event) {
         selectedFile = event.target.files[0];
         const labelFichier = document.getElementById('file-name-display');
@@ -540,7 +662,7 @@
         }
     }
 
-    // --- 6. INTELLIGENCE DE PUBLICATION (CLOUD FIREBASE) ---
+    // --- 6. INTELLIGENCE DE PUBLICATION AVEC PUSH DE COMPTAGE CORRIGÉ (0 à 100%) ---
     async function publishProduct() {
         const name = document.getElementById('prod-name').value;
         const price = document.getElementById('prod-price').value;
@@ -557,6 +679,7 @@
             const storageRef = storage.ref('produits_seg/' + Date.now() + "_" + selectedFile.name);
             const uploadTask = storageRef.put(selectedFile);
 
+            // CORRECTION FLUX : Écoute en direct pour incrémenter dynamiquement le % réel
             uploadTask.on('state_changed', 
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -568,6 +691,7 @@
                     btn.disabled = false;
                 }, 
                 async () => {
+                    // S'exécute à 100% du téléversement réussi
                     const photoURL = await uploadTask.snapshot.ref.getDownloadURL();
                     await db.collection("produits").add({
                         nom: name,
@@ -577,12 +701,12 @@
                         date: new Date()
                     });
 
-                    statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI !";
+                    statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI ! 100%";
                     statusLabel.style.color = "#00FF66";
                     
                     alert("🚀 Félicitations Fondateur !\nVotre article de luxe est déployé en direct sur le marché de l'Empire.");
                     
-                    // Reset du formulaire complet
+                    // Nettoyage complet
                     document.getElementById('prod-name').value = "";
                     document.getElementById('prod-price').value = "";
                     document.getElementById('prod-file').value = "";
@@ -597,7 +721,7 @@
                         btn.innerText = "PUBLIER DANS L'EMPIRE";
                         btn.disabled = false;
                         basculerEcran('accueil');
-                    }, 1000);
+                    }, 1500);
                 }
             );
 
@@ -608,7 +732,7 @@
         }
     }
 
-    // --- 7. ECOUTE EN TEMPS RÉEL DU MARCHÉ (FIRESTORE STREAM) ---
+    // --- 7. ECOUTE EN TEMPS RÉEL DU MARCHÉ ---
     function loadProducts() {
         const feed = document.getElementById('market-feed');
         db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
@@ -630,12 +754,7 @@
                         <div class="product-info">
                             <h3>${p.nom}</h3>
                             <p class="price">${prixFormate} FCFA</p>
-                            <div class="card-actions">
-                                <button class="btn-buy" onclick="alert('Protocole de Séquestre S.E.G enclenché pour cet article.')">Acheter Maintenant</button>
-                                <button class="btn-share" onclick="partagerArticle('${p.nom}', '${prixFormate}')">
-                                    <i class="fa-solid fa-share-nodes"></i>
-                                </button>
-                            </div>
+                            <button class="btn-buy" onclick="basculerEcran('chat')">Négocier sur le Chat</button>
                         </div>
                     </div>
                 `;
@@ -643,12 +762,56 @@
         });
     }
 
-    // --- 8. SYSTÈME WA & COMPTEUR CAPITAL DE L'EMPIRE ---
-    function partagerArticle(nom, prix) {
-        const texte = encodeURIComponent(`Découvrez cette opportunité d'exception sur S.E.G GLOBAL : ${nom} à ${prix} FCFA !`);
-        window.open(`https://api.whatsapp.com/send?text=${texte}`, '_blank');
+    // --- 8. MESSAGERIE INTERNE SECURISEE ---
+    async function sendChatMessage() {
+        const inputEl = document.getElementById('chat-input-msg');
+        const messageText = inputEl.value.trim();
+        
+        if(!messageText) return;
+        if(!SEG_Security.filtrerTexte(messageText)) {
+            inputEl.value = ""; 
+            return;
+        }
+
+        try {
+            await db.collection("messages").add({
+                expediteur: SEG_ID,
+                texte: messageText,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            inputEl.value = "";
+        } catch (error) {
+            console.error("Erreur d'envoi du message :", error);
+        }
     }
 
+    function listenChatStream() {
+        const chatFlow = document.getElementById('chat-flow');
+        db.collection("messages").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
+            chatFlow.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const msg = doc.data();
+                const estMoi = msg.expediteur === SEG_ID;
+                const classeMessage = estMoi ? "msg-me" : "msg-other";
+                const signatureLabel = estMoi ? "Vous (Fondateur)" : `ID: ${msg.expediteur}`;
+                
+                chatFlow.innerHTML += `
+                    <div class="message ${classeMessage}">
+                        <div>${msg.texte}</div>
+                        <span class="msg-meta">${signatureLabel}</span>
+                    </div>
+                `;
+            });
+            scrollToBottomChat();
+        });
+    }
+
+    function scrollToBottomChat() {
+        const chatFlow = document.getElementById('chat-flow');
+        chatFlow.scrollTop = chatFlow.scrollHeight;
+    }
+
+    // --- 9. COMPTEUR DYNAMIQUE CAPITAL ---
     let money = 450173947;
     setInterval(() => {
         money += Math.floor(Math.random() * 8000);
@@ -661,7 +824,6 @@
         location.reload(); 
     }
     
-    // Persistance Session Smartphone
     if(localStorage.getItem("seg_session") === "active") startApp();
 </script>
 </body>
