@@ -243,7 +243,7 @@
             text-transform: uppercase;
         }
 
-        /* --- SECTION DE RECRUTEMENT EMPIRE (STYLE CORRIGÉ) --- */
+        /* --- SECTION RECRUTEMENT STYLE PREMIUM --- */
         .seller-recruitment-card {
             margin-top: 50px; 
             padding: 30px; 
@@ -535,10 +535,9 @@
 </div>
 
 <script>
-    // --- 1. INITIALISATION CLASSIQUE COMPATIBLE ---
+    // --- 1. INITIALISATION DES API ---
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
     
-    // Config unifiée tirée directement des paramètres Google Cloud Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
@@ -557,7 +556,7 @@
     let correctOTP = "";
     let selectedFile = null;
 
-    // --- 2. PROTOCOLE ANTI-FRAUDE (S.E.G GUARD) ---
+    // --- 2. PROTOCOLE ANTI-FRAUDE ---
     const SEG_Security = {
         filtrerTexte: function(texte) {
             const phoneRegex = /[0-9]{8,}/g; 
@@ -569,7 +568,7 @@
         }
     };
 
-    // --- 3. SYSTEME D'AUTHENTIFICATION OTP SECURISE ---
+    // --- 3. SYSTEME D'AUTHENTIFICATION OTP ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
         if(!email) return alert("Veuillez saisir votre adresse e-mail.");
@@ -611,7 +610,7 @@
         listenChatStream();
     }
 
-    // --- 4. NAVIGATION DE L'APPLICATION ---
+    // --- 4. ROUTAGE ET NAVIGATION ---
     function basculerEcran(cible) {
         document.getElementById('screen-accueil').classList.remove('active-screen');
         document.getElementById('screen-vente').classList.remove('active-screen');
@@ -639,7 +638,7 @@
         }
     }
 
-    // --- 5. GESTION DE L'IMAGE ET APERÇU ---
+    // --- 5. TRAITEMENT PHOTO ---
     function previewImage(event) {
         selectedFile = event.target.files[0];
         const labelFichier = document.getElementById('file-name-display');
@@ -662,7 +661,7 @@
         }
     }
 
-    // --- 6. INTELLIGENCE DE PUBLICATION AVEC PUSH DE COMPTAGE CORRIGÉ (0 à 100%) ---
+    // --- 6. INTELLIGENCE DE PUBLICATION CORRIGÉE ET SÉCURISÉE ---
     async function publishProduct() {
         const name = document.getElementById('prod-name').value;
         const price = document.getElementById('prod-price').value;
@@ -674,24 +673,27 @@
 
         btn.innerText = "INITIALISATION DU FLUX...";
         btn.disabled = true;
+        statusLabel.textContent = "ANALYSE ET SÉCURISATION : 1%";
 
         try {
             const storageRef = storage.ref('produits_seg/' + Date.now() + "_" + selectedFile.name);
             const uploadTask = storageRef.put(selectedFile);
 
-            // CORRECTION FLUX : Écoute en direct pour incrémenter dynamiquement le % réel
-            uploadTask.on('state_changed', 
+            // CORRECTION SÉCURISÉE DE L'ÉCOUTEUR DE COMPTAGE
+            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, 
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    statusLabel.textContent = "ANALYSE ET SÉCURISATION : " + Math.round(progress) + "%";
+                    // On s'assure que l'affichage progresse dynamiquement de 1 à 99%
+                    statusLabel.textContent = "ANALYSE ET SÉCURISATION : " + Math.max(1, Math.round(progress)) + "%";
                 }, 
                 (error) => { 
+                    console.error(error);
                     alert("Interruption du transfert Cloud : " + error.message);
                     btn.innerText = "RÉESSAYER LE DÉPLOIEMENT";
                     btn.disabled = false;
                 }, 
                 async () => {
-                    // S'exécute à 100% du téléversement réussi
+                    // Finalisation à 100% et envoi vers Firestore
                     const photoURL = await uploadTask.snapshot.ref.getDownloadURL();
                     await db.collection("produits").add({
                         nom: name,
@@ -706,7 +708,6 @@
                     
                     alert("🚀 Félicitations Fondateur !\nVotre article de luxe est déployé en direct sur le marché de l'Empire.");
                     
-                    // Nettoyage complet
                     document.getElementById('prod-name').value = "";
                     document.getElementById('prod-price').value = "";
                     document.getElementById('prod-file').value = "";
@@ -732,7 +733,7 @@
         }
     }
 
-    // --- 7. ECOUTE EN TEMPS RÉEL DU MARCHÉ ---
+    // --- 7. ECOUTE DU MARCHÉ ---
     function loadProducts() {
         const feed = document.getElementById('market-feed');
         db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
@@ -762,7 +763,7 @@
         });
     }
 
-    // --- 8. MESSAGERIE INTERNE SECURISEE ---
+    // --- 8. SYSTÈME DE MESSAGERIE ---
     async function sendChatMessage() {
         const inputEl = document.getElementById('chat-input-msg');
         const messageText = inputEl.value.trim();
@@ -811,7 +812,7 @@
         chatFlow.scrollTop = chatFlow.scrollHeight;
     }
 
-    // --- 9. COMPTEUR DYNAMIQUE CAPITAL ---
+    // --- 9. COMPTEUR CAPITAL ---
     let money = 450173947;
     setInterval(() => {
         money += Math.floor(Math.random() * 8000);
