@@ -12,6 +12,9 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
 
     <style>
         :root { 
@@ -183,7 +186,7 @@
             margin: 5px 0;
         }
 
-        /* --- FLUX DU MARCHÉ EN TEMPS RÉEL --- */
+        /* --- FLUX DU MARCHÉ EN TEMPS RÉEL (FORMAT VISIONNEUSE / MÉDIA MULTIPLE) --- */
         #market-feed { display: flex; flex-direction: column; gap: 25px; }
         
         .product-card {
@@ -211,7 +214,7 @@
         
         .product-image-container { 
             width: 100%; 
-            height: 260px; 
+            height: 320px; /* Légèrement agrandi pour un effet immersif style Reels */
             background: #111; 
             border-radius: 12px; 
             display: flex;
@@ -221,7 +224,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
-        .product-image-container img { width: 100%; height: 100%; object-fit: cover; }
+        .product-image-container img, .product-image-container video { width: 100%; height: 100%; object-fit: cover; }
         
         .product-info { margin-top: 15px; }
         .product-info h3 { font-size: 19px; color: #fff; font-weight: 600; }
@@ -240,7 +243,7 @@
             text-transform: uppercase;
         }
 
-        /* --- SECTION RECRUTEMENT STYLE PREMIUM --- */
+        /* --- SECTION DE RECRUTEMENT EMPIRE --- */
         .seller-recruitment-card {
             margin-top: 50px; 
             padding: 30px; 
@@ -356,7 +359,7 @@
         .file-custom-btn { background: rgba(212, 175, 55, 0.1); color: var(--gold); padding: 10px 20px; border-radius: 8px; font-size: 13px; display: inline-block; margin-bottom: 8px; font-weight: bold; }
         .file-name-text { display: block; font-size: 13px; color: #777; }
         
-        #preview { 
+        #preview, #preview-video { 
             width: 100%; height: 200px; object-fit: cover; margin-top: 15px; 
             display: none; border-radius: 12px; border: 1px solid var(--gold); 
         }
@@ -418,7 +421,7 @@
                 <label>Adresse e-mail de l'Empire</label>
                 <input type="email" id="email_input" placeholder="exemple@segglobal.com">
             </div>
-            <button class="btn-gold" id="btn_otp">Obtenir mon code d'accès</button>
+            <button class="btn-gold" id="btn_otp" onclick="sendAccessCode()">Obtenir mon code d'accès</button>
         </div>
         
         <div id="login_step2" style="display:none;">
@@ -426,7 +429,7 @@
                 <label>Clé de sécurité à usage unique (OTP)</label>
                 <input type="text" id="otp_input" placeholder="------">
             </div>
-            <button class="btn-gold" id="btn_verify_otp">Ouvrir l'Empire</button>
+            <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
         </div>
     </div>
 
@@ -448,7 +451,7 @@
             <div class="seller-recruitment-card">
                 <h3>VOUS ÊTES VENDEUR ?</h3>
                 <p>Rejoignez l'empire S.E.G GLOBAL et vendez vos montres, sacs et bijoux au monde entier.</p>
-                <button class="btn-gold" id="btn_ouvrir_boutique" style="border-radius: 50px;">
+                <button class="btn-gold" style="border-radius: 50px;" onclick="basculerEcran('vente')">
                     OUVRIR MA BOUTIQUE ICI
                 </button>
             </div>
@@ -468,20 +471,22 @@
             </div>
 
             <div class="form-group">
-                <label>Protocole : Archive Visuelle Obligatoire</label>
+                <label>Protocole : Archive Visuelle Obligatoire (Photo ou Vidéo)</label>
                 <div class="file-select-container">
                     <span class="file-custom-btn">Choisir le fichier</span>
                     <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
-                    <input type="file" id="prod-file" accept="image/*">
+                    <!-- Acceptation étendue aux vidéos pour le format "TikTok" -->
+                    <input type="file" id="prod-file" accept="image/*,video/*" onchange="previewMedia(event)">
                 </div>
                 <img id="preview" alt="Aperçu de l'article">
+                <video id="preview-video" controls muted></video>
             </div>
 
             <div style="text-align: center; margin: 20px 0; min-height: 20px;">
                 <div id="upload-status" style="color: var(--neon-blue); font-weight: bold; font-size:13px;"></div>
             </div>
 
-            <button class="btn-gold" id="pub_btn">PUBLIER DANS L'EMPIRE</button>
+            <button class="btn-gold" id="pub_btn" onclick="publishProduct()">PUBLIER DANS L'EMPIRE</button>
         </main>
 
         <main id="screen-chat" class="app-screen">
@@ -490,7 +495,7 @@
                 <div class="chat-messages" id="chat-flow"></div>
                 <div class="chat-input-bar">
                     <input type="text" id="chat-input-msg" placeholder="Votre message hautement sécurisé...">
-                    <button class="btn-send" id="btn_send_chat"><i class="fa-solid fa-paper-plane"></i></button>
+                    <button class="btn-send" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
         </main>
@@ -502,23 +507,23 @@
                 <div class="val-money" style="color: var(--gold); font-size: 20px;">AUTORISÉ (SEG-ID)</div>
                 <div style="font-size: 11px; color: #888; margin-top: 10px;">ID Signature : SEG-237-3130</div>
             </div>
-            <button class="btn-gold" id="btn_logout" style="background:#151515; color:#fff; border: 1px solid #333; margin-top: 40px;">Déconnexion Sécurisée</button>
+            <button class="btn-gold" style="background:#151515; color:#fff; border: 1px solid #333; margin-top: 40px;" onclick="logout()">Déconnexion Sécurisée</button>
         </main>
 
         <nav class="bottom-nav">
-            <div class="nav-item active" id="btn-nav-accueil">
+            <div class="nav-item active" id="btn-nav-accueil" onclick="basculerEcran('accueil')">
                 <i class="fa-solid fa-gem"></i>
                 <span>MARCHÉ</span>
             </div>
-            <div class="nav-item" id="btn-nav-vente">
+            <div class="nav-item" id="btn-nav-vente" onclick="basculerEcran('vente')">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span>VENDRE</span>
             </div>
-            <div class="nav-item" id="btn-nav-chat">
+            <div class="nav-item" id="btn-nav-chat" onclick="basculerEcran('chat')">
                 <i class="fa-solid fa-comments"></i>
                 <span>CHAT</span>
             </div>
-            <div class="nav-item" id="btn-nav-vault">
+            <div class="nav-item" id="btn-nav-vault" onclick="basculerEcran('vault')">
                 <i class="fa-solid fa-vault"></i>
                 <span>COFFRE</span>
             </div>
@@ -527,16 +532,14 @@
 
     <div class="server-status">
         <span class="status-dot online"></span>
-        <p>Connexion Cloud Google v10 : Hybride (Stable)</p>
+        <p>Connexion Cloud Google : 22ms (Stable)</p>
     </div>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
-
-    // Configuration officielle S.E.G GLOBAL
+<script>
+    // --- 1. INITIALISATION CLASSIQUE COMPATIBLE ---
+    (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
+    
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
@@ -546,51 +549,26 @@
         appId: "1:880037527683:web:e399589d8db19468bfb847",
         measurementId: "G-Z5WG470MGE"
     };
-
-    // Initialisation
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
+    firebase.initializeApp(firebaseConfig);
     
+    const db = firebase.firestore();
+    const storage = firebase.storage();
     const SEG_ID = "SEG-237-3130"; 
+
     let correctOTP = "";
     let selectedFile = null;
 
-    // EmailJS Init
-    emailjs.init("QGnoNmpH78_GuSLf4");
-
-    // --- SÉCURITÉ ANTI-PARTAGE DE NUMÉRO ---
     const SEG_Security = {
         filtrerTexte: function(texte) {
             const phoneRegex = /[0-9]{8,}/g; 
             if (phoneRegex.test(texte)) {
-                alert("🚨 SÉCURITÉ S.E.G :\nL'échange direct de numéros de téléphone est strictement restreint.\nLe protocole utilise exclusivement votre identifiant unique SEG-ID.");
+                alert("🚨 SÉCURITÉ S.E.G :\nL'échange direct de numéros de téléphone est restreint.\nUtilisez exclusivement votre identifiant unique SEG-ID.");
                 return false;
             }
             return true;
         }
     };
 
-    // --- RECOUVREMENT DE SESSION ---
-    if(localStorage.getItem("seg_session") === "active") {
-        startApp();
-    }
-
-    // --- ATTACHES DES ÉVÉNEMENTS DOM ---
-    document.getElementById('btn_otp').addEventListener('click', sendAccessCode);
-    document.getElementById('btn_verify_otp').addEventListener('click', verifyAccessCode);
-    document.getElementById('btn_ouvrir_boutique').addEventListener('click', () => basculerEcran('vente'));
-    document.getElementById('prod-file').addEventListener('change', previewImage);
-    document.getElementById('pub_btn').addEventListener('click', publishProduct);
-    document.getElementById('btn_send_chat').addEventListener('click', sendChatMessage);
-    document.getElementById('btn_logout').addEventListener('click', logout);
-
-    document.getElementById('btn-nav-accueil').addEventListener('click', () => basculerEcran('accueil'));
-    document.getElementById('btn-nav-vente').addEventListener('click', () => basculerEcran('vente'));
-    document.getElementById('btn-nav-chat').addEventListener('click', () => basculerEcran('chat'));
-    document.getElementById('btn-nav-vault').addEventListener('click', () => basculerEcran('vault'));
-
-    // --- FONCTIONS LOGIQUE APP ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
         if(!email) return alert("Veuillez saisir votre adresse e-mail.");
@@ -659,9 +637,15 @@
         }
     }
 
-    function previewImage(event) {
+    // --- 5. GESTION DU MULTIMÉDIA (IMAGE / VIDÉO) ET APERÇU ---
+    function previewMedia(event) {
         selectedFile = event.target.files[0];
         const labelFichier = document.getElementById('file-name-display');
+        const imgPrev = document.getElementById('preview');
+        const videoPrev = document.getElementById('preview-video');
+        
+        imgPrev.style.display = "none";
+        videoPrev.style.display = "none";
         
         if (selectedFile) {
             labelFichier.textContent = selectedFile.name;
@@ -669,19 +653,22 @@
             
             const reader = new FileReader();
             reader.onload = (e) => {
-                const prev = document.getElementById('preview');
-                prev.src = e.target.result;
-                prev.style.display = "block";
+                if (selectedFile.type.startsWith('image/')) {
+                    imgPrev.src = e.target.result;
+                    imgPrev.style.display = "block";
+                } else if (selectedFile.type.startsWith('video/')) {
+                    videoPrev.src = e.target.result;
+                    videoPrev.style.display = "block";
+                }
             }
             reader.readAsDataURL(selectedFile);
         } else {
             labelFichier.textContent = "aucun fichier sélectionné";
             labelFichier.style.color = "#777";
-            document.getElementById('preview').style.display = "none";
         }
     }
 
-    // --- LE MOTEUR COMPTEUR CORRIGÉ (FLUIDE ET CONSTANT) ---
+    // --- 6. INTELLIGENCE DE PUBLICATION ---
     async function publishProduct() {
         const name = document.getElementById('prod-name').value;
         const price = document.getElementById('prod-price').value;
@@ -693,32 +680,29 @@
 
         btn.innerText = "INITIALISATION DU FLUX...";
         btn.disabled = true;
-        statusLabel.textContent = "ANALYSE ET SÉCURISATION : 1%";
 
         try {
-            const storageRef = ref(storage, 'produits_seg/' + Date.now() + "_" + selectedFile.name);
-            const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+            const isVideo = selectedFile.type.startsWith('video/');
+            const storageRef = storage.ref('produits_seg/' + Date.now() + "_" + selectedFile.name);
+            const uploadTask = storageRef.put(selectedFile);
 
-            // Écouteur v10 réactif aux réseaux mobiles instables (LTE/3G)
             uploadTask.on('state_changed', 
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    // Calcule et force une progression continue fluide
-                    statusLabel.textContent = "ANALYSE ET SÉCURISATION : " + Math.max(1, Math.round(progress)) + "%";
+                    statusLabel.textContent = "ANALYSE ET SÉCURISATION : " + Math.round(progress) + "%";
                 }, 
                 (error) => { 
-                    console.error(error);
                     alert("Interruption du transfert Cloud : " + error.message);
                     btn.innerText = "RÉESSAYER LE DÉPLOIEMENT";
                     btn.disabled = false;
                 }, 
                 async () => {
-                    const photoURL = await getDownloadURL(uploadTask.snapshot.ref);
-                    
-                    await addDoc(collection(db, "produits"), {
+                    const mediaURL = await uploadTask.snapshot.ref.getDownloadURL();
+                    await db.collection("produits").add({
                         nom: name,
                         prix: parseFloat(price),
-                        image: photoURL,
+                        image: mediaURL,
+                        fileType: isVideo ? 'video' : 'image', // On enregistre le type pour l'affichage dynamique
                         vendeurId: SEG_ID,
                         date: new Date()
                     });
@@ -726,12 +710,13 @@
                     statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI ! 100%";
                     statusLabel.style.color = "#00FF66";
                     
-                    alert("🚀 Félicitations Fondateur !\nVotre article de luxe est déployé en direct sur le marché de l'Empire.");
+                    alert("🚀 Félicitations Fondateur !\nVotre article de luxe est déployé en direct.");
                     
                     document.getElementById('prod-name').value = "";
                     document.getElementById('prod-price').value = "";
                     document.getElementById('prod-file').value = "";
                     document.getElementById('preview').style.display = "none";
+                    document.getElementById('preview-video').style.display = "none";
                     document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
                     document.getElementById('file-name-display').style.color = "#777";
                     selectedFile = null;
@@ -753,11 +738,10 @@
         }
     }
 
+    // --- 7. ECOUTE DU MARCHÉ AVEC PRIS EN CHARGE DU LECTEUR VIDÉO AUTOMATIQUE (STYLE TIKTOK) ---
     function loadProducts() {
         const feed = document.getElementById('market-feed');
-        const q = query(collection(db, "produits"), orderBy("date", "desc"));
-        
-        onSnapshot(q, (snapshot) => {
+        db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
             feed.innerHTML = "";
             if(snapshot.empty) {
                 feed.innerHTML = "<p style='text-align:center; color:#555; padding: 40px;'>Aucun joyau disponible sur le marché.</p>";
@@ -767,31 +751,36 @@
                 const p = doc.data();
                 const prixFormate = Number(p.prix).toLocaleString('fr-FR');
                 
+                // Détection dynamique du média pour injecter soit une image soit une vidéo auto-play en boucle
+                let mediaHTML = `<img src="${p.image || 'https://via.placeholder.com/150'}" alt="Luxury Item">`;
+                if(p.fileType === 'video') {
+                    mediaHTML = `<video src="${p.image}" autoplay loop muted playsinline></video>`;
+                }
+                
                 feed.innerHTML += `
                     <div class="product-card">
                         <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Certifié</div>
                         <div class="product-image-container">
-                            <img src="${p.image || 'https://via.placeholder.com/150'}" alt="Luxury Item">
+                            ${mediaHTML}
                         </div>
                         <div class="product-info">
                             <h3>${p.nom}</h3>
                             <p class="price">${prixFormate} FCFA</p>
-                            <button class="btn-buy" id="btn_negocier_${doc.id}">Négocier sur le Chat</button>
+                            <button class="btn-buy" onclick="declencherNegociation('${p.nom}')">Négocier sur le Chat</button>
                         </div>
                     </div>
                 `;
             });
-
-            // Re-lier les clics des boutons dynamiques créés
-            snapshot.forEach((doc) => {
-                const btnBuy = document.getElementById(`btn_negocier_${doc.id}`);
-                if(btnBuy) {
-                    btnBuy.addEventListener('click', () => basculerEcran('chat'));
-                }
-            });
         });
     }
 
+    // Raccourci business pour envoyer le produit directement dans le chat
+    function declencherNegociation(nomProduit) {
+        basculerEcran('chat');
+        document.getElementById('chat-input-msg').value = `Bonjour, je suis intéressé par l'article : [${nomProduit}]. Est-il disponible ?`;
+    }
+
+    // --- 8. MESSAGERIE INTERNE SECURISEE ---
     async function sendChatMessage() {
         const inputEl = document.getElementById('chat-input-msg');
         const messageText = inputEl.value.trim();
@@ -803,10 +792,10 @@
         }
 
         try {
-            await addDoc(collection(db, "messages"), {
+            await db.collection("messages").add({
                 expediteur: SEG_ID,
                 texte: messageText,
-                timestamp: new Date()
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
             inputEl.value = "";
         } catch (error) {
@@ -816,9 +805,7 @@
 
     function listenChatStream() {
         const chatFlow = document.getElementById('chat-flow');
-        const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
-        
-        onSnapshot(q, (snapshot) => {
+        db.collection("messages").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
             chatFlow.innerHTML = "";
             snapshot.forEach((doc) => {
                 const msg = doc.data();
@@ -842,7 +829,7 @@
         chatFlow.scrollTop = chatFlow.scrollHeight;
     }
 
-    // Compteur Capital simulation
+    // --- 9. COMPTEUR DYNAMIQUE CAPITAL ---
     let money = 450173947;
     setInterval(() => {
         money += Math.floor(Math.random() * 8000);
@@ -854,6 +841,8 @@
         localStorage.removeItem("seg_session"); 
         location.reload(); 
     }
+    
+    if(localStorage.getItem("seg_session") === "active") startApp();
 </script>
 </body>
 </html>
