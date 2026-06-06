@@ -11,7 +11,6 @@
     <meta name="theme-color" content="#050505">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
@@ -128,7 +127,9 @@
             transition: border-color 0.3s;
         }
         
-        input:focus { border-color: var(--neon-blue); }
+        input:focus {
+            border-color: var(--neon-blue);
+        }
         
         .btn-gold { 
             width: 100%; 
@@ -145,7 +146,11 @@
             transition: 0.3s;
         }
         
-        .btn-gold:disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; }
+        .btn-gold:disabled { 
+            background: #222 !important; 
+            color: #555 !important; 
+            cursor: not-allowed; 
+        }
         
         /* --- GESTION DES ÉCRANS --- */
         .app-screen { display: none; padding: 20px; animation: screenFade 0.4s ease-out forwards; }
@@ -181,7 +186,7 @@
             margin: 5px 0;
         }
 
-        /* --- MARCHÉ FORMAT S.E.G REELS --- */
+        /* --- FLUX DU MARCHÉ EN TEMPS RÉEL (FORMAT VISIONNEUSE / MÉDIA MULTIPLE) --- */
         #market-feed { display: flex; flex-direction: column; gap: 25px; }
         
         .product-card {
@@ -209,7 +214,7 @@
         
         .product-image-container { 
             width: 100%; 
-            height: 320px; 
+            height: 320px; /* Légèrement agrandi pour un effet immersif style Reels */
             background: #111; 
             border-radius: 12px; 
             display: flex;
@@ -220,6 +225,7 @@
         }
         
         .product-image-container img, .product-image-container video { width: 100%; height: 100%; object-fit: cover; }
+        
         .product-info { margin-top: 15px; }
         .product-info h3 { font-size: 19px; color: #fff; font-weight: 600; }
         .product-card .price { color: var(--neon-blue); font-size: 18px; font-weight: 700; margin: 6px 0 15px 0; }
@@ -237,6 +243,7 @@
             text-transform: uppercase;
         }
 
+        /* --- SECTION DE RECRUTEMENT EMPIRE --- */
         .seller-recruitment-card {
             margin-top: 50px; 
             padding: 30px; 
@@ -246,10 +253,21 @@
             text-align: center;
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
         }
-        .seller-recruitment-card h3 { color: var(--neon-blue); font-size: 18px; letter-spacing: 2px; margin-bottom: 10px; font-weight: 800; }
-        .seller-recruitment-card p { color: #bbb; font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
+        .seller-recruitment-card h3 {
+            color: var(--neon-blue);
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        .seller-recruitment-card p {
+            color: #bbb;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
 
-        /* --- COMPOSANTS CHAT --- */
+        /* --- SYSTÈME DE CHAT INTEGRÉ --- */
         .chat-container {
             display: flex;
             flex-direction: column;
@@ -259,16 +277,76 @@
             border-radius: 14px;
             overflow: hidden;
         }
-        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .message { max-width: 80%; padding: 12px 16px; border-radius: 14px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
-        .msg-me { background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%); color: #000; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 500; }
-        .msg-other { background: rgba(255,255,255,0.08); color: #fff; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid rgba(255,255,255,0.05); }
-        .msg-meta { font-size: 9px; opacity: 0.6; margin-top: 4px; display: block; text-align: right; }
-        .chat-input-bar { display: flex; padding: 10px; background: rgba(0,0,0,0.4); border-top: 1px solid rgba(212,175,55,0.1); gap: 8px; }
-        .chat-input-bar input { flex: 1; margin: 0; }
-        .btn-send { background: var(--gold); border: none; color: #000; width: 50px; border-radius: 12px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 16px; }
 
-        /* --- ZONE PREVIEW IMPORTATION --- */
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .msg-me {
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+            color: #000;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+            font-weight: 500;
+        }
+
+        .msg-other {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .msg-meta {
+            font-size: 9px;
+            opacity: 0.6;
+            margin-top: 4px;
+            display: block;
+            text-align: right;
+        }
+
+        .chat-input-bar {
+            display: flex;
+            padding: 10px;
+            background: rgba(0,0,0,0.4);
+            border-top: 1px solid rgba(212,175,55,0.1);
+            gap: 8px;
+        }
+
+        .chat-input-bar input {
+            flex: 1;
+            margin: 0;
+        }
+
+        .btn-send {
+            background: var(--gold);
+            border: none;
+            color: #000;
+            width: 50px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        /* --- ARCHIVE VISUELLE ET PREVIEW --- */
         .file-select-container {
             background: rgba(255, 255, 255, 0.02);
             border: 1px dashed var(--border);
@@ -280,9 +358,13 @@
         .file-select-container input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
         .file-custom-btn { background: rgba(212, 175, 55, 0.1); color: var(--gold); padding: 10px 20px; border-radius: 8px; font-size: 13px; display: inline-block; margin-bottom: 8px; font-weight: bold; }
         .file-name-text { display: block; font-size: 13px; color: #777; }
-        #preview, #preview-video { width: 100%; height: 200px; object-fit: cover; margin-top: 15px; display: none; border-radius: 12px; border: 1px solid var(--gold); }
+        
+        #preview, #preview-video { 
+            width: 100%; height: 200px; object-fit: cover; margin-top: 15px; 
+            display: none; border-radius: 12px; border: 1px solid var(--gold); 
+        }
 
-        /* --- NAV BAR STANDARDS SMARTPHONE --- */
+        /* --- BARRE DE NAVIGATION IPHONE --- */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -297,11 +379,32 @@
             padding: 14px 0 calc(14px + env(safe-area-inset-bottom)) 0; 
             z-index: 1000;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; text-decoration: none; font-size: 10px; gap: 6px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #555;
+            text-decoration: none;
+            font-size: 10px;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
         .nav-item i { font-size: 20px; }
         .nav-item.active { color: var(--gold); text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
 
-        .server-status { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 11px; color: #444; margin: 30px 0 10px 0; }
+        .server-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #444;
+            margin: 30px 0 10px 0;
+        }
         .status-dot.online { width: 6px; height: 6px; background-color: #00FF66; border-radius: 50%; }
     </style>
 </head>
@@ -318,7 +421,7 @@
                 <label>Adresse e-mail de l'Empire</label>
                 <input type="email" id="email_input" placeholder="exemple@segglobal.com">
             </div>
-            <button class="btn-gold" id="btn_otp">Obtenir mon code d'accès</button>
+            <button class="btn-gold" id="btn_otp" onclick="sendAccessCode()">Obtenir mon code d'accès</button>
         </div>
         
         <div id="login_step2" style="display:none;">
@@ -326,11 +429,12 @@
                 <label>Clé de sécurité à usage unique (OTP)</label>
                 <input type="text" id="otp_input" placeholder="------">
             </div>
-            <button class="btn-gold" id="btn_verify_otp">Ouvrir l'Empire</button>
+            <button class="btn-gold" onclick="verifyAccessCode()">Ouvrir l'Empire</button>
         </div>
     </div>
 
     <div id="main_app" style="display:none;">
+        
         <header class="empire-header">
             <h1>S.E.G GLOBAL</h1>
             <div class="objectif-badge">OBJECTIF : 500 MILLIARDS FCFA</div>
@@ -347,7 +451,7 @@
             <div class="seller-recruitment-card">
                 <h3>VOUS ÊTES VENDEUR ?</h3>
                 <p>Rejoignez l'empire S.E.G GLOBAL et vendez vos montres, sacs et bijoux au monde entier.</p>
-                <button class="btn-gold" id="btn_ouvrir_boutique" style="border-radius: 50px;">
+                <button class="btn-gold" style="border-radius: 50px;" onclick="basculerEcran('vente')">
                     OUVRIR MA BOUTIQUE ICI
                 </button>
             </div>
@@ -355,28 +459,34 @@
 
         <main id="screen-vente" class="app-screen">
             <h2 class="section-title">Vendre un Article</h2>
+            
             <div class="form-group">
                 <label>Nom ou Désignation du produit</label>
                 <input type="text" id="prod-name" placeholder="Ex: Diamant Brut Certifié">
             </div>
+
             <div class="form-group">
                 <label>Prix Final (FCFA)</label>
                 <input type="number" id="prod-price" placeholder="Entrez le montant">
             </div>
+
             <div class="form-group">
                 <label>Protocole : Archive Visuelle Obligatoire (Photo ou Vidéo)</label>
                 <div class="file-select-container">
                     <span class="file-custom-btn">Choisir le fichier</span>
                     <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
-                    <input type="file" id="prod-file" accept="image/*,video/*">
+                    <!-- Acceptation étendue aux vidéos pour le format "TikTok" -->
+                    <input type="file" id="prod-file" accept="image/*,video/*" onchange="previewMedia(event)">
                 </div>
                 <img id="preview" alt="Aperçu de l'article">
                 <video id="preview-video" controls muted></video>
             </div>
+
             <div style="text-align: center; margin: 20px 0; min-height: 20px;">
                 <div id="upload-status" style="color: var(--neon-blue); font-weight: bold; font-size:13px;"></div>
             </div>
-            <button class="btn-gold" id="pub_btn">PUBLIER DANS L'EMPIRE</button>
+
+            <button class="btn-gold" id="pub_btn" onclick="publishProduct()">PUBLIER DANS L'EMPIRE</button>
         </main>
 
         <main id="screen-chat" class="app-screen">
@@ -385,7 +495,7 @@
                 <div class="chat-messages" id="chat-flow"></div>
                 <div class="chat-input-bar">
                     <input type="text" id="chat-input-msg" placeholder="Votre message hautement sécurisé...">
-                    <button class="btn-send" id="btn_send_chat"><i class="fa-solid fa-paper-plane"></i></button>
+                    <button class="btn-send" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
         </main>
@@ -397,14 +507,26 @@
                 <div class="val-money" style="color: var(--gold); font-size: 20px;">AUTORISÉ (SEG-ID)</div>
                 <div style="font-size: 11px; color: #888; margin-top: 10px;">ID Signature : SEG-237-3130</div>
             </div>
-            <button class="btn-gold" id="btn_logout" style="background:#151515; color:#fff; border: 1px solid #333; margin-top: 40px;">Déconnexion Sécurisée</button>
+            <button class="btn-gold" style="background:#151515; color:#fff; border: 1px solid #333; margin-top: 40px;" onclick="logout()">Déconnexion Sécurisée</button>
         </main>
 
         <nav class="bottom-nav">
-            <div class="nav-item active" id="btn-nav-accueil"><i class="fa-solid fa-gem"></i><span>MARCHÉ</span></div>
-            <div class="nav-item" id="btn-nav-vente"><i class="fa-solid fa-bag-shopping"></i><span>VENDRE</span></div>
-            <div class="nav-item" id="btn-nav-chat"><i class="fa-solid fa-comments"></i><span>CHAT</span></div>
-            <div class="nav-item" id="btn-nav-vault"><i class="fa-solid fa-vault"></i><span>COFFRE</span></div>
+            <div class="nav-item active" id="btn-nav-accueil" onclick="basculerEcran('accueil')">
+                <i class="fa-solid fa-gem"></i>
+                <span>MARCHÉ</span>
+            </div>
+            <div class="nav-item" id="btn-nav-vente" onclick="basculerEcran('vente')">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span>VENDRE</span>
+            </div>
+            <div class="nav-item" id="btn-nav-chat" onclick="basculerEcran('chat')">
+                <i class="fa-solid fa-comments"></i>
+                <span>CHAT</span>
+            </div>
+            <div class="nav-item" id="btn-nav-vault" onclick="basculerEcran('vault')">
+                <i class="fa-solid fa-vault"></i>
+                <span>COFFRE</span>
+            </div>
         </nav>
     </div>
 
@@ -415,10 +537,9 @@
 </div>
 
 <script>
-    // Initialisation d'EmailJS
-    emailjs.init("QGnoNmpH78_GuSLf4");
+    // --- 1. INITIALISATION CLASSIQUE COMPATIBLE ---
+    (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
     
-    // Configuration SDK Firebase Compat (v9 standard)
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
@@ -437,34 +558,16 @@
     let correctOTP = "";
     let selectedFile = null;
 
-    // Filtre Anti-Fraude
     const SEG_Security = {
         filtrerTexte: function(texte) {
             const phoneRegex = /[0-9]{8,}/g; 
             if (phoneRegex.test(texte)) {
-                alert("🚨 SÉCURITÉ S.E.G :\nL'échange direct de numéros de téléphone est restreint. Utilisez uniquement votre identifiant SEG-ID.");
+                alert("🚨 SÉCURITÉ S.E.G :\nL'échange direct de numéros de téléphone est restreint.\nUtilisez exclusivement votre identifiant unique SEG-ID.");
                 return false;
             }
             return true;
         }
     };
-
-    // Attribution manuelle des événements DOM pour éliminer les bugs mobiles
-    document.getElementById('btn_otp').addEventListener('click', sendAccessCode);
-    document.getElementById('btn_verify_otp').addEventListener('click', verifyAccessCode);
-    document.getElementById('btn_ouvrir_boutique').addEventListener('click', () => basculerEcran('vente'));
-    document.getElementById('prod-file').addEventListener('change', previewMedia);
-    document.getElementById('pub_btn').addEventListener('click', publishProduct);
-    document.getElementById('btn_send_chat').addEventListener('click', sendChatMessage);
-    document.getElementById('btn_logout').addEventListener('click', logout);
-
-    document.getElementById('btn-nav-accueil').addEventListener('click', () => basculerEcran('accueil'));
-    document.getElementById('btn-nav-vente').addEventListener('click', () => basculerEcran('vente'));
-    document.getElementById('btn-nav-chat').addEventListener('click', () => basculerEcran('chat'));
-    document.getElementById('btn-nav-vault').addEventListener('click', () => basculerEcran('vault'));
-
-    // Si une session existe déjà, on ouvre directement l'application
-    if(localStorage.getItem("seg_session") === "active") { startApp(); }
 
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
@@ -475,23 +578,29 @@
         btn.innerText = "CONNEXION AU SERVEUR...";
         btn.disabled = true;
 
-        emailjs.send("service_ocg86ge", "template_v7i6m5m", { to_email: email, otp_code: correctOTP })
+        emailjs.send("service_ocg86ge", "template_v7i6m5m", { 
+            to_email: email, 
+            otp_code: correctOTP 
+        })
         .then(() => {
             document.getElementById('login_step1').style.display = 'none';
             document.getElementById('login_step2').style.display = 'block';
         })
-        .catch(() => {
-            alert("Erreur de la passerelle d'accès.");
+        .catch((err) => {
+            alert("Erreur d'initialisation de la passerelle d'accès.");
             btn.innerText = "Obtenir mon code d'accès";
             btn.disabled = false;
         });
     }
 
     function verifyAccessCode() {
-        if(document.getElementById('otp_input').value === correctOTP) {
+        const inputCode = document.getElementById('otp_input').value;
+        if(inputCode === correctOTP) {
             localStorage.setItem("seg_session", "active");
             startApp();
-        } else { alert("Code erroné."); }
+        } else {
+            alert("Code de vérification erroné. Accès refusé.");
+        }
     }
 
     function startApp() {
@@ -502,14 +611,33 @@
     }
 
     function basculerEcran(cible) {
-        ['screen-accueil', 'screen-vente', 'screen-chat', 'screen-vault'].forEach(s => document.getElementById(s).classList.remove('active-screen'));
-        ['btn-nav-accueil', 'btn-nav-vente', 'btn-nav-chat', 'btn-nav-vault'].forEach(b => document.getElementById(b).classList.remove('active'));
+        document.getElementById('screen-accueil').classList.remove('active-screen');
+        document.getElementById('screen-vente').classList.remove('active-screen');
+        document.getElementById('screen-chat').classList.remove('active-screen');
+        document.getElementById('screen-vault').classList.remove('active-screen');
         
-        document.getElementById(`screen-${cible}`).classList.add('active-screen');
-        document.getElementById(`btn-nav-${cible}`).classList.add('active');
-        if(cible === 'chat') scrollToBottomChat();
+        document.getElementById('btn-nav-accueil').classList.remove('active');
+        document.getElementById('btn-nav-vente').classList.remove('active');
+        document.getElementById('btn-nav-chat').classList.remove('active');
+        document.getElementById('btn-nav-vault').classList.remove('active');
+
+        if(cible === 'accueil') {
+            document.getElementById('screen-accueil').classList.add('active-screen');
+            document.getElementById('btn-nav-accueil').classList.add('active');
+        } else if(cible === 'vente') {
+            document.getElementById('screen-vente').classList.add('active-screen');
+            document.getElementById('btn-nav-vente').classList.add('active');
+        } else if(cible === 'chat') {
+            document.getElementById('screen-chat').classList.add('active-screen');
+            document.getElementById('btn-nav-chat').classList.add('active');
+            scrollToBottomChat();
+        } else if(cible === 'vault') {
+            document.getElementById('screen-vault').classList.add('active-screen');
+            document.getElementById('btn-nav-vault').classList.add('active');
+        }
     }
 
+    // --- 5. GESTION DU MULTIMÉDIA (IMAGE / VIDÉO) ET APERÇU ---
     function previewMedia(event) {
         selectedFile = event.target.files[0];
         const labelFichier = document.getElementById('file-name-display');
@@ -532,7 +660,7 @@
                     videoPrev.src = e.target.result;
                     videoPrev.style.display = "block";
                 }
-            };
+            }
             reader.readAsDataURL(selectedFile);
         } else {
             labelFichier.textContent = "aucun fichier sélectionné";
@@ -540,6 +668,7 @@
         }
     }
 
+    // --- 6. INTELLIGENCE DE PUBLICATION ---
     async function publishProduct() {
         const name = document.getElementById('prod-name').value;
         const price = document.getElementById('prod-price').value;
@@ -547,11 +676,10 @@
         const btn = document.getElementById('pub_btn');
         
         if(!SEG_Security.filtrerTexte(name)) return;
-        if(!name || !price || !selectedFile) return alert("Informations incomplètes.");
+        if(!name || !price || !selectedFile) return alert("Informations incomplètes pour la publication.");
 
         btn.innerText = "INITIALISATION DU FLUX...";
         btn.disabled = true;
-        statusLabel.textContent = "ANALYSE ET SÉCURISATION : 1%";
 
         try {
             const isVideo = selectedFile.type.startsWith('video/');
@@ -561,11 +689,12 @@
             uploadTask.on('state_changed', 
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    statusLabel.textContent = "ANALYSE ET SÉCURISATION : " + Math.max(1, Math.round(progress)) + "%";
+                    statusLabel.textContent = "ANALYSE ET SÉCURISATION : " + Math.round(progress) + "%";
                 }, 
                 (error) => { 
-                    alert("Interruption : " + error.message);
-                    btn.innerText = "PUBLIER DANS L'EMPIRE"; btn.disabled = false;
+                    alert("Interruption du transfert Cloud : " + error.message);
+                    btn.innerText = "RÉESSAYER LE DÉPLOIEMENT";
+                    btn.disabled = false;
                 }, 
                 async () => {
                     const mediaURL = await uploadTask.snapshot.ref.getDownloadURL();
@@ -573,83 +702,105 @@
                         nom: name,
                         prix: parseFloat(price),
                         image: mediaURL,
-                        fileType: isVideo ? 'video' : 'image',
+                        fileType: isVideo ? 'video' : 'image', // On enregistre le type pour l'affichage dynamique
                         vendeurId: SEG_ID,
                         date: new Date()
                     });
 
                     statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI ! 100%";
                     statusLabel.style.color = "#00FF66";
-                    alert("🚀 Joyau déployé avec succès sur le marché !");
                     
-                    document.getElementById('prod-name').value = ""; document.getElementById('prod-price').value = ""; document.getElementById('prod-file').value = "";
-                    imgPrev = document.getElementById('preview').style.display = "none"; document.getElementById('preview-video').style.display = "none";
+                    alert("🚀 Félicitations Fondateur !\nVotre article de luxe est déployé en direct.");
+                    
+                    document.getElementById('prod-name').value = "";
+                    document.getElementById('prod-price').value = "";
+                    document.getElementById('prod-file').value = "";
+                    document.getElementById('preview').style.display = "none";
+                    document.getElementById('preview-video').style.display = "none";
                     document.getElementById('file-name-display').textContent = "aucun fichier sélectionné";
+                    document.getElementById('file-name-display').style.color = "#777";
                     selectedFile = null;
                     
                     setTimeout(() => {
-                        statusLabel.textContent = ""; statusLabel.style.color = "var(--neon-blue)";
-                        btn.innerText = "PUBLIER DANS L'EMPIRE"; btn.disabled = false;
+                        statusLabel.textContent = "";
+                        statusLabel.style.color = "var(--neon-blue)";
+                        btn.innerText = "PUBLIER DANS L'EMPIRE";
+                        btn.disabled = false;
                         basculerEcran('accueil');
                     }, 1500);
                 }
             );
-        } catch (error) { btn.disabled = false; }
+
+        } catch (error) {
+            alert("Erreur critique d'infrastructure : " + error.message);
+            btn.innerText = "PUBLIER DANS L'EMPIRE";
+            btn.disabled = false;
+        }
     }
 
-    const produitsSimulation = [
-        { nom: "Audemars Piguet Royal Oak Oro", prix: 38500000, image: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=500&q=80", fileType: "image" },
-        { nom: "Diamant Brut Pur Certifié 2.5 Carats", prix: 14000000, image: "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=500&q=80", fileType: "image" },
-        { nom: "Sac Hermès Birkin 30 Black Gold", prix: 11500000, image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=500&q=80", fileType: "image" }
-    ];
-
+    // --- 7. ECOUTE DU MARCHÉ AVEC PRIS EN CHARGE DU LECTEUR VIDÉO AUTOMATIQUE (STYLE TIKTOK) ---
     function loadProducts() {
         const feed = document.getElementById('market-feed');
         db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
             feed.innerHTML = "";
             if(snapshot.empty) {
-                produitsSimulation.forEach((p) => {
-                    feed.innerHTML += generateProductHTML(p.nom, p.prix, p.image, p.fileType);
-                });
+                feed.innerHTML = "<p style='text-align:center; color:#555; padding: 40px;'>Aucun joyau disponible sur le marché.</p>";
                 return;
             }
             snapshot.forEach((doc) => {
                 const p = doc.data();
-                feed.innerHTML += generateProductHTML(p.nom, p.prix, p.image, p.fileType || 'image');
+                const prixFormate = Number(p.prix).toLocaleString('fr-FR');
+                
+                // Détection dynamique du média pour injecter soit une image soit une vidéo auto-play en boucle
+                let mediaHTML = `<img src="${p.image || 'https://via.placeholder.com/150'}" alt="Luxury Item">`;
+                if(p.fileType === 'video') {
+                    mediaHTML = `<video src="${p.image}" autoplay loop muted playsinline></video>`;
+                }
+                
+                feed.innerHTML += `
+                    <div class="product-card">
+                        <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Certifié</div>
+                        <div class="product-image-container">
+                            ${mediaHTML}
+                        </div>
+                        <div class="product-info">
+                            <h3>${p.nom}</h3>
+                            <p class="price">${prixFormate} FCFA</p>
+                            <button class="btn-buy" onclick="declencherNegociation('${p.nom}')">Négocier sur le Chat</button>
+                        </div>
+                    </div>
+                `;
             });
         });
     }
 
-    function generateProductHTML(nom, prix, image, fileType) {
-        let mediaHTML = `<img src="${image || 'https://via.placeholder.com/260'}" alt="Luxury Item">`;
-        if(fileType === 'video') {
-            mediaHTML = `<video src="${image}" autoplay loop muted playsinline></video>`;
-        }
-        return `
-            <div class="product-card">
-                <div class="product-badge"><i class="fa-solid fa-sparkles"></i> Certifié</div>
-                <div class="product-image-container">${mediaHTML}</div>
-                <div class="product-info">
-                    <h3>${nom}</h3>
-                    <p class="price">${Number(prix).toLocaleString('fr-FR')} FCFA</p>
-                    <button class="btn-buy" onclick="declencherNegociation('${nom.replace(/'/g, "\\'")}')">Négocier sur le Chat</button>
-                </div>
-            </div>`;
-    }
-
-    window.declencherNegociation = function(nomProduit) {
+    // Raccourci business pour envoyer le produit directement dans le chat
+    function declencherNegociation(nomProduit) {
         basculerEcran('chat');
         document.getElementById('chat-input-msg').value = `Bonjour, je suis intéressé par l'article : [${nomProduit}]. Est-il disponible ?`;
-    };
+    }
 
+    // --- 8. MESSAGERIE INTERNE SECURISEE ---
     async function sendChatMessage() {
         const inputEl = document.getElementById('chat-input-msg');
-        const text = inputEl.value.trim();
-        if(!text || !SEG_Security.filtrerTexte(text)) return;
+        const messageText = inputEl.value.trim();
+        
+        if(!messageText) return;
+        if(!SEG_Security.filtrerTexte(messageText)) {
+            inputEl.value = ""; 
+            return;
+        }
+
         try {
-            await db.collection("messages").add({ expediteur: SEG_ID, texte: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            await db.collection("messages").add({
+                expediteur: SEG_ID,
+                texte: messageText,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
             inputEl.value = "";
-        } catch (e) {}
+        } catch (error) {
+            console.error("Erreur d'envoi du message :", error);
+        }
     }
 
     function listenChatStream() {
@@ -659,21 +810,39 @@
             snapshot.forEach((doc) => {
                 const msg = doc.data();
                 const estMoi = msg.expediteur === SEG_ID;
+                const classeMessage = estMoi ? "msg-me" : "msg-other";
+                const signatureLabel = estMoi ? "Vous (Fondateur)" : `ID: ${msg.expediteur}`;
+                
                 chatFlow.innerHTML += `
-                    <div class="message ${estMoi ? 'msg-me' : 'msg-other'}">
+                    <div class="message ${classeMessage}">
                         <div>${msg.texte}</div>
-                        <span class="msg-meta">${estMoi ? 'Vous (Fondateur)' : 'ID: ' + msg.expediteur}</span>
-                    </div>`;
+                        <span class="msg-meta">${signatureLabel}</span>
+                    </div>
+                `;
             });
             scrollToBottomChat();
         });
     }
 
-    function scrollToBottomChat() { const cf = document.getElementById('chat-flow'); cf.scrollTop = cf.scrollHeight; }
+    function scrollToBottomChat() {
+        const chatFlow = document.getElementById('chat-flow');
+        chatFlow.scrollTop = chatFlow.scrollHeight;
+    }
 
+    // --- 9. COMPTEUR DYNAMIQUE CAPITAL ---
     let money = 450173947;
-    setInterval(() => { money += Math.floor(Math.random() * 8000); const el = document.getElementById('live-money'); if(el) el.innerText = money.toLocaleString('fr-FR') + " FCFA"; }, 4000);
-    function logout() { localStorage.removeItem("seg_session"); location.reload(); }
+    setInterval(() => {
+        money += Math.floor(Math.random() * 8000);
+        const liveMoneyEl = document.getElementById('live-money');
+        if(liveMoneyEl) liveMoneyEl.innerText = money.toLocaleString('fr-FR') + " FCFA";
+    }, 4000);
+
+    function logout() { 
+        localStorage.removeItem("seg_session"); 
+        location.reload(); 
+    }
+    
+    if(localStorage.getItem("seg_session") === "active") startApp();
 </script>
 </body>
 </html>
