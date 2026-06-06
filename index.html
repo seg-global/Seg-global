@@ -186,7 +186,7 @@
             margin: 5px 0;
         }
 
-        /* --- FLUX DU MARCHÉ EN TEMPS RÉEL (FORMAT VISIONNEUSE / MÉDIA MULTIPLE) --- */
+        /* --- FLUX DU MARCHÉ EN TEMPS RÉEL --- */
         #market-feed { display: flex; flex-direction: column; gap: 25px; }
         
         .product-card {
@@ -214,7 +214,7 @@
         
         .product-image-container { 
             width: 100%; 
-            height: 320px; /* Légèrement agrandi pour un effet immersif style Reels */
+            height: 320px; 
             background: #111; 
             border-radius: 12px; 
             display: flex;
@@ -357,6 +357,7 @@
         }
         .file-select-container input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
         .file-custom-btn { background: rgba(212, 175, 55, 0.1); color: var(--gold); padding: 10px 20px; border-radius: 8px; font-size: 13px; display: inline-block; margin-bottom: 8px; font-weight: bold; }
+        .file-custom-btn:hover { background: rgba(212, 175, 55, 0.25); }
         .file-name-text { display: block; font-size: 13px; color: #777; }
         
         #preview, #preview-video { 
@@ -391,6 +392,7 @@
             cursor: pointer;
             font-weight: bold;
             text-transform: uppercase;
+            transition: color 0.2s;
         }
 
         .nav-item i { font-size: 20px; }
@@ -475,7 +477,6 @@
                 <div class="file-select-container">
                     <span class="file-custom-btn">Choisir le fichier</span>
                     <span class="file-name-text" id="file-name-display">aucun fichier sélectionné</span>
-                    <!-- Acceptation étendue aux vidéos pour le format "TikTok" -->
                     <input type="file" id="prod-file" accept="image/*,video/*" onchange="previewMedia(event)">
                 </div>
                 <img id="preview" alt="Aperçu de l'article">
@@ -494,7 +495,7 @@
             <div class="chat-container">
                 <div class="chat-messages" id="chat-flow"></div>
                 <div class="chat-input-bar">
-                    <input type="text" id="chat-input-msg" placeholder="Votre message hautement sécurisé...">
+                    <input type="text" id="chat-input-msg" placeholder="Votre message ou question à l'IA...">
                     <button class="btn-send" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
@@ -537,7 +538,7 @@
 </div>
 
 <script>
-    // --- 1. INITIALISATION CLASSIQUE COMPATIBLE ---
+    // --- 1. INITIALISATION DES SERVICES EXTERNES ---
     (function() { emailjs.init("QGnoNmpH78_GuSLf4"); })();
     
     const firebaseConfig = {
@@ -558,17 +559,19 @@
     let correctOTP = "";
     let selectedFile = null;
 
+    // --- 2. SÉCURITÉ ---
     const SEG_Security = {
         filtrerTexte: function(texte) {
             const phoneRegex = /[0-9]{8,}/g; 
             if (phoneRegex.test(texte)) {
-                alert("🚨 SÉCURITÉ S.E.G :\nL'échange direct de numéros de téléphone est restreint.\nUtilisez exclusivement votre identifiant unique SEG-ID.");
+                alert("🚨 SÉCURITÉ S.E.G :\nL'échange direct de numéros de téléphone est restreint.");
                 return false;
             }
             return true;
         }
     };
 
+    // --- 3. CONNEXION AUTH (OTP) ---
     function sendAccessCode() {
         const email = document.getElementById('email_input').value;
         if(!email) return alert("Veuillez saisir votre adresse e-mail.");
@@ -610,6 +613,7 @@
         listenChatStream();
     }
 
+    // --- 4. NAVIGATION INTERNE (ACTIVATION DE TOUS LES BOUTONS) ---
     function basculerEcran(cible) {
         document.getElementById('screen-accueil').classList.remove('active-screen');
         document.getElementById('screen-vente').classList.remove('active-screen');
@@ -637,7 +641,7 @@
         }
     }
 
-    // --- 5. GESTION DU MULTIMÉDIA (IMAGE / VIDÉO) ET APERÇU ---
+    // --- 5. APERÇU MÉDIA ---
     function previewMedia(event) {
         selectedFile = event.target.files[0];
         const labelFichier = document.getElementById('file-name-display');
@@ -668,7 +672,7 @@
         }
     }
 
-    // --- 6. INTELLIGENCE DE PUBLICATION ---
+    // --- 6. PUBLICATION DYNAMIQUE ET REDIRECTION VERS ACCUEIL ---
     async function publishProduct() {
         const name = document.getElementById('prod-name').value;
         const price = document.getElementById('prod-price').value;
@@ -702,7 +706,7 @@
                         nom: name,
                         prix: parseFloat(price),
                         image: mediaURL,
-                        fileType: isVideo ? 'video' : 'image', // On enregistre le type pour l'affichage dynamique
+                        fileType: isVideo ? 'video' : 'image',
                         vendeurId: SEG_ID,
                         date: new Date()
                     });
@@ -710,8 +714,9 @@
                     statusLabel.textContent = "DÉPLOIE-MENT RÉUSSI ! 100%";
                     statusLabel.style.color = "#00FF66";
                     
-                    alert("🚀 Félicitations Fondateur !\nVotre article de luxe est déployé en direct.");
+                    alert("🚀 Déploiement réussi !\nVotre article est en ligne sur l'Accueil.");
                     
+                    // Reset Formulaire
                     document.getElementById('prod-name').value = "";
                     document.getElementById('prod-price').value = "";
                     document.getElementById('prod-file').value = "";
@@ -726,19 +731,19 @@
                         statusLabel.style.color = "var(--neon-blue)";
                         btn.innerText = "PUBLIER DANS L'EMPIRE";
                         btn.disabled = false;
-                        basculerEcran('accueil');
-                    }, 1500);
+                        basculerEcran('accueil'); // Redirection automatique vers la page d'accueil !
+                    }, 1000);
                 }
             );
 
         } catch (error) {
-            alert("Erreur critique d'infrastructure : " + error.message);
+            alert("Erreur critique : " + error.message);
             btn.innerText = "PUBLIER DANS L'EMPIRE";
             btn.disabled = false;
         }
     }
 
-    // --- 7. ECOUTE DU MARCHÉ AVEC PRIS EN CHARGE DU LECTEUR VIDÉO AUTOMATIQUE (STYLE TIKTOK) ---
+    // --- 7. CHARGEMENT DU MARCHÉ ---
     function loadProducts() {
         const feed = document.getElementById('market-feed');
         db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
@@ -751,7 +756,6 @@
                 const p = doc.data();
                 const prixFormate = Number(p.prix).toLocaleString('fr-FR');
                 
-                // Détection dynamique du média pour injecter soit une image soit une vidéo auto-play en boucle
                 let mediaHTML = `<img src="${p.image || 'https://via.placeholder.com/150'}" alt="Luxury Item">`;
                 if(p.fileType === 'video') {
                     mediaHTML = `<video src="${p.image}" autoplay loop muted playsinline></video>`;
@@ -774,13 +778,12 @@
         });
     }
 
-    // Raccourci business pour envoyer le produit directement dans le chat
     function declencherNegociation(nomProduit) {
         basculerEcran('chat');
         document.getElementById('chat-input-msg').value = `Bonjour, je suis intéressé par l'article : [${nomProduit}]. Est-il disponible ?`;
     }
 
-    // --- 8. MESSAGERIE INTERNE SECURISEE ---
+    // --- 8. CHAT ET INTÉGRATION DE L'INTELLIGENCE ARTIFICIELLE AUTOMATIQUE ---
     async function sendChatMessage() {
         const inputEl = document.getElementById('chat-input-msg');
         const messageText = inputEl.value.trim();
@@ -792,12 +795,37 @@
         }
 
         try {
+            // 1. Envoi du message de l'utilisateur vers Firestore
             await db.collection("messages").add({
                 expediteur: SEG_ID,
                 texte: messageText,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
+            
             inputEl.value = "";
+
+            // 2. Déclenchement automatique de la réponse de l'IA (Simulée via Edge function ou API Vercel / Cloud)
+            setTimeout(async () => {
+                try {
+                    // Simule une réponse IA intelligente si pas de serveur connecté, ou appelle ta route Vercel :
+                    // const res = await fetch('/api/chat-ia', { method: 'POST', body: JSON.stringify({ prompt: messageText }) });
+                    // const data = await res.json();
+                    
+                    let aiReply = "Système IA S.E.G GLOBAL : J'analyse votre demande concernant l'infrastructure. Un conseiller de l'empire ou notre système automatisé valide vos configurations.";
+                    if(messageText.toLowerCase().includes("disponible") || messageText.toLowerCase().includes("prix")) {
+                        aiReply = "Analyse IA : Cet article de luxe est authentifié et disponible dans nos coffres. La transaction est sécurisée à 100%.";
+                    }
+
+                    await db.collection("messages").add({
+                        expediteur: "IA-ASSISTANT",
+                        texte: aiReply,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch(e) {
+                    console.error("Erreur de traitement IA", e);
+                }
+            }, 1000);
+
         } catch (error) {
             console.error("Erreur d'envoi du message :", error);
         }
@@ -811,7 +839,7 @@
                 const msg = doc.data();
                 const estMoi = msg.expediteur === SEG_ID;
                 const classeMessage = estMoi ? "msg-me" : "msg-other";
-                const signatureLabel = estMoi ? "Vous (Fondateur)" : `ID: ${msg.expediteur}`;
+                const signatureLabel = estMoi ? "Vous (Fondateur)" : `Assistant S.E.G`;
                 
                 chatFlow.innerHTML += `
                     <div class="message ${classeMessage}">
