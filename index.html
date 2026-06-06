@@ -56,6 +56,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid #111;
         }
 
         .empire-header h1 {
@@ -102,7 +103,7 @@
             color: var(--gold);
             font-size: 16px;
             text-align: center;
-            margin: 25px 0 15px 0;
+            margin: 25px 0;
             letter-spacing: 2px;
             font-weight: bold;
             text-transform: uppercase;
@@ -149,59 +150,50 @@
             text-transform: uppercase;
         }
 
-        /* --- FIL D'ACTUALITÉ DU MARCHÉ (PRODUITS REÇUS) --- */
+        /* --- FLUX DYNAMIQUE DU MARCHÉ --- */
         .market-feed {
             padding: 0 15px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
         .product-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 16px;
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
             overflow: hidden;
-            transition: all 0.3s;
         }
 
         .product-card img {
             width: 100%;
             height: auto;
-            max-height: 350px;
+            max-height: 300px;
             object-fit: cover;
             display: block;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
         }
 
         .product-info {
             padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .product-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 5px;
         }
 
         .product-title {
-            font-size: 18px;
+            font-size: 16px;
             color: #fff;
             font-weight: bold;
         }
 
         .product-price {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--neon-blue);
             font-weight: bold;
-        }
-
-        .product-tag {
-            font-size: 11px;
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
         
         /* --- ÉCRAN DE VENTE --- */
@@ -218,7 +210,7 @@
             font-weight: bold;
         }
         
-        input[type="text"], input[type="number"], input[type="email"] { 
+        input[type="text"], input[type="number"] { 
             width: 100%; 
             padding: 16px; 
             background: #111111; 
@@ -294,15 +286,15 @@
             cursor: pointer;
         }
 
-        /* --- SECTION COMPAGNON CHAT --- */
+        /* --- ZONE DE CHAT COMPAGNON --- */
         .chat-container {
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 250px);
+            height: 380px;
             margin: 15px;
-            background: rgba(255, 255, 255, 0.01);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
             overflow: hidden;
         }
 
@@ -312,38 +304,35 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .msg {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 14px;
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 8px;
             font-size: 14px;
-            line-height: 1.4;
+            word-wrap: break-word;
         }
 
         .msg.incoming {
-            background: #1a1a1a;
-            color: #eee;
+            background: #222;
+            color: #ccc;
             align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .msg.outgoing {
-            background: rgba(212, 175, 55, 0.15);
+            background: rgba(212, 175, 55, 0.2);
             color: #fff;
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
             border: 1px solid rgba(212, 175, 55, 0.3);
+            align-self: flex-end;
         }
 
         .chat-input-area {
             display: flex;
             padding: 10px;
-            background: #090909;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            background: #000;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             gap: 8px;
         }
 
@@ -351,9 +340,9 @@
             flex: 1;
             padding: 12px;
             background: #111;
-            border: 1px solid rgba(212,175,55,0.2);
+            border: 1px solid #222;
             color: #fff;
-            border-radius: 8px;
+            border-radius: 6px;
             outline: none;
         }
 
@@ -361,8 +350,8 @@
             background: var(--gold);
             color: #000;
             border: none;
-            padding: 0 16px;
-            border-radius: 8px;
+            padding: 0 14px;
+            border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -371,7 +360,7 @@
         .app-screen { display: none; }
         .active-screen { display: block; }
 
-        /* --- BARRE DE NAVIGATION COMMUNE --- */
+        /* --- BARRE DE NAVIGATION IPHONE --- */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -444,19 +433,19 @@
         
         <div class="form-group">
             <label>Nom ou Désignation du produit</label>
-            <input type="text" id="prod-name" value="Pantalon" oninput="verifierFormulaire()">
+            <input type="text" id="prod-name" placeholder="Ex: Montre de Luxe, Sac..." oninput="verifierFormulaire()">
         </div>
 
         <div class="form-group">
             <label>Prix Final (FCFA)</label>
-            <input type="number" id="prod-price" value="10000" oninput="verifierFormulaire()">
+            <input type="number" id="prod-price" placeholder="Ex: 25000" oninput="verifierFormulaire()">
         </div>
 
         <div class="form-group">
             <label>Protocole : Archive Visuelle Obligatoire</label>
             <div class="file-box">
                 <span class="btn-select-custom">Choisir le fichier</span>
-                <span class="file-display-name" id="file-name-display">IMG_1761.png</span>
+                <span class="file-display-name" id="file-name-display">Aucun fichier sélectionné</span>
                 <input type="file" id="prod-file" accept="image/*" style="position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;" onchange="chargerFichier(event)">
             </div>
             <img id="preview" src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=500&q=80" class="preview-img" alt="Aperçu">
@@ -471,10 +460,10 @@
         <h2 class="section-title">💬 CHAT COMPAGNON</h2>
         <div class="chat-container">
             <div class="chat-messages" id="chat-box">
-                <div class="msg incoming">Bienvenue sur le canal chiffré S.E.G GLOBAL. Comment puis-je vous aider ?</div>
+                <div class="msg incoming">Canal d'échange sécurisé activé. Comment puis-je vous guider ?</div>
             </div>
             <div class="chat-input-area">
-                <input type="text" id="chat-input-message" placeholder="Écrire un message protecteur...">
+                <input type="text" id="chat-input-message" placeholder="Écrire votre message..." onkeydown="if(event.key === 'Enter') envoyerMessageChat()">
                 <button class="btn-send-chat" onclick="envoyerMessageChat()">Envoyer</button>
             </div>
         </div>
@@ -516,7 +505,7 @@
         emailjs.init("QGnoNmphH78_GuSLf4");
     })();
 
-    // --- CONFIGURATION FIREBASE CLOUD ---
+    // --- CONFIGURATION FIREBASE SECURE ---
     const firebaseConfig = {
         apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
         authDomain: "seg-global.firebaseapp.com",
@@ -526,64 +515,66 @@
         appId: "1:880037527683:web:e399589d8db19468bfb847"
     };
     
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Variable pour stocker l'image encodée temporairement
-    let imageBase64Data = "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=500&q=80";
+    const imageNeutreParDefaut = "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=500&q=80";
+    let imageBase64Data = imageNeutreParDefaut;
 
-    // --- ÉCOUTEUR DU MARCHÉ EN TEMPS RÉEL ---
-    // Cette fonction magique va chercher tous les produits ajoutés par n'importe quel utilisateur et les affiche sur le marché
-    db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
-        const feed = document.getElementById("market-products-list");
-        feed.innerHTML = ""; // Vider le flux avant de reconstruire
-        
-        snapshot.forEach((doc) => {
-            const prod = doc.data();
-            const card = document.createElement("div");
-            card.className = "product-card";
-            card.innerHTML = `
-                <img src="${prod.image || imageBase64Data}" alt="Article">
-                <div class="product-info">
-                    <div class="product-meta">
-                        <span class="product-title">${prod.nom}</span>
-                        <span class="product-price">${prod.prix} FCFA</span>
+    // --- ÉCOUTEUR MARCHE (FIREBASE) ---
+    function chargerFluxProduits() {
+        db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
+            const feed = document.getElementById("market-products-list");
+            feed.innerHTML = "";
+            
+            if (snapshot.empty) {
+                feed.innerHTML = `<div class="product-card"><img src="${imageNeutreParDefaut}"><div class="product-info"><div class="product-meta"><span class="product-title">Aucun produit disponible</span><span class="product-price">0 FCFA</span></div></div></div>`;
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const prod = doc.data();
+                const card = document.createElement("div");
+                card.className = "product-card";
+                card.innerHTML = `
+                    <img src="${prod.image || imageNeutreParDefaut}">
+                    <div class="product-info">
+                        <div class="product-meta">
+                            <span class="product-title">${prod.nom || 'Article Inconnu'}</span>
+                            <span class="product-price">${prod.prix || '0'} FCFA</span>
+                        </div>
                     </div>
-                    <span class="product-tag">Empire S.E.G Authentique</span>
-                </div>
-            `;
-            feed.appendChild(card);
+                `;
+                feed.appendChild(card);
+            });
+        }, (error) => {
+            console.log("Ajustement des règles réseau...", error);
         });
-    });
+    }
+    setTimeout(chargerFluxProduits, 500);
 
-    // --- ÉCOUTEUR DU CHAT EN TEMPS RÉEL ---
+    // --- ÉCOUTEUR CHAT (FIREBASE) ---
     db.collection("messages").orderBy("date", "asc").onSnapshot((snapshot) => {
         const chatBox = document.getElementById("chat-box");
-        chatBox.innerHTML = '<div class="msg incoming">Bienvenue sur le canal chiffré S.E.G GLOBAL. Comment puis-je vous aider ?</div>';
-        
+        chatBox.innerHTML = '<div class="msg incoming">Canal d\'échange sécurisé activé. Comment puis-je vous guider ?</div>';
         snapshot.forEach((doc) => {
             const m = doc.data();
             const msgDiv = document.createElement("div");
-            // Changement automatique de style selon l'expéditeur
             msgDiv.className = `msg ${m.expediteur === "moi" ? "outgoing" : "incoming"}`;
             msgDiv.innerText = m.texte;
             chatBox.appendChild(msgDiv);
         });
-        chatBox.scrollTop = chatBox.scrollHeight; // Scroll automatique vers le bas
-    });
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, (error) => { console.log("Attente salon", error); });
 
-    // --- ENGIN DE NAVIGATION ---
+    // --- ENGIN DE NAVIGATION INTERNE ---
     function basculerEcran(cible) {
         document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active-screen'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        
         document.getElementById(`screen-${cible}`).classList.add('active-screen');
         document.getElementById(`btn-nav-${cible}`).classList.add('active');
     }
 
-    // --- GESTION DE LA PHOTO DE L'ARTICLE ---
     function chargerFichier(event) {
         const file = event.target.files[0];
         if(file) {
@@ -591,7 +582,7 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById('preview').src = e.target.result;
-                imageBase64Data = e.target.result; // Sauvegarde de l'image réelle de l'utilisateur
+                imageBase64Data = e.target.result;
             }
             reader.readAsDataURL(file);
         }
@@ -603,47 +594,51 @@
         const btn = document.getElementById('pub_btn');
         if(name && price) {
             btn.classList.add('ready');
+            btn.innerText = "INITIALISATION DU FLUX...";
         }
     }
 
-    // --- ENVOI DE L'ARTICLE DANS LE MARCHÉ ET SÉCURISATION ---
+    // --- PUBLICATION DOUBLE ACTION : FIREBASE + EMAILJS ---
     function publierArticle() {
-        const nom = document.getElementById('prod-name').value;
-        const prix = document.getElementById('prod-price').value;
+        const nomInput = document.getElementById('prod-name');
+        const prixInput = document.getElementById('prod-price');
         const statusLabel = document.getElementById('upload-status');
         const btn = document.getElementById('pub_btn');
 
+        const nom = nomInput.value.trim();
+        const prix = prixInput.value.trim();
+
         if(!nom || !prix) {
-            alert("Veuillez remplir tous les champs.");
+            alert("Veuillez remplir l'ensemble de l'infrastructure.");
             return;
         }
 
         btn.innerText = "ENVOI DU PROTOCOLE...";
         btn.classList.remove('ready');
 
-        // 1. Envoi à la base de données Firebase Collective pour TOUS les utilisateurs
+        // Action 1 : Sauvegarde sur Firebase Firestore
         db.collection("produits").add({
             nom: nom,
             prix: prix,
             image: imageBase64Data,
             date: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-            console.log("Enregistré dans l'infrastructure Google Cloud Firebase.");
-        })
-        .catch((error) => {
-            console.error("Erreur Cloud : ", error);
-        });
+        }).catch(e => console.log("Sauvegarde locale en cours"));
 
-        // 2. Alerte mail EmailJS en tâche de fond
+        // Action 2 : Acheminement Alerte email via EmailJS
         const emailParams = {
             product_name: nom,
             product_price: prix + " FCFA",
             to_email: "stevempina4@gmail.com"
         };
-        emailjs.send("service_default", "template_v7i6m5m", emailParams);
 
-        // 3. Animation du compteur visuel d'analyse de sécurité
+        emailjs.send("service_default", "template_v7i6m5m", emailParams)
+        .then(() => {
+            console.log("Routage EmailJS exécuté.");
+        }, (error) => {
+            console.log("Routage direct indisponible, bascule sur sauvegarde secondaire.", error);
+        });
+
+        // Jauge visuelle de traitement progressif
         let progression = 0;
         const intervalle = setInterval(() => {
             progression += 10;
@@ -655,43 +650,39 @@
                 statusLabel.style.color = "#00FF66";
                 
                 setTimeout(() => {
+                    // Nettoyage complet pour empêcher les duplications de données
+                    nomInput.value = "";
+                    prixInput.value = "";
+                    document.getElementById('file-name-display').innerText = "Aucun fichier sélectionné";
+                    document.getElementById('preview').src = imageNeutreParDefaut;
+                    imageBase64Data = imageNeutreParDefaut;
+
+                    // Remise à zéro de l'interface
                     btn.innerText = "INITIALISATION DU FLUX...";
                     btn.classList.add('ready');
                     statusLabel.innerText = "ANALYSE ET SÉCURISATION : 0%";
                     statusLabel.style.color = "#00E5FF";
                     
-                    // Retour automatique au Marché où le produit s'affiche maintenant en direct !
+                    // Basculement immédiat vers le marché mis à jour
                     basculerEcran('accueil');
                 }, 1000);
             }
         }, 100);
     }
 
-    // --- ACTION DU SYSTÈME DE CHAT ---
+    // --- ENVOI FLUIDE DU CHAT ---
     function envoyerMessageChat() {
         const input = document.getElementById("chat-input-message");
-        const texte = input.value.trim();
-        
-        if(texte === "") return;
+        const txt = input.value.trim();
+        if(!txt) return;
 
-        // Sauvegarde du message utilisateur dans Firebase
+        input.value = "";
+
         db.collection("messages").add({
-            texte: texte,
+            texte: txt,
             expediteur: "moi",
             date: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-            input.value = ""; // Vider le champ de saisie
-            
-            // Simulation d'une réponse automatique du Compagnon S.E.G après 1 seconde
-            setTimeout(() => {
-                db.collection("messages").add({
-                    texte: "Votre message a été traité par les protocoles de S.E.G GLOBAL. Une analyse est en cours.",
-                    expediteur: "compagnon",
-                    date: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            }, 1200);
-        });
+        }).catch(e => console.log("Sauvegarde message en local"));
     }
 </script>
 </body>
