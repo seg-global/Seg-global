@@ -1,198 +1,139 @@
-import React, { useState } from 'react';
-import { Shield, Smartphone, Coins, MessageSquare, PlusCircle, ShoppingBag, ArrowUpRight } from 'lucide-react';
-
-export default function App() {
-  const [currentTab, setCurrentTab] = useState('market');
-  const [chatMessage, setChatMessage] = useState('');
-  const [chatAlert, setChatAlert] = useState('');
-  const [vaultEscrow, setVaultEscrow] = useState(1240000);
-  const [showModal, setShowModal] = useState(false);
-
-  // Filtre de sécurité pour le Chat
-  const handleSendMessage = () => {
-    const forbidden = [/whatsapp/i, /telegram/i, /instagram/i, /\d{8,}/];
-    const hasForbidden = forbidden.some(regex => regex.test(chatMessage));
-
-    if (hasForbidden) {
-      setChatAlert("Sécurité S.E.G : Communication hors plateforme interdite.");
-    } else {
-      setChatAlert("");
-      setChatMessage("");
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-black text-white font-sans flex flex-col justify-between" style={{ backgroundColor: '#000000' }}>
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-black">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S.E.G GLOBAL</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script>
+    // Système de navigation ultra-léger pour mobile
+    function switchTab(tabId) {
+      // Masquer tous les onglets
+      document.getElementById('tab-market').classList.add('hidden');
+      document.getElementById('tab-sell').classList.add('hidden');
+      document.getElementById('tab-chat').classList.add('hidden');
+      document.getElementById('tab-vault').classList.add('hidden');
       
-      {/* HEADER */}
-      <header className="p-6 border-b border-yellow-600/20 text-center bg-zinc-950">
-        <p className="text-xs tracking-widest text-yellow-600/60 uppercase">Collection Privée</p>
-        <h1 className="text-2xl font-bold tracking-tight text-yellow-500 mt-1">S.E.G GLOBAL</h1>
-      </header>
+      // Afficher l'onglet sélectionné
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
 
-      {/* MAIN CONTENT CONTAINER */}
-      <main className="flex-1 p-4 overflow-y-auto pb-24">
-        
-        {/* TAB 1: MARKET */}
-        {currentTab === 'market' && (
-          <div className="space-y-6 animate-fadeIn">
-            <h2 className="text-xl font-semibold text-yellow-500 mb-4">Le Marché</h2>
-            <div className="bg-zinc-900 border border-yellow-600/30 rounded-2xl overflow-hidden shadow-xl">
-              <div className="h-64 bg-gradient-to-b from-zinc-800 to-zinc-900 flex items-center justify-center p-4">
-                <div className="w-40 h-40 rounded-full border-4 border-yellow-500/40 bg-zinc-950 flex items-center justify-center shadow-2xl">
-                  <span className="text-yellow-500 text-6xl">👑</span>
-                </div>
-              </div>
-              <div className="p-6 space-y-4">
-                <span className="text-xs text-yellow-600/80 uppercase tracking-wider">Haute Horlogerie</span>
-                <h3 className="text-xl font-bold text-yellow-500">Tourbillon Royale 24K</h3>
-                <p className="text-sm text-zinc-400 leading-relaxed">
-                  Mouvement tourbillon manufacture, boîtier or massif 24 carats, édition unique numérotée.
-                </p>
-                <div className="flex items-center justify-between pt-4 border-t border-zinc-800">
-                  <span className="text-xl font-mono text-yellow-500 font-bold">$1,240,000</span>
-                  <button 
-                    onClick={() => setShowModal(true)}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-xl transition duration-300 shadow-lg flex items-center gap-2"
-                  >
-                    <Shield size={16} /> Acquire via Escrow
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+      // Réinitialiser le style de tous les boutons du menu bas
+      const buttons = document.querySelectorAll('.nav-btn');
+      buttons.forEach(btn => btn.classList.remove('text-yellow-500'));
+      buttons.forEach(btn => btn.classList.add('text-zinc-500'));
 
-        {/* TAB 2: SELL */}
-        {currentTab === 'sell' && (
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-yellow-500">Vendre un Bien</h2>
-            <div className="bg-zinc-900 border border-yellow-600/20 rounded-2xl p-6 space-y-4">
-              <div>
-                <label className="block text-xs text-yellow-600 uppercase tracking-wider mb-2">Désignation</label>
-                <input type="text" placeholder="Ex. Montre, Automobile, Œuvre d'art" className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-white focus:border-yellow-500 outline-none" />
-              </div>
-              <div>
-                <label className="block text-xs text-yellow-600 uppercase tracking-wider mb-2">Prix Demandé (USD)</label>
-                <input type="number" placeholder="$0" className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-white focus:border-yellow-500 outline-none" />
-              </div>
-              <div>
-                <label className="block text-xs text-yellow-600 uppercase tracking-wider mb-2">Description</label>
-                <textarea rows={4} placeholder="Provenance, authenticité, certificats..." className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-white focus:border-yellow-500 outline-none"></textarea>
-              </div>
-              <button className="w-full bg-yellow-500 text-black font-bold py-4 rounded-xl shadow-lg uppercase tracking-wider text-sm mt-2">
-                Soumettre pour vérification
-              </button>
-            </div>
-          </div>
-        )}
+      // Activer le bouton cliqué
+      document.getElementById('btn-' + tabId).classList.add('text-yellow-500');
+      document.getElementById('btn-' + tabId).classList.remove('text-zinc-500');
+    }
 
-        {/* TAB 3: CHAT */}
-        {currentTab === 'chat' && (
-          <div className="space-y-4 flex flex-col h-full">
-            <h2 className="text-xl font-semibold text-yellow-500">Le Concierge</h2>
-            <div className="bg-zinc-900 border border-yellow-600/20 rounded-2xl p-4 flex-1 space-y-4 min-h-[300px] flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="bg-zinc-950 border border-zinc-800 p-3 rounded-xl max-w-[85%]">
-                  <p className="text-sm text-yellow-600/80 font-semibold mb-1">Acheteur</p>
-                  <p className="text-sm">Bonjour, la Tourbillon Royale est-elle toujours disponible ?</p>
-                </div>
-                <div className="bg-yellow-500 text-black p-3 rounded-xl max-w-[85%] ml-auto">
-                  <p className="text-sm font-semibold mb-1">Vous</p>
-                  <p className="text-sm">Oui, l'acquisition se fait exclusivement via Escrow sécurisé.</p>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                {chatAlert && (
-                  <div className="bg-red-950/80 border border-red-700 text-red-400 text-xs p-3 rounded-xl font-medium">
-                    {chatAlert}
-                  </div>
-                )}
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    value={chatMessage}
-                    onChange={(e) => setChatMessage(e.target.value)}
-                    placeholder="Votre message..." 
-                    className="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-yellow-500 text-sm"
-                  />
-                  <button onClick={handleSendMessage} className="bg-yellow-500 text-black p-3 rounded-xl font-bold">
-                    ➔
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+    // Gestion du Chat (Simulation en attendant Firebase)
+    function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const messageText = input.value.trim();
+      if (messageText === '') return;
 
-        {/* TAB 4: VAULT */}
-        {currentTab === 'vault' && (
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-yellow-500">Le Coffre</h2>
-            <div className="grid grid-cols-1 gap-4">
-              <div className="bg-zinc-900 border border-yellow-600/30 rounded-2xl p-6">
-                <p className="text-xs text-yellow-600/60 uppercase tracking-widest mb-1">Fonds Bloqués (Escrow)</p>
-                <p className="text-3xl font-mono font-bold text-yellow-500">${vaultEscrow.toLocaleString()}</p>
-              </div>
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-                <p className="text-xs text-zinc-500 uppercase tracking-widest mb-1">Solde Disponible</p>
-                <p className="text-2xl font-mono font-bold text-zinc-400">$0</p>
-              </div>
-            </div>
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-              <h3 className="text-sm font-semibold text-yellow-600 uppercase tracking-wider mb-4">Mouvements Récents</h3>
-              <div className="flex items-center justify-between text-sm border-b border-zinc-800 pb-3">
-                <div>
-                  <p className="font-medium">Escrow — Tourbillon Royale</p>
-                  <p className="text-xs text-zinc-500">En attente de confirmation</p>
-                </div>
-                <span className="text-yellow-500 font-mono font-bold">-${vaultEscrow.toLocaleString()}</span>
-              </div>
-            </div>
-          </div>
-        )}
+      // Filtre de sécurité basique S.E.G
+      if (messageText.toLowerCase().includes('whatsapp') || messageText.toLowerCase().includes('+237')) {
+        document.getElementById('chat-alert').classList.remove('hidden');
+        return;
+      } else {
+        document.getElementById('chat-alert').classList.add('hidden');
+      }
 
-      </main>
-
-      {/* TRANSACTION MODAL */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-zinc-900 border border-yellow-500 rounded-2xl p-6 max-w-sm w-full space-y-4">
-            <h3 className="text-lg font-bold text-yellow-500">Ordre d'Achat Sécurisé</h3>
-            <div className="text-sm space-y-2 text-zinc-300">
-              <div className="flex justify-between"><span>Montant :</span><span className="font-mono text-white">$1,240,000</span></div>
-              <div className="flex justify-between text-yellow-600/80"><span>Frais S.E.G (3%) :</span><span className="font-mono">$37,200</span></div>
-              <div className="border-t border-zinc-800 pt-2 flex justify-between font-bold text-white"><span>Total :</span><span className="font-mono text-yellow-500">$1,277,200</span></div>
-            </div>
-            <div className="flex gap-2 pt-2">
-              <button onClick={() => setShowModal(false)} className="flex-1 bg-zinc-800 text-white py-2 rounded-xl text-sm font-medium">Annuler</button>
-              <button onClick={() => { setVaultEscrow(1240000); setShowModal(false); setCurrentTab('vault'); }} className="flex-1 bg-yellow-500 text-black py-2 rounded-xl text-sm font-bold">Confirmer</button>
-            </div>
+      const chatContainer = document.getElementById('chat-messages');
+      
+      // Message de l'utilisateur
+      const userBubble = `
+        <div class="flex justify-end animate-fade-in">
+          <div class="bg-yellow-500 text-black rounded-2xl px-4 py-2.5 max-w-[80%] text-xs font-medium shadow-md">
+            ${messageText}
           </div>
         </div>
-      )}
+      `;
+      chatContainer.innerHTML += userBubble;
+      input.value = '';
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  </script>
+</head>
+<body class="h-full text-white font-sans flex flex-col justify-between antialiased pb-20 select-none">
 
-      {/* NAVIGATION BAR */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-yellow-600/20 p-3 flex justify-around items-center z-40">
-        <button onClick={() => setCurrentTab('market')} className={`flex flex-col items-center gap-1 transition ${currentTab === 'market' ? 'text-yellow-500 font-bold' : 'text-zinc-500'}`}>
-          <ShoppingBag size={20} />
-          <span className="text-[10px] uppercase tracking-wider">Market</span>
-        </button>
-        <button onClick={() => setCurrentTab('sell')} className={`flex flex-col items-center gap-1 transition ${currentTab === 'sell' ? 'text-yellow-500 font-bold' : 'text-zinc-500'}`}>
-          <PlusCircle size={20} />
-          <span className="text-[10px] uppercase tracking-wider">Sell</span>
-        </button>
-        <button onClick={() => setCurrentTab('chat')} className={`flex flex-col items-center gap-1 transition ${currentTab === 'chat' ? 'text-yellow-500 font-bold' : 'text-zinc-500'}`}>
-          <MessageSquare size={20} />
-          <span className="text-[10px] uppercase tracking-wider">Chat</span>
-        </button>
-        <button onClick={() => setCurrentTab('vault')} className={`flex flex-col items-center gap-1 transition ${currentTab === 'vault' ? 'text-yellow-500 font-bold' : 'text-zinc-500'}`}>
-          <Coins size={20} />
-          <span className="text-[10px] uppercase tracking-wider">Vault</span>
-        </button>
-      </nav>
-
+  <div id="tab-market" class="flex-1 overflow-y-auto p-4 space-y-6">
+    <div class="space-y-1">
+      <span class="text-[10px] tracking-widest text-zinc-500 uppercase font-semibold">Collection Privée</span>
+      <h1 class="text-3xl font-serif font-bold text-yellow-500">Le Marché</h1>
     </div>
-  );
-}
+
+    <div class="bg-zinc-950 border border-yellow-600/10 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="h-64 bg-zinc-900 flex items-center justify-center relative bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&q=80&w=600');">
+        <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent"></div>
+      </div>
+      <div class="p-5 space-y-4">
+        <div class="space-y-1">
+          <span class="text-[9px] tracking-widest text-yellow-600 uppercase font-bold">Haute Horlogerie</span>
+          <h2 class="text-xl font-bold tracking-tight">Tourbillon Royale 24K</h2>
+          <p class="text-xs text-zinc-400 leading-relaxed">Mouvement tourbillon manufacture, boîtier or massif 24 carats, édition unique numérotée.</p>
+        </div>
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xl font-mono font-bold text-yellow-500 tracking-tight">$1,240,000</span>
+          <button class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg transition flex items-center gap-1.5">
+            <i class="fa-solid fa-shield"></i> Acquire via Escrow
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-sell" class="flex-1 overflow-y-auto p-4 space-y-6 hidden">
+    <div class="space-y-1">
+      <span class="text-[10px] tracking-widest text-zinc-500 uppercase font-semibold">Mise en Vente</span>
+      <h1 class="text-3xl font-serif font-bold text-yellow-500">Vendre un Bien</h1>
+    </div>
+
+    <div class="bg-zinc-950 border border-zinc-900 rounded-2xl p-5 space-y-4">
+      <div class="space-y-1">
+        <label class="text-[10px] uppercase text-zinc-500 tracking-wider">Désignation</label>
+        <input type="text" placeholder="Ex. Montre, Automobile, Œuvre d'art" class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs outline-none focus:border-yellow-500 transition" />
+      </div>
+      <div class="space-y-1">
+        <label class="text-[10px] uppercase text-zinc-500 tracking-wider">Prix Demandé (USD)</label>
+        <input type="number" placeholder="$0" class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs outline-none focus:border-yellow-500 font-mono text-yellow-500 transition" />
+      </div>
+      <div class="space-y-1">
+        <label class="text-[10px] uppercase text-zinc-500 tracking-wider">Description</label>
+        <textarea rows="4" placeholder="Provenance, authenticité, certificats..." class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs outline-none focus:border-yellow-500 transition resize-none"></textarea>
+      </div>
+      <button class="w-full bg-yellow-500 text-black font-bold py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-lg mt-2 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-cloud-arrow-up"></i> Soumettre pour vérification
+      </button>
+    </div>
+  </div>
+
+  <div id="tab-chat" class="flex-1 flex flex-col hidden h-full overflow-hidden">
+    <div class="p-4 border-b border-zinc-900 bg-black">
+      <span class="text-[10px] tracking-widest text-zinc-500 uppercase font-semibold">Messagerie Privée</span>
+      <h1 class="text-xl font-serif font-bold text-yellow-500">Le Concierge</h1>
+    </div>
+
+    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
+      <div class="flex flex-col space-y-1">
+        <span class="text-[9px] text-zinc-500 pl-1">Acheteur</span>
+        <div class="bg-zinc-900 border border-zinc-800 text-zinc-300 rounded-2xl px-4 py-2.5 max-w-[80%] leading-relaxed">
+          Bonjour, la Tourbillon Royale est-elle toujours disponible ?
+        </div>
+      </div>
+      <div class="flex flex-col space-y-1 items-end">
+        <span class="text-[9px] text-zinc-500 pr-1">Vous</span>
+        <div class="bg-yellow-500 text-black font-medium rounded-2xl px-4 py-2.5 max-w-[80%] shadow-md">
+          Oui, l'acquisition se fait exclusivement via Escrow sécurisé.
+        </div>
+      </div>
+    </div>
+
+    <div id="chat-alert" class="mx-4 p-2.5 bg-red-950/40 border border-red-900 text-red-400 text-[10px] rounded-xl hidden flex items-center gap-2">
+      <i class="fa-solid fa-triangle-exclamation"></i> Sécurité S.E.G : Les contacts externes sont interdits.
+    </div>
+
+    <div class="p-4 bg-black border-t border-zinc-900 flex items-center gap-2
