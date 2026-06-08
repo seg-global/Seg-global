@@ -1,689 +1,198 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.E.G GLOBAL - Infrastructure Premium</title>
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="S.E.G GLOBAL">
-    <meta name="theme-color" content="#050505">
+import React, { useState } from 'react';
+import { Shield, Smartphone, Coins, MessageSquare, PlusCircle, ShoppingBag, ArrowUpRight } from 'lucide-react';
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+export default function App() {
+  const [currentTab, setCurrentTab] = useState('market');
+  const [chatMessage, setChatMessage] = useState('');
+  const [chatAlert, setChatAlert] = useState('');
+  const [vaultEscrow, setVaultEscrow] = useState(1240000);
+  const [showModal, setShowModal] = useState(false);
 
-    <style>
-        :root { 
-            --gold: #D4AF37; 
-            --gold-dark: #AA7C11;
-            --bg: #000000; 
-            --neon-blue: #00E5FF; 
-            --glass: rgba(255, 255, 255, 0.03); 
-            --card-bg: rgba(255, 255, 255, 0.02);
-            --border: rgba(212, 175, 55, 0.2);
-        }
+  // Filtre de sécurité pour le Chat
+  const handleSendMessage = () => {
+    const forbidden = [/whatsapp/i, /telegram/i, /instagram/i, /\d{8,}/];
+    const hasForbidden = forbidden.some(regex => regex.test(chatMessage));
+
+    if (hasForbidden) {
+      setChatAlert("Sécurité S.E.G : Communication hors plateforme interdite.");
+    } else {
+      setChatAlert("");
+      setChatMessage("");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white font-sans flex flex-col justify-between" style={{ backgroundColor: '#000000' }}>
+      
+      {/* HEADER */}
+      <header className="p-6 border-b border-yellow-600/20 text-center bg-zinc-950">
+        <p className="text-xs tracking-widest text-yellow-600/60 uppercase">Collection Privée</p>
+        <h1 className="text-2xl font-bold tracking-tight text-yellow-500 mt-1">S.E.G GLOBAL</h1>
+      </header>
+
+      {/* MAIN CONTENT CONTAINER */}
+      <main className="flex-1 p-4 overflow-y-auto pb-24">
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body, html { 
-            background: var(--bg); 
-            color: #fff; 
-            min-height: 100vh; 
-            overflow-x: hidden;
-        }
-        
-        .container { 
-            max-width: 450px; 
-            margin: auto; 
-            padding-bottom: 110px; 
-            box-sizing: border-box;
-        }
-
-        /* --- EN-TÊTE PREMIUM S.E.G --- */
-        .empire-header {
-            text-align: center;
-            padding: 25px 10px 15px 10px;
-            background: #000000;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #111;
-        }
-
-        .empire-header h1 {
-            color: var(--gold);
-            font-size: 28px;
-            letter-spacing: 3px;
-            font-weight: bold;
-        }
-
-        .objectif-badge {
-            color: var(--neon-blue);
-            font-size: 12px;
-            margin-top: 5px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        /* --- STRUCTURE DU MARCHÉ --- */
-        .header-stats { 
-            background: rgba(255, 255, 255, 0.02); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            border-radius: 16px; 
-            padding: 22px 15px; 
-            text-align: center; 
-            margin: 15px; 
-        }
-        
-        .stat-label {
-            font-size: 10px;
-            color: #888;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-
-        .val-money { 
-            font-size: 28px; 
-            color: var(--neon-blue); 
-            font-weight: bold; 
-            letter-spacing: 0.5px;
-        }
-
-        .section-title {
-            color: var(--gold);
-            font-size: 16px;
-            text-align: center;
-            margin: 25px 0;
-            letter-spacing: 2px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .vendeur-card {
-            border: 2px dashed var(--neon-blue);
-            border-radius: 18px;
-            padding: 35px 20px;
-            margin: 15px;
-            text-align: center;
-            background: rgba(0, 229, 255, 0.01);
-        }
-
-        .vendeur-title {
-            color: var(--neon-blue);
-            font-size: 22px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        .vendeur-text {
-            color: #aaa;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 30px;
-            padding: 0 10px;
-        }
-
-        .btn-boutique {
-            display: inline-block;
-            width: 100%;
-            max-width: 280px;
-            background: linear-gradient(180deg, #D4AF37 0%, #AA7C11 100%);
-            color: #000;
-            font-weight: bold;
-            font-size: 14px;
-            padding: 16px;
-            border-radius: 30px;
-            border: none;
-            cursor: pointer;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* --- FLUX DYNAMIQUE DU MARCHÉ --- */
-        .market-feed {
-            padding: 0 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .product-card {
-            background: #111111;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .product-card img {
-            width: 100%;
-            height: auto;
-            max-height: 300px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .product-info {
-            padding: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .product-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .product-title {
-            font-size: 16px;
-            color: #fff;
-            font-weight: bold;
-        }
-
-        .product-price {
-            font-size: 15px;
-            color: var(--neon-blue);
-            font-weight: bold;
-        }
-        
-        /* --- ÉCRAN DE VENTE --- */
-        .form-group {
-            margin: 20px 15px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            color: var(--gold);
-            margin-bottom: 10px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        input[type="text"], input[type="number"] { 
-            width: 100%; 
-            padding: 16px; 
-            background: #111111; 
-            border: 1px solid rgba(212, 175, 55, 0.3); 
-            color: #fff; 
-            border-radius: 12px; 
-            font-size: 16px;
-            outline: none;
-        }
-
-        .file-box {
-            border: 1px dashed rgba(212, 175, 55, 0.4);
-            padding: 25px;
-            text-align: center;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.01);
-            position: relative;
-        }
-
-        .btn-select-custom {
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--gold);
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 5px;
-        }
-
-        .file-display-name {
-            display: block;
-            font-size: 13px;
-            color: var(--neon-blue);
-            margin-top: 5px;
-        }
-        
-        .preview-img {
-            display: block;
-            width: 100%;
-            border-radius: 12px;
-            margin-top: 15px;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-        }
-
-        .status-text {
-            color: var(--neon-blue);
-            font-weight: bold;
-            font-size: 14px;
-            text-align: center;
-            margin: 20px 0;
-            letter-spacing: 1px;
-        }
-        
-        .btn-action-gold { 
-            width: calc(100% - 30px); 
-            margin: 0 15px;
-            padding: 18px; 
-            background: #222222; 
-            color: #777777; 
-            border: none; 
-            border-radius: 12px; 
-            font-weight: bold; 
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-        }
-
-        .btn-action-gold.ready {
-            background: linear-gradient(180deg, #D4AF37 0%, #AA7C11 100%);
-            color: #000;
-            cursor: pointer;
-        }
-
-        /* --- ZONE DE CHAT COMPAGNON --- */
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 380px;
-            margin: 15px;
-            background: #111111;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .msg {
-            max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 14px;
-            word-wrap: break-word;
-        }
-
-        .msg.incoming {
-            background: #222;
-            color: #ccc;
-            align-self: flex-start;
-        }
-
-        .msg.outgoing {
-            background: rgba(212, 175, 55, 0.2);
-            color: #fff;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            align-self: flex-end;
-        }
-
-        .chat-input-area {
-            display: flex;
-            padding: 10px;
-            background: #000;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            gap: 8px;
-        }
-
-        .chat-input-area input {
-            flex: 1;
-            padding: 12px;
-            background: #111;
-            border: 1px solid #222;
-            color: #fff;
-            border-radius: 6px;
-            outline: none;
-        }
-
-        .btn-send-chat {
-            background: var(--gold);
-            color: #000;
-            border: none;
-            padding: 0 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        
-        /* --- ENGIN DES ÉCRANS --- */
-        .app-screen { display: none; }
-        .active-screen { display: block; }
-
-        /* --- BARRE DE NAVIGATION IPHONE --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #050505;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0 calc(12px + env(safe-area-inset-bottom)) 0; 
-            z-index: 1000;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #555555;
-            text-decoration: none;
-            font-size: 10px;
-            gap: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 25%;
-        }
-
-        .nav-item i { font-size: 20px; }
-        .nav-item.active { color: var(--gold); }
-
-        .connection-indicator {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: #666;
-            margin: 25px 0;
-        }
-        .dot { width: 6px; height: 6px; background-color: #00FF66; border-radius: 50%; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    
-    <header class="empire-header">
-        <h1>S.E.G GLOBAL</h1>
-        <div class="objectif-badge">OBJECTIF : 500 MILLIARDS FCFA</div>
-    </header>
-
-    <main id="screen-accueil" class="app-screen active-screen">
-        <div class="header-stats">
-            <div class="stat-label">Analyse Global Fonds</div>
-            <div class="val-money">450 182 262 FCFA</div>
-        </div>
-        <h2 class="section-title">MARCHÉ DE L'EMPIRE</h2>
-        
-        <div class="vendeur-card">
-            <div class="vendeur-title">VOUS ÊTES VENDEUR ?</div>
-            <div class="vendeur-text">Rejoignez l'empire S.E.G GLOBAL et vendez vos montres, sacs et bijoux au monde entier.</div>
-            <button class="btn-boutique" onclick="basculerEcran('vente')">OUVRIR MA BOUTIQUE ICI</button>
-        </div>
-
-        <div class="market-feed" id="market-products-list">
+        {/* TAB 1: MARKET */}
+        {currentTab === 'market' && (
+          <div className="space-y-6 animate-fadeIn">
+            <h2 className="text-xl font-semibold text-yellow-500 mb-4">Le Marché</h2>
+            <div className="bg-zinc-900 border border-yellow-600/30 rounded-2xl overflow-hidden shadow-xl">
+              <div className="h-64 bg-gradient-to-b from-zinc-800 to-zinc-900 flex items-center justify-center p-4">
+                <div className="w-40 h-40 rounded-full border-4 border-yellow-500/40 bg-zinc-950 flex items-center justify-center shadow-2xl">
+                  <span className="text-yellow-500 text-6xl">👑</span>
+                </div>
+              </div>
+              <div className="p-6 space-y-4">
+                <span className="text-xs text-yellow-600/80 uppercase tracking-wider">Haute Horlogerie</span>
+                <h3 className="text-xl font-bold text-yellow-500">Tourbillon Royale 24K</h3>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  Mouvement tourbillon manufacture, boîtier or massif 24 carats, édition unique numérotée.
+                </p>
+                <div className="flex items-center justify-between pt-4 border-t border-zinc-800">
+                  <span className="text-xl font-mono text-yellow-500 font-bold">$1,240,000</span>
+                  <button 
+                    onClick={() => setShowModal(true)}
+                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-xl transition duration-300 shadow-lg flex items-center gap-2"
+                  >
+                    <Shield size={16} /> Acquire via Escrow
+                  </button>
+                </div>
+              </div>
             </div>
-    </main>
+          </div>
+        )}
 
-    <main id="screen-vente" class="app-screen">
-        <h2 class="section-title">VENDRE UN ARTICLE</h2>
-        
-        <div class="form-group">
-            <label>Nom ou Désignation du produit</label>
-            <input type="text" id="prod-name" placeholder="Ex: Montre de Luxe, Sac..." oninput="verifierFormulaire()">
-        </div>
-
-        <div class="form-group">
-            <label>Prix Final (FCFA)</label>
-            <input type="number" id="prod-price" placeholder="Ex: 25000" oninput="verifierFormulaire()">
-        </div>
-
-        <div class="form-group">
-            <label>Protocole : Archive Visuelle Obligatoire</label>
-            <div class="file-box">
-                <span class="btn-select-custom">Choisir le fichier</span>
-                <span class="file-display-name" id="file-name-display">Aucun fichier sélectionné</span>
-                <input type="file" id="prod-file" accept="image/*" style="position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;" onchange="chargerFichier(event)">
+        {/* TAB 2: SELL */}
+        {currentTab === 'sell' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold text-yellow-500">Vendre un Bien</h2>
+            <div className="bg-zinc-900 border border-yellow-600/20 rounded-2xl p-6 space-y-4">
+              <div>
+                <label className="block text-xs text-yellow-600 uppercase tracking-wider mb-2">Désignation</label>
+                <input type="text" placeholder="Ex. Montre, Automobile, Œuvre d'art" className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-white focus:border-yellow-500 outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs text-yellow-600 uppercase tracking-wider mb-2">Prix Demandé (USD)</label>
+                <input type="number" placeholder="$0" className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-white focus:border-yellow-500 outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs text-yellow-600 uppercase tracking-wider mb-2">Description</label>
+                <textarea rows={4} placeholder="Provenance, authenticité, certificats..." className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-white focus:border-yellow-500 outline-none"></textarea>
+              </div>
+              <button className="w-full bg-yellow-500 text-black font-bold py-4 rounded-xl shadow-lg uppercase tracking-wider text-sm mt-2">
+                Soumettre pour vérification
+              </button>
             </div>
-            <img id="preview" src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=500&q=80" class="preview-img" alt="Aperçu">
-        </div>
+          </div>
+        )}
 
-        <div class="status-text" id="upload-status">ANALYSE ET SÉCURISATION : 0%</div>
-
-        <button class="btn-action-gold ready" id="pub_btn" onclick="publierArticle()">INITIALISATION DU FLUX...</button>
-    </main>
-
-    <main id="screen-chat" class="app-screen">
-        <h2 class="section-title">💬 CHAT COMPAGNON</h2>
-        <div class="chat-container">
-            <div class="chat-messages" id="chat-box">
-                <div class="msg incoming">Canal d'échange sécurisé activé. Comment puis-je vous guider ?</div>
+        {/* TAB 3: CHAT */}
+        {currentTab === 'chat' && (
+          <div className="space-y-4 flex flex-col h-full">
+            <h2 className="text-xl font-semibold text-yellow-500">Le Concierge</h2>
+            <div className="bg-zinc-900 border border-yellow-600/20 rounded-2xl p-4 flex-1 space-y-4 min-h-[300px] flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="bg-zinc-950 border border-zinc-800 p-3 rounded-xl max-w-[85%]">
+                  <p className="text-sm text-yellow-600/80 font-semibold mb-1">Acheteur</p>
+                  <p className="text-sm">Bonjour, la Tourbillon Royale est-elle toujours disponible ?</p>
+                </div>
+                <div className="bg-yellow-500 text-black p-3 rounded-xl max-w-[85%] ml-auto">
+                  <p className="text-sm font-semibold mb-1">Vous</p>
+                  <p className="text-sm">Oui, l'acquisition se fait exclusivement via Escrow sécurisé.</p>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                {chatAlert && (
+                  <div className="bg-red-950/80 border border-red-700 text-red-400 text-xs p-3 rounded-xl font-medium">
+                    {chatAlert}
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={chatMessage}
+                    onChange={(e) => setChatMessage(e.target.value)}
+                    placeholder="Votre message..." 
+                    className="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-yellow-500 text-sm"
+                  />
+                  <button onClick={handleSendMessage} className="bg-yellow-500 text-black p-3 rounded-xl font-bold">
+                    ➔
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="chat-input-area">
-                <input type="text" id="chat-input-message" placeholder="Écrire votre message..." onkeydown="if(event.key === 'Enter') envoyerMessageChat()">
-                <button class="btn-send-chat" onclick="envoyerMessageChat()">Envoyer</button>
+          </div>
+        )}
+
+        {/* TAB 4: VAULT */}
+        {currentTab === 'vault' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold text-yellow-500">Le Coffre</h2>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="bg-zinc-900 border border-yellow-600/30 rounded-2xl p-6">
+                <p className="text-xs text-yellow-600/60 uppercase tracking-widest mb-1">Fonds Bloqués (Escrow)</p>
+                <p className="text-3xl font-mono font-bold text-yellow-500">${vaultEscrow.toLocaleString()}</p>
+              </div>
+              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                <p className="text-xs text-zinc-500 uppercase tracking-widest mb-1">Solde Disponible</p>
+                <p className="text-2xl font-mono font-bold text-zinc-400">$0</p>
+              </div>
             </div>
-        </div>
-    </main>
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+              <h3 className="text-sm font-semibold text-yellow-600 uppercase tracking-wider mb-4">Mouvements Récents</h3>
+              <div className="flex items-center justify-between text-sm border-b border-zinc-800 pb-3">
+                <div>
+                  <p className="font-medium">Escrow — Tourbillon Royale</p>
+                  <p className="text-xs text-zinc-500">En attente de confirmation</p>
+                </div>
+                <span className="text-yellow-500 font-mono font-bold">-${vaultEscrow.toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+        )}
 
-    <main id="screen-vault" class="app-screen">
-        <h2 class="section-title">🔐 COFFRE</h2>
-        <div style="padding: 20px; text-align: center; color: #666; font-size: 14px;">Coffre-fort S.E.G GLOBAL sécurisé.</div>
-    </main>
+      </main>
 
-    <nav class="bottom-nav">
-        <div class="nav-item active" id="btn-nav-accueil" onclick="basculerEcran('accueil')">
-            <i class="fa-solid fa-gem"></i>
-            <span>MARCHÉ</span>
+      {/* TRANSACTION MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-zinc-900 border border-yellow-500 rounded-2xl p-6 max-w-sm w-full space-y-4">
+            <h3 className="text-lg font-bold text-yellow-500">Ordre d'Achat Sécurisé</h3>
+            <div className="text-sm space-y-2 text-zinc-300">
+              <div className="flex justify-between"><span>Montant :</span><span className="font-mono text-white">$1,240,000</span></div>
+              <div className="flex justify-between text-yellow-600/80"><span>Frais S.E.G (3%) :</span><span className="font-mono">$37,200</span></div>
+              <div className="border-t border-zinc-800 pt-2 flex justify-between font-bold text-white"><span>Total :</span><span className="font-mono text-yellow-500">$1,277,200</span></div>
+            </div>
+            <div className="flex gap-2 pt-2">
+              <button onClick={() => setShowModal(false)} className="flex-1 bg-zinc-800 text-white py-2 rounded-xl text-sm font-medium">Annuler</button>
+              <button onClick={() => { setVaultEscrow(1240000); setShowModal(false); setCurrentTab('vault'); }} className="flex-1 bg-yellow-500 text-black py-2 rounded-xl text-sm font-bold">Confirmer</button>
+            </div>
+          </div>
         </div>
-        <div class="nav-item" id="btn-nav-vente" onclick="basculerEcran('vente')">
-            <i class="fa-solid fa-bag-shopping"></i>
-            <span>VENDRE</span>
-        </div>
-        <div class="nav-item" id="btn-nav-chat" onclick="basculerEcran('chat')">
-            <i class="fa-solid fa-comments"></i>
-            <span>CHAT</span>
-        </div>
-        <div class="nav-item" id="btn-nav-vault" onclick="basculerEcran('vault')">
-            <i class="fa-solid fa-vault"></i>
-            <span>COFFRE</span>
-        </div>
-    </nav>
+      )}
 
-    <div class="connection-indicator">
-        <span class="dot"></span>
-        <span>Connexion Cloud Google : 22ms (Stable)</span>
+      {/* NAVIGATION BAR */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-yellow-600/20 p-3 flex justify-around items-center z-40">
+        <button onClick={() => setCurrentTab('market')} className={`flex flex-col items-center gap-1 transition ${currentTab === 'market' ? 'text-yellow-500 font-bold' : 'text-zinc-500'}`}>
+          <ShoppingBag size={20} />
+          <span className="text-[10px] uppercase tracking-wider">Market</span>
+        </button>
+        <button onClick={() => setCurrentTab('sell')} className={`flex flex-col items-center gap-1 transition ${currentTab === 'sell' ? 'text-yellow-500 font-bold' : 'text-zinc-500'}`}>
+          <PlusCircle size={20} />
+          <span className="text-[10px] uppercase tracking-wider">Sell</span>
+        </button>
+        <button onClick={() => setCurrentTab('chat')} className={`flex flex-col items-center gap-1 transition ${currentTab === 'chat' ? 'text-yellow-500 font-bold' : 'text-zinc-500'}`}>
+          <MessageSquare size={20} />
+          <span className="text-[10px] uppercase tracking-wider">Chat</span>
+        </button>
+        <button onClick={() => setCurrentTab('vault')} className={`flex flex-col items-center gap-1 transition ${currentTab === 'vault' ? 'text-yellow-500 font-bold' : 'text-zinc-500'}`}>
+          <Coins size={20} />
+          <span className="text-[10px] uppercase tracking-wider">Vault</span>
+        </button>
+      </nav>
+
     </div>
-</div>
-
-<script>
-    // --- INITIALISATION EMAILJS ---
-    (function() {
-        emailjs.init("QGnoNmphH78_GuSLf4");
-    })();
-
-    // --- CONFIGURATION FIREBASE SECURE ---
-    const firebaseConfig = {
-        apiKey: "AIzaSyAMX8SfBySnpcD_vS9hH5f8Q2L-Y0X0kE0",
-        authDomain: "seg-global.firebaseapp.com",
-        projectId: "seg-global",
-        storageBucket: "seg-global.appspot.com",
-        messagingSenderId: "880037527683",
-        appId: "1:880037527683:web:e399589d8db19468bfb847"
-    };
-    
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    const imageNeutreParDefaut = "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=500&q=80";
-    let imageBase64Data = imageNeutreParDefaut;
-
-    // --- ÉCOUTEUR MARCHE (FIREBASE) ---
-    function chargerFluxProduits() {
-        db.collection("produits").orderBy("date", "desc").onSnapshot((snapshot) => {
-            const feed = document.getElementById("market-products-list");
-            feed.innerHTML = "";
-            
-            if (snapshot.empty) {
-                feed.innerHTML = `<div class="product-card"><img src="${imageNeutreParDefaut}"><div class="product-info"><div class="product-meta"><span class="product-title">Aucun produit disponible</span><span class="product-price">0 FCFA</span></div></div></div>`;
-                return;
-            }
-
-            snapshot.forEach((doc) => {
-                const prod = doc.data();
-                const card = document.createElement("div");
-                card.className = "product-card";
-                card.innerHTML = `
-                    <img src="${prod.image || imageNeutreParDefaut}">
-                    <div class="product-info">
-                        <div class="product-meta">
-                            <span class="product-title">${prod.nom || 'Article Inconnu'}</span>
-                            <span class="product-price">${prod.prix || '0'} FCFA</span>
-                        </div>
-                    </div>
-                `;
-                feed.appendChild(card);
-            });
-        }, (error) => {
-            console.log("Ajustement des règles réseau...", error);
-        });
-    }
-    setTimeout(chargerFluxProduits, 500);
-
-    // --- ÉCOUTEUR CHAT (FIREBASE) ---
-    db.collection("messages").orderBy("date", "asc").onSnapshot((snapshot) => {
-        const chatBox = document.getElementById("chat-box");
-        chatBox.innerHTML = '<div class="msg incoming">Canal d\'échange sécurisé activé. Comment puis-je vous guider ?</div>';
-        snapshot.forEach((doc) => {
-            const m = doc.data();
-            const msgDiv = document.createElement("div");
-            msgDiv.className = `msg ${m.expediteur === "moi" ? "outgoing" : "incoming"}`;
-            msgDiv.innerText = m.texte;
-            chatBox.appendChild(msgDiv);
-        });
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }, (error) => { console.log("Attente salon", error); });
-
-    // --- ENGIN DE NAVIGATION INTERNE ---
-    function basculerEcran(cible) {
-        document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active-screen'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById(`screen-${cible}`).classList.add('active-screen');
-        document.getElementById(`btn-nav-${cible}`).classList.add('active');
-    }
-
-    function chargerFichier(event) {
-        const file = event.target.files[0];
-        if(file) {
-            document.getElementById('file-name-display').innerText = file.name;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('preview').src = e.target.result;
-                imageBase64Data = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        }
-    }
-
-    function verifierFormulaire() {
-        const name = document.getElementById('prod-name').value;
-        const price = document.getElementById('prod-price').value;
-        const btn = document.getElementById('pub_btn');
-        if(name && price) {
-            btn.classList.add('ready');
-            btn.innerText = "INITIALISATION DU FLUX...";
-        }
-    }
-
-    // --- PUBLICATION DOUBLE ACTION : FIREBASE + EMAILJS ---
-    function publierArticle() {
-        const nomInput = document.getElementById('prod-name');
-        const prixInput = document.getElementById('prod-price');
-        const statusLabel = document.getElementById('upload-status');
-        const btn = document.getElementById('pub_btn');
-
-        const nom = nomInput.value.trim();
-        const prix = prixInput.value.trim();
-
-        if(!nom || !prix) {
-            alert("Veuillez remplir l'ensemble de l'infrastructure.");
-            return;
-        }
-
-        btn.innerText = "ENVOI DU PROTOCOLE...";
-        btn.classList.remove('ready');
-
-        // Action 1 : Sauvegarde sur Firebase Firestore
-        db.collection("produits").add({
-            nom: nom,
-            prix: prix,
-            image: imageBase64Data,
-            date: firebase.firestore.FieldValue.serverTimestamp()
-        }).catch(e => console.log("Sauvegarde locale en cours"));
-
-        // Action 2 : Acheminement Alerte email via EmailJS
-        const emailParams = {
-            product_name: nom,
-            product_price: prix + " FCFA",
-            to_email: "stevempina4@gmail.com"
-        };
-
-        emailjs.send("service_default", "template_v7i6m5m", emailParams)
-        .then(() => {
-            console.log("Routage EmailJS exécuté.");
-        }, (error) => {
-            console.log("Routage direct indisponible, bascule sur sauvegarde secondaire.", error);
-        });
-
-        // Jauge visuelle de traitement progressif
-        let progression = 0;
-        const intervalle = setInterval(() => {
-            progression += 10;
-            statusLabel.innerText = "ANALYSE ET SÉCURISATION : " + progression + "%";
-            
-            if(progression >= 100) {
-                clearInterval(intervalle);
-                statusLabel.innerText = "DÉPLOIE-MENT RÉUSSI ! 100%";
-                statusLabel.style.color = "#00FF66";
-                
-                setTimeout(() => {
-                    // Nettoyage complet pour empêcher les duplications de données
-                    nomInput.value = "";
-                    prixInput.value = "";
-                    document.getElementById('file-name-display').innerText = "Aucun fichier sélectionné";
-                    document.getElementById('preview').src = imageNeutreParDefaut;
-                    imageBase64Data = imageNeutreParDefaut;
-
-                    // Remise à zéro de l'interface
-                    btn.innerText = "INITIALISATION DU FLUX...";
-                    btn.classList.add('ready');
-                    statusLabel.innerText = "ANALYSE ET SÉCURISATION : 0%";
-                    statusLabel.style.color = "#00E5FF";
-                    
-                    // Basculement immédiat vers le marché mis à jour
-                    basculerEcran('accueil');
-                }, 1000);
-            }
-        }, 100);
-    }
-
-    // --- ENVOI FLUIDE DU CHAT ---
-    function envoyerMessageChat() {
-        const input = document.getElementById("chat-input-message");
-        const txt = input.value.trim();
-        if(!txt) return;
-
-        input.value = "";
-
-        db.collection("messages").add({
-            texte: txt,
-            expediteur: "moi",
-            date: firebase.firestore.FieldValue.serverTimestamp()
-        }).catch(e => console.log("Sauvegarde message en local"));
-    }
-</script>
-</body>
-</html>
+  );
+}
