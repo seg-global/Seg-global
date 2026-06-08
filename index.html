@@ -7,7 +7,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script>
-    // Système de navigation entre les onglets
+    // Variables d'état globales de l'application
+    let balanceEscrow = 1240000;
+    let balanceAvailable = 0;
+
     function switchTab(tabId) {
       document.getElementById('tab-market').classList.add('hidden');
       document.getElementById('tab-sell').classList.add('hidden');
@@ -26,9 +29,8 @@
       document.getElementById('btn-' + tabId).classList.remove('text-zinc-500');
     }
 
-    // Gestion de la fenêtre d'achat sécurisé (Modal Escrow)
-    function toggleModal(show) {
-      const modal = document.getElementById('escrow-modal');
+    function toggleModal(modalId, show) {
+      const modal = document.getElementById(modalId);
       if (show) {
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -38,14 +40,54 @@
       }
     }
 
-    // Simulation d'achat
+    // Évolution : Gestion dynamique de l'achat et du coffre
     function confirmPurchase() {
-      toggleModal(false);
-      alert("Ordre d'achat sécurisé envoyé ! Les fonds de $1,240,000 sont bloqués sur votre compte Vault.");
+      toggleModal('escrow-modal', false);
+      
+      // Mise à jour dynamique des soldes du Coffre
+      balanceAvailable += 1240000;
+      document.getElementById('vault-escrow-display').innerText = "$0";
+      document.getElementById('vault-available-display').innerText = "$" + balanceAvailable.toLocaleString();
+      
+      // Ajout d'une nouvelle ligne de transaction historique
+      const historyContainer = document.getElementById('transaction-history');
+      const newTx = `
+        <div class="bg-zinc-950 border border-emerald-900/30 rounded-xl p-4 flex items-center justify-between text-xs animate-fade-in">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-zinc-900 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <i class="fa-solid fa-circle-check text-[10px]"></i>
+            </div>
+            <div>
+              <div class="font-medium text-zinc-300">Libération Escrow — Tourbillon</div>
+              <div class="text-[9px] text-emerald-500">Transaction validée avec succès</div>
+            </div>
+          </div>
+          <div class="font-mono text-emerald-400 font-semibold">+$1,240,000</div>
+        </div>
+      `;
+      historyContainer.insertAdjacentHTML('afterbegin', newTx);
+      
       switchTab('vault');
     }
 
-    // Envoi de message dans le Chat
+    // Évolution : Traitement de la mise en vente
+    function handleSellSubmission(event) {
+      event.preventDefault();
+      const name = document.getElementById('sell-name').value;
+      const price = document.getElementById('sell-price').value;
+      
+      if(!name || !price) {
+        alert("Veuillez remplir au moins le nom et le prix de votre actif.");
+        return;
+      }
+
+      document.getElementById('success-modal-message').innerText = `Votre bien "${name}" d'une valeur de $${parseInt(price).toLocaleString()} a été transmis aux experts S.E.G pour certification.`;
+      toggleModal('success-modal', true);
+      
+      // Réinitialiser le formulaire
+      document.getElementById('sell-form').reset();
+    }
+
     function sendMessage() {
       const input = document.getElementById('chat-input');
       const messageText = input.value.trim();
@@ -92,7 +134,7 @@
         </div>
         <div class="flex items-center justify-between pt-1">
           <span class="text-lg font-mono font-bold text-yellow-500 tracking-tight">$1,240,000</span>
-          <button onclick="toggleModal(true)" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-2.5 rounded-xl text-[10px] uppercase tracking-wider shadow-lg transition flex items-center gap-1.5">
+          <button onclick="toggleModal('escrow-modal', true)" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-2.5 rounded-xl text-[10px] uppercase tracking-wider shadow-lg transition flex items-center gap-1.5">
             <i class="fa-solid fa-shield-halved"></i> Acquire via Escrow
           </button>
         </div>
@@ -106,23 +148,23 @@
       <h1 class="text-2xl font-serif font-bold text-yellow-500">Vendre un Bien</h1>
     </div>
 
-    <div class="bg-zinc-950 border border-zinc-900 rounded-2xl p-4 space-y-3">
+    <form id="sell-form" onsubmit="handleSellSubmission(event)" class="bg-zinc-950 border border-zinc-900 rounded-2xl p-4 space-y-3">
       <div class="space-y-1">
         <label class="text-[9px] uppercase text-zinc-500 tracking-wider font-semibold">Désignation</label>
-        <input type="text" placeholder="Ex. Montre, Automobile, Œuvre d'art" class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs outline-none focus:border-yellow-500 text-white" />
+        <input id="sell-name" type="text" placeholder="Ex. Diamant Brut, Montre de Luxe" class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs outline-none focus:border-yellow-500 text-white" required />
       </div>
       <div class="space-y-1">
         <label class="text-[9px] uppercase text-zinc-500 tracking-wider font-semibold">Prix Demandé (USD)</label>
-        <input type="number" placeholder="$0" class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs outline-none focus:border-yellow-500 font-mono text-yellow-500" />
+        <input id="sell-price" type="number" placeholder="$0" class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs outline-none focus:border-yellow-500 font-mono text-yellow-500" required />
       </div>
       <div class="space-y-1">
-        <label class="text-[9px] uppercase text-zinc-500 tracking-wider font-semibold">Description</label>
-        <textarea rows="3" placeholder="Provenance, authenticité, certificats..." class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs outline-none focus:border-yellow-500 text-white resize-none"></textarea>
+        <label class="text-[9px] uppercase text-zinc-500 tracking-wider font-semibold">Description & Provenance</label>
+        <textarea id="sell-desc" rows="3" placeholder="Détails d'authenticité, certificats de laboratoire..." class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs outline-none focus:border-yellow-500 text-white resize-none"></textarea>
       </div>
-      <button class="w-full bg-yellow-500 text-black font-bold py-3 rounded-xl text-[10px] uppercase tracking-widest shadow-lg mt-1 flex items-center justify-center gap-2">
+      <button type="submit" class="w-full bg-yellow-500 text-black font-bold py-3 rounded-xl text-[10px] uppercase tracking-widest shadow-lg mt-1 flex items-center justify-center gap-2">
         <i class="fa-solid fa-cloud-arrow-up"></i> Soumettre pour vérification
       </button>
-    </div>
+    </form>
   </div>
 
   <div id="tab-chat" class="flex-1 flex flex-col pb-16 hidden h-full overflow-hidden">
@@ -167,27 +209,29 @@
     <div class="space-y-2.5">
       <div class="bg-zinc-950 border border-yellow-600/10 rounded-xl p-4 space-y-1">
         <span class="text-[9px] text-zinc-500 uppercase tracking-wider font-semibold"><i class="fa-solid fa-lock text-yellow-600 mr-1"></i> Fonds Bloqués (Escrow)</span>
-        <div class="text-2xl font-mono font-bold text-yellow-500">$1,240,000</div>
+        <div id="vault-escrow-display" class="text-2xl font-mono font-bold text-yellow-500">$1,240,000</div>
       </div>
       <div class="bg-zinc-950 border border-zinc-900 rounded-xl p-4 space-y-1">
         <span class="text-[9px] text-zinc-500 uppercase tracking-wider font-semibold"><i class="fa-solid fa-wallet text-zinc-500 mr-1"></i> Solde Disponible</span>
-        <div class="text-2xl font-mono font-bold text-zinc-400">$0</div>
+        <div id="vault-available-display" class="text-2xl font-mono font-bold text-zinc-400">$0</div>
       </div>
     </div>
 
     <div class="space-y-2">
       <h3 class="text-[10px] uppercase text-zinc-500 tracking-widest font-bold">Suivi des Transactions</h3>
-      <div class="bg-zinc-950 border border-zinc-900 rounded-xl p-4 flex items-center justify-between text-xs">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-zinc-900 border border-yellow-600/10 flex items-center justify-center text-yellow-500">
-            <i class="fa-solid fa-arrow-right-arrow-left text-[10px]"></i>
+      <div id="transaction-history" class="space-y-2">
+        <div class="bg-zinc-950 border border-zinc-900 rounded-xl p-4 flex items-center justify-between text-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-zinc-900 border border-yellow-600/10 flex items-center justify-center text-yellow-500">
+              <i class="fa-solid fa-arrow-right-arrow-left text-[10px]"></i>
+            </div>
+            <div>
+              <div class="font-medium text-zinc-300">Escrow — Tourbillon Royale</div>
+              <div class="text-[9px] text-zinc-500">En attente de confirmation d'achat</div>
+            </div>
           </div>
-          <div>
-            <div class="font-medium text-zinc-300">Escrow — Tourbillon Royale</div>
-            <div class="text-[9px] text-zinc-500">Fonds sécurisés</div>
-          </div>
+          <div class="font-mono text-yellow-500 font-semibold">-$1,240,000</div>
         </div>
-        <div class="font-mono text-yellow-500 font-semibold">-$1,240,000</div>
       </div>
     </div>
   </div>
@@ -197,17 +241,24 @@
       <div class="text-center space-y-1">
         <i class="fa-solid fa-shield-halved text-yellow-500 text-2xl"></i>
         <h3 class="text-base font-bold text-yellow-500">Ordre d'Achat Sécurisé</h3>
-        <p class="text-[10px] text-zinc-500 uppercase font-semibold">Vérification S.E.G Escrow</p>
       </div>
       <div class="bg-black border border-zinc-900 rounded-xl p-3 space-y-2 text-[11px] font-mono">
         <div class="flex justify-between"><span class="text-zinc-500">Montant :</span><span>$1,240,000</span></div>
-        <div class="flex justify-between"><span class="text-zinc-500">Frais S.E.G (3%) :</span><span class="text-yellow-600">$37,200</span></div>
-        <div class="border-t border-zinc-900 my-1 pt-1 flex justify-between font-bold text-yellow-500"><span>Total :</span><span>$1,277,200</span></div>
+        <div class="border-t border-zinc-900 my-1 pt-1 flex justify-between font-bold text-yellow-500"><span>Total :</span><span>$1,240,000</span></div>
       </div>
       <div class="flex gap-2 text-[10px] uppercase font-bold tracking-wider">
-        <button onclick="toggleModal(false)" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl py-3 text-zinc-400 hover:text-white transition">Annuler</button>
-        <button onclick="confirmPurchase()" class="flex-1 bg-yellow-500 text-black rounded-xl py-3 hover:bg-yellow-600 transition">Confirmer</button>
+        <button onclick="toggleModal('escrow-modal', false)" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl py-3 text-zinc-400">Annuler</button>
+        <button onclick="confirmPurchase()" class="flex-1 bg-yellow-500 text-black rounded-xl py-3 font-bold">Confirmer</button>
       </div>
+    </div>
+  </div>
+
+  <div id="success-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-zinc-950 border border-emerald-500/20 rounded-2xl w-full max-w-xs p-5 space-y-4 shadow-2xl text-center">
+      <i class="fa-solid fa-circle-check text-emerald-400 text-3xl"></i>
+      <h3 class="text-base font-bold text-emerald-400">Demande Enregistrée</h3>
+      <p id="success-modal-message" class="text-xs text-zinc-400 leading-relaxed"></p>
+      <button onclick="toggleModal('success-modal', false)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2.5 text-xs text-zinc-300 font-semibold uppercase tracking-wider">Fermer</button>
     </div>
   </div>
 
