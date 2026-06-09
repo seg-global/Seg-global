@@ -1,292 +1,152 @@
-<!DOCTYPE html>
-<html lang="fr" class="h-full bg-black">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>S.E.G GLOBAL — IA Security</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script>
-    let balanceAvailable = 0;
-    // Variables pour la simulation de l'IA KYC
-    let kycStep = 0;
-    let currentSellerProduct = "";
+import { useState, useRef, useEffect } from 'react';
 
-    function switchTab(tabId) {
-      document.getElementById('tab-market').classList.add('hidden');
-      document.getElementById('tab-sell').classList.add('hidden');
-      document.getElementById('tab-chat').classList.add('hidden');
-      document.getElementById('tab-vault').classList.add('hidden');
-      
-      document.getElementById('tab-' + tabId).classList.remove('hidden');
+export default function IAValidationZone({ currentProduct = "Montre de Luxe", currentPrice = 1200000 }) {
+  // Gestion des messages de la discussion KYC
+  const [messages, setMessages] = useState<Array<{ role: 'user' | 'model'; text: string }>>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+  
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
-      const buttons = document.querySelectorAll('.nav-btn');
-      buttons.forEach(btn => {
-        btn.classList.remove('text-yellow-500');
-        btn.classList.add('text-zinc-500');
+  // Faire défiler automatiquement le tchat vers le bas
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  // Fonction pour envoyer le message au serveur (Route API)
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim() || isLoading || isApproved) return;
+
+    const userMessage = inputValue.trim();
+    setInputValue("");
+    setIsLoading(true);
+
+    // 1. Ajouter le message de l'utilisateur à l'historique visuel
+    const updatedHistory = [...messages, { role: 'user' as const, text: userMessage }];
+    setMessages(updatedHistory);
+
+    try {
+      // 2. Transformer l'historique pour le format attendu par l'API Gemini
+      const formattedHistory = updatedHistory.map(msg => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.text }]
+      }));
+
+      // 3. Appel de notre Route API sécurisée
+      const response = await fetch('/api/verify-ia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messageHistory: formattedHistory,
+          currentProduct: currentProduct,
+          currentPrice: currentPrice
+        }),
       });
 
-      document.getElementById('btn-' + tabId).classList.add('text-yellow-500');
-      document.getElementById('btn-' + tabId).classList.remove('text-zinc-500');
-    }
+      const data = await response.json();
 
-    function toggleModal(modalId, show) {
-      const modal = document.getElementById(modalId);
-      if (show) {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-      } else {
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
-      }
-    }
+      if (data.reply) {
+        // 4. Ajouter la réponse de l'IA à l'écran
+        setMessages(prev => [...prev, { role: 'model', text: data.reply }]);
 
-    // Déclenchement de l'IA d'authentification pour les vendeurs
-    function triggerKYCIA(event) {
-      event.preventDefault();
-      currentSellerProduct = document.getElementById('sell-name').value;
-      if(!currentSellerProduct) return;
-
-      // Ouvrir le panneau de l'IA et réinitialiser la discussion
-      toggleModal('kyc-ia-modal', true);
-      kycStep = 1;
-      
-      document.getElementById('kyc-chat-box').innerHTML = `
-        <div class="flex flex-col space-y-1">
-          <span class="text-[9px] text-yellow-500 font-bold">🛡️ S.E.G VERIFY IA</span>
-          <div class="bg-zinc-900 border border-yellow-600/20 text-zinc-200 rounded-2xl rounded-tl-none px-3.5 py-2.5 leading-relaxed">
-            Système d'authentification activé pour la vente de : <strong>${currentSellerProduct}</strong>.<br><br>
-            Pour valider la création de votre boutique, veuillez saisir votre <strong>Nom Complet</strong> et votre <strong>Numéro de Carte d'Identité ou Passeport</strong>.
-          </div>
-        </div>
-      `;
-      document.getElementById('sell-form').reset();
-    }
-
-    // Gestion des réponses de l'utilisateur à l'IA
-    function sendKYCResponse() {
-      const input = document.getElementById('kyc-input');
-      const text = input.value.trim();
-      if(text === '') return;
-
-      const chatBox = document.getElementById('kyc-chat-box');
-      
-      // Message de l'utilisateur
-      chatBox.innerHTML += `
-        <div class="flex flex-col space-y-1 items-end">
-          <span class="text-[9px] text-zinc-500 pr-1">Créateur</span>
-          <div class="bg-yellow-500 text-black font-semibold rounded-2xl rounded-tr-none px-4 py-2">
-            ${text}
-          </div>
-        </div>
-      `;
-      input.value = "";
-
-      // Logique de l'IA pas à pas
-      setTimeout(() => {
-        if(kycStep === 1) {
-          kycStep = 2;
-          chatBox.innerHTML += `
-            <div class="flex flex-col space-y-1 pt-2">
-              <span class="text-[9px] text-yellow-500 font-bold">🛡️ S.E.G VERIFY IA</span>
-              <div class="bg-zinc-900 border border-yellow-600/20 text-zinc-200 rounded-2xl rounded-tl-none px-3.5 py-2.5">
-                Identité reçue. Deuxième étape : Quelle est la <strong>provenance exacte</strong> de cet actif de luxe et possédez-vous un certificat d'authenticité ? (Oui/Non + détails)
-              </div>
-            </div>
-          `;
-        } else if(kycStep === 2) {
-          kycStep = 3;
-          chatBox.innerHTML += `
-            <div class="flex flex-col space-y-1 pt-2">
-              <span class="text-[9px] text-yellow-500 font-bold">🛡️ S.E.G VERIFY IA</span>
-              <div class="bg-zinc-900 border border-emerald-500/20 text-emerald-400 rounded-2xl rounded-tl-none px-3.5 py-2.5 bg-emerald-950/20">
-                ✨ Analyse biométrique et documentaire terminée. <br>
-                <strong>Statut : APPROUVÉ.</strong><br>
-                Votre boutique S.E.G GLOBAL est officiellement certifiée. Le produit est ajouté au catalogue général.
-              </div>
-            </div>
-          `;
-          // Remplacer le bouton par un bouton de fermeture
-          document.getElementById('kyc-input-zone').innerHTML = `
-            <button onclick="toggleModal('kyc-ia-modal', false)" class="w-full bg-emerald-500 text-black font-bold py-3 rounded-xl text-xs uppercase tracking-widest">
-              Déployer la Boutique en Ligne
-            </button>
-          `;
+        // 5. CAS CRUCIAL : Si l'IA détecte que tout est en ordre et écrit [APPROUVÉ]
+        if (data.reply.includes('[APPROUVÉ]')) {
+          setIsApproved(true);
+          // Ici, tu pourras ajouter ton code pour enregistrer la boutique dans Firebase !
         }
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }, 1000);
+      } else {
+        setMessages(prev => [...prev, { role: 'model', text: "⚠️ Une erreur de connexion est survenue avec le protocole de sécurité S.E.G." }]);
+      }
+    } catch (error) {
+      console.error("Erreur de communication avec l'IA:", error);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    function confirmPurchase() {
-      toggleModal('escrow-modal', false);
-      balanceAvailable += 1240000;
-      document.getElementById('vault-escrow-display').innerText = "$0";
-      document.getElementById('vault-available-display').innerText = "$" + balanceAvailable.toLocaleString();
-      
-      const historyContainer = document.getElementById('transaction-history');
-      const newTx = `
-        <div class="bg-zinc-950 border border-emerald-900/30 rounded-xl p-4 flex items-center justify-between text-xs animate-fade-in">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-zinc-900 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-              <i class="fa-solid fa-circle-check text-[10px]"></i>
-            </div>
-            <div>
-              <div class="font-medium text-zinc-300">Libération Escrow — Tourbillon</div>
-              <div class="text-[9px] text-emerald-500">Transaction validée avec succès</div>
-            </div>
-          </div>
-          <div class="font-mono text-emerald-400 font-semibold">+$1,240,000</div>
+  return (
+    <div className="flex flex-col h-full max-w-md mx-auto bg-black text-white p-4">
+      {/* En-tête de sécurité */}
+      <div className="p-3 border-b border-zinc-900 flex items-center justify-between bg-zinc-950 rounded-t-xl">
+        <div className="flex items-center gap-2">
+          <div className={`w-2 h-2 rounded-full ${isApproved ? 'bg-emerald-500' : 'bg-yellow-500 animate-pulse'}`}></div>
+          <span className="text-[10px] font-mono tracking-widest text-yellow-500 font-bold uppercase">
+            {isApproved ? 'S.E.G Audit Terminé' : 'S.E.G Biometric Audit'}
+          </span>
         </div>
-      `;
-      historyContainer.insertAdjacentHTML('afterbegin', newTx);
-      switchTab('vault');
-    }
+      </div>
 
-    function selectCategory(element, categoryName) {
-      const allBadges = document.querySelectorAll('.category-badge');
-      allBadges.forEach(badge => {
-        badge.classList.remove('border-yellow-500', 'text-yellow-500', 'bg-yellow-500/10');
-        badge.classList.add('border-zinc-800', 'text-zinc-400', 'bg-zinc-950');
-      });
-      element.classList.add('border-yellow-500', 'text-yellow-500', 'bg-yellow-500/10');
-    }
-
-    function sendMessage() {
-      const input = document.getElementById('chat-input');
-      const messageText = input.value.trim();
-      if (messageText === '') return;
-
-      const chatContainer = document.getElementById('chat-messages');
-      chatContainer.innerHTML += `
-        <div class="flex justify-end items-end gap-1">
-          <div class="bg-yellow-500 text-black font-semibold rounded-2xl rounded-tr-none px-4 py-2.5 max-w-[80%] shadow-md">
-            ${messageText}
+      {/* Zone de Tchat dynamique */}
+      <div className="flex-1 overflow-y-auto py-4 space-y-4 min-h-[350px] max-h-[500px] px-2 bg-zinc-950/40">
+        {/* Message d'accueil par défaut de l'IA */}
+        <div className="flex flex-col space-y-1">
+          <span className="text-[9px] text-yellow-500 font-bold">🛡️ S.E.G VERIFY IA</span>
+          <div className="bg-zinc-900 border border-yellow-600/10 text-zinc-300 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs leading-relaxed">
+            Système de certification autonome activé pour : <strong>{currentProduct}</strong>.<br/><br/>
+            Pour valider la création de votre espace de marché, veuillez décliner votre <strong>Nom Complet</strong> ainsi que votre <strong>Numéro de pièce d'identité (CNI ou Passeport)</strong>.
           </div>
         </div>
-      `;
-      input.value = '';
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-  </script>
-</head>
-<body class="h-full bg-black text-white font-sans flex flex-col justify-between overflow-hidden antialiased select-none">
 
-  <div id="tab-market" class="flex-1 overflow-y-auto p-4 space-y-5 pb-24">
-    <div class="space-y-0.5">
-      <span class="text-[9px] tracking-widest text-zinc-500 uppercase font-bold">Collection Privée</span>
-      <h1 class="text-2xl font-serif font-bold text-yellow-500">Le Marché</h1>
-    </div>
+        {/* Affichage de l'historique des échanges */}
+        {messages.map((msg, index) => (
+          <div key={index} className={`flex flex-col space-y-1 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+            <span className="text-[9px] text-zinc-500 px-1">
+              {msg.role === 'user' ? 'Créateur de Marché' : '🛡️ S.E.G VERIFY IA'}
+            </span>
+            <div className={`text-xs max-w-[85%] px-4 py-2.5 rounded-2xl ${
+              msg.role === 'user' 
+                ? 'bg-yellow-500 text-black font-semibold rounded-tr-none shadow-md' 
+                : 'bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-tl-none'
+            }`}>
+              {msg.text.replace('[APPROUVÉ]', '')}
+            </div>
+          </div>
+        ))}
 
-    <div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
-      <button onclick="selectCategory(this, 'all')" class="category-badge flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-yellow-500 text-yellow-500 bg-yellow-500/10 text-[10px] font-bold uppercase tracking-wider flex-shrink-0">
-        <i class="fa-solid fa-border-all text-[11px]"></i> Tout
-      </button>
-      <button onclick="selectCategory(this, 'watches')" class="category-badge flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-zinc-800 text-zinc-400 bg-zinc-950 text-[10px] font-bold uppercase tracking-wider flex-shrink-0">
-        <i class="fa-solid fa-clock text-[11px]"></i> Montres
-      </button>
-      <button onclick="selectCategory(this, 'clothes')" class="category-badge flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-zinc-800 text-zinc-400 bg-zinc-950 text-[10px] font-bold uppercase tracking-wider flex-shrink-0">
-        <i class="fa-solid fa-shirt text-[11px]"></i> Habits
-      </button>
-      <button onclick="selectCategory(this, 'stones')" class="category-badge flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-zinc-800 text-zinc-400 bg-zinc-950 text-[10px] font-bold uppercase tracking-wider flex-shrink-0">
-        <i class="fa-solid fa-gem text-[11px]"></i> Pierres
-      </button>
-    </div>
+        {/* Indicateur d'écriture de l'IA */}
+        {isLoading && (
+          <div className="flex flex-col space-y-1 items-start animate-pulse">
+            <span className="text-[9px] text-zinc-500 px-1">🛡️ Analyse des données...</span>
+            <div className="bg-zinc-900 text-zinc-500 text-xs px-4 py-2 rounded-2xl rounded-tl-none">
+              <i className="fa-solid fa-ellipsis text-yellow-500 animate-bounce"></i>
+            </div>
+          </div>
+        )}
 
-    <div class="bg-zinc-950 border border-yellow-600/10 rounded-2xl overflow-hidden shadow-2xl">
-      <div class="h-56 bg-zinc-900 relative bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&q=80&w=600');">
-        <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent"></div>
-      </div>
-      <div class="p-4 space-y-3">
-        <div class="space-y-1">
-          <span class="text-[9px] tracking-widest text-yellow-600 uppercase font-bold">💎 Haute Horlogerie</span>
-          <h2 class="text-lg font-bold tracking-tight">Tourbillon Royale 24K</h2>
-        </div>
-        <div class="flex items-center justify-between pt-1">
-          <span class="text-lg font-mono font-bold text-yellow-500 tracking-tight">$1,240,000</span>
-          <button onclick="toggleModal('escrow-modal', true)" class="bg-yellow-500 text-black font-bold px-4 py-2.5 rounded-xl text-[10px] uppercase tracking-wider shadow-lg">
-            <i class="fa-solid fa-shield-halved"></i> Acquire
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-sell" class="flex-1 overflow-y-auto p-4 space-y-4 pb-24 hidden">
-    <div class="space-y-0.5">
-      <span class="text-[9px] tracking-widest text-zinc-500 uppercase font-bold">Mise en Vente</span>
-      <h1 class="text-2xl font-serif font-bold text-yellow-500">Ouvrir un Marché</h1>
-    </div>
-
-    <form id="sell-form" onsubmit="triggerKYCIA(event)" class="bg-zinc-950 border border-zinc-900 rounded-2xl p-4 space-y-3">
-      <div class="space-y-1">
-        <label class="text-[9px] uppercase text-zinc-500 tracking-wider font-semibold">Titre de la Boutique ou du Bien</label>
-        <input id="sell-name" type="text" placeholder="Ex. Diamants de Sang, Lunettes Or" class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs text-white outline-none" required />
-      </div>
-      <div class="space-y-1">
-        <label class="text-[9px] uppercase text-zinc-500 tracking-wider font-semibold">Valeur estimée (USD)</label>
-        <input id="sell-price" type="number" placeholder="$0" class="w-full bg-zinc-900 border border-yellow-600/10 rounded-xl p-3 text-xs text-white outline-none" required />
-      </div>
-      <button type="submit" class="w-full bg-yellow-500 text-black font-bold py-3 rounded-xl text-[10px] uppercase tracking-widest shadow-lg mt-1 flex items-center justify-center gap-2">
-        <i class="fa-solid fa-robot"></i> Lancer la Vérification IA S.E.G
-      </button>
-    </form>
-  </div>
-
-  <div id="tab-chat" class="flex-1 flex flex-col pb-16 hidden h-full overflow-hidden">
-    <div class="p-4 border-b border-zinc-900 bg-black"><h1 class="text-xl font-serif font-bold text-yellow-500">Le Concierge</h1></div>
-    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 text-xs"></div>
-    <div class="p-3 bg-black border-t border-zinc-900 flex items-center gap-2">
-      <input id="chat-input" type="text" placeholder="Message..." class="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-xs text-white" />
-      <button onclick="sendMessage()" class="bg-yellow-500 text-black w-10 h-10 rounded-xl flex items-center justify-center"><i class="fa-solid fa-paper-plane text-xs"></i></button>
-    </div>
-  </div>
-
-  <div id="tab-vault" class="flex-1 overflow-y-auto p-4 space-y-5 pb-24 hidden">
-    <h1 class="text-2xl font-serif font-bold text-yellow-500">Le Coffre</h1>
-    <div class="bg-zinc-950 border border-yellow-600/10 rounded-xl p-4">
-      <span class="text-[9px] text-zinc-500 uppercase">Fonds Bloqués</span>
-      <div id="vault-escrow-display" class="text-2xl font-mono font-bold text-yellow-500">$1,240,000</div>
-    </div>
-    <div class="bg-zinc-950 border border-zinc-900 rounded-xl p-4">
-      <span class="text-[9px] text-zinc-500 uppercase">Solde Disponible</span>
-      <div id="vault-available-display" class="text-2xl font-mono font-bold text-zinc-400">$0</div>
-    </div>
-    <div id="transaction-history" class="space-y-2"></div>
-  </div>
-
-  <div id="kyc-ia-modal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex-col justify-between p-4 animate-fade-in">
-    <div class="p-3 border-b border-zinc-900 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-        <span class="text-xs font-mono tracking-widest text-yellow-500 font-bold">S.E.G BIOMETRIC AUDIT</span>
-      </div>
-      <button onclick="toggleModal('kyc-ia-modal', false)" class="text-zinc-500 text-xs uppercase font-bold">Fermer</button>
-    </div>
-
-    <div id="kyc-chat-box" class="flex-1 overflow-y-auto py-6 space-y-4 text-xs max-w-md mx-auto w-full">
+        <div ref={chatEndRef} />
       </div>
 
-    <div id="kyc-input-zone" class="p-3 border-t border-zinc-900 max-w-md mx-auto w-full flex items-center gap-2 bg-black">
-      <input id="kyc-input" type="text" placeholder="Entrez vos informations ici..." class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs text-white outline-none focus:border-yellow-500" onkeypress="if(event.key === 'Enter') sendKYCResponse()" />
-      <button onclick="sendKYCResponse()" class="bg-yellow-500 text-black w-11 h-11 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
-        <i class="fa-solid fa-chevron-right font-bold"></i>
-      </button>
+      {/* Zone de saisie ou bouton final de succès */}
+      <div className="mt-2 border-t border-zinc-900 pt-3 bg-black">
+        {isApproved ? (
+          <div className="bg-emerald-950/30 border border-emerald-500/30 text-emerald-400 p-4 rounded-xl text-center space-y-2 animate-fade-in">
+            <div className="text-sm font-bold flex items-center justify-center gap-2">
+              <i className="fa-solid fa-circle-check"></i> Certification Validée
+            </div>
+            <p className="text-[11px] text-zinc-400">Votre identité a été vérifiée avec succès. Votre boutique est maintenant ouverte au public.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSendMessage} className="flex items-center gap-2">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              disabled={isLoading}
+              placeholder="Répondre à l'IA de sécurité..."
+              className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs text-white outline-none focus:border-yellow-500 disabled:opacity-50"
+            />
+            <button
+              type="submit"
+              disabled={isLoading || !inputValue.trim()}
+              className="bg-yellow-500 hover:bg-yellow-600 disabled:bg-zinc-800 text-black disabled:text-zinc-600 w-11 h-11 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0 transition"
+            >
+              <i className="fa-solid fa-chevron-right font-bold"></i>
+            </button>
+          </form>
+        )}
+      </div>
     </div>
-  </div>
-
-  <div id="escrow-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-    <div class="bg-zinc-950 border border-yellow-600/20 rounded-2xl p-5 space-y-4 max-w-xs w-full">
-      <h3 class="text-base font-bold text-yellow-500 text-center">Confirmer l'Achat Escrow</h3>
-      <button onclick="confirmPurchase()" class="w-full bg-yellow-500 text-black font-bold py-3 rounded-xl text-xs uppercase">Confirmer</button>
-    </div>
-  </div>
-
-  <div class="fixed bottom-0 left-0 right-0 h-16 bg-black/95 border-t border-zinc-900 flex items-center justify-around z-40">
-    <button id="btn-market" onclick="switchTab('market')" class="nav-btn flex flex-col items-center gap-1 text-yellow-500"><i class="fa-solid fa-bag-shopping"></i><span class="text-[9px] font-bold">Market</span></button>
-    <button id="btn-sell" onclick="switchTab('sell')" class="nav-btn flex flex-col items-center gap-1 text-zinc-500"><i class="fa-solid fa-robot"></i><span class="text-[9px] font-bold">Verify IA</span></button>
-    <button id="btn-chat" onclick="switchTab('chat')" class="nav-btn flex flex-col items-center gap-1 text-zinc-500"><i class="fa-solid fa-comment"></i><span class="text-[9px] font-bold">Chat</span></button>
-    <button id="btn-vault" onclick="switchTab('vault')" class="nav-btn flex flex-col items-center gap-1 text-zinc-500"><i class="fa-solid fa-box-archive"></i><span class="text-[9px] font-bold">Vault</span></button>
-  </div>
-
-</body>
-</html>
+  );
+}
