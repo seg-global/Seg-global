@@ -1,152 +1,74 @@
-import { useState, useRef, useEffect } from 'react';
+// ========================================================
+// LE CERVEAU DE L'IA : AUTOMATISATION ET COMMISSIONS
+// ========================================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
-export default function IAValidationZone({ currentProduct = "Montre de Luxe", currentPrice = 1200000 }) {
-  // Gestion des messages de la discussion KYC
-  const [messages, setMessages] = useState<Array<{ role: 'user' | 'model'; text: string }>>([]);
-  const [inputValue, setInputValue] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isApproved, setIsApproved] = useState(false);
-  
-  const chatEndRef = useRef<HTMLDivElement>(null);
+// 1. Connexion automatique à tes serveurs Firebase
+const firebaseConfig = {
+    apiKey: "TON_API_KEY_ICI",
+    authDomain: "seg-global.web.app",
+    projectId: "seg-global",
+    storageBucket: "seg-global.appspot.com",
+    messagingSenderId: "TON_MESSAGING_SENDER_ID",
+    appId: "TON_APP_ID"
+};
 
-  // Faire défiler automatiquement le tchat vers le bas
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  // Fonction pour envoyer le message au serveur (Route API)
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim() || isLoading || isApproved) return;
+// Taux de commission de ton empire (ex: 5% sur chaque vente)
+const TAUX_COMMISSION = 0.05;
 
-    const userMessage = inputValue.trim();
-    setInputValue("");
-    setIsLoading(true);
+// 2. LE MOTEUR IA : ANALYSE, BLOCAGE ET CALCUL AUTOMATIQUE
+async function genererBoutiqueParIA(nomVendeur, nomBoutique, descriptionSaisie, prixArticleFCFA) {
+    console.log("🧠 Analyse de l'IA en cours pour " + nomBoutique + "...");
 
-    // 1. Ajouter le message de l'utilisateur à l'historique visuel
-    const updatedHistory = [...messages, { role: 'user' as const, text: userMessage }];
-    setMessages(updatedHistory);
+    // ACTION AUTOMATIQUE 1 : Le filtre de sécurité mondial de l'IA
+    // Détecte n'importe quelle suite de 7 à 15 chiffres (tous les numéros de la terre)
+    const detecterNumero = /\d{7,15}/g;
+    const contientUnPlus = descriptionSaisie.includes("+");
+    const contientDoubleZero = descriptionSaisie.includes("00");
 
-    try {
-      // 2. Transformer l'historique pour le format attendu par l'API Gemini
-      const formattedHistory = updatedHistory.map(msg => ({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.text }]
-      }));
-
-      // 3. Appel de notre Route API sécurisée
-      const response = await fetch('/api/verify-ia', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messageHistory: formattedHistory,
-          currentProduct: currentProduct,
-          currentPrice: currentPrice
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.reply) {
-        // 4. Ajouter la réponse de l'IA à l'écran
-        setMessages(prev => [...prev, { role: 'model', text: data.reply }]);
-
-        // 5. CAS CRUCIAL : Si l'IA détecte que tout est en ordre et écrit [APPROUVÉ]
-        if (data.reply.includes('[APPROUVÉ]')) {
-          setIsApproved(true);
-          // Ici, tu pourras ajouter ton code pour enregistrer la boutique dans Firebase !
-        }
-      } else {
-        setMessages(prev => [...prev, { role: 'model', text: "⚠️ Une erreur de connexion est survenue avec le protocole de sécurité S.E.G." }]);
-      }
-    } catch (error) {
-      console.error("Erreur de communication avec l'IA:", error);
-    } finally {
-      setIsLoading(false);
+    if (detecterNumero.test(descriptionSaisie) || contientUnPlus || contientDoubleZero) {
+        console.error("🚨 IA SÉCURITÉ : Tentative de fraude détectée (Numéro de téléphone).");
+        alert("Action Bloquée par l'IA : Il est strictement interdit de partager des numéros WhatsApp ou directs pour contourner les commissions.");
+        return; // L'IA détruit la requête, rien n'est enregistré
     }
-  };
 
-  return (
-    <div className="flex flex-col h-full max-w-md mx-auto bg-black text-white p-4">
-      {/* En-tête de sécurité */}
-      <div className="p-3 border-b border-zinc-900 flex items-center justify-between bg-zinc-950 rounded-t-xl">
-        <div className="flex items-center gap-2">
-          <div className={`w-2 h-2 rounded-full ${isApproved ? 'bg-emerald-500' : 'bg-yellow-500 animate-pulse'}`}></div>
-          <span className="text-[10px] font-mono tracking-widest text-yellow-500 font-bold uppercase">
-            {isApproved ? 'S.E.G Audit Terminé' : 'S.E.G Biometric Audit'}
-          </span>
-        </div>
-      </div>
+    // ACTION AUTOMATIQUE 2 : Calcul de la richesse de l'application
+    const prix = Number(prixArticleFCFA);
+    const commissionApplication = prix * TAUX_COMMISSION;
+    const restePourLeVendeur = prix - commissionApplication;
 
-      {/* Zone de Tchat dynamique */}
-      <div className="flex-1 overflow-y-auto py-4 space-y-4 min-h-[350px] max-h-[500px] px-2 bg-zinc-950/40">
-        {/* Message d'accueil par défaut de l'IA */}
-        <div className="flex flex-col space-y-1">
-          <span className="text-[9px] text-yellow-500 font-bold">🛡️ S.E.G VERIFY IA</span>
-          <div className="bg-zinc-900 border border-yellow-600/10 text-zinc-300 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs leading-relaxed">
-            Système de certification autonome activé pour : <strong>{currentProduct}</strong>.<br/><br/>
-            Pour valider la création de votre espace de marché, veuillez décliner votre <strong>Nom Complet</strong> ainsi que votre <strong>Numéro de pièce d'identité (CNI ou Passeport)</strong>.
-          </div>
-        </div>
+    // ACTION AUTOMATIQUE 3 : Traduction et Mise en ligne mondiale par l'IA
+    try {
+        const docRef = await addDoc(collection(db, "boutiques_automatisees"), {
+            createur: nomVendeur,
+            nomBoutique: nomBoutique,
+            descriptionOriginale: descriptionSaisie,
+            prixTotal: prix,
+            commissionGagnee: commissionApplication, // Ton argent stocké automatiquement
+            argentVendeur: restePourLeVendeur,
+            statutIA: "APPROUVÉ_ET_VÉRIFIÉ",
+            dateAction: new Date(),
+            langueMondiale: "en-fr" // Prêt pour la traduction automatique Vertex AI
+        });
 
-        {/* Affichage de l'historique des échanges */}
-        {messages.map((msg, index) => (
-          <div key={index} className={`flex flex-col space-y-1 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-            <span className="text-[9px] text-zinc-500 px-1">
-              {msg.role === 'user' ? 'Créateur de Marché' : '🛡️ S.E.G VERIFY IA'}
-            </span>
-            <div className={`text-xs max-w-[85%] px-4 py-2.5 rounded-2xl ${
-              msg.role === 'user' 
-                ? 'bg-yellow-500 text-black font-semibold rounded-tr-none shadow-md' 
-                : 'bg-zinc-900 border border-zinc-800 text-zinc-200 rounded-tl-none'
-            }`}>
-              {msg.text.replace('[APPROUVÉ]', '')}
-            </div>
-          </div>
-        ))}
-
-        {/* Indicateur d'écriture de l'IA */}
-        {isLoading && (
-          <div className="flex flex-col space-y-1 items-start animate-pulse">
-            <span className="text-[9px] text-zinc-500 px-1">🛡️ Analyse des données...</span>
-            <div className="bg-zinc-900 text-zinc-500 text-xs px-4 py-2 rounded-2xl rounded-tl-none">
-              <i className="fa-solid fa-ellipsis text-yellow-500 animate-bounce"></i>
-            </div>
-          </div>
-        )}
-
-        <div ref={chatEndRef} />
-      </div>
-
-      {/* Zone de saisie ou bouton final de succès */}
-      <div className="mt-2 border-t border-zinc-900 pt-3 bg-black">
-        {isApproved ? (
-          <div className="bg-emerald-950/30 border border-emerald-500/30 text-emerald-400 p-4 rounded-xl text-center space-y-2 animate-fade-in">
-            <div className="text-sm font-bold flex items-center justify-center gap-2">
-              <i className="fa-solid fa-circle-check"></i> Certification Validée
-            </div>
-            <p className="text-[11px] text-zinc-400">Votre identité a été vérifiée avec succès. Votre boutique est maintenant ouverte au public.</p>
-          </div>
-        ) : (
-          <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              disabled={isLoading}
-              placeholder="Répondre à l'IA de sécurité..."
-              className="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs text-white outline-none focus:border-yellow-500 disabled:opacity-50"
-            />
-            <button
-              type="submit"
-              disabled={isLoading || !inputValue.trim()}
-              className="bg-yellow-500 hover:bg-yellow-600 disabled:bg-zinc-800 text-black disabled:text-zinc-600 w-11 h-11 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0 transition"
-            >
-              <i className="fa-solid fa-chevron-right font-bold"></i>
-            </button>
-          </form>
-        )}
-      </div>
-    </div>
-  );
+        console.log("💰 IA FINANCES : Commission de " + commissionApplication + " FCFA calculée et sécurisée.");
+        alert("🎉 Succès ! L'IA a validé et publié la boutique. Ta commission est sécurisée sur ce produit !");
+        
+    } catch (erreur) {
+        console.error("Erreur d'automatisation : ", erreur);
+    }
 }
+
+// ========================================================
+// ZONE DE LANCEMENT (L'IA SIMULE LES ENTRÉES)
+// ========================================================
+
+// TEST 1 : Un utilisateur honnête crée sa vitrine de bijoux de luxe
+// genererBoutiqueParIA("Mpina", "S.E.G Luxury", "Diamants certifiés et pierres précieuses authentiques.", 500000);
+
+// TEST 2 : Un fraudeur essaie de mettre son WhatsApp pour ne pas payer ta commission
+// genererBoutiqueParIA("Fraudeur", "Boutique Flash", "Écris moi vite sur mon WhatsApp +237677000000", 25000);
